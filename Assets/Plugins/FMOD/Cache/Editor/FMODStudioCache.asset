@@ -54,6 +54,44 @@ MonoBehaviour:
   lastModified: 639073654155430701
   FileSizes: []
   Exists: 1
+--- !u!114 &-4816443877660444592
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/Master.strings.bank
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorBankRef
+  Path: FMOD/Desktop/Desktop/Master.strings.bank
+  Name: Master.strings
+  StudioPath: bank:/Master.strings
+  lastModified: 639073670134984513
+  FileSizes:
+  - Name: 
+    Value: 870
+  Exists: 1
+--- !u!114 &-4436394248421826066
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/Master.bank
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorBankRef
+  Path: FMOD/Desktop/Desktop/Master.bank
+  Name: Master
+  StudioPath: bank:/Master
+  lastModified: 639073670134959410
+  FileSizes: []
+  Exists: 1
 --- !u!114 &-2476383466417746215
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -114,19 +152,82 @@ MonoBehaviour:
   m_Name: FMODStudioCache
   m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EventCache
   EditorBanks:
-  - {fileID: -2154458777102775812}
-  - {fileID: -6961581183511724390}
-  - {fileID: -6558057037589132700}
-  - {fileID: -7331028348846570983}
+  - {fileID: -4816443877660444592}
+  - {fileID: 3254683663042269243}
+  - {fileID: -4436394248421826066}
+  - {fileID: 1568511918537167654}
   EditorEvents:
-  - {fileID: -2476383466417746215}
+  - {fileID: 221587808414942438}
   EditorParameters: []
   MasterBanks:
-  - {fileID: -6558057037589132700}
+  - {fileID: -4436394248421826066}
   StringsBanks:
-  - {fileID: -2154458777102775812}
+  - {fileID: -4816443877660444592}
   cacheVersion: 131858
-  cacheTime: 639073656175509547
+  cacheTime: 639073674159200612
   SerializableEventsDict:
   - key: event:/event_test
     index: 0
+--- !u!114 &221587808414942438
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/event_test
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
+  Path: event:/event_test
+  Guid:
+    Data1: 1199565442
+    Data2: 1089086816
+    Data3: 458944920
+    Data4: 1510201302
+  Banks:
+  - {fileID: 3254683663042269243}
+  IsStream: 1
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
+--- !u!114 &1568511918537167654
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/Music.bank
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorBankRef
+  Path: FMOD/Desktop/Desktop/Music.bank
+  Name: Music
+  StudioPath: bank:/Music
+  lastModified: 639073670135015109
+  FileSizes: []
+  Exists: 1
+--- !u!114 &3254683663042269243
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/Ambiences.bank
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorBankRef
+  Path: FMOD/Desktop/Desktop/Ambiences.bank
+  Name: Ambiences
+  StudioPath: bank:/Ambiences
+  lastModified: 639073674159200612
+  FileSizes: []
+  Exists: 1
