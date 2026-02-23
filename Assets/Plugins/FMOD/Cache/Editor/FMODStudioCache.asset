@@ -54,6 +54,34 @@ MonoBehaviour:
   lastModified: 639073654155430701
   FileSizes: []
   Exists: 1
+--- !u!114 &-5563558248621591433
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Event_Boatsplashing
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
+  Path: event:/Event_Boatsplashing
+  Guid:
+    Data1: 1222449737
+    Data2: 1217276976
+    Data3: -1287881057
+    Data4: -1800389706
+  Banks:
+  - {fileID: 3254683663042269243}
+  - {fileID: -4436394248421826066}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 5400
 --- !u!114 &-4816443877660444592
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -69,10 +97,10 @@ MonoBehaviour:
   Path: FMOD/Desktop/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 639073679833556281
+  lastModified: 639074477758425256
   FileSizes:
   - Name: 
-    Value: 870
+    Value: 1012
   Exists: 1
 --- !u!114 &-4436394248421826066
 MonoBehaviour:
@@ -89,7 +117,7 @@ MonoBehaviour:
   Path: FMOD/Desktop/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 639073679833556281
+  lastModified: 639074477758400072
   FileSizes: []
   Exists: 1
 --- !u!114 &-2476383466417746215
@@ -158,16 +186,25 @@ MonoBehaviour:
   - {fileID: 1568511918537167654}
   EditorEvents:
   - {fileID: 221587808414942438}
+  - {fileID: 8383107625619515350}
+  - {fileID: -5563558248621591433}
+  - {fileID: 7686294240496637162}
   EditorParameters: []
   MasterBanks:
   - {fileID: -4436394248421826066}
   StringsBanks:
   - {fileID: -4816443877660444592}
   cacheVersion: 131858
-  cacheTime: 639073679833556281
+  cacheTime: 639074477758425256
   SerializableEventsDict:
-  - key: event:/event_test
+  - key: event:/Event_test
     index: 0
+  - key: event:/Event_LowSanity
+    index: 1
+  - key: event:/Event_Boatsplashing
+    index: 2
+  - key: event:/Event_OceanAmbGeneral
+    index: 3
 --- !u!114 &221587808414942438
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -178,9 +215,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
-  m_Name: event:/event_test
+  m_Name: event:/Event_test
   m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
-  Path: event:/event_test
+  Path: event:/Event_test
   Guid:
     Data1: 1199565442
     Data2: 1089086816
@@ -210,7 +247,7 @@ MonoBehaviour:
   Path: FMOD/Desktop/Desktop/Music.bank
   Name: Music
   StudioPath: bank:/Music
-  lastModified: 639073679833556281
+  lastModified: 639074468285231579
   FileSizes: []
   Exists: 1
 --- !u!114 &3254683663042269243
@@ -228,6 +265,62 @@ MonoBehaviour:
   Path: FMOD/Desktop/Desktop/Ambiences.bank
   Name: Ambiences
   StudioPath: bank:/Ambiences
-  lastModified: 639073679833546250
+  lastModified: 639074477757674961
   FileSizes: []
   Exists: 1
+--- !u!114 &7686294240496637162
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Event_OceanAmbGeneral
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
+  Path: event:/Event_OceanAmbGeneral
+  Guid:
+    Data1: 505253198
+    Data2: 1185016264
+    Data3: 764627329
+    Data4: 688797964
+  Banks:
+  - {fileID: 3254683663042269243}
+  - {fileID: -4436394248421826066}
+  IsStream: 1
+  Is3D: 1
+  IsOneShot: 0
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 71906
+--- !u!114 &8383107625619515350
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Event_LowSanity
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
+  Path: event:/Event_LowSanity
+  Guid:
+    Data1: 687277345
+    Data2: 1207688506
+    Data3: -2132639604
+    Data4: -948113825
+  Banks:
+  - {fileID: 3254683663042269243}
+  - {fileID: -4436394248421826066}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 0
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 6400
