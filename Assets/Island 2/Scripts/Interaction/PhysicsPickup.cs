@@ -4,7 +4,9 @@
 [RequireComponent(typeof(Collider))]
 public class PhysicsPickup : MonoBehaviour, IPickup
 {
+    [Header("Attachment Settings")]
     [SerializeField] private Vector3 pickupPositionOffset;
+    
     private Rigidbody pickupRigidbody;
     private Collider pickupCollider;
 
@@ -24,7 +26,7 @@ public class PhysicsPickup : MonoBehaviour, IPickup
 
     public virtual void Grab(PickupController pickupController)
     {
-        if (pickupController == null || pickupController.HasPickup) return;
+        if (!pickupController || pickupController.HasPickup) return;
 
         pickupController.GrabPickup(this);
 

@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
 
+/** Temporary test class */
 public class SpawnButton : MonoBehaviour, IInteractable
 {
+    [Header("Item to Spawn")]
     [SerializeField] private GameObject spawnPrefab;
     [SerializeField] private string objectInteractMessage;
     

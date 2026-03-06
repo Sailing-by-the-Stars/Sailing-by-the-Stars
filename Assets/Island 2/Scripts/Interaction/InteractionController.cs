@@ -2,8 +2,17 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+/** Interaction System Documentation - How to Use:
+ *
+ * If you need an object to be interactable,
+ * simply create a new script that implements the IInteractable interface
+ * and put any custom logic that needs to happen on interaction in
+ * the overriden Interact() function.
+ */
+
 public class InteractionController : MonoBehaviour
 {
+    [Header("Interaction References & Settings")]
     [SerializeField] private Camera playerCamera;
     [SerializeField] private TextMeshProUGUI interactionText;
     [SerializeField] private float interactionDistance = 5f;
@@ -38,6 +47,7 @@ public class InteractionController : MonoBehaviour
 
     private void CheckForInteractionInput()
     {
+        // TODO: replace hardcoded key press with Input Actions
         if (Keyboard.current.eKey.wasPressedThisFrame && currentTargetedInteractable != null)
         {
             currentTargetedInteractable.Interact(this);
