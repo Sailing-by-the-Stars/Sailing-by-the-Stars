@@ -6,24 +6,24 @@ using UnityEngine.InputSystem;
 public class TempFPController : MonoBehaviour
 {
     [Header("Movement")]
-    public float walkSpeed = 5f;
-    public float sprintSpeed = 9f;
-    public float jumpHeight = 1.5f;
-    public float gravity = -9.81f;
+    [SerializeField] private float walkSpeed = 5f;
+    [SerializeField] private float sprintSpeed = 9f;
+    [SerializeField] private float jumpHeight = 1.5f;
+    [SerializeField] private float gravity = -9.81f;
 
     [Header("Look")]
-    public Transform playerCamera;
-    public float mouseSensitivity = 0.1f;
-    public float minPitch = -89f;
-    public float maxPitch = 89f;
+    [SerializeField] private Transform playerCamera;
+    [SerializeField] private float mouseSensitivity = 0.1f;
+    [SerializeField] private float minPitch = -89f;
+    [SerializeField] private float maxPitch = 89f;
 
     private CharacterController charController;
 
     private PlayerInput input;
-    InputAction moveAction;
-    InputAction lookAction;
-    InputAction sprintAction;
-    InputAction jumpAction;
+    private InputAction moveAction;
+    private InputAction lookAction;
+    private InputAction sprintAction;
+    private InputAction jumpAction;
 
     private Vector2 moveInput;
     private Vector2 lookInput;
@@ -33,7 +33,7 @@ public class TempFPController : MonoBehaviour
     private float verticalVelocity;
     private float pitch;
 
-    void Awake()
+    private void Awake()
     {
         charController = GetComponent<CharacterController>();
         input = GetComponent<PlayerInput>();
@@ -51,8 +51,6 @@ public class TempFPController : MonoBehaviour
 
     void Update()
     {
-        Debug.Log(1f / Time.deltaTime);
-
         sprintHeld = sprintAction.IsPressed();
         moveInput = moveAction.ReadValue<Vector2>();
         lookInput = lookAction.ReadValue<Vector2>();
@@ -61,7 +59,7 @@ public class TempFPController : MonoBehaviour
         HandleMove();
     }
 
-    void HandleLook()
+    private void HandleLook()
     {
         float mouseX = lookInput.x * mouseSensitivity;
         float mouseY = lookInput.y * mouseSensitivity;
@@ -73,7 +71,7 @@ public class TempFPController : MonoBehaviour
         transform.Rotate(Vector3.up * mouseX);
     }
 
-    void HandleMove()
+    private void HandleMove()
     {
         Vector3 move = transform.right * moveInput.x + transform.forward * moveInput.y;
         float speed = sprintHeld ? sprintSpeed : walkSpeed;
