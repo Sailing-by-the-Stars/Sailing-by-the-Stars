@@ -1,4 +1,7 @@
-// created by Christina
+/*
+ * Created by Christina Pence
+ * Contributed to by:
+ */
 
 using UnityEngine;
 

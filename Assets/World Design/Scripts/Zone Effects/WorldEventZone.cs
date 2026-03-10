@@ -1,3 +1,8 @@
+/*
+ * Created by Christina Pence
+ * Contributed to by:
+ */
+
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
@@ -14,9 +19,6 @@ public class WorldEventZone : MonoBehaviour
     private bool isInside = false; // logical inside state of instigator
     private Coroutine exitCoroutine; // Track effect coroutines for cancellation
     private IZoneEffect[] effects;
-    // and what about exit events?
-    // but what about our start effects tracking?
-    //private List<Coroutine> runningCoroutines = new();
 
     private void Awake()
     {

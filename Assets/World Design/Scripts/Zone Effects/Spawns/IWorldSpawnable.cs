@@ -1,3 +1,7 @@
+/*
+ * Created by Christina Pence
+ * Contributed to by:
+ */
 using UnityEngine;
 
 public interface IWorldSpawnable

@@ -358,7 +358,7 @@ Camera:
     height: 1
   near clip plane: 0.1
   far clip plane: 1000
-  field of view: 60
+  field of view: 97.1
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -1090,6 +1090,14 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1632352949193073200, guid: 584172e94de7fd543a4aaf3e3b8ded8c, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 1632352949193073200, guid: 584172e94de7fd543a4aaf3e3b8ded8c, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 1632352949193073200, guid: 584172e94de7fd543a4aaf3e3b8ded8c, type: 3}
       propertyPath: m_LocalPosition.x
       value: 4.5277
       objectReference: {fileID: 0}
@@ -1133,8 +1141,13 @@ PrefabInstance:
       propertyPath: m_Name
       value: Zone_BigFish
       objectReference: {fileID: 0}
+    - target: {fileID: 8422984063957678331, guid: 584172e94de7fd543a4aaf3e3b8ded8c, type: 3}
+      propertyPath: spawnPrefab
+      value: 
+      objectReference: {fileID: 1809855982420343196, guid: 498c390c3481ce24c8924c9aa500891f, type: 3}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 2980393608411628832, guid: 584172e94de7fd543a4aaf3e3b8ded8c, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 584172e94de7fd543a4aaf3e3b8ded8c, type: 3}

@@ -1,3 +1,7 @@
+/*
+ * Created by Christina Pence
+ * Contributed to by:
+ */
 using UnityEngine;
 using UnityEngine.Rendering.HighDefinition;
 using System.Collections;
@@ -31,6 +35,8 @@ public class GiantFishAI : MonoBehaviour, IWorldSpawnable
     [SerializeField] private float surfaceOffset = 0f;
 
     [Header("Attack")]
+    [Tooltip("Passive fish never attacks but dives periodically")]
+    [SerializeField] private bool isPassive = false;
     [SerializeField] private float attackArcHeight = 6f;
     [Tooltip("Units above boat pivot to aim the attack")]
     [SerializeField] private float boatSurfaceOffset = 1f;
@@ -135,8 +141,15 @@ public class GiantFishAI : MonoBehaviour, IWorldSpawnable
             stateRoutine = StartCoroutine(DivingRoutine());
             return;
         }
-        // apply force when running into object to prevent visual overlap
-        PushApart(other);
+        // apply force when running into object to prevent visual overlap or run away
+        if (knockable != null)
+        {   
+            PushApart(other);
+        }
+        else
+        {
+            EnterState(State.Diving);
+        }
     }
 
     private void PushApart(Collider other)
@@ -151,11 +164,9 @@ public class GiantFishAI : MonoBehaviour, IWorldSpawnable
         // dot product to get speed component of boat directed towards fish
         bool isRamming = Vector3.Dot(-pushDir, boatVelocity) > rammingThreshold;
         float multiplier = isRamming ? rammingMultiplier : 1f;
-        // counter boat's current movement velocity of the boat directed towards the fish and push away boat
-        float approachSpeed = Mathf.Max(0f, Vector3.Dot(-pushDir, boatVelocity));
-        Vector3 velocity = pushDir * (collisionBoatForce + approachSpeed) * multiplier;
+        Vector3 velocity = pushDir * collisionBoatForce; // do not apply ramming to boat (feels like punishment)
         knockable?.ApplyKnockback(velocity, collisionSpin);
-        // push away fish
+        // push away fish with ramming multiplier
         transform.position += -pushDir * collisionFishForce * multiplier * Time.deltaTime;
     }
 
@@ -210,7 +221,7 @@ public class GiantFishAI : MonoBehaviour, IWorldSpawnable
         float totalDuration = spiralDuration + ((orbitDurationMin + orbitDurationMax) * 0.5f);
         float closeInSpeed = totalRadialDistance / totalDuration;
 
-        // circleSpeed split three ways to keep total speed constant: tangential (orbit), radial (close in), vertical (rise)
+        // circle in and upward
         float verticalDistance = fullySurfacedYHeight - fullySubmergedY;
         float riseSpeed = verticalDistance / spiralDuration; // use approximate time fish should be underwater
 
@@ -233,7 +244,7 @@ public class GiantFishAI : MonoBehaviour, IWorldSpawnable
             yield return null;
         }
 
-        // phase 3: orbit at surface
+        // circle at surface
         float orbitDuration = Random.Range(orbitDurationMin, orbitDurationMax);
         float orbitElapsed = 0f;
 
@@ -248,8 +259,8 @@ public class GiantFishAI : MonoBehaviour, IWorldSpawnable
 
             yield return null;
         }
-
-        EnterState(State.Attacking);
+        // transition to diving if fish is passive, otherwise attack
+        EnterState(isPassive ? State.Diving : State.Attacking);
     }
     // update orbit center, radius, and angular speed
     // returns tangential speed
@@ -297,6 +308,16 @@ public class GiantFishAI : MonoBehaviour, IWorldSpawnable
             // parabolic path for attack
             pos.y = Mathf.Lerp(startPos.y, targetPos.y, t) + attackArcHeight * Mathf.Sin(t * Mathf.PI);
             transform.position = pos;
+
+            Vector3 moveDir = targetPos - transform.position;
+            moveDir.y = 0f;
+            // pitch from arc slope: derivative of (lerp + arcHeight * Sin(t * PI)) with respect to t
+            float arcSlope = (targetPos.y - startPos.y) + attackArcHeight * Mathf.PI * Mathf.Cos(t * Mathf.PI);
+            if (moveDir != Vector3.zero)
+            {
+                transform.rotation = Quaternion.LookRotation(new Vector3(moveDir.normalized.x,
+                                                                         arcSlope / distance, moveDir.normalized.z));
+            }
 
             yield return null;
         }
@@ -362,9 +383,9 @@ public class GiantFishAI : MonoBehaviour, IWorldSpawnable
     private void RotateAroundOrbit(float angularSpeed)
     {
         transform.RotateAround(orbitCenter, Vector3.up, angularSpeed * Time.deltaTime);
-        // face fish horizontally tangent to the radius
+        // face fish horizontally tangent to the radius (use outward direction for counterclockwise rotation/ positive angularSpeed)
         transform.rotation = Quaternion.LookRotation(Vector3.Cross(Vector3.up,
-                                                                   orbitCenter - transform.position).normalized);
+                                                                   transform.position - orbitCenter).normalized);
     }
 
     // gradually corrects fish back to currentOrbitRadius if it was knocked off
