@@ -1,25 +1,21 @@
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
-//Creator: Joost
-public class Movement : MonoBehaviour
+public class OrbitMovement : MonoBehaviour
 {
     [Header("Movement Settings")]
     [SerializeField] float movementSpeed;
-    [SerializeField] float sprintMultiplier;
+
+    [Header("Collision Handling")]
+    [SerializeField] Rigidbody rb;
 
     [Header("Camera Setting")]
     [SerializeField] float mouseSensitivity;
     [SerializeField] float minXRotation = -90f;
     [SerializeField] float maxXRotation = 90f;
 
-    [Header("Collision Handling")]
-    [SerializeField] Rigidbody rb;
 
     PlayerControls playerControls;
-
-    Camera cam;
+    [SerializeField] Camera cam;
 
     float xCamRotation = 0f;
     float yCamRotation = 0f;
@@ -39,19 +35,20 @@ public class Movement : MonoBehaviour
         playerControls.Disable();
     }
 
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
-        cam = GetComponentInChildren<Camera>();
     }
 
-    private void Update()
+    // Update is called once per frame
+    void Update()
     {
         RotateCamera();
     }
 
-    void FixedUpdate()
+    private void FixedUpdate()
     {
         MovePlayer();
     }
@@ -59,11 +56,16 @@ public class Movement : MonoBehaviour
     void MovePlayer()
     {
         Vector2 moveDirection = playerControls.Land.Move.ReadValue<Vector2>();
-        
+
         rb.MovePosition(rb.position + rb.transform.forward * moveDirection.y * movementSpeed * Time.deltaTime);
         rb.MovePosition(rb.position + rb.transform.right * moveDirection.x * movementSpeed * Time.deltaTime);
-    }
 
+        /*if(moveDirection == Vector2.zero)
+        {
+            rb.linearVelocity = Vector2.zero;
+            rb.angularVelocity = Vector2.zero;
+        }*/
+    }
     void RotateCamera()
     {
         Vector2 lookDirection = playerControls.Land.Look.ReadValue<Vector2>();
@@ -72,14 +74,17 @@ public class Movement : MonoBehaviour
         // Rotating the Y rotation
         yCamRotation += cameraMoveDirection.x;
         yCamRotation = FixRotationLimit(yCamRotation);
-        gameObject.transform.rotation = Quaternion.Euler(0, yCamRotation, 0);
+
+        //gameObject.transform.rotation = Quaternion.Euler(0, yCamRotation, 0);
+
+        transform.Rotate(Vector3.up * cameraMoveDirection.x);
 
 
         // Rotating the X rotation
         xCamRotation -= cameraMoveDirection.y;
         xCamRotation = Mathf.Clamp(xCamRotation, minXRotation, maxXRotation);
         cam.transform.localRotation = Quaternion.Euler(xCamRotation, 0, 0);
- }
+    }
 
     /// <summary>
     /// This function makes sure that IF the game gets played long enough
