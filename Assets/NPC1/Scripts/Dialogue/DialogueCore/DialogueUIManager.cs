@@ -132,6 +132,7 @@ public class DialogueUIManager : MonoBehaviour
         {
             dialogueText.text += c;
             yield return new WaitForSeconds(speed);
+            Debug.Log(speed);
         }
 
         typewriterCoroutine = null;

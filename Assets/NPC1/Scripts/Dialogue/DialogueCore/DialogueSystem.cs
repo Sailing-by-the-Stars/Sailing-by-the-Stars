@@ -146,7 +146,7 @@ public class DialogueSystem : MonoBehaviour
         lineFullyRevealed = false;
         waitingForPlayerInput = true;
 
-        float speed = Mathf.Lerp(0.5f, 0.01f, currentDialogue.talkingSpeed);
+        float speed = 1 - currentDialogue.talkingSpeed;
 
         if (currentNode is DialogueLineNode lineNode)
         {

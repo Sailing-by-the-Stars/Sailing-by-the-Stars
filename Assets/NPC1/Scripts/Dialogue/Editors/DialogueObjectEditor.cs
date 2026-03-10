@@ -28,21 +28,17 @@ public class DialogueObjectEditor : Editor
         EditorGUILayout.PropertyField(hasName_prop, new GUIContent("Does it have a name?"));
         if (hasName_prop.boolValue)
             EditorGUILayout.PropertyField(npcName_prop, new GUIContent("Name"));
-
+        EditorGUILayout.PropertyField(talkingSpeed_prop, new GUIContent("Talking Speed"));
         EditorGUILayout.Space();
         EditorGUILayout.LabelField("Add Node", EditorStyles.boldLabel);
         if (GUILayout.Button("Add Dialogue Line")) AddNode(new DialogueLineNode());
         if (GUILayout.Button("Add Choice Node")) AddNode(new ChoiceNode());
         if (GUILayout.Button("Add Conditional Node")) AddNode(new ConditionalNode());
-        if (GUILayout.Button("Add Give a Quest Node")) AddNode(new StartQuestNode());
+        if (GUILayout.Button("Give a Quest Node")) AddNode(new StartQuestNode());
 
         EditorGUILayout.Space();
         EditorGUILayout.LabelField("Dialogue Nodes", EditorStyles.boldLabel);
         DrawNodes();
-
-        EditorGUILayout.Space();
-        EditorGUILayout.PropertyField(talkingSpeed_prop, new GUIContent("Talking Speed"));
-
         serializedObject.ApplyModifiedProperties();
     }
 

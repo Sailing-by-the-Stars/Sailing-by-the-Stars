@@ -1,5 +1,5 @@
 using UnityEngine;
-[CreateAssetMenu(fileName = "Quest", menuName = "NPCScriptables/Quest")]
+[CreateAssetMenu(fileName = "Quest", menuName = "Placeholder/Quest")]
 // Placeholder!!! Created by Jantina
 public class Quest : ScriptableObject
 {
