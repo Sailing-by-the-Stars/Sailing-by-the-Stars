@@ -668,6 +668,69 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &704406753
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 704406755}
+  - component: {fileID: 704406754}
+  m_Layer: 0
+  m_Name: Event_Sanity Emitter
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &704406754
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 704406753}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: FMODUnity::FMODUnity.StudioEventEmitter
+  CollisionTag: Untagged
+  EventReference:
+    Guid:
+      Data1: 687277345
+      Data2: 1207688506
+      Data3: -2132639604
+      Data4: -948113825
+    Path: event:/Event_Sanity
+  Event: 
+  EventPlayTrigger: 1
+  EventStopTrigger: 4
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  NonRigidbodyVelocity: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 20
+--- !u!4 &704406755
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 704406753}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.09337571, y: -0.009416014, z: -0.054142497}
+  m_LocalScale: {x: 10, y: 10, z: 10}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1502045054}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &747441096
 GameObject:
   m_ObjectHideFlags: 0
@@ -714,15 +777,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f61dd2b22db94d7c9238bf79ba700b92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::World_Design.Scripts.Challenges.Challenge1.TriggerAnimationPlayer
-  animator: {fileID: 0}
-  playOnEnter: 1
-  enterUsesTriggerParameter: 1
-  enterTriggerParameter: Play
-  enterStateName: 
-  playOnExit: 0
-  exitUsesTriggerParameter: 1
-  exitTriggerParameter: 
-  exitStateName: 
 --- !u!95 &747441100
 Animator:
   serializedVersion: 7
@@ -904,7 +958,8 @@ Transform:
   m_LocalPosition: {x: -87.1, y: 0.49, z: -20.8}
   m_LocalScale: {x: 12.744158, y: 12.744158, z: 12.744158}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 704406755}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1502045055
