@@ -1,6 +1,7 @@
 using FMOD;
 using UnityEngine;
 
+// Created by: Joost
 public class OrbitalGravity : MonoBehaviour
 {
     [SerializeField] Transform gravityCenter;

@@ -10,7 +10,7 @@ public class Movement : MonoBehaviour
     [SerializeField] float sprintMultiplier;
 
     [Header("Camera Setting")]
-    [SerializeField] float mouseSensitivity;
+    [SerializeField] float mouseSensitivity = 10f;
     [SerializeField] float minXRotation = -90f;
     [SerializeField] float maxXRotation = 90f;
 

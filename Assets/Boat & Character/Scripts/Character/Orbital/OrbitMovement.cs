@@ -1,21 +1,22 @@
 using UnityEngine;
 
+// Created by: Joost
 public class OrbitMovement : MonoBehaviour
 {
     [Header("Movement Settings")]
     [SerializeField] float movementSpeed;
 
-    [Header("Collision Handling")]
-    [SerializeField] Rigidbody rb;
-
     [Header("Camera Setting")]
-    [SerializeField] float mouseSensitivity;
+    [SerializeField] float mouseSensitivity = 10f;
     [SerializeField] float minXRotation = -90f;
     [SerializeField] float maxXRotation = 90f;
 
+    [Header("Collision Handling")]
+    [SerializeField] Rigidbody rb;
 
     PlayerControls playerControls;
-    [SerializeField] Camera cam;
+
+    Camera cam;
 
     float xCamRotation = 0f;
     float yCamRotation = 0f;
@@ -40,6 +41,7 @@ public class OrbitMovement : MonoBehaviour
     {
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+        cam = GetComponentInChildren<Camera>();
     }
 
     // Update is called once per frame
