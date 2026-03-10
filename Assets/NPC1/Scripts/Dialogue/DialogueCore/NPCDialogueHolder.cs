@@ -22,7 +22,7 @@ public class NPCDialogueHolder : MonoBehaviour
     public float interactionDistance = 2f;
 
     private Transform player;
-
+    private bool isInteracting;
     private static NPCDialogueHolder currentClosestNPC;
     private static float closestDistance = Mathf.Infinity;
 
@@ -78,15 +78,26 @@ public class NPCDialogueHolder : MonoBehaviour
     void StartConversation()
     {
         InteractionPromptUI.Instance.HidePrompt();
-
+        if (GetComponent<Animator>() != null)
+        {
+            GetComponent<Animator>().SetBool("IsTalking", true);
+        }
         if (!hasInteractedBefore || !hasRepeatDialogue)
         {
-            DialogueSystem.Instance.StartDialogue(firstDialogue);
+            DialogueSystem.Instance.StartDialogue(firstDialogue, this.gameObject);
             hasInteractedBefore = true;
         }
         else
         {
-            DialogueSystem.Instance.StartDialogue(repeatDialogue);
+            DialogueSystem.Instance.StartDialogue(repeatDialogue, this.gameObject);
+        }
+    }
+
+    public void EndConversation()
+    {
+        if (GetComponent<Animator>() != null)
+        {
+            GetComponent<Animator>().SetBool("IsTalking", false);
         }
     }
 }

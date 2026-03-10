@@ -17,16 +17,13 @@ public class DialogueSystem : MonoBehaviour
     [SerializeField] private PlayerState player;
 
     public static DialogueSystem Instance;
-
     private Dictionary<string, DialogueNode> nodeLookup;
 
     [HideInInspector] public DialogueNode currentNode;
-
     private DialogueLineNode currentLineNode;
     private bool lineFullyRevealed = false;
-
     [HideInInspector] public bool isDialogueActive = false;
-
+    private GameObject sendingObject;
     private bool waitingForPlayerInput = false;
 
     private void Awake()
@@ -74,12 +71,20 @@ public class DialogueSystem : MonoBehaviour
                 if (string.IsNullOrEmpty(nextID))
                 {
                     uiManager.EndDialogue();
+                    if (sendingObject.GetComponent<NPCDialogueHolder>() != null)
+                    {
+                        sendingObject.GetComponent<NPCDialogueHolder>().EndConversation();
+                    }
                     currentNode = null;
                 }
                 else if (!nodeLookup.TryGetValue(nextID, out currentNode))
                 {
                     Debug.LogWarning($"Node '{nextID}' not found. Ending dialogue.");
                     uiManager.EndDialogue();
+                    if (sendingObject.GetComponent<NPCDialogueHolder>() != null)
+                    {
+                        sendingObject.GetComponent<NPCDialogueHolder>().EndConversation();
+                    }
                     currentNode = null;
                 }
                 else
@@ -114,11 +119,11 @@ public class DialogueSystem : MonoBehaviour
     /// <summary>
     /// Starts a dialogue sequence using the provided dialogue asset.
     /// </summary>
-    public void StartDialogue(Dialogue dialogue)
+    public void StartDialogue(Dialogue dialogue, GameObject sender)
     {
         if (currentDialogue == null || uiManager == null) return;
 
-        
+        sendingObject = sender;
         currentDialogue = dialogue;
         BuildNodeLookup();
         isDialogueActive = true;
@@ -137,6 +142,11 @@ public class DialogueSystem : MonoBehaviour
         if (currentNode == null)
         {
             uiManager.EndDialogue();
+            if (sendingObject.GetComponent<NPCDialogueHolder>() != null)
+            {
+                sendingObject.GetComponent<NPCDialogueHolder>().EndConversation();
+            }
+            
             return;
         }
 
@@ -212,6 +222,10 @@ public class DialogueSystem : MonoBehaviour
         if (string.IsNullOrEmpty(nextNodeID))
         {
             uiManager.EndDialogue();
+            if (sendingObject.GetComponent<NPCDialogueHolder>() != null)
+            {
+                sendingObject.GetComponent<NPCDialogueHolder>().EndConversation();
+            }
             currentNode = null;
             return;
         }
@@ -220,6 +234,10 @@ public class DialogueSystem : MonoBehaviour
         {
             Debug.LogWarning($"Node '{nextNodeID}' not found. Ending dialogue.");
             uiManager.EndDialogue();
+            if (sendingObject.GetComponent<NPCDialogueHolder>() != null)
+            {
+                sendingObject.GetComponent<NPCDialogueHolder>().EndConversation();
+            }
             currentNode = null;
             return;
         }
@@ -241,6 +259,10 @@ public class DialogueSystem : MonoBehaviour
         if (string.IsNullOrEmpty(nextNodeID))
         {
             uiManager.EndDialogue();
+            if (sendingObject.GetComponent<NPCDialogueHolder>() != null)
+            {
+                sendingObject.GetComponent<NPCDialogueHolder>().EndConversation();
+            }
             currentNode = null;
             return;
         }
@@ -249,6 +271,10 @@ public class DialogueSystem : MonoBehaviour
         {
             Debug.LogWarning($"Node '{nextNodeID}' not found. Ending dialogue.");
             uiManager.EndDialogue();
+            if (sendingObject.GetComponent<NPCDialogueHolder>() != null)
+            {
+                sendingObject.GetComponent<NPCDialogueHolder>().EndConversation();
+            }
             currentNode = null;
             return;
         }
