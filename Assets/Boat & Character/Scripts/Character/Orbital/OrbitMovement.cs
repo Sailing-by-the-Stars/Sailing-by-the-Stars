@@ -4,7 +4,7 @@ using UnityEngine;
 public class OrbitMovement : MonoBehaviour
 {
     [Header("Movement Settings")]
-    [SerializeField] float movementSpeed;
+    [SerializeField] float movementSpeed = 4f;
 
     [Header("Camera Setting")]
     [SerializeField] float mouseSensitivity = 10f;

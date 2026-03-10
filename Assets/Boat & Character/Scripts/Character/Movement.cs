@@ -6,7 +6,7 @@ using UnityEngine.InputSystem;
 public class Movement : MonoBehaviour
 {
     [Header("Movement Settings")]
-    [SerializeField] float movementSpeed;
+    [SerializeField] float movementSpeed = 4f;
     [SerializeField] float sprintMultiplier;
 
     [Header("Camera Setting")]
