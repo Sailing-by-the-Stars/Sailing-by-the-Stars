@@ -6,17 +6,17 @@ using UnityEditor;
 public class FloatingObject : MonoBehaviour
 {
     [Header("Water Settings")]
-    public WaterSurface targetSurface; // Reference to the water surface that the object will float on
-    public bool includeDeformers = true; // Whether to include surface deformers (waves, ripples) in calculations
-    public float verticalOffset = 0.0f; // Vertical offset above the water surface for object positioning
+    [SerializeField] private WaterSurface targetSurface; // Reference to the water surface that the object will float on
+    [SerializeField] private bool includeDeformers = true; // Whether to include surface deformers (waves, ripples) in calculations
+    [SerializeField] private float verticalOffset = 0.0f; // Vertical offset above the water surface for object positioning
 
     [Header("Follow Settings")]
-    public bool followWaterCurrent = false; // Determines if the object should move along the water current
-    public float currentSpeedMultiplier = 1f; // Multiplier to adjust the influence of water current on object movement
+    [SerializeField] private bool followWaterCurrent = false; // Determines if the object should move along the water current
+    [SerializeField] private float currentSpeedMultiplier = 1f; // Multiplier to adjust the influence of water current on object movement
 
     [Header("Collision Settings")]
-    public bool useRigidbodyForCollision = false; // Determines if Rigidbody physics should be used for collision detection
-    public LayerMask obstacleLayers; // Layers considered obstacles for collision detection (e.g., shore, rocks)
+    [HideInInspector] public bool useRigidbodyForCollision = false; // Determines if Rigidbody physics should be used for collision detection
+    [SerializeField] private LayerMask obstacleLayers; // Layers considered obstacles for collision detection (e.g., shore, rocks)
 
 
     private bool disableCurrentFlow = false; // Flag to temporarily stop current-based movement after collision

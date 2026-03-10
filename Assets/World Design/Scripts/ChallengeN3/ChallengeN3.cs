@@ -11,6 +11,8 @@ public class ChallengeN3 : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] private GameObject ocean;
+    [SerializeField] private GameObject triggerZone;
+    private SetParameterByID windController;
 
     [Header("Original value of the properties")]
     private float largeWindSpeedO = 30f;
@@ -19,6 +21,7 @@ public class ChallengeN3 : MonoBehaviour
     private float secondBandO = 0;
     private float windSpeedO = 4f;
     private float chaosO = 0.8f;
+    private float windStart = 0f;
 
     [Header ("Goal values of the properties")]
     private float targetLargeWind = 250f;
@@ -27,6 +30,12 @@ public class ChallengeN3 : MonoBehaviour
     private float targetSecondBand = 1f;
     private float targetWind = 15f;
     private float targetChaos = 1f;
+    private float windTarget = 4f;
+
+    private void Start()
+    {
+        windController = triggerZone.GetComponent<SetParameterByID>();
+    }
 
     private void OnTriggerEnter(Collider other)
     {
@@ -55,6 +64,7 @@ public class ChallengeN3 : MonoBehaviour
         StartCoroutine(DecreaseValues(3f));
     }
 
+    //Coroutine to increase values
     private IEnumerator IncreaseValues(float duration)
     {
         WaterSurface ws = ocean.GetComponent<WaterSurface>();
@@ -69,6 +79,8 @@ public class ChallengeN3 : MonoBehaviour
         SerializedProperty chaos = so.FindProperty("ripplesChaos"); //Local chaos
 
         float elapsed = 0f;
+
+        //With this while we increase the values in 3 seconds
         while (elapsed < duration)
         {
             float time = elapsed / duration;
@@ -81,6 +93,8 @@ public class ChallengeN3 : MonoBehaviour
             windSpeed.floatValue = Mathf.Lerp(windSpeedO, targetWind, time);
             chaos.floatValue = Mathf.Lerp(chaosO, targetChaos, time);
 
+            windController.wind = Mathf.Lerp(windStart, windTarget, time);
+
             so.ApplyModifiedProperties();
 
             elapsed += Time.deltaTime;
@@ -88,28 +102,31 @@ public class ChallengeN3 : MonoBehaviour
         }
     }
 
-
+    //Coroutine to decrease values
     private IEnumerator DecreaseValues(float duration)
     {
         WaterSurface ws = ocean.GetComponent<WaterSurface>();
         SerializedObject so = new SerializedObject(ws);
 
-        SerializedProperty largeWindSpeed = so.FindProperty("largeWindSpeed");
-        SerializedProperty largeChaos = so.FindProperty("largeChaos");
-        SerializedProperty firstband = so.FindProperty("largeBand0Multiplier");
-        SerializedProperty secondBand = so.FindProperty("largeBand1Multiplier");
-        SerializedProperty windSpeed = so.FindProperty("ripplesWindSpeed");
-        SerializedProperty chaos = so.FindProperty("ripplesChaos");
+        SerializedProperty largeWindSpeed = so.FindProperty("largeWindSpeed"); //Wind speed in swell
+        SerializedProperty largeChaos = so.FindProperty("largeChaos"); //Chaos in swell
+        SerializedProperty firstband = so.FindProperty("largeBand0Multiplier"); //First band
+        SerializedProperty secondBand = so.FindProperty("largeBand1Multiplier"); //Second band
+        SerializedProperty windSpeed = so.FindProperty("ripplesWindSpeed"); //Local wind
+        SerializedProperty chaos = so.FindProperty("ripplesChaos"); //Local chaos
 
-        // leemos los valores actuales como punto de partida
+        //We make sure that the value is its current value
         float startLargeWind = largeWindSpeed.floatValue;
         float startLargeChaos = largeChaos.floatValue;
         float startFirstBand = firstband.floatValue;
         float startSecondBand = secondBand.floatValue;
         float startWind = windSpeed.floatValue;
         float startChaos = chaos.floatValue;
+        float startWindFMOD = windController.wind;
 
         float elapsed = 0f;
+
+        //With this while we decrease the values in 3 seconds
         while (elapsed < duration)
         {
             float time = elapsed / duration;
@@ -121,6 +138,8 @@ public class ChallengeN3 : MonoBehaviour
             secondBand.floatValue = Mathf.Lerp(startSecondBand, secondBandO, time);
             windSpeed.floatValue = Mathf.Lerp(startWind, windSpeedO, time);
             chaos.floatValue = Mathf.Lerp(startChaos, chaosO, time);
+
+            windController.wind = Mathf.Lerp(startWindFMOD, windStart, time);
 
             so.ApplyModifiedProperties();
 
