@@ -1,0 +1,116 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a27b1591cf442e34da26ab4a98de3513, type: 3}
+  m_Name: CultistDialog
+  m_EditorClassIdentifier: Assembly-CSharp::Dialogue
+  hasName: 1
+  npcName: Cultist
+  talkingSpeed: 0.5
+  nodes:
+  - rid: 6341597381389189120
+  - rid: 6341597381389189121
+  - rid: 6341597381389189122
+  - rid: 6341597381389189123
+  - rid: 6341597381389189124
+  - rid: 6341597381389189125
+  - rid: 6341597381389189126
+  - rid: 6341597381389189127
+  - rid: 6341597381389189129
+  - rid: 6341597381389189130
+  references:
+    version: 2
+    RefIds:
+    - rid: 6341597381389189120
+      type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: Greeting
+        text: 'Ahoy there chap.
+
+          I see you''ve been washed ashore like
+          I did many years ago.'
+        nextNodeID: WhereAreYouFrom
+    - rid: 6341597381389189121
+      type: {class: ChoiceNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: WhereAreYouFrom
+        text: Do ye know where you came from?
+        choices:
+        - choiceText: I can't remember
+          nextNodeID: NoWorries
+        - choiceText: ...
+          nextNodeID: NoWorries
+    - rid: 6341597381389189122
+      type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: NoWorries
+        text: 'No worries mate. Ye see, I got here many years ago after my ship ran
+          ashore. The bloody captain must have had too much grog and hit some nasty
+          cliff on our starboard. '
+        nextNodeID: NoWorries2
+    - rid: 6341597381389189123
+      type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: NoWorries2
+        text: I've only just started to learn the ropes as a Jack back then. But
+          those lovely people here were nearby and helped me ashore, otherwise I
+          would have been in Davy Jones Locker with my fellow mates.
+        nextNodeID: Rehua
+    - rid: 6341597381389189124
+      type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: Rehua
+        text: 'It must have been divine intervention, because they followed a shooting
+          star and found myself on the way. It must have been in the will of Rehua,
+          that they found me here. '
+        nextNodeID: Rehua2
+    - rid: 6341597381389189125
+      type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: Rehua2
+        text: The stories differ from island to island, but I know him as one of
+          the star gods and the brightest star on the southern hemisphere. Ye might
+          know it in the Canis Majoris, as the star Sirius.
+        nextNodeID: UpForTheTask
+    - rid: 6341597381389189126
+      type: {class: ChoiceNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: UpForTheTask
+        text: Are ye going to sail in that old Waka to the next island? That sounds
+          rough. Ye don't even have one for a dog watch. Are ye up for the task?
+        choices:
+        - choiceText: I think so ...
+          nextNodeID: SoundGood
+        - choiceText: Can't wait!
+          nextNodeID: SoundGood
+    - rid: 6341597381389189127
+      type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: SoundGood
+        text: "Sounds convincing enough. \nBut before ye run off, I got something
+          for ye."
+        nextNodeID: Sextant
+    - rid: 6341597381389189129
+      type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: Sextant
+        text: This is a Sextant. I found it in the remaining shipwrecks, that washed
+          ashore. It should come in use if ye want to know which way ye want to sail.
+          Focus on the stars and find the South Star to find yer nautical direction.
+        nextNodeID: Bye
+    - rid: 6341597381389189130
+      type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: Bye
+        text: If ye need any help with Star Constellations, I'll be here watching
+          the star night. I am waiting on a sign from Rehua, to know why he saved
+          me. If you see any signs from him out there, be sure tell me about them.
+        nextNodeID: 
