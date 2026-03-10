@@ -9,8 +9,6 @@ public class Dialogue : ScriptableObject
     [Tooltip("Affects how fast the NPC speaks")]
     [Range(0.1f, 1f)]
     public float talkingSpeed = 0.1f;
-    [SerializeField] bool givesQuest;
-    public Quest quest;
     [SerializeReference]
     public List<DialogueNode> nodes = new();
 }

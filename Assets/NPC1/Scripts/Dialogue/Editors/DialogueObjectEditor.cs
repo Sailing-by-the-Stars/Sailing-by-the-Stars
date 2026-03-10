@@ -9,8 +9,6 @@ public class DialogueObjectEditor : Editor
     SerializedProperty hasName_prop;
     SerializedProperty npcName_prop;
     SerializedProperty nodes_prop;
-    SerializedProperty givesQuest_prop;
-    SerializedProperty quest_prop;
 
     Dictionary<int, bool> foldouts = new Dictionary<int, bool>();
 
@@ -20,8 +18,6 @@ public class DialogueObjectEditor : Editor
         npcName_prop = serializedObject.FindProperty("npcName");
         nodes_prop = serializedObject.FindProperty("nodes");
         talkingSpeed_prop = serializedObject.FindProperty("talkingSpeed");
-        givesQuest_prop = serializedObject.FindProperty("givesQuest");
-        quest_prop = serializedObject.FindProperty("quest");
     }
 
     public override void OnInspectorGUI()
@@ -38,6 +34,7 @@ public class DialogueObjectEditor : Editor
         if (GUILayout.Button("Add Dialogue Line")) AddNode(new DialogueLineNode());
         if (GUILayout.Button("Add Choice Node")) AddNode(new ChoiceNode());
         if (GUILayout.Button("Add Conditional Node")) AddNode(new ConditionalNode());
+        if (GUILayout.Button("Add Give a Quest Node")) AddNode(new StartQuestNode());
 
         EditorGUILayout.Space();
         EditorGUILayout.LabelField("Dialogue Nodes", EditorStyles.boldLabel);
@@ -45,12 +42,6 @@ public class DialogueObjectEditor : Editor
 
         EditorGUILayout.Space();
         EditorGUILayout.PropertyField(talkingSpeed_prop, new GUIContent("Talking Speed"));
-
-        EditorGUILayout.Space();
-        EditorGUILayout.LabelField("Quests", EditorStyles.boldLabel);
-        EditorGUILayout.PropertyField(givesQuest_prop, new GUIContent("Does it give a quest?"));
-        if (givesQuest_prop.boolValue)
-            EditorGUILayout.PropertyField(quest_prop);
 
         serializedObject.ApplyModifiedProperties();
     }
@@ -116,6 +107,17 @@ public class DialogueObjectEditor : Editor
 
                 SerializedProperty conditionsProp = element.FindPropertyRelative("conditions");
                 EditorGUILayout.PropertyField(conditionsProp, true);
+            }
+            if (element.managedReferenceValue is StartQuestNode)
+            {
+                SerializedProperty questProp = element.FindPropertyRelative("questToStart");
+                SerializedProperty nextNodeProp = element.FindPropertyRelative("nextNodeID");
+
+                EditorGUILayout.LabelField("Quest Settings", EditorStyles.boldLabel);
+
+                EditorGUILayout.PropertyField(questProp, new GUIContent("Quest To Start"));
+
+                DrawNextNodeDropdown(nextNodeProp, "Next Node");
             }
 
             EditorGUILayout.Space();

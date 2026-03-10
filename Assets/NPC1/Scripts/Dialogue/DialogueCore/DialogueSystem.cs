@@ -1,34 +1,43 @@
 using UnityEngine;
 using System;
 using System.Collections.Generic;
-// Created By Jantina
+// Created by Jantina
+
 public class DialogueSystem : MonoBehaviour
 {
+    [Header("Dialogue References")]
+
+    [Tooltip("The dialogue asset currently being processed.")]
     [SerializeField] private Dialogue currentDialogue;
+
+    [Tooltip("Handles all dialogue UI such as text, choices and typewriter effects.")]
     [SerializeField] private DialogueUIManager uiManager;
+
+    [Tooltip("Reference to the player state used for evaluating dialogue conditions.")]
     [SerializeField] private PlayerState player;
 
+    public static DialogueSystem Instance;
+
     private Dictionary<string, DialogueNode> nodeLookup;
-    [SerializeField] Dialogue testingDialogue;
+
     [HideInInspector] public DialogueNode currentNode;
+
     private DialogueLineNode currentLineNode;
     private bool lineFullyRevealed = false;
+
+    [HideInInspector] public bool isDialogueActive = false;
+
     private bool waitingForPlayerInput = false;
 
     private void Awake()
     {
+        Instance = this;
+
         if (player == null)
         {
             GameObject placeholder = new GameObject("PlayerState");
             player = placeholder.AddComponent<PlayerState>();
         }
-    }
-
-    private void Start()
-    {
-        if (currentDialogue == null || uiManager == null) return;
-        BuildNodeLookup();
-        StartDialogue(testingDialogue);
     }
 
     private void Update()
@@ -45,13 +54,12 @@ public class DialogueSystem : MonoBehaviour
             }
 
             if (currentNode is ChoiceNode)
-            {
                 return;
-            }
 
             if (currentNode is ConditionalNode condNodeClick)
             {
                 bool allPass = true;
+
                 foreach (var condition in condNodeClick.conditions)
                 {
                     if (!condition.Evaluate(player))
@@ -80,7 +88,7 @@ public class DialogueSystem : MonoBehaviour
                     ProcessNode();
                 }
 
-                return; 
+                return;
             }
 
             waitingForPlayerInput = false;
@@ -88,9 +96,14 @@ public class DialogueSystem : MonoBehaviour
             AdvanceNode(nextIDNormal);
         }
     }
+
+    /// <summary>
+    /// Builds a lookup dictionary for quickly retrieving dialogue nodes by ID.
+    /// </summary>
     private void BuildNodeLookup()
     {
         nodeLookup = new Dictionary<string, DialogueNode>();
+
         foreach (var node in currentDialogue.nodes)
         {
             if (node != null && !string.IsNullOrEmpty(node.nodeID))
@@ -98,14 +111,27 @@ public class DialogueSystem : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Starts a dialogue sequence using the provided dialogue asset.
+    /// </summary>
     public void StartDialogue(Dialogue dialogue)
     {
+        if (currentDialogue == null || uiManager == null) return;
+
+        
         currentDialogue = dialogue;
+        BuildNodeLookup();
+        isDialogueActive = true;
+
         if (currentDialogue.nodes.Count == 0) return;
+
         currentNode = currentDialogue.nodes[0];
         ProcessNode();
     }
 
+    /// <summary>
+    /// Processes the current dialogue node and determines which UI or logic should be executed.
+    /// </summary>
     private void ProcessNode()
     {
         if (currentNode == null)
@@ -129,40 +155,58 @@ public class DialogueSystem : MonoBehaviour
         }
         else if (currentNode is ChoiceNode choiceNode)
         {
-            waitingForPlayerInput = true; //
-            currentLineNode = new DialogueLineNode { text = choiceNode.text }; 
+            waitingForPlayerInput = true;
+            currentLineNode = new DialogueLineNode { text = choiceNode.text };
+
             uiManager.ShowChoiceNode(choiceNode, npcName, OnChoiceSelected, speed);
         }
         else if (currentNode is ConditionalNode condNode)
         {
-            
             currentLineNode = new DialogueLineNode { text = condNode.text };
+
             lineFullyRevealed = false;
             waitingForPlayerInput = true;
 
-            
-            string trueID = condNode.trueNodeID;
-            string falseID = condNode.falseNodeID;
-            var conditions = condNode.conditions;
+            uiManager.ShowDialogueNode(
+                currentLineNode,
+                currentDialogue.hasName ? currentDialogue.npcName : "",
+                speed,
+                OnTypewriterComplete
+            );
+        }
+        else if (currentNode is StartQuestNode questNode)
+        {
+            if (questNode.questToStart != null)
+            {
+                Debug.Log("Start A Quest");
+            }
 
-            uiManager.ShowDialogueNode(currentLineNode, currentDialogue.hasName ? currentDialogue.npcName : "", speed, OnTypewriterComplete);
-
+            AdvanceNode(questNode.nextNodeID);
         }
     }
 
+    /// <summary>
+    /// Called when the dialogue typewriter effect finishes revealing the current text.
+    /// </summary>
     private void OnTypewriterComplete()
     {
         lineFullyRevealed = true;
-        
     }
 
+    /// <summary>
+    /// Retrieves the next node ID from the current dialogue line node.
+    /// </summary>
     private string GetNextNodeIDForCurrentNode()
     {
         if (currentNode is DialogueLineNode lineNode)
             return lineNode.nextNodeID;
+
         return null;
     }
 
+    /// <summary>
+    /// Advances the dialogue to the node with the provided ID.
+    /// </summary>
     private void AdvanceNode(string nextNodeID)
     {
         if (string.IsNullOrEmpty(nextNodeID))
@@ -183,6 +227,9 @@ public class DialogueSystem : MonoBehaviour
         ProcessNode();
     }
 
+    /// <summary>
+    /// Handles the player selecting a dialogue choice and advances to the linked node.
+    /// </summary>
     private void OnChoiceSelected(string nextNodeID)
     {
         if (uiManager.TypewriterRunning)

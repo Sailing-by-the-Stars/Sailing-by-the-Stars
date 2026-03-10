@@ -4,20 +4,35 @@ using TMPro;
 using System;
 using System.Collections;
 // Created by Jantina
+
 public class DialogueUIManager : MonoBehaviour
 {
-    [Header("UI References")]
+
+    [Tooltip("The main dialogue panel that contains all dialogue UI elements.")]
     [SerializeField] private GameObject dialogueBox;
+
+    [Tooltip("Text component displaying the NPC's name.")]
     [SerializeField] private TMP_Text npcNameText;
+
+    [Tooltip("Text component displaying the dialogue text.")]
     [SerializeField] private TMP_Text dialogueText;
+
+    [Tooltip("Button to advance to the next dialogue line.")]
     [SerializeField] private Button nextButton;
+
+    [Tooltip("First choice button for player dialogue options.")]
     [SerializeField] private Button choiceButton1;
+
+    [Tooltip("Second choice button for player dialogue options.")]
     [SerializeField] private Button choiceButton2;
 
     private Coroutine typewriterCoroutine;
     private Action onTypewriterComplete;
     private string currentFullText;
 
+    /// <summary>
+    /// Returns true if the typewriter effect is currently running.
+    /// </summary>
     public bool TypewriterRunning => typewriterCoroutine != null;
 
     private void Awake()
@@ -28,6 +43,9 @@ public class DialogueUIManager : MonoBehaviour
         dialogueBox.gameObject.SetActive(false);
     }
 
+    /// <summary>
+    /// Displays a dialogue line node with typewriter effect.
+    /// </summary>
     public void ShowDialogueNode(DialogueLineNode node, string npcName, float typingSpeed, Action typewriterCallback)
     {
         npcNameText.text = npcName;
@@ -35,7 +53,7 @@ public class DialogueUIManager : MonoBehaviour
         nextButton.gameObject.SetActive(false);
         choiceButton1.gameObject.SetActive(false);
         choiceButton2.gameObject.SetActive(false);
-        dialogueBox.gameObject.SetActive(true);
+        dialogueBox.SetActive(true);
 
         currentFullText = node.text;
         onTypewriterComplete = () =>
@@ -50,6 +68,9 @@ public class DialogueUIManager : MonoBehaviour
         typewriterCoroutine = StartCoroutine(TypewriterEffect(currentFullText, typingSpeed));
     }
 
+    /// <summary>
+    /// Displays a choice node with typewriter effect, then activates choice buttons when done.
+    /// </summary>
     public void ShowChoiceNode(ChoiceNode choiceNode, string npcName, Action<string> onChoiceSelected, float typingSpeed)
     {
         npcNameText.text = npcName;
@@ -57,7 +78,7 @@ public class DialogueUIManager : MonoBehaviour
         nextButton.gameObject.SetActive(false);
         choiceButton1.gameObject.SetActive(false);
         choiceButton2.gameObject.SetActive(false);
-        dialogueBox.gameObject.SetActive(true);
+        dialogueBox.SetActive(true);
 
         currentFullText = choiceNode.text;
         onTypewriterComplete = () =>
@@ -71,6 +92,9 @@ public class DialogueUIManager : MonoBehaviour
         typewriterCoroutine = StartCoroutine(TypewriterEffect(currentFullText, typingSpeed));
     }
 
+    /// <summary>
+    /// Activates choice buttons and assigns click events for player selection.
+    /// </summary>
     private void SetupChoiceButtons(ChoiceNode choiceNode, Action<string> onChoiceSelected)
     {
         choiceButton1.gameObject.SetActive(false);
@@ -97,9 +121,13 @@ public class DialogueUIManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Coroutine for typing out dialogue character by character.
+    /// </summary>
     private IEnumerator TypewriterEffect(string fullText, float speed)
     {
         dialogueText.text = "";
+
         foreach (char c in fullText)
         {
             dialogueText.text += c;
@@ -110,6 +138,9 @@ public class DialogueUIManager : MonoBehaviour
         onTypewriterComplete?.Invoke();
     }
 
+    /// <summary>
+    /// Skips the typewriter effect and instantly shows the full dialogue text.
+    /// </summary>
     public void SkipTypewriter()
     {
         if (typewriterCoroutine != null)
@@ -122,6 +153,9 @@ public class DialogueUIManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Ends the dialogue and hides all UI elements.
+    /// </summary>
     public void EndDialogue()
     {
         dialogueText.text = "";
@@ -129,6 +163,7 @@ public class DialogueUIManager : MonoBehaviour
         nextButton.gameObject.SetActive(false);
         choiceButton1.gameObject.SetActive(false);
         choiceButton2.gameObject.SetActive(false);
-        dialogueBox.gameObject.SetActive(false);
+        dialogueBox.SetActive(false);
+        DialogueSystem.Instance.isDialogueActive = false;
     }
 }
