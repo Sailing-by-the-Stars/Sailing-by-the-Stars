@@ -14,21 +14,26 @@ public class BoatController : MonoBehaviour
     [SerializeField] private float dragCoefficient = 1.1f;
     [SerializeField] private float liftCoefficient = 1.5f;
     [SerializeField] private float sailArea = 20;
+    [SerializeField] private float underwaterFrontArea = .5f;
     [SerializeField] private float airDensity = 1.225f;
-    [SerializeField] private float torqueStrength = 10f;
+    [SerializeField] private float waterDensity = 1000f;
+    [SerializeField] private float rudderTorqueStrength = 10f;
+    [SerializeField] private float keelDragStrength = 10f;
 
     [Header("Boat stats")]
     [SerializeField] private float maxRudderDeflection = 20f;
+    [SerializeField] private float maxMastAngle = 90f;
 
     [Header("Controls")]
     [SerializeField] private SmoothAxis2D rudderAxis;
-    [SerializeField] private SmoothAxis2D mainsheetAxis;
+    [SerializeField] private SmoothAxis2D mastAxis;
 
     [Header("")]
     [SerializeField] private GameObject hullObject;
     [SerializeField] private GameObject rudderObject;
     [SerializeField] private GameObject mastObject;
     [SerializeField] private GameObject sailObject;
+    [SerializeField] private GameObject mastPivot;
 
 
     private Rigidbody rigidBody;
@@ -43,20 +48,25 @@ public class BoatController : MonoBehaviour
     void Update()
     {
         //RotateRudder();
+        RotateMastAndSail();
     }
 
     void FixedUpdate()
     {
         apparentWind = wind - rigidBody.linearVelocity;
-        Vector3 mastDirection = Vector3.ProjectOnPlane(mastObject.transform.up, Vector3.up).normalized;
+        Vector3 mastDirection = Vector3.ProjectOnPlane(-mastObject.transform.up, Vector3.up).normalized;
         Vector3 windDirection = Vector3.ProjectOnPlane(apparentWind, Vector3.up).normalized;
 
-        float mastDirectionIntoWind = Vector3.SignedAngle(-mastDirection, windDirection, Vector3.up);
-        //rigidBody.AddRelativeForce(new Vector3(40f ,0f, 0f), ForceMode.Force);
-        //rigidBody.AddRelativeTorque(new Vector3(0f, 10f, 0f), ForceMode.Force);
+        float mastDirectionIntoWind = Vector3.SignedAngle(mastDirection, -windDirection, Vector3.up);
 
         CalculateDrag(apparentWind.magnitude, mastDirectionIntoWind);
         CalculateLift(apparentWind.magnitude, mastDirectionIntoWind);
+
+        Debug.Log("AOA: " + mastDirectionIntoWind);
+
+        ApplyRudderTorque();
+        ApplyKeelDrag();
+        applyWaterDrag();
     }
 
     //Calculates the force of drag experienced on the sail, used when running downwind and broadreach
@@ -64,18 +74,24 @@ public class BoatController : MonoBehaviour
     {
         float drag = .5f * airDensity * apparentWindSpeed * apparentWindSpeed * sailArea * dragCoefficient;
 
-        if (apparentWindAngle > 135f)
+        if (apparentWindAngle > 130f || apparentWindAngle < -130f)
         {
-            drag *= Mathf.SmoothStep(0.1f, 1f, (apparentWindAngle - 135f) / 45f);
+            drag = 0;
         }
-        else if (apparentWindAngle < -135f)
+        else if (apparentWindAngle > 40f)
         {
-            drag *= Mathf.SmoothStep(0.1f, 1f, (-apparentWindAngle - 135f) / 45f);
+            drag *= Mathf.SmoothStep(0.1f, 1f, (apparentWindAngle - 40f) / 50f);
+        }
+        else if (apparentWindAngle < -40f)
+        {
+            drag *= Mathf.SmoothStep(0.1f, 1f, (-apparentWindAngle - 40f) / 50f);
         }
         else
+        {
             drag *= .1f;
+        }
 
-        //Debug.Log("Drag: " + drag);
+        Debug.Log("Drag: " + drag);
 
         //make sure that the drag value decreased when the apparentWindAngle moves away from 180 degrees
         ApplyDrag(drag, apparentWindAngle);
@@ -86,16 +102,22 @@ public class BoatController : MonoBehaviour
     {
         float lift = .5f * airDensity * apparentWindSpeed * apparentWindSpeed * sailArea * liftCoefficient;
 
-        if (apparentWindAngle < 135f && apparentWindAngle > 0f)
+        if (apparentWindAngle > 90f || apparentWindAngle < -90f)
         {
-            lift *= Mathf.SmoothStep(1f, .1f, apparentWindAngle / 135f);
+            lift = 0f;
         }
-        else if (apparentWindAngle > -135f && apparentWindAngle < 0f)
+        else if (apparentWindAngle < 70f && apparentWindAngle > 0f)
         {
-            lift *= Mathf.SmoothStep(1f, .1f, -apparentWindAngle / 135f);
+            lift *= Mathf.SmoothStep(1f, .01f, apparentWindAngle / 70f);
+        }
+        else if (apparentWindAngle > -70f && apparentWindAngle < 0f)
+        {
+            lift *= Mathf.SmoothStep(1f, .01f, -apparentWindAngle / 70f);
         }
         else
-            lift *= .1f;
+        {
+            lift = 0f;
+        }
 
         //Debug.Log("Lift: " + lift);
 
@@ -140,11 +162,40 @@ public class BoatController : MonoBehaviour
         rigidBody.AddForce(dragVector, ForceMode.Force);
     }
 
-    private void RotateRudder()
+    void ApplyRudderTorque()
     {
-        Vector3 rudderRotationPoint = rudderObject.transform.position + rudderObject.transform.forward;
-        Vector3 rudderAxis = rudderObject.transform.up;
-        rudderObject.transform.RotateAround(rudderRotationPoint, rudderAxis, 10f * Time.deltaTime);
-        
+        float forwardVelocity = transform.InverseTransformVector(rigidBody.linearVelocity).z;
+
+        rigidBody.AddTorque(Vector3.up * rudderAxis.value * rudderTorqueStrength * forwardVelocity, ForceMode.Force);
+        Debug.Log("RudderTorque: " + rudderAxis.value * rudderTorqueStrength * forwardVelocity);
+    }
+
+    void ApplyKeelDrag()
+    {
+        Vector3 localVelocity = transform.InverseTransformVector(rigidBody.linearVelocity);
+
+        Vector3 keelDragVector = Vector3.right * localVelocity.x * keelDragStrength;
+
+        rigidBody.AddRelativeForce(-keelDragVector);
+    }
+
+    void applyWaterDrag()
+    {
+        Vector3 localVelocity = transform.InverseTransformVector(rigidBody.linearVelocity);
+        float waterDrag = .5f * waterDensity * Mathf.Pow(localVelocity.z, 2) * .9f * underwaterFrontArea;
+        rigidBody.AddRelativeForce(-Vector3.forward * waterDrag);
+    }
+
+    private float currentMastAngle = 0f;
+
+    private void RotateMastAndSail()
+    {
+        float targetMastAngle = mastAxis.value * maxMastAngle;
+        float deltaMastAngle = targetMastAngle - currentMastAngle;
+
+        mastObject.transform.RotateAround(mastPivot.transform.position, Vector3.up, deltaMastAngle);
+        sailObject.transform.RotateAround(mastPivot.transform.position, Vector3.up, deltaMastAngle);
+
+        currentMastAngle = targetMastAngle;
     }
 }
