@@ -19,6 +19,8 @@ MonoBehaviour:
   - rid: 2042809308283404375
   - rid: 2042809308283404376
   - rid: 2042809308283404377
+  - rid: 2042809312053297228
+  - rid: 2042809312053297229
   references:
     version: 2
     RefIds:
@@ -42,6 +44,20 @@ MonoBehaviour:
         text: Do you want to investigate the abandoned mine?
         choices:
         - choiceText: Yes, of course!
-          nextNodeID: 
+          nextNodeID: UnkownHeroQuest3-4
         - choiceText: "No, that\u2019s way too scary!"
-          nextNodeID: 
+          nextNodeID: UnkownHeroQuest3-5
+    - rid: 2042809312053297228
+      type: {class: StartQuestNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: UnkownHeroQuest3-4
+        text: 
+        questToStart: {fileID: 11400000, guid: e1c0fb28cca269d4788e3b175610bf0f, type: 2}
+        nextNodeID: 
+    - rid: 2042809312053297229
+      type: {class: StartQuestNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: UnkownHeroQuest3-5
+        text: 
+        questToStart: {fileID: 11400000, guid: 44f1da11ab5db1c4381dbd1480ae8f70, type: 2}
+        nextNodeID: 

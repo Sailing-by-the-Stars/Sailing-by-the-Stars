@@ -18,7 +18,7 @@ MonoBehaviour:
   nodes:
   - rid: 2042809308283404362
   - rid: 2042809308283404363
-  - rid: 2042809308283404364
+  - rid: 2042809312053297225
   references:
     version: 2
     RefIds:
@@ -38,10 +38,11 @@ MonoBehaviour:
         nodeID: UnkownHeroStart2
         text: When opening the bottle you take out the map and start looking at it.
         nextNodeID: UnkownHeroStart3
-    - rid: 2042809308283404364
-      type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
+    - rid: 2042809312053297225
+      type: {class: StartQuestNode, ns: , asm: Assembly-CSharp}
       data:
         nodeID: UnkownHeroStart3
         text: On the map you can see a weird Y shaped palm tree. What could this
           mean?
+        questToStart: {fileID: 11400000, guid: d3a1cd1e2cae4334990f2a9695fd9eb4, type: 2}
         nextNodeID: 

@@ -20,7 +20,7 @@ MonoBehaviour:
   - rid: 2042809308283404371
   - rid: 2042809308283404372
   - rid: 2042809308283404373
-  - rid: 2042809308283404374
+  - rid: 2042809312053297227
   references:
     version: 2
     RefIds:
@@ -55,10 +55,11 @@ MonoBehaviour:
         text: 'They wrote me off as dead so quick, atleast now i can work from the
           shadows... '
         nextNodeID: UnkownHeroQuest2-5
-    - rid: 2042809308283404374
-      type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
+    - rid: 2042809312053297227
+      type: {class: StartQuestNode, ns: , asm: Assembly-CSharp}
       data:
         nodeID: UnkownHeroQuest2-5
         text: I will be the best *scratched out word* of this island! I have found
           the perfect hideout already.
+        questToStart: {fileID: 11400000, guid: d196c84801d6b584a8b24c8d00b9f5e6, type: 2}
         nextNodeID: 
