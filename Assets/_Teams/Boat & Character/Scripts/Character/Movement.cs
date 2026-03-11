@@ -48,11 +48,12 @@ public class Movement : MonoBehaviour
 
     private void Update()
     {
-        RotateCamera();
+
     }
 
     void FixedUpdate()
     {
+        RotateCamera();
         MovePlayer();
     }
 
