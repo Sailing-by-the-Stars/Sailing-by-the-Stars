@@ -6,7 +6,7 @@ namespace World_Design.Scripts.Challenges.Challenge1
     public class TriggerScript : MonoBehaviour
     {
         [Header("Settings")]
-        [SerializeField] private string targetTag = "boat";
+        [SerializeField] private string targetTag = "Player";
 
         public Animator animator;
 
