@@ -20,7 +20,7 @@ MonoBehaviour:
   - rid: 2042809308283404366
   - rid: 2042809308283404367
   - rid: 2042809308283404368
-  - rid: 2042809308283404369
+  - rid: 2042809312053297226
   references:
     version: 2
     RefIds:
@@ -57,9 +57,10 @@ MonoBehaviour:
         text: 'You look at closer at the palm tree and realise it has clues carved
           into it for your next objective. '
         nextNodeID: UnkownHeroQuest1-5
-    - rid: 2042809308283404369
-      type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
+    - rid: 2042809312053297226
+      type: {class: StartQuestNode, ns: , asm: Assembly-CSharp}
       data:
         nodeID: UnkownHeroQuest1-5
         text: It looks like an anvil next to a rock.
+        questToStart: {fileID: 11400000, guid: 363ddd0c9ff5f1b4eb2b05e65838b644, type: 2}
         nextNodeID: 

@@ -17,6 +17,7 @@ MonoBehaviour:
   talkingSpeed: 0.95
   nodes:
   - rid: 2042809308283404379
+  - rid: 2042809312053297232
   references:
     version: 2
     RefIds:
@@ -27,6 +28,13 @@ MonoBehaviour:
         text: Do you want to go inside the cabin or chicken out and leave?
         choices:
         - choiceText: Of course i want to go inside! I am not afraid!
-          nextNodeID: 
+          nextNodeID: UnkownHeroQuest5-2
         - choiceText: I dont trust this... I think i should leave
           nextNodeID: 
+    - rid: 2042809312053297232
+      type: {class: StartQuestNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: UnkownHeroQuest5-2
+        text: 
+        questToStart: {fileID: 11400000, guid: 0ac011f36f5a0f44cb554f328552f67f, type: 2}
+        nextNodeID: 

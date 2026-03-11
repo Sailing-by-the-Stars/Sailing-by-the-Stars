@@ -16,14 +16,15 @@ MonoBehaviour:
   npcName: 
   talkingSpeed: 0.95
   nodes:
-  - rid: 2042809308283404378
+  - rid: 2042809312053297231
   references:
     version: 2
     RefIds:
-    - rid: 2042809308283404378
-      type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
+    - rid: 2042809312053297231
+      type: {class: StartQuestNode, ns: , asm: Assembly-CSharp}
       data:
         nodeID: UnkownHeroQuest4-1
         text: Here lies the brave hero *scratched out name*. He died so many others
           could live
+        questToStart: {fileID: 11400000, guid: 44f1da11ab5db1c4381dbd1480ae8f70, type: 2}
         nextNodeID: 
