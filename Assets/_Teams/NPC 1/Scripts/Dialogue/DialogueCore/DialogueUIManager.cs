@@ -50,6 +50,18 @@ public class DialogueUIManager : MonoBehaviour
         choiceButton2.gameObject.SetActive(false);
         dialogueBox.gameObject.SetActive(false);
     }
+    private void Update()
+    {
+        if (choiceButton1.gameObject.activeSelf && Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            choiceButton1.onClick.Invoke();
+        }
+
+        if (choiceButton2.gameObject.activeSelf && Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            choiceButton2.onClick.Invoke();
+        }
+    }
 
     /// <summary>
     /// Displays a dialogue line node with typewriter effect.
