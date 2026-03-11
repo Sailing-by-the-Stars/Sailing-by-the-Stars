@@ -15,6 +15,7 @@ public class BoatController : MonoBehaviour
     [SerializeField] private float liftCoefficient = 1.5f;
     [SerializeField] private float sailArea = 20;
     [SerializeField] private float airDensity = 1.225f;
+    [SerializeField] private float torqueStrength = 10f;
 
     [Header("Boat stats")]
     [SerializeField] private float maxRudderDeflection = 20f;
@@ -47,7 +48,7 @@ public class BoatController : MonoBehaviour
     void FixedUpdate()
     {
         apparentWind = wind - rigidBody.linearVelocity;
-        Vector3 mastDirection = Vector3.ProjectOnPlane(mastObject.transform.right, Vector3.up).normalized;
+        Vector3 mastDirection = Vector3.ProjectOnPlane(mastObject.transform.up, Vector3.up).normalized;
         Vector3 windDirection = Vector3.ProjectOnPlane(apparentWind, Vector3.up).normalized;
 
         float mastDirectionIntoWind = Vector3.SignedAngle(-mastDirection, windDirection, Vector3.up);
@@ -74,7 +75,7 @@ public class BoatController : MonoBehaviour
         else
             drag *= .1f;
 
-        Debug.Log("Drag: " + drag);
+        //Debug.Log("Drag: " + drag);
 
         //make sure that the drag value decreased when the apparentWindAngle moves away from 180 degrees
         ApplyDrag(drag, apparentWindAngle);
@@ -96,7 +97,7 @@ public class BoatController : MonoBehaviour
         else
             lift *= .1f;
 
-        Debug.Log("Lift: " + lift);
+        //Debug.Log("Lift: " + lift);
 
         //make sure that the lift value decreased when the apparentWindAngle moves away from being between around 30 to 135 degrees
         ApplyLift(lift, apparentWindAngle);
@@ -120,6 +121,7 @@ public class BoatController : MonoBehaviour
         Vector3 localLiftVector = new Vector3(0f, liftVector.y, 0f);
         liftVector = hullObject.transform.TransformVector(localLiftVector);
         
+        Debug.Log("Lift Vector: " + liftVector);
         rigidBody.AddForce(liftVector, ForceMode.Force);
     }
 
@@ -134,6 +136,7 @@ public class BoatController : MonoBehaviour
         Vector3 LocalDragVector = new Vector3(0f, dragVector.y, 0f);
         dragVector = hullObject.transform.TransformVector(LocalDragVector);
 
+        Debug.Log("Drag Vector: " + dragVector);
         rigidBody.AddForce(dragVector, ForceMode.Force);
     }
 
