@@ -2,10 +2,13 @@ using UnityEngine;
 
 public class WaypointFollower : MonoBehaviour
 {
-    [SerializeField] private GameObject[] waypoints;
+    [Header("Movement Settings")]
     [SerializeField] private float movementSpeed = 1f;
-    private readonly float switchDistance = .01f;
+    
+    [Header("References")]
+    [SerializeField] private GameObject[] waypoints;
 
+    private readonly float switchDistance = .01f;
     private int currentWaypointIndex = 0;
 
     void Update()
