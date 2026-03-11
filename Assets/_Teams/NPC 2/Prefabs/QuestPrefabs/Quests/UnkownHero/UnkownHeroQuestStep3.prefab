@@ -233,6 +233,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7119750807003756151}
+  - component: {fileID: 2781635666234251029}
   m_Layer: 0
   m_Name: UnkownHeroQuestStep3
   m_TagString: Untagged
@@ -259,6 +260,23 @@ Transform:
   - {fileID: 9098757783820166551}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2781635666234251029
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6138478252374370995}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 727ffce1f89102743b4b943882b1a791, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NPCDialogueHolder
+  firstDialogue: {fileID: 11400000, guid: 536b0ceb1f7a54e4cbecfd827b0adabc, type: 2}
+  hasRepeatDialogue: 0
+  repeatDialogue: {fileID: 0}
+  hasInteractedBefore: 0
+  interactionDistance: 5
 --- !u!1 &6606390654025616696
 GameObject:
   m_ObjectHideFlags: 0
@@ -442,14 +460,6 @@ PrefabInstance:
     - target: {fileID: 2872909045617161148, guid: d937a74f8d878fe42ba34fead73c01ec, type: 3}
       propertyPath: m_TagString
       value: Player
-      objectReference: {fileID: 0}
-    - target: {fileID: 7610984433084736538, guid: d937a74f8d878fe42ba34fead73c01ec, type: 3}
-      propertyPath: itemID
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 7610984433084736538, guid: d937a74f8d878fe42ba34fead73c01ec, type: 3}
-      propertyPath: destroyOnCollect
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

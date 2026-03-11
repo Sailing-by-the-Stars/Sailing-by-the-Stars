@@ -126,6 +126,7 @@ GameObject:
   - component: {fileID: 3411380304137597538}
   - component: {fileID: 5719783054093703980}
   - component: {fileID: 1804289520839679779}
+  - component: {fileID: 4032370612995265186}
   m_Layer: 0
   m_Name: UnkownHeroQuestStart
   m_TagString: Untagged
@@ -231,6 +232,23 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
+--- !u!114 &4032370612995265186
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8043962148435183799}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 727ffce1f89102743b4b943882b1a791, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NPCDialogueHolder
+  firstDialogue: {fileID: 11400000, guid: acdc3329af5d15a468f5085affa0d25b, type: 2}
+  hasRepeatDialogue: 0
+  repeatDialogue: {fileID: 0}
+  hasInteractedBefore: 0
+  interactionDistance: 5
 --- !u!1001 &2165627126341792208
 PrefabInstance:
   m_ObjectHideFlags: 0

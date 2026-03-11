@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8700864238293864987}
+  - component: {fileID: 377802284349345056}
   m_Layer: 0
   m_Name: UnkownHeroQuestStep4A
   m_TagString: Untagged
@@ -34,6 +35,23 @@ Transform:
   - {fileID: 922566308137831754}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &377802284349345056
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1641832542869948563}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 727ffce1f89102743b4b943882b1a791, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NPCDialogueHolder
+  firstDialogue: {fileID: 11400000, guid: aeb7226a8cc2b704aa2b9526dcdcf753, type: 2}
+  hasRepeatDialogue: 0
+  repeatDialogue: {fileID: 0}
+  hasInteractedBefore: 0
+  interactionDistance: 5
 --- !u!1 &2544998494680880716
 GameObject:
   m_ObjectHideFlags: 0

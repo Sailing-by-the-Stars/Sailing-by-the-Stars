@@ -1,0 +1,47 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a27b1591cf442e34da26ab4a98de3513, type: 3}
+  m_Name: UnkownHeroQuest3
+  m_EditorClassIdentifier: Assembly-CSharp::Dialogue
+  hasName: 0
+  npcName: 
+  talkingSpeed: 0.95
+  nodes:
+  - rid: 2042809308283404375
+  - rid: 2042809308283404376
+  - rid: 2042809308283404377
+  references:
+    version: 2
+    RefIds:
+    - rid: 2042809308283404375
+      type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: UnkownHeroQuest3-1
+        text: 'You read the sign an notices it is giving you directions. '
+        nextNodeID: UnkownHeroQuest3-2
+    - rid: 2042809308283404376
+      type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: UnkownHeroQuest3-2
+        text: If you turn left on the intersection you will go to a cabin. If you
+          turn right you will go to an abandoned mine
+        nextNodeID: UnkownHeroQuest3-3
+    - rid: 2042809308283404377
+      type: {class: ChoiceNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: UnkownHeroQuest3-3
+        text: Do you want to investigate the abandoned mine?
+        choices:
+        - choiceText: Yes, of course!
+          nextNodeID: 
+        - choiceText: "No, that\u2019s way too scary!"
+          nextNodeID: 
