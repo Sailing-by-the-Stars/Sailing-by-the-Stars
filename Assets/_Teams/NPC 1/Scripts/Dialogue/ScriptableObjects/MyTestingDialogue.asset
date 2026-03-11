@@ -1,0 +1,72 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a27b1591cf442e34da26ab4a98de3513, type: 3}
+  m_Name: MyTestingDialogue
+  m_EditorClassIdentifier: Assembly-CSharp::Dialogue
+  hasName: 1
+  npcName: Jeremy
+  talkingSpeed: 1
+  nodes:
+  - rid: 5104013395742687318
+  - rid: 5104013395742687320
+  - rid: 5104013395742687321
+  - rid: 5104013395742687322
+  - rid: 5104013395742687323
+  - rid: 5104013395742687324
+  references:
+    version: 2
+    RefIds:
+    - rid: 5104013395742687318
+      type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: Greeting
+        text: Hiyaaaaaa, welcome!
+        nextNodeID: Choice
+    - rid: 5104013395742687320
+      type: {class: ChoiceNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: Choice
+        text: Choose! Do you want pineapple on your pizza?
+        choices:
+        - choiceText: Yes
+          nextNodeID: Condition
+        - choiceText: No
+          nextNodeID: NoPineapple
+    - rid: 5104013395742687321
+      type: {class: ConditionalNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: Condition
+        text: GOOD!!! Now. Do you have gem?
+        conditions:
+        - conditionType: 1
+          questID: 
+          itemID: Gem
+        trueNodeID: HasGem
+        falseNodeID: No Gem
+    - rid: 5104013395742687322
+      type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: HasGem
+        text: You Do! Perf <3
+        nextNodeID: 
+    - rid: 5104013395742687323
+      type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: NoPineapple
+        text: Omg rude.
+        nextNodeID: 
+    - rid: 5104013395742687324
+      type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: No Gem
+        text: Omg you're broke!
+        nextNodeID: 

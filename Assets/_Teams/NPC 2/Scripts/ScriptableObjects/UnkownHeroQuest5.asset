@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a27b1591cf442e34da26ab4a98de3513, type: 3}
+  m_Name: UnkownHeroQuest5
+  m_EditorClassIdentifier: Assembly-CSharp::Dialogue
+  hasName: 0
+  npcName: 
+  talkingSpeed: 0.95
+  nodes:
+  - rid: 2042809308283404379
+  references:
+    version: 2
+    RefIds:
+    - rid: 2042809308283404379
+      type: {class: ChoiceNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: UnkownHeroQuest5-1
+        text: Do you want to go inside the cabin or chicken out and leave?
+        choices:
+        - choiceText: Of course i want to go inside! I am not afraid!
+          nextNodeID: 
+        - choiceText: I dont trust this... I think i should leave
+          nextNodeID: 
