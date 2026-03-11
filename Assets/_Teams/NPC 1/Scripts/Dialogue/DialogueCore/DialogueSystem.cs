@@ -188,10 +188,18 @@ public class DialogueSystem : MonoBehaviour
         {
             if (questNode.questToStart != null)
             {
-                Debug.Log("Start A Quest");
+                QuestManager.Instance.StartQuest(questNode.questToStart);
             }
+            currentLineNode = new DialogueLineNode { text = questNode.text };
+            lineFullyRevealed = false;
+            waitingForPlayerInput = true;
 
-            AdvanceNode(questNode.nextNodeID);
+            uiManager.ShowDialogueNode(
+                currentLineNode,
+                currentDialogue.hasName ? currentDialogue.npcName : "",
+                speed,
+                OnTypewriterComplete
+            );
         }
     }
 

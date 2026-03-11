@@ -47,6 +47,7 @@ public class CollectQuestItem : MonoBehaviour
 
         if (destroyOnCollect)
         {
+            InteractionPromptUI.Instance.HidePrompt();
             Destroy(transform.root.gameObject);
         } 
         else
