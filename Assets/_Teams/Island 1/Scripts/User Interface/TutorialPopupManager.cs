@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class TutorialPopupManager : MonoBehaviour
 {
-    private static WaitForSecondsRealtime _waitForSeconds;
+    [Header("Display Settings")]
     [SerializeField] float timeBetweenPopups = 2f;
 
+    private static WaitForSecondsRealtime _waitForSeconds;
     private TutorialPopup[] popupScripts;
     private int popupScriptIndex = 0;
 
@@ -23,30 +24,21 @@ public class TutorialPopupManager : MonoBehaviour
             popupScript.gameObject.SetActive(false);
         }
 
-        Debug.Log("PopusSctips: " + popupScripts.Length);
-        Debug.Log("TimeScale: " + Time.timeScale);
-
         StartCoroutine(DisplayNextPopup());
     }
 
     void PopupIsDone()
     {
-        Debug.Log("Popup is done");
         StartCoroutine(DisplayNextPopup());
     }
 
     IEnumerator DisplayNextPopup()
     {
-        Debug.Log("Displaying next component");
-
         yield return _waitForSeconds;
-
-        Debug.Log("Coroutine resumed");
 
         if (popupScriptIndex < popupScripts.Length)
         {
             popupScripts[popupScriptIndex].gameObject.SetActive(true);
-            Debug.Log("Enabled popup: " + popupScriptIndex);
             popupScriptIndex++;
         }
     }

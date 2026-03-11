@@ -4,7 +4,10 @@ using UnityEngine.UI;
 
 public class LookTutorial: TutorialPopup
 {
-    [SerializeField] private readonly float requiredMouseTravelDistance = 1000f;
+    [Header("Requirements")]
+    [SerializeField] private float requiredMouseTravelDistance = 1000f;
+    
+    [Header("References")]
     [SerializeField] private Image progressbarMask;
 
     private float mouseTravelDistance = 0f;
