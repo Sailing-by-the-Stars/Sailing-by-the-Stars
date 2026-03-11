@@ -12,6 +12,7 @@ public class ChallengeN3 : MonoBehaviour
     [Header("References")]
     [SerializeField] private GameObject ocean;
     [SerializeField] private GameObject triggerZone;
+    [SerializeField] private string targetTag = "Player";
     private SetParameterByID windController;
 
     [Header("Original value of the properties")]
@@ -39,7 +40,7 @@ public class ChallengeN3 : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.name == "Boat")
+        if (other.gameObject.name == targetTag)
         {
             StartChallenge();
         }
@@ -47,7 +48,7 @@ public class ChallengeN3 : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.name == "Boat")
+        if (other.gameObject.name == targetTag)
         {
             EndChallange();
         }
