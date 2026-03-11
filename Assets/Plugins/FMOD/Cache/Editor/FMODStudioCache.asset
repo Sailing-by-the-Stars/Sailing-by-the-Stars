@@ -1,5 +1,50 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-8999385955169170004
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Event_OceanAmbGeneral
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
+  Path: event:/Event_OceanAmbGeneral
+  Guid:
+    Data1: 505253198
+    Data2: 1185016264
+    Data3: 764627329
+    Data4: 688797964
+  Banks:
+  - {fileID: 1448068778948407955}
+  IsStream: 1
+  Is3D: 1
+  IsOneShot: 0
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 71906
+--- !u!114 &-8951415835335799628
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/Music.bank
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorBankRef
+  Path: FMOD/Desktop/Desktop/Music.bank
+  Name: Music
+  StudioPath: bank:/Music
+  lastModified: 639073679833556281
+  FileSizes: []
+  Exists: 1
 --- !u!114 &-7530468493095375726
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -109,6 +154,33 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 5400
+--- !u!114 &-5375881598054394116
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Event_Boatsplashing
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
+  Path: event:/Event_Boatsplashing
+  Guid:
+    Data1: 1222449737
+    Data2: 1217276976
+    Data3: -1287881057
+    Data4: -1800389706
+  Banks:
+  - {fileID: 1448068778948407955}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 5400
 --- !u!114 &-4816443877660444592
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -146,6 +218,54 @@ MonoBehaviour:
   StudioPath: bank:/Master
   lastModified: 639081486998733422
   FileSizes: []
+  Exists: 1
+--- !u!114 &-3677694611342258589
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Event_Sanity
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
+  Path: event:/Event_Sanity
+  Guid:
+    Data1: 687277345
+    Data2: 1207688506
+    Data3: -2132639604
+    Data4: -948113825
+  Banks:
+  - {fileID: 1448068778948407955}
+  IsStream: 1
+  Is3D: 1
+  IsOneShot: 0
+  Parameters:
+  - {fileID: 7996682054418010265}
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 71726
+--- !u!114 &-3553501461422277716
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/Master.strings.bank
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorBankRef
+  Path: FMOD/Desktop/Desktop/Master.strings.bank
+  Name: Master.strings
+  StudioPath: bank:/Master.strings
+  lastModified: 639088542869935908
+  FileSizes:
+  - Name: 
+    Value: 1076
   Exists: 1
 --- !u!114 &-2476383466417746215
 MonoBehaviour:
@@ -194,6 +314,58 @@ MonoBehaviour:
   - Name: 
     Value: 870
   Exists: 1
+--- !u!114 &-1657786434945440786
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Event_WindSystem
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
+  Path: event:/Event_WindSystem
+  Guid:
+    Data1: 1149511842
+    Data2: 1312112227
+    Data3: 193244844
+    Data4: 1167070184
+  Banks:
+  - {fileID: 1448068778948407955}
+  IsStream: 1
+  Is3D: 0
+  IsOneShot: 0
+  Parameters:
+  - {fileID: -828896709725460165}
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 252000
+--- !u!114 &-828896709725460165
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/Event_WindSystem/WeatherIntensity
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorParamRef
+  Name: WeatherIntensity
+  StudioPath: 
+  Min: 0
+  Max: 1
+  Default: 0
+  ID:
+    data1: 3046648008
+    data2: 1698949157
+  Type: 0
+  IsGlobal: 0
+  Labels: []
+  Exists: 1
 --- !u!114 &-747685565672575214
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -231,30 +403,48 @@ MonoBehaviour:
   m_Name: FMODStudioCache
   m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EventCache
   EditorBanks:
-  - {fileID: -4816443877660444592}
-  - {fileID: -4436394248421826066}
-  - {fileID: 1568511918537167654}
+  - {fileID: -3553501461422277716}
+  - {fileID: 1448068778948407955}
+  - {fileID: -8951415835335799628}
   EditorEvents:
-  - {fileID: -5563558248621591433}
-  - {fileID: 7686294240496637162}
-  - {fileID: 6010435183081612655}
-  - {fileID: -7530468493095375726}
+  - {fileID: -3677694611342258589}
+  - {fileID: -5375881598054394116}
+  - {fileID: -8999385955169170004}
+  - {fileID: -1657786434945440786}
   EditorParameters: []
   MasterBanks:
-  - {fileID: -4436394248421826066}
+  - {fileID: 1448068778948407955}
   StringsBanks:
-  - {fileID: -4816443877660444592}
+  - {fileID: -3553501461422277716}
   cacheVersion: 131858
-  cacheTime: 639081486998798423
+  cacheTime: 639088542869935908
   SerializableEventsDict:
-  - key: event:/Event_Boatsplashing
-    index: 0
-  - key: event:/Event_OceanAmbGeneral
-    index: 1
   - key: event:/Event_Sanity
+    index: 0
+  - key: event:/Event_Boatsplashing
+    index: 1
+  - key: event:/Event_OceanAmbGeneral
     index: 2
   - key: event:/Event_WindSystem
     index: 3
+--- !u!114 &1448068778948407955
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/Master.bank
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorBankRef
+  Path: FMOD/Desktop/Desktop/Master.bank
+  Name: Master
+  StudioPath: bank:/Master
+  lastModified: 639088542869935908
+  FileSizes: []
+  Exists: 1
 --- !u!114 &1568511918537167654
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -348,6 +538,30 @@ MonoBehaviour:
   ID:
     data1: 3046648008
     data2: 1698949157
+  Type: 0
+  IsGlobal: 0
+  Labels: []
+  Exists: 1
+--- !u!114 &7996682054418010265
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/Event_Sanity/SanityMeter
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorParamRef
+  Name: SanityMeter
+  StudioPath: 
+  Min: 0
+  Max: 1
+  Default: 0
+  ID:
+    data1: 1230863699
+    data2: 3331329585
   Type: 0
   IsGlobal: 0
   Labels: []
