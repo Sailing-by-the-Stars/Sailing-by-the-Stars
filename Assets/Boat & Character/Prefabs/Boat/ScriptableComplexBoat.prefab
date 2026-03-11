@@ -1,0 +1,184 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &8793327576181382360
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6736058736273579916}
+  - component: {fileID: 5384667946113378211}
+  - component: {fileID: 442482156103244409}
+  - component: {fileID: 105991467372227707}
+  m_Layer: 0
+  m_Name: ScriptableComplexBoat
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6736058736273579916
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8793327576181382360}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -6.32984, y: 0, z: 27.17887}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1317788254855895804}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!54 &5384667946113378211
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8793327576181382360}
+  serializedVersion: 5
+  m_Mass: 50
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!114 &442482156103244409
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8793327576181382360}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7792e44595529442b4e7c424ed1e51b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BoatController
+  wind: {x: 0, y: 0, z: 0}
+  apparentWind: {x: 0, y: 0, z: 0}
+  dragCoefficient: 1.1
+  liftCoefficient: 1.5
+  sailArea: 20
+  airDensity: 1.225
+  maxRudderDeflection: 20
+  rudderAxis: {fileID: 105991467372227707}
+  mainsheetAxis: {fileID: 0}
+  hullObject: {fileID: 6099197165009078058}
+  rudderObject: {fileID: 0}
+  mastObject: {fileID: 2499076764783227862}
+  sailObject: {fileID: 1941134086513385030}
+--- !u!114 &105991467372227707
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8793327576181382360}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f7c0c49230930e44c92706869d640957, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SmoothAxis2D
+  positiveButton: {fileID: -8853939324595208936, guid: a721d710d66a731478e6ad20549501ff, type: 3}
+  negativeButton: {fileID: 8359616076184510029, guid: a721d710d66a731478e6ad20549501ff, type: 3}
+  speed: 2
+  minValue: -1
+  maxValue: 1
+  currentValue: 0
+--- !u!1001 &3218855225849810878
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 6736058736273579916}
+    m_Modifications:
+    - target: {fileID: 4531204694360331586, guid: 7418104f4fe1b6546b3cf0e994313a3b, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -1.9509997
+      objectReference: {fileID: 0}
+    - target: {fileID: 4531204694360331586, guid: 7418104f4fe1b6546b3cf0e994313a3b, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4531204694360331586, guid: 7418104f4fe1b6546b3cf0e994313a3b, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 1.8551998
+      objectReference: {fileID: 0}
+    - target: {fileID: 4531204694360331586, guid: 7418104f4fe1b6546b3cf0e994313a3b, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4531204694360331586, guid: 7418104f4fe1b6546b3cf0e994313a3b, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4531204694360331586, guid: 7418104f4fe1b6546b3cf0e994313a3b, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4531204694360331586, guid: 7418104f4fe1b6546b3cf0e994313a3b, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4531204694360331586, guid: 7418104f4fe1b6546b3cf0e994313a3b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4531204694360331586, guid: 7418104f4fe1b6546b3cf0e994313a3b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4531204694360331586, guid: 7418104f4fe1b6546b3cf0e994313a3b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6590126810407896263, guid: 7418104f4fe1b6546b3cf0e994313a3b, type: 3}
+      propertyPath: m_Name
+      value: ComplexBoat
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 7418104f4fe1b6546b3cf0e994313a3b, type: 3}
+--- !u!4 &1317788254855895804 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4531204694360331586, guid: 7418104f4fe1b6546b3cf0e994313a3b, type: 3}
+  m_PrefabInstance: {fileID: 3218855225849810878}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1941134086513385030 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3916971608773251576, guid: 7418104f4fe1b6546b3cf0e994313a3b, type: 3}
+  m_PrefabInstance: {fileID: 3218855225849810878}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &2499076764783227862 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1010260788942093416, guid: 7418104f4fe1b6546b3cf0e994313a3b, type: 3}
+  m_PrefabInstance: {fileID: 3218855225849810878}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &6099197165009078058 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8651160105164703892, guid: 7418104f4fe1b6546b3cf0e994313a3b, type: 3}
+  m_PrefabInstance: {fileID: 3218855225849810878}
+  m_PrefabAsset: {fileID: 0}
