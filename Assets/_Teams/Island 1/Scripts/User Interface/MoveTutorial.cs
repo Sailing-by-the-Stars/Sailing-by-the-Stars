@@ -5,7 +5,10 @@ using UnityEngine.UI;
 
 public class MoveTutorial: TutorialPopup
 {
-    [SerializeField] private readonly float requiredTimeMovementKeysPressedMs = 1000f;
+    [Header("Requirements")]
+    [SerializeField] private float requiredTimeMovementKeysPressedMs = 1000f;
+
+    [Header("References")]
     [SerializeField] private Image progressbarMask;
 
     private float timeMovementKeyPressed = 0f;
