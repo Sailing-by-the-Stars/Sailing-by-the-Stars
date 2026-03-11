@@ -1,5 +1,33 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-7530468493095375726
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Event_WindSystem
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
+  Path: event:/Event_WindSystem
+  Guid:
+    Data1: 1149511842
+    Data2: 1312112227
+    Data3: 193244844
+    Data4: 1167070184
+  Banks:
+  - {fileID: -4436394248421826066}
+  IsStream: 1
+  Is3D: 0
+  IsOneShot: 0
+  Parameters:
+  - {fileID: 7774373850613394628}
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 252000
 --- !u!114 &-7331028348846570983
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -99,7 +127,7 @@ MonoBehaviour:
   lastModified: 639081457807405286
   FileSizes:
   - Name: 
-    Value: 978
+    Value: 1076
   Exists: 1
 --- !u!114 &-4436394248421826066
 MonoBehaviour:
@@ -166,6 +194,30 @@ MonoBehaviour:
   - Name: 
     Value: 870
   Exists: 1
+--- !u!114 &-747685565672575214
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/Event_Sanity/SanityMeter
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorParamRef
+  Name: SanityMeter
+  StudioPath: 
+  Min: 0
+  Max: 1
+  Default: 0
+  ID:
+    data1: 1230863699
+    data2: 3331329585
+  Type: 0
+  IsGlobal: 0
+  Labels: []
+  Exists: 1
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -183,9 +235,10 @@ MonoBehaviour:
   - {fileID: -4436394248421826066}
   - {fileID: 1568511918537167654}
   EditorEvents:
-  - {fileID: 8383107625619515350}
   - {fileID: -5563558248621591433}
   - {fileID: 7686294240496637162}
+  - {fileID: 6010435183081612655}
+  - {fileID: -7530468493095375726}
   EditorParameters: []
   MasterBanks:
   - {fileID: -4436394248421826066}
@@ -194,12 +247,14 @@ MonoBehaviour:
   cacheVersion: 131858
   cacheTime: 639081457807405286
   SerializableEventsDict:
-  - key: event:/Event_LowSanity
-    index: 0
   - key: event:/Event_Boatsplashing
-    index: 1
+    index: 0
   - key: event:/Event_OceanAmbGeneral
+    index: 1
+  - key: event:/Event_Sanity
     index: 2
+  - key: event:/Event_WindSystem
+    index: 3
 --- !u!114 &1568511918537167654
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -218,7 +273,7 @@ MonoBehaviour:
   lastModified: 639081457807405286
   FileSizes: []
   Exists: 1
---- !u!114 &6180818272172434669
+--- !u!114 &6010435183081612655
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -227,21 +282,25 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
-  m_Name: parameter:/Event_LowSanity/SanityMeter
-  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorParamRef
-  Name: SanityMeter
-  StudioPath: 
-  Min: 0
-  Max: 1
-  Default: 0
-  ID:
-    data1: 1230863699
-    data2: 3331329585
-  Type: 0
-  IsGlobal: 0
-  Labels: []
-  Exists: 1
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Event_Sanity
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
+  Path: event:/Event_Sanity
+  Guid:
+    Data1: 687277345
+    Data2: 1207688506
+    Data3: -2132639604
+    Data4: -948113825
+  Banks:
+  - {fileID: -4436394248421826066}
+  IsStream: 1
+  Is3D: 1
+  IsOneShot: 0
+  Parameters:
+  - {fileID: -747685565672575214}
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 71726
 --- !u!114 &7686294240496637162
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -269,7 +328,7 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 71906
---- !u!114 &8383107625619515350
+--- !u!114 &7774373850613394628
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -278,22 +337,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
-  m_Name: event:/Event_LowSanity
-  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
-  Path: event:/Event_LowSanity
-  Guid:
-    Data1: 687277345
-    Data2: 1207688506
-    Data3: -2132639604
-    Data4: -948113825
-  Banks:
-  - {fileID: -4436394248421826066}
-  IsStream: 1
-  Is3D: 1
-  IsOneShot: 0
-  Parameters:
-  - {fileID: 6180818272172434669}
-  MinDistance: 1
-  MaxDistance: 20
-  Length: 71726
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/Event_WindSystem/WeatherIntensity
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorParamRef
+  Name: WeatherIntensity
+  StudioPath: 
+  Min: 0
+  Max: 1
+  Default: 0
+  ID:
+    data1: 3046648008
+    data2: 1698949157
+  Type: 0
+  IsGlobal: 0
+  Labels: []
+  Exists: 1
