@@ -6,10 +6,10 @@ using UnityEngine;
 
 
 [RequireComponent(typeof(LineRenderer))]
-public class Constilation : MonoBehaviour
+public class LineAnimator : MonoBehaviour
 {
     //set by the script
-    private LineRenderer lineRenderer;
+    private LineRenderer lineExample;
     List<TwinklingStar> stars = new List<TwinklingStar>();
 
     //set in the editor
@@ -19,11 +19,6 @@ public class Constilation : MonoBehaviour
     void Start()
     {
         //get a reference to everything
-        //the linerenderer
-        lineRenderer = GetComponent<LineRenderer>();
-        lineRenderer.positionCount = 1;
-        lineRenderer.SetPosition(0, stars[0].transform.position);
-
         //all stars under this constilation
         foreach (Transform transform in transform)
         {
@@ -34,6 +29,15 @@ public class Constilation : MonoBehaviour
                 stars.Add(star);
             }
         }
+        
+        
+        //the linerenderer
+        lineExample = GetComponent<LineRenderer>();
+        
+        //set initial values
+        lineExample.positionCount = 1;
+        lineExample.SetPosition(0, stars[0].transform.position);
+
 
         StartCoroutine(AnimateLine());
     }
@@ -47,8 +51,8 @@ public class Constilation : MonoBehaviour
 
             float time = 0;
 
-            lineRenderer.positionCount = i + 2;
-            lineRenderer.SetPosition(i + 1, start);
+            lineExample.positionCount = i + 2;
+            lineExample.SetPosition(i + 1, start);
 
             while (time < segmentDuration)
             {
@@ -58,12 +62,12 @@ public class Constilation : MonoBehaviour
                 float curvedT = curve.Evaluate(t);
                 Vector3 pos = Vector3.Lerp(start, end, curvedT);
 
-                lineRenderer.SetPosition(i + 1, pos);
+                lineExample.SetPosition(i + 1, pos);
 
                 yield return null;
             }
 
-            lineRenderer.SetPosition(i + 1, end);
+            lineExample.SetPosition(i + 1, end);
         }
     }
 }

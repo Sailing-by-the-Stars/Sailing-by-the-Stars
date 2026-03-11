@@ -51,7 +51,7 @@ public class TempFPController : MonoBehaviour
 
     void Update()
     {
-        Debug.Log(1f / Time.deltaTime);
+        //Debug.Log(1f / Time.deltaTime);
 
         sprintHeld = sprintAction.IsPressed();
         moveInput = moveAction.ReadValue<Vector2>();
