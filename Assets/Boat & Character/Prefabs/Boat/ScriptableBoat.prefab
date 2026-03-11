@@ -49,12 +49,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BoatController
   wind: {x: 0, y: 0, z: 0}
   apparentWind: {x: 0, y: 0, z: 0}
+  dragCoefficient: 1.1
+  liftCoefficient: 1.5
+  sailArea: 20
+  airDensity: 1.225
   maxRudderDeflection: 20
   rudderAxis: {fileID: 3820227108679320509}
   mainsheetAxis: {fileID: 0}
+  hullObject: {fileID: 5042506734572181499}
   rudderObject: {fileID: 3142967104577129642}
-  telltaleObject: {fileID: 1926386001636091480}
   mastObject: {fileID: 8755170215091711922}
+  sailObject: {fileID: 0}
 --- !u!114 &3820227108679320509
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -157,14 +162,14 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5dbfba2f781de25439120e1e07cd3ac0, type: 3}
---- !u!1 &1926386001636091480 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1415609167543915452, guid: 5dbfba2f781de25439120e1e07cd3ac0, type: 3}
-  m_PrefabInstance: {fileID: 657143830577952228}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &3142967104577129642 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2486175255526046030, guid: 5dbfba2f781de25439120e1e07cd3ac0, type: 3}
+  m_PrefabInstance: {fileID: 657143830577952228}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &5042506734572181499 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5540608407091847711, guid: 5dbfba2f781de25439120e1e07cd3ac0, type: 3}
   m_PrefabInstance: {fileID: 657143830577952228}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &7210144807477210783 stripped
