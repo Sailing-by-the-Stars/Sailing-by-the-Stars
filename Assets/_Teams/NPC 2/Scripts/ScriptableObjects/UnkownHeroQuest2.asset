@@ -15,7 +15,50 @@ MonoBehaviour:
   hasName: 0
   npcName: 
   talkingSpeed: 0.95
-  nodes: []
+  nodes:
+  - rid: 2042809308283404370
+  - rid: 2042809308283404371
+  - rid: 2042809308283404372
+  - rid: 2042809308283404373
+  - rid: 2042809308283404374
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 2042809308283404370
+      type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: UnkownHeroQuest2-1
+        text: You see a picture of what looks like an abandoned cabin with a dirt
+          path leading upto it, painted on the strange rock formation, you also see
+          some cryptic text.
+        nextNodeID: UnkownHeroQuest2-2
+    - rid: 2042809308283404371
+      type: {class: ChoiceNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: UnkownHeroQuest2-2
+        text: Do you want to try and read the cryptic text?
+        choices:
+        - choiceText: Yes! I will try to read the text
+          nextNodeID: UnkownHeroQuest2-3
+        - choiceText: No, I think the text will be to hard for me to understand
+          nextNodeID: 
+    - rid: 2042809308283404372
+      type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: UnkownHeroQuest2-3
+        text: 'You try and succesfully read the text. '
+        nextNodeID: UnkownHeroQuest2-4
+    - rid: 2042809308283404373
+      type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: UnkownHeroQuest2-4
+        text: 'They wrote me off as dead so quick, atleast now i can work from the
+          shadows... '
+        nextNodeID: UnkownHeroQuest2-5
+    - rid: 2042809308283404374
+      type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: UnkownHeroQuest2-5
+        text: I will be the best *scratched out word* of this island! I have found
+          the perfect hideout already.
+        nextNodeID: 

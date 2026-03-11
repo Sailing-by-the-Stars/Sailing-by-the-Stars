@@ -15,7 +15,51 @@ MonoBehaviour:
   hasName: 0
   npcName: 
   talkingSpeed: 0.95
-  nodes: []
+  nodes:
+  - rid: 2042809308283404365
+  - rid: 2042809308283404366
+  - rid: 2042809308283404367
+  - rid: 2042809308283404368
+  - rid: 2042809308283404369
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 2042809308283404365
+      type: {class: ChoiceNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: UnkownHeroQuest1-1
+        text: While you investigate the strange looking tree you see what looks like
+          a paper in the corner of your eye.
+        choices:
+        - choiceText: you pick up the paper and read it
+          nextNodeID: UnkownHeroQuest1-2
+        - choiceText: "you ignore the paper, it probably isn\u2019t important anyway
+            right?"
+          nextNodeID: UnkownHeroQuest1-4
+    - rid: 2042809308283404366
+      type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: UnkownHeroQuest1-2
+        text: Reading the paper you quickly notice that its an old news paper. In
+          the news paper you read about a hero that did a heroic act.
+        nextNodeID: UnkownHeroQuest1-3
+    - rid: 2042809308283404367
+      type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: UnkownHeroQuest1-3
+        text: You can't make out who the hero was, because for some reason the name
+          and face of the hero are crossed out.
+        nextNodeID: UnkownHeroQuest1-4
+    - rid: 2042809308283404368
+      type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: UnkownHeroQuest1-4
+        text: 'You look at closer at the palm tree and realise it has clues carved
+          into it for your next objective. '
+        nextNodeID: UnkownHeroQuest1-5
+    - rid: 2042809308283404369
+      type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: UnkownHeroQuest1-5
+        text: It looks like an anvil next to a rock.
+        nextNodeID: 
