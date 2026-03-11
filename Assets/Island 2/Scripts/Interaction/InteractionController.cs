@@ -10,6 +10,7 @@ using UnityEngine.InputSystem;
  * the overriden Interact() function.
  */
 
+// Author: Edward
 public class InteractionController : MonoBehaviour
 {
     [Header("Interaction References & Settings")]

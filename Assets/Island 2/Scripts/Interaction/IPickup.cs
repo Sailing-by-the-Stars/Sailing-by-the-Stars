@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 
+// Author: Edward
 public interface IPickup : IInteractable
 {
     public void Grab(PickupController pickupController);

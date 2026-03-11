@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 
+// Author: Edward
 public class TorchPickup : PhysicsPickup
 {
     private Light torchLight;

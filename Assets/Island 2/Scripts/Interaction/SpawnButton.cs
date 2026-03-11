@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 
 /** Temporary test class */
+// Author: Edward
 public class SpawnButton : MonoBehaviour, IInteractable
 {
     [Header("Item to Spawn")]

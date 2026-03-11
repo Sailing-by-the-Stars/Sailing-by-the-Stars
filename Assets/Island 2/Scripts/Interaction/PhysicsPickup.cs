@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 
+// Author: Edward
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(Collider))]
 public class PhysicsPickup : MonoBehaviour, IPickup

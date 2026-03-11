@@ -13,6 +13,7 @@ using UnityEngine.InputSystem;
  * from which new per-object scripts can be derived. Use PhysicsPickup.cs as a reference.
  */
 
+// Author: Edward
 public class PickupController : MonoBehaviour
 {
     [Header("Pickup Settings")]
