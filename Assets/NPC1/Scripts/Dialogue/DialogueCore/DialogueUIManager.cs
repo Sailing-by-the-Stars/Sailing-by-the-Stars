@@ -8,8 +8,13 @@ using System.Collections;
 public class DialogueUIManager : MonoBehaviour
 {
 
+    
+
     [Tooltip("The main dialogue panel that contains all dialogue UI elements.")]
     [SerializeField] private GameObject dialogueBox;
+
+    [Tooltip("Nameplate for the npcs")]
+    [SerializeField] private GameObject npcNameplate;
 
     [Tooltip("Text component displaying the NPC's name.")]
     [SerializeField] private TMP_Text npcNameText;
@@ -25,6 +30,9 @@ public class DialogueUIManager : MonoBehaviour
 
     [Tooltip("Second choice button for player dialogue options.")]
     [SerializeField] private Button choiceButton2;
+
+    [Tooltip("Image background for dialogue options.")]
+    [SerializeField] private Image choiceButtonImage;
 
     private Coroutine typewriterCoroutine;
     private Action onTypewriterComplete;
@@ -49,12 +57,23 @@ public class DialogueUIManager : MonoBehaviour
     public void ShowDialogueNode(DialogueLineNode node, string npcName, float typingSpeed, Action typewriterCallback)
     {
         npcNameText.text = npcName;
+
+        if (npcName == "" )
+        {
+            npcNameplate.SetActive(false);
+
+        }
+        else
+        {
+            npcNameplate.SetActive(true);
+        }
+
         dialogueText.text = "";
         nextButton.gameObject.SetActive(false);
         choiceButton1.gameObject.SetActive(false);
         choiceButton2.gameObject.SetActive(false);
         dialogueBox.SetActive(true);
-
+        choiceButtonImage.enabled=false;
         currentFullText = node.text;
         onTypewriterComplete = () =>
         {
@@ -73,13 +92,23 @@ public class DialogueUIManager : MonoBehaviour
     /// </summary>
     public void ShowChoiceNode(ChoiceNode choiceNode, string npcName, Action<string> onChoiceSelected, float typingSpeed)
     {
+        if (npcName == "" )
+        {
+            npcNameplate.SetActive(false);
+
+        }
+        else
+        {
+            npcNameplate.SetActive(true);
+        }
+        
         npcNameText.text = npcName;
         dialogueText.text = "";
         nextButton.gameObject.SetActive(false);
         choiceButton1.gameObject.SetActive(false);
         choiceButton2.gameObject.SetActive(false);
         dialogueBox.SetActive(true);
-
+    
         currentFullText = choiceNode.text;
         onTypewriterComplete = () =>
         {
@@ -99,6 +128,7 @@ public class DialogueUIManager : MonoBehaviour
     {
         choiceButton1.gameObject.SetActive(false);
         choiceButton2.gameObject.SetActive(false);
+        choiceButtonImage.enabled=true;
 
         if (choiceNode.choices.Count > 0)
         {
