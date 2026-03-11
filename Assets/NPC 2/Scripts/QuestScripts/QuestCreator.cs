@@ -11,7 +11,7 @@ public class Quest : ScriptableObject
     [SerializeField] private string questID;
     [Header("Quest name")]
     [SerializeField] private string questName;
-    [Header("Quest description")]
+    [Header("Quest description (can be blank for now)")]
     [SerializeField] private string description;
     [Header("Quest objectives")]
     [SerializeField] private List<QuestObjective> objectives = new();
