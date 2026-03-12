@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a27b1591cf442e34da26ab4a98de3513, type: 3}
+  m_Name: UnkownHeroQuest4
+  m_EditorClassIdentifier: Assembly-CSharp::Dialogue
+  hasName: 0
+  npcName: 
+  talkingSpeed: 0.95
+  nodes:
+  - rid: 2042809312053297231
+  references:
+    version: 2
+    RefIds:
+    - rid: 2042809312053297231
+      type: {class: StartQuestNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: UnkownHeroQuest4-1
+        text: Here lies the brave hero *scratched out name*. He died so many others
+          could live
+        questToStart: {fileID: 11400000, guid: 44f1da11ab5db1c4381dbd1480ae8f70, type: 2}
+        nextNodeID: 
