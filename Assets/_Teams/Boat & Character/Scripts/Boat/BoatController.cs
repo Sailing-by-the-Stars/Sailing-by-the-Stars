@@ -182,7 +182,7 @@ public class BoatController : MonoBehaviour
     void applyWaterDrag()
     {
         Vector3 localVelocity = transform.InverseTransformVector(rigidBody.linearVelocity);
-        float waterDrag = .5f * waterDensity * Mathf.Pow(localVelocity.z, 2) * .9f * underwaterFrontArea;
+        float waterDrag = .5f * waterDensity * Mathf.Pow(localVelocity.z, 2f) * .9f * underwaterFrontArea * Mathf.Sign(localVelocity.z);
         rigidBody.AddRelativeForce(-Vector3.forward * waterDrag);
     }
 
