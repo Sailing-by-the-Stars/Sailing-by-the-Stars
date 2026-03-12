@@ -66,7 +66,7 @@ public class ConstellationMatcher : MonoBehaviour
         overlayImage.color = c;
     }
 
-    void OnDrawGizmos()
+    void OnDrawGizmosSelected()
     {
         if (Camera.main == null) return;
 
