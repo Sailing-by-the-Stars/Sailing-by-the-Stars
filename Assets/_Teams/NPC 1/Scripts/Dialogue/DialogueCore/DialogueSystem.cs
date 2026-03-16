@@ -127,6 +127,7 @@ public class DialogueSystem : MonoBehaviour
         currentDialogue = dialogue;
         BuildNodeLookup();
         isDialogueActive = true;
+        if (currentDialogue.hasItemID == true) QuestManager.Instance.RegisterItemCollected(currentDialogue.itemID);
 
         if (currentDialogue.nodes.Count == 0) return;
 

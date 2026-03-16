@@ -7,7 +7,7 @@ public class DialogueObjectEditor : Editor
 {
     SerializedProperty talkingSpeed_prop;
     SerializedProperty hasName_prop;
-    SerializedProperty npcName_prop;
+    SerializedProperty npcName_prop, hasItemID_prop, itemID_prop;
     SerializedProperty nodes_prop;
 
     Dictionary<int, bool> foldouts = new Dictionary<int, bool>();
@@ -16,6 +16,8 @@ public class DialogueObjectEditor : Editor
     {
         hasName_prop = serializedObject.FindProperty("hasName");
         npcName_prop = serializedObject.FindProperty("npcName");
+        hasItemID_prop = serializedObject.FindProperty("hasItemID");
+        itemID_prop = serializedObject.FindProperty("itemID");
         nodes_prop = serializedObject.FindProperty("nodes");
         talkingSpeed_prop = serializedObject.FindProperty("talkingSpeed");
     }
@@ -28,6 +30,9 @@ public class DialogueObjectEditor : Editor
         EditorGUILayout.PropertyField(hasName_prop, new GUIContent("Does it have a name?"));
         if (hasName_prop.boolValue)
             EditorGUILayout.PropertyField(npcName_prop, new GUIContent("Name"));
+        EditorGUILayout.PropertyField(hasItemID_prop, new GUIContent("Does it have an itemID (Quest system)?"));
+        if (hasItemID_prop.boolValue)
+            EditorGUILayout.PropertyField(itemID_prop, new GUIContent("ItemID"));
         EditorGUILayout.PropertyField(talkingSpeed_prop, new GUIContent("Talking Speed"));
         EditorGUILayout.Space();
         EditorGUILayout.LabelField("Add Node", EditorStyles.boldLabel);

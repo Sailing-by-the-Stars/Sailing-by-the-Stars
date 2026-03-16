@@ -11,4 +11,6 @@ public class Dialogue : ScriptableObject
     public float talkingSpeed = 0.95f;
     [SerializeReference]
     public List<DialogueNode> nodes = new();
+    public bool hasItemID;
+    public int itemID;
 }
