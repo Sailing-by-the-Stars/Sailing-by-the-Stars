@@ -73,10 +73,10 @@ MonoBehaviour:
     m_Value: 1
   fixedExposure:
     m_OverrideState: 1
-    m_Value: 11.885187
+    m_Value: 0.9
   compensation:
     m_OverrideState: 1
-    m_Value: 0
+    m_Value: 5
   limitMin:
     m_OverrideState: 1
     m_Value: -1
@@ -276,10 +276,10 @@ MonoBehaviour:
     m_OverrideState: 0
     m_Value: 0.15
   temporalAccumulation:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: 1
   ghostingReduction:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: 0.5
   blurSharpness:
     m_OverrideState: 0
@@ -390,6 +390,53 @@ MonoBehaviour:
   - {fileID: -3560588520263505782}
   - {fileID: -2946153373520017352}
   - {fileID: 3205448464610623092}
+  - {fileID: 1294902217652194444}
+--- !u!114 &1294902217652194444
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24f077503be6ae942a1e1245dbd53ea9, type: 3}
+  m_Name: Bloom
+  m_EditorClassIdentifier: Unity.RenderPipelines.HighDefinition.Runtime::UnityEngine.Rendering.HighDefinition.Bloom
+  active: 1
+  quality:
+    m_OverrideState: 1
+    m_Value: 3
+  threshold:
+    m_OverrideState: 0
+    m_Value: 0.41
+  intensity:
+    m_OverrideState: 0
+    m_Value: 0
+  scatter:
+    m_OverrideState: 0
+    m_Value: 0.7
+  tint:
+    m_OverrideState: 0
+    m_Value: {r: 1, g: 1, b: 1, a: 1}
+  dirtTexture:
+    m_OverrideState: 0
+    m_Value: {fileID: 0}
+  dirtIntensity:
+    m_OverrideState: 0
+    m_Value: 0
+  anamorphic:
+    m_OverrideState: 0
+    m_Value: 1
+  m_Resolution:
+    m_OverrideState: 1
+    m_Value: 2
+  m_HighQualityPrefiltering:
+    m_OverrideState: 1
+    m_Value: 0
+  m_HighQualityFiltering:
+    m_OverrideState: 1
+    m_Value: 1
 --- !u!114 &2948623337441824224
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -426,10 +473,10 @@ MonoBehaviour:
     m_OverrideState: 1
     m_Value: {x: 0.8011023, y: 1, z: 0.99999833, w: 0}
   midtones:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: {x: 1, y: 1, z: 1, w: 0}
   highlights:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: {x: 1, y: 1, z: 1, w: 0}
   shadowsStart:
     m_OverrideState: 0
@@ -517,8 +564,8 @@ MonoBehaviour:
     m_OverrideState: 0
     m_Value: 0.01192826
   aerosolTint:
-    m_OverrideState: 0
-    m_Value: {r: 0.9, g: 0.9, b: 0.9, a: 1}
+    m_OverrideState: 1
+    m_Value: {r: 0.0022249965, g: 0.4716981, b: 0.4359773, a: 1}
   aerosolMaximumAltitude:
     m_OverrideState: 0
     m_Value: 8289.296
@@ -535,8 +582,8 @@ MonoBehaviour:
     m_OverrideState: 0
     m_Value: 20000
   groundTint:
-    m_OverrideState: 0
-    m_Value: {r: 0, g: 0.013902752, b: 0.00759531, a: 1}
+    m_OverrideState: 1
+    m_Value: {r: 0.0028415138, g: 0.045393806, b: 0.029124612, a: 1}
   groundColorTexture:
     m_OverrideState: 0
     m_Value: {fileID: 0}
@@ -568,13 +615,13 @@ MonoBehaviour:
     m_OverrideState: 0
     m_Value: 1
   horizonTint:
-    m_OverrideState: 0
-    m_Value: {r: 1, g: 1, b: 1, a: 1}
+    m_OverrideState: 1
+    m_Value: {r: 0.069583125, g: 0.02950339, b: 0.16037738, a: 1}
   zenithTint:
-    m_OverrideState: 0
-    m_Value: {r: 1, g: 1, b: 1, a: 1}
+    m_OverrideState: 1
+    m_Value: {r: 0.6886792, g: 0.061721236, b: 0.23998742, a: 1}
   horizonZenithShift:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: 0
   m_SkyVersion: 3
   m_ObsoleteEarthPreset:
