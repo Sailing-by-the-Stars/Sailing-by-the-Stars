@@ -28,8 +28,8 @@ public class NPCDialogueHolder : MonoBehaviour, IInteractable
 
     public string InteractMessage => "Press E to Talk";
 
-    void Update()
-    {
+    // void Update()
+    // {
         // if (player == null) return;
 
         // float distance = Vector3.Distance(transform.position, player.position);
@@ -57,11 +57,11 @@ public class NPCDialogueHolder : MonoBehaviour, IInteractable
         // if (currentClosestNPC != this) return;
 
         // Hide prompt if dialogue active
-        if (DialogueSystem.Instance.isDialogueActive)
-        {
-            InteractionPromptUI.Instance.HidePrompt();
-            return;
-        }
+        // if (DialogueSystem.Instance.isDialogueActive)
+        // {
+        //     InteractionPromptUI.Instance.HidePrompt();
+        //     return;
+        // }
 
         // // Show prompt when in range
         // InteractionPromptUI.Instance.ShowPrompt("Press Enter to Talk");
@@ -70,7 +70,7 @@ public class NPCDialogueHolder : MonoBehaviour, IInteractable
         // {
         //     StartConversation();
         // }
-    }
+    // }
     public void Interact(InteractionController interactionController)
     {
         StartConversation();

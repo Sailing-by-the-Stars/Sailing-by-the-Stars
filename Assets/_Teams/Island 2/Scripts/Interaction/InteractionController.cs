@@ -40,7 +40,7 @@ public class InteractionController : MonoBehaviour
 
     private void UpdateInteractionText()
     {
-        if (currentTargetedInteractable == null)
+        if (currentTargetedInteractable == null || DialogueSystem.Instance.isDialogueActive)
         {
             interactionText.text = string.Empty;
             return;
@@ -52,7 +52,7 @@ public class InteractionController : MonoBehaviour
     private void CheckForInteractionInput()
     {
         // TODO: replace hardcoded key press with Input Actions
-        if (Keyboard.current.eKey.wasPressedThisFrame && currentTargetedInteractable != null)
+        if (Keyboard.current.eKey.wasPressedThisFrame && currentTargetedInteractable != null && !DialogueSystem.Instance.isDialogueActive)
         {
             currentTargetedInteractable.Interact(this);
         }
