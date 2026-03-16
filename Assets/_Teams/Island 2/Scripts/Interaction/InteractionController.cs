@@ -31,8 +31,11 @@ public class InteractionController : MonoBehaviour
     {
         var ray = playerCamera.ViewportPointToRay(new Vector2(0.5f, 0.5f));
         
-        Physics.Raycast(ray, out RaycastHit hit, interactionDistance);
+        Physics.Raycast(ray, out RaycastHit hit, interactionDistance, ~0, QueryTriggerInteraction.Ignore);
+        Debug.DrawRay(ray.origin, ray.direction * interactionDistance, Color.green);
+        
         currentTargetedInteractable = hit.collider?.GetComponent<IInteractable>();
+
     }
 
     private void UpdateInteractionText()
