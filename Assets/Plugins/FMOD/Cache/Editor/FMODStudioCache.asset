@@ -1,5 +1,50 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-9025175686977542221
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/event_Boatsplashing
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
+  Path: event:/event_Boatsplashing
+  Guid:
+    Data1: 1222449737
+    Data2: 1217276976
+    Data3: -1287881057
+    Data4: -1800389706
+  Banks:
+  - {fileID: -7615375385575145822}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 5400
+--- !u!114 &-7615375385575145822
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/Master.bank
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorBankRef
+  Path: FMOD/Desktop/Desktop/Master.bank
+  Name: Master
+  StudioPath: bank:/Master
+  lastModified: 639092856615629799
+  FileSizes: []
+  Exists: 1
 --- !u!114 &-7530468493095375726
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -63,6 +108,30 @@ MonoBehaviour:
   StudioPath: bank:/Ambiences
   lastModified: 639073656175509547
   FileSizes: []
+  Exists: 1
+--- !u!114 &-6753799874252627881
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/event_Sanity/SanityMeter
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorParamRef
+  Name: SanityMeter
+  StudioPath: 
+  Min: 0
+  Max: 1
+  Default: 0
+  ID:
+    data1: 1230863699
+    data2: 3331329585
+  Type: 0
+  IsGlobal: 0
+  Labels: []
   Exists: 1
 --- !u!114 &-6558057037589132700
 MonoBehaviour:
@@ -147,6 +216,34 @@ MonoBehaviour:
   lastModified: 639087769051552926
   FileSizes: []
   Exists: 1
+--- !u!114 &-3219104853242311282
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/event_Sanity
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
+  Path: event:/event_Sanity
+  Guid:
+    Data1: 687277345
+    Data2: 1207688506
+    Data3: -2132639604
+    Data4: -948113825
+  Banks:
+  - {fileID: -7615375385575145822}
+  IsStream: 1
+  Is3D: 1
+  IsOneShot: 0
+  Parameters:
+  - {fileID: -6753799874252627881}
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 71726
 --- !u!114 &-2476383466417746215
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -174,6 +271,26 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 0
+--- !u!114 &-2403198509949695407
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/Master.strings.bank
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorBankRef
+  Path: FMOD/Desktop/Desktop/Master.strings.bank
+  Name: Master.strings
+  StudioPath: bank:/Master.strings
+  lastModified: 639092856615655078
+  FileSizes:
+  - Name: 
+    Value: 1222
+  Exists: 1
 --- !u!114 &-2154458777102775812
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -231,30 +348,61 @@ MonoBehaviour:
   m_Name: FMODStudioCache
   m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EventCache
   EditorBanks:
-  - {fileID: -4816443877660444592}
-  - {fileID: -4436394248421826066}
-  - {fileID: 1568511918537167654}
+  - {fileID: -2403198509949695407}
+  - {fileID: -7615375385575145822}
+  - {fileID: 2593946213146389841}
   EditorEvents:
-  - {fileID: -5563558248621591433}
-  - {fileID: 7686294240496637162}
-  - {fileID: 6010435183081612655}
-  - {fileID: -7530468493095375726}
+  - {fileID: -3219104853242311282}
+  - {fileID: -9025175686977542221}
+  - {fileID: 3104584797561801464}
+  - {fileID: 654196157588972625}
+  - {fileID: 5301264500974209776}
   EditorParameters: []
   MasterBanks:
-  - {fileID: -4436394248421826066}
+  - {fileID: -7615375385575145822}
   StringsBanks:
-  - {fileID: -4816443877660444592}
+  - {fileID: -2403198509949695407}
   cacheVersion: 131858
-  cacheTime: 639087769051552926
+  cacheTime: 639092856615655078
   SerializableEventsDict:
-  - key: event:/Event_Boatsplashing
+  - key: event:/event_Sanity
     index: 0
-  - key: event:/Event_OceanAmbGeneral
+  - key: event:/event_Boatsplashing
     index: 1
-  - key: event:/Event_Sanity
+  - key: event:/event_OceanAmbGeneral
     index: 2
-  - key: event:/Event_WindSystem
+  - key: event:/event_WindSystem
     index: 3
+  - key: event:/event_Weather_Rainstorm
+    index: 4
+--- !u!114 &654196157588972625
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/event_WindSystem
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
+  Path: event:/event_WindSystem
+  Guid:
+    Data1: 1149511842
+    Data2: 1312112227
+    Data3: 193244844
+    Data4: 1167070184
+  Banks:
+  - {fileID: -7615375385575145822}
+  IsStream: 1
+  Is3D: 0
+  IsOneShot: 0
+  Parameters:
+  - {fileID: 3784692965628498917}
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 314000
 --- !u!114 &1568511918537167654
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -272,6 +420,128 @@ MonoBehaviour:
   StudioPath: bank:/Music
   lastModified: 639080597818691337
   FileSizes: []
+  Exists: 1
+--- !u!114 &2593946213146389841
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/Music.bank
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorBankRef
+  Path: FMOD/Desktop/Desktop/Music.bank
+  Name: Music
+  StudioPath: bank:/Music
+  lastModified: 639078870678225320
+  FileSizes: []
+  Exists: 1
+--- !u!114 &3104584797561801464
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/event_OceanAmbGeneral
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
+  Path: event:/event_OceanAmbGeneral
+  Guid:
+    Data1: 505253198
+    Data2: 1185016264
+    Data3: 764627329
+    Data4: 688797964
+  Banks:
+  - {fileID: -7615375385575145822}
+  IsStream: 1
+  Is3D: 1
+  IsOneShot: 0
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 71906
+--- !u!114 &3784692965628498917
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/event_WindSystem/WeatherIntensity
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorParamRef
+  Name: WeatherIntensity
+  StudioPath: 
+  Min: 0
+  Max: 1
+  Default: 0
+  ID:
+    data1: 3046648008
+    data2: 1698949157
+  Type: 0
+  IsGlobal: 0
+  Labels: []
+  Exists: 1
+--- !u!114 &5301264500974209776
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/event_Weather_Rainstorm
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
+  Path: event:/event_Weather_Rainstorm
+  Guid:
+    Data1: 234368269
+    Data2: 1315837011
+    Data3: 2025991602
+    Data4: 682676542
+  Banks:
+  - {fileID: -7615375385575145822}
+  IsStream: 1
+  Is3D: 1
+  IsOneShot: 0
+  Parameters:
+  - {fileID: 5913748560593451318}
+  - {fileID: 8465479960032737838}
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 90090
+--- !u!114 &5913748560593451318
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/event_Weather_Rainstorm/RainIntensity
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorParamRef
+  Name: RainIntensity
+  StudioPath: 
+  Min: 0
+  Max: 1
+  Default: 0
+  ID:
+    data1: 2826404304
+    data2: 450578612
+  Type: 0
+  IsGlobal: 0
+  Labels: []
   Exists: 1
 --- !u!114 &6010435183081612655
 MonoBehaviour:
@@ -349,6 +619,30 @@ MonoBehaviour:
     data1: 3046648008
     data2: 1698949157
   Type: 0
+  IsGlobal: 0
+  Labels: []
+  Exists: 1
+--- !u!114 &8465479960032737838
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/event_Weather_Rainstorm/Thunder-OnOff
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorParamRef
+  Name: Thunder-OnOff
+  StudioPath: 
+  Min: 0
+  Max: 1
+  Default: 0
+  ID:
+    data1: 3231819566
+    data2: 1844750321
+  Type: 1
   IsGlobal: 0
   Labels: []
   Exists: 1
