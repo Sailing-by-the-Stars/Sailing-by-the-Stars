@@ -187,7 +187,7 @@ PrefabInstance:
     - target: {fileID: 1807279683487760211, guid: a5fa8a9b1406cba49bbc4afac22372a8, type: 3}
       propertyPath: interactPrompt
       value: 
-      objectReference: {fileID: 540062542}
+      objectReference: {fileID: 0}
     - target: {fileID: 3239792604967603187, guid: a5fa8a9b1406cba49bbc4afac22372a8, type: 3}
       propertyPath: m_Name
       value: UnkownHeroQuestStep1
@@ -546,7 +546,7 @@ PrefabInstance:
     - target: {fileID: 6971019248136176864, guid: 1a87c6a22918dcf4b9b6c8e66b2fe97a, type: 3}
       propertyPath: interactPrompt
       value: 
-      objectReference: {fileID: 540062542}
+      objectReference: {fileID: 0}
     - target: {fileID: 8700864238293864987, guid: 1a87c6a22918dcf4b9b6c8e66b2fe97a, type: 3}
       propertyPath: m_LocalPosition.x
       value: -8.53
@@ -986,17 +986,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
---- !u!114 &540062542 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1736030259934829090, guid: c2c0de4dacd93fa448db7c1e006b1d91, type: 3}
-  m_PrefabInstance: {fileID: 709590787}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
 --- !u!1001 &559354716
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1052,7 +1041,7 @@ PrefabInstance:
     - target: {fileID: 7529992794907564005, guid: a4ade8316d6fcec459f037994752510d, type: 3}
       propertyPath: interactPrompt
       value: 
-      objectReference: {fileID: 540062542}
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1311,7 +1300,7 @@ PrefabInstance:
     - target: {fileID: 6971019248136176864, guid: 9ff3e5e4d267dfd44a65bef8e5ac188c, type: 3}
       propertyPath: interactPrompt
       value: 
-      objectReference: {fileID: 540062542}
+      objectReference: {fileID: 0}
     - target: {fileID: 8700864238293864987, guid: 9ff3e5e4d267dfd44a65bef8e5ac188c, type: 3}
       propertyPath: m_LocalPosition.x
       value: -7.92
@@ -1486,7 +1475,8 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 2723526677988201277, guid: c2c0de4dacd93fa448db7c1e006b1d91, type: 3}
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 1565327350267778612, guid: c2c0de4dacd93fa448db7c1e006b1d91, type: 3}
       insertIndex: -1
@@ -1518,7 +1508,7 @@ PrefabInstance:
     - target: {fileID: 1312469190396226621, guid: 3689195d4adc23e41acacc8bedff0ca1, type: 3}
       propertyPath: interactPrompt
       value: 
-      objectReference: {fileID: 540062542}
+      objectReference: {fileID: 0}
     - target: {fileID: 6138478252374370995, guid: 3689195d4adc23e41acacc8bedff0ca1, type: 3}
       propertyPath: m_Name
       value: UnkownHeroQuestStep3
@@ -1805,7 +1795,7 @@ PrefabInstance:
     - target: {fileID: 1196699159384090461, guid: 359a5fb8be1bf5a418d1df8850fbe63b, type: 3}
       propertyPath: interactPrompt
       value: 
-      objectReference: {fileID: 540062542}
+      objectReference: {fileID: 0}
     - target: {fileID: 2465439081778083202, guid: 359a5fb8be1bf5a418d1df8850fbe63b, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -4077,8 +4067,8 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8616085796799534538, guid: 3291e68c9c4fb484db48223dc8d968c5, type: 3}
       propertyPath: interactPrompt
-      value: 
-      objectReference: {fileID: 540062542}
+      value: Press E to GET CANDY
+      objectReference: {fileID: 0}
     - target: {fileID: 8881499531433073246, guid: 3291e68c9c4fb484db48223dc8d968c5, type: 3}
       propertyPath: m_LocalScale.x
       value: 8
