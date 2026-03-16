@@ -40,7 +40,7 @@ public class TempFPController : MonoBehaviour
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
-
+        
         moveAction = input.actions["Move"];
         lookAction = input.actions["Look"];
         sprintAction = input.actions["Sprint"];
