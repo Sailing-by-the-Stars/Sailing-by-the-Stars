@@ -33,8 +33,8 @@ public class NPCDialogueHolderEditor : Editor
 
         EditorGUILayout.Space();
 
-        EditorGUILayout.LabelField("Interaction Settings", EditorStyles.boldLabel);
-        EditorGUILayout.PropertyField(interactionDistance);
+        // EditorGUILayout.LabelField("Interaction Settings", EditorStyles.boldLabel);
+        // EditorGUILayout.PropertyField(interactionDistance);
 
         serializedObject.ApplyModifiedProperties();
     }

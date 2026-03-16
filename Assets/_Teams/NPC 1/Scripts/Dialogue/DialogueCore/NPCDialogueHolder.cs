@@ -4,7 +4,7 @@ using UnityEngine;
 /// Handles dialogue interaction with this NPC.
 /// Ensures only the closest NPC can be interacted with.
 /// </summary>
-public class NPCDialogueHolder : MonoBehaviour
+public class NPCDialogueHolder : MonoBehaviour, IInteractable
 {
     [Tooltip("Dialogue shown the first time the player talks to this NPC.")]
     public Dialogue firstDialogue;
@@ -19,45 +19,42 @@ public class NPCDialogueHolder : MonoBehaviour
     public bool hasInteractedBefore = false;
 
     [Tooltip("Distance the player must be within to talk to this NPC.")]
-    public float interactionDistance = 2f;
+    // public float interactionDistance = 3f;
 
-    private Transform player;
-    private bool isInteracting;
-    private static NPCDialogueHolder currentClosestNPC;
-    private static float closestDistance = Mathf.Infinity;
+    // private Transform player;
+    // private bool isInteracting;
+    // private static NPCDialogueHolder currentClosestNPC;
+    // private static float closestDistance = Mathf.Infinity;
 
-    void Start()
-    {
-        player = GameObject.FindGameObjectWithTag("Player")?.transform;
-    }
+    public string InteractMessage => "Press E to Talk";
 
     void Update()
     {
-        if (player == null) return;
+        // if (player == null) return;
 
-        float distance = Vector3.Distance(transform.position, player.position);
+        // float distance = Vector3.Distance(transform.position, player.position);
 
-        // Player left range
-        if (distance > interactionDistance)
-        {
-            if (currentClosestNPC == this)
-            {
-                currentClosestNPC = null;
-                InteractionPromptUI.Instance.HidePrompt();
-            }
+        // // Player left range
+        // if (distance > interactionDistance)
+        // {
+        //     if (currentClosestNPC == this)
+        //     {
+        //         currentClosestNPC = null;
+        //         InteractionPromptUI.Instance.HidePrompt();
+        //     }
 
-            return;
-        }
+        //     return;
+        // }
 
-        // Determine closest NPC
-        if (currentClosestNPC == null || distance < closestDistance)
-        {
-            currentClosestNPC = this;
-            closestDistance = distance;
-        }
+        // // Determine closest NPC
+        // if (currentClosestNPC == null || distance < closestDistance)
+        // {
+        //     currentClosestNPC = this;
+        //     closestDistance = distance;
+        // }
 
-        // Only closest NPC can interact
-        if (currentClosestNPC != this) return;
+        // // Only closest NPC can interact
+        // if (currentClosestNPC != this) return;
 
         // Hide prompt if dialogue active
         if (DialogueSystem.Instance.isDialogueActive)
@@ -66,13 +63,17 @@ public class NPCDialogueHolder : MonoBehaviour
             return;
         }
 
-        // Show prompt when in range
-        InteractionPromptUI.Instance.ShowPrompt("Press Enter to Talk");
+        // // Show prompt when in range
+        // InteractionPromptUI.Instance.ShowPrompt("Press Enter to Talk");
 
-        if (Input.GetKeyDown(KeyCode.Return) && !DialogueSystem.Instance.isDialogueActive)
-        {
-            StartConversation();
-        }
+        // if (Input.GetKeyDown(KeyCode.Return) && !DialogueSystem.Instance.isDialogueActive)
+        // {
+        //     StartConversation();
+        // }
+    }
+    public void Interact(InteractionController interactionController)
+    {
+        StartConversation();
     }
 
     void StartConversation()
