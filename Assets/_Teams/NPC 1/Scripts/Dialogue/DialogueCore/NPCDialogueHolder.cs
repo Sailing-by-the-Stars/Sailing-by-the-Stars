@@ -18,15 +18,15 @@ public class NPCDialogueHolder : MonoBehaviour, IInteractable
     [HideInInspector]
     public bool hasInteractedBefore = false;
 
-    [Tooltip("Distance the player must be within to talk to this NPC.")]
+    // [Tooltip("Distance the player must be within to talk to this NPC.")]
     // public float interactionDistance = 3f;
 
     // private Transform player;
     // private bool isInteracting;
     // private static NPCDialogueHolder currentClosestNPC;
     // private static float closestDistance = Mathf.Infinity;
-
-    public string InteractMessage => "Press E to Talk";
+    [SerializeField] private string interactMessage = "Press E to Talk";
+    public string InteractMessage => interactMessage;
 
     // void Update()
     // {

@@ -7,14 +7,14 @@ public class NPCDialogueHolderEditor : Editor
     SerializedProperty firstDialogue;
     SerializedProperty hasRepeatDialogue;
     SerializedProperty repeatDialogue;
-    SerializedProperty interactionDistance;
+    SerializedProperty interactionMessage;
 
     void OnEnable()
     {
         firstDialogue = serializedObject.FindProperty("firstDialogue");
         hasRepeatDialogue = serializedObject.FindProperty("hasRepeatDialogue");
         repeatDialogue = serializedObject.FindProperty("repeatDialogue");
-        interactionDistance = serializedObject.FindProperty("interactionDistance");
+        interactionMessage = serializedObject.FindProperty("interactMessage");
     }
 
     public override void OnInspectorGUI()
@@ -33,8 +33,8 @@ public class NPCDialogueHolderEditor : Editor
 
         EditorGUILayout.Space();
 
-        // EditorGUILayout.LabelField("Interaction Settings", EditorStyles.boldLabel);
-        // EditorGUILayout.PropertyField(interactionDistance);
+        EditorGUILayout.LabelField("Interaction Settings", EditorStyles.boldLabel);
+        EditorGUILayout.PropertyField(interactionMessage);
 
         serializedObject.ApplyModifiedProperties();
     }
