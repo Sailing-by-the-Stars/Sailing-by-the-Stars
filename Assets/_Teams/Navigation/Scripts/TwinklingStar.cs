@@ -1,9 +1,52 @@
 using System.Collections;
-using UnityEditor;
+using System.Collections.Generic;
 using UnityEngine;
+
+public enum StarState
+{
+    none,
+    minigame,
+    highlighted,
+    selected,
+}
+
+public interface IStarState
+{
+    void Enter();
+    void Tick();
+    void Exit();
+}
+
 
 public class TwinklingStar : MonoBehaviour
 {
+    [SerializeField] StarState debugState;
+
+    StarState prevStarState;
+    StarState StarState;
+    public StarState starState
+    {
+        get { return StarState; }
+        set
+        {
+            if (StarState == value) return;
+            StarState = value;
+            UpdateStar(StarState, prevStarState);
+            Debug.Log($"starState changed to: {StarState}");
+            prevStarState = StarState;
+        }
+    }
+
+    private static readonly Dictionary<StarState, IStarState> _states = new()
+    {
+        { StarState.none, new NoneState() },
+        { StarState.minigame, new MinigameState() },
+        { StarState.highlighted, new HighlightedState() },
+        { StarState.selected, new SelectedState() },
+    };
+
+
+
     [SerializeField] AnimationCurve twinkleCurve;
     [SerializeField] AnimationCurve dimCurve;
 
@@ -33,14 +76,17 @@ public class TwinklingStar : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (_states.TryGetValue(starState, out var curState))
+        {
+            curState.Tick();
+        }
+
         //Start the twinkle animation if twinkling is enabled
         if (twinkle && twinkleRoutine == null)
         {
             twinkleRoutine = StartCoroutine(Twinkle());
         }
     }
-
-
 
     private IEnumerator Twinkle()
     {
@@ -122,6 +168,11 @@ public class TwinklingStar : MonoBehaviour
 
     private void OnValidate()
     {
+        if (debugState != starState)
+        {
+            starState = debugState;
+        }
+
         //If the value of the dim boolean changes, start the dim or brighten animation
         if (!dim && brightenRoutine == null)
         {
@@ -131,6 +182,104 @@ public class TwinklingStar : MonoBehaviour
         if (dim && dimRoutine == null)
         {
             dimRoutine = StartCoroutine(Dim());
+        }
+    }
+
+
+    //state machine things:
+    public static void UpdateStar(StarState state, StarState prevState)
+    {
+        if (_states.TryGetValue(prevState, out var oldState))
+        {
+            oldState.Exit();
+        }
+        else
+        {
+            if (oldState != null)
+            {
+                Debug.LogError($"State {oldState} not registered");
+            }
+        }
+
+        if (_states.TryGetValue(state, out var newState))
+        {
+            newState.Enter();
+        }
+        else
+        {
+            Debug.LogError($"State {newState.ToString()} not registered");
+        }
+    }
+
+    public class NoneState : IStarState
+    {
+        public void Enter()
+        {
+            Debug.LogWarning("entering state none");
+        }
+
+        public void Tick()
+        {
+            Debug.Log("updating state none");
+        }
+
+        public void Exit()
+        {
+            Debug.LogError("exiting state none");
+        }
+    }
+
+    public class MinigameState : IStarState
+    {
+        public void Enter()
+        {
+
+        }
+
+        public void Tick()
+        {
+
+        }
+
+        public void Exit()
+        {
+
+        }
+    }
+
+    public class HighlightedState : IStarState
+    {
+        public void Enter()
+        {
+
+        }
+
+        public void Tick()
+        {
+
+        }
+
+        public void Exit()
+        {
+
+        }
+    }
+
+    public class SelectedState : IStarState
+    {
+        public void Enter()
+        {
+
+        }
+
+        public void Tick()
+        {
+
+        }
+
+        public void Exit()
+        {
+
         }
     }
 }
