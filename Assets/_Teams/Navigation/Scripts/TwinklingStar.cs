@@ -12,9 +12,9 @@ public enum StarState
 
 public interface IStarState
 {
-    void Enter();
-    void Tick();
-    void Exit();
+    void Enter(TwinklingStar star);
+    void Tick(TwinklingStar star);
+    void Exit(TwinklingStar star);
 }
 
 
@@ -78,7 +78,7 @@ public class TwinklingStar : MonoBehaviour
     {
         if (_states.TryGetValue(starState, out var curState))
         {
-            curState.Tick();
+            curState.Tick(this);
         }
 
         //Start the twinkle animation if twinkling is enabled
@@ -187,11 +187,11 @@ public class TwinklingStar : MonoBehaviour
 
 
     //state machine things:
-    public static void UpdateStar(StarState state, StarState prevState)
+    public void UpdateStar(StarState state, StarState prevState)
     {
         if (_states.TryGetValue(prevState, out var oldState))
         {
-            oldState.Exit();
+            oldState.Exit(this);
         }
         else
         {
@@ -203,7 +203,7 @@ public class TwinklingStar : MonoBehaviour
 
         if (_states.TryGetValue(state, out var newState))
         {
-            newState.Enter();
+            newState.Enter(this);
         }
         else
         {
@@ -213,17 +213,19 @@ public class TwinklingStar : MonoBehaviour
 
     public class NoneState : IStarState
     {
-        public void Enter()
+        public void Enter(TwinklingStar star)
         {
             Debug.LogWarning("entering state none");
+
+            
         }
 
-        public void Tick()
+        public void Tick(TwinklingStar star)
         {
             Debug.Log("updating state none");
         }
 
-        public void Exit()
+        public void Exit(TwinklingStar star)
         {
             Debug.LogError("exiting state none");
         }
@@ -231,17 +233,17 @@ public class TwinklingStar : MonoBehaviour
 
     public class MinigameState : IStarState
     {
-        public void Enter()
+        public void Enter(TwinklingStar star)
         {
 
         }
 
-        public void Tick()
+        public void Tick(TwinklingStar star)
         {
 
         }
 
-        public void Exit()
+        public void Exit(TwinklingStar star)
         {
 
         }
@@ -249,17 +251,17 @@ public class TwinklingStar : MonoBehaviour
 
     public class HighlightedState : IStarState
     {
-        public void Enter()
+        public void Enter(TwinklingStar star)
         {
 
         }
 
-        public void Tick()
+        public void Tick(TwinklingStar star)
         {
 
         }
 
-        public void Exit()
+        public void Exit(TwinklingStar star)
         {
 
         }
@@ -267,17 +269,17 @@ public class TwinklingStar : MonoBehaviour
 
     public class SelectedState : IStarState
     {
-        public void Enter()
+        public void Enter(TwinklingStar star)
         {
 
         }
 
-        public void Tick()
+        public void Tick(TwinklingStar star)
         {
 
         }
 
-        public void Exit()
+        public void Exit(TwinklingStar star)
         {
 
         }
