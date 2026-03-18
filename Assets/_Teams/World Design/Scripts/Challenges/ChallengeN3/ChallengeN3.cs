@@ -5,6 +5,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.Rendering.HighDefinition;
 using System.Reflection;
+using System;
 
 
 
@@ -17,7 +18,7 @@ public class ChallengeN3 : MonoBehaviour
     [SerializeField] private GameObject ocean;
     [SerializeField] private GameObject triggerZone;
     [SerializeField] private string targetTag = "Player";
-    private SetParameterByID windController;
+    
 
     [Header("Original value of the properties")]
     private float largeWindSpeedO = 30f;
@@ -37,9 +38,20 @@ public class ChallengeN3 : MonoBehaviour
     private float targetChaos = 1f;
     private float windTarget = 4f;
 
+    [Header("Bool")]
+    [HideInInspector] public bool sounds = false;
+    [HideInInspector] public event Action<bool> OnSoundsChanged;
+
     private void Start()
     {
-        windController = triggerZone.GetComponent<SetParameterByID>();
+        //windController = triggerZone.GetComponent<SetParameterByID>();
+    }
+
+    private void SetSounds(bool value)
+    {
+        if (sounds == value) return;
+        sounds = value;
+        OnSoundsChanged?.Invoke(sounds);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -96,8 +108,9 @@ public class ChallengeN3 : MonoBehaviour
             if (fWindSpeed != null) fWindSpeed.SetValue(ws, Mathf.Lerp(windSpeedO, targetWind, time));
             if (fChaos != null) fChaos.SetValue(ws, Mathf.Lerp(chaosO, targetChaos, time));
 
-            if (windController != null)
-                windController.wind = Mathf.Lerp(windStart, windTarget, time);
+            SetSounds(true);
+
+            //if (windController != null) windController.wind = Mathf.Lerp(windStart, windTarget, time);
 
             elapsed += Time.deltaTime;
             yield return null;
@@ -126,7 +139,7 @@ public class ChallengeN3 : MonoBehaviour
         float startSecondBand = fSecondBand != null ? (float)fSecondBand.GetValue(ws) : 0f;
         float startWind = fWindSpeed != null ? (float)fWindSpeed.GetValue(ws) : 0f;
         float startChaos = fChaos != null ? (float)fChaos.GetValue(ws) : 0f;
-        float startWindFMOD = windController != null ? windController.wind : 0f;
+        //float startWindFMOD = windController != null ? windController.wind : 0f;
 
         float elapsed = 0f;
 
@@ -146,7 +159,9 @@ public class ChallengeN3 : MonoBehaviour
 
             if (fChaos != null) fChaos.SetValue(ws, Mathf.Lerp(startChaos, chaosO, time));
 
-            if (windController != null) windController.wind = Mathf.Lerp(startWindFMOD, windStart, time);
+            //if (windController != null) windController.wind = Mathf.Lerp(startWindFMOD, windStart, time);
+
+            SetSounds(false);
 
             elapsed += Time.deltaTime;
             yield return null;
