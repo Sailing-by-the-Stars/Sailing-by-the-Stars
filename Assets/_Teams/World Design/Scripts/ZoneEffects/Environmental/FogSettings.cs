@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.Rendering.HighDefinition;
 
-[CreateAssetMenu(fileName = "FogSettings", menuName = "Effects/Fog Settings")]
+[CreateAssetMenu(fileName = "FogSettings", menuName = "World Environment Effects/Fog Settings")]
 public class FogSettings : ScriptableObject
 {
     [Header("Fog Attributes")]

@@ -1,0 +1,160 @@
+/*
+ * Created by Christina Pence
+ * Contributed to by:
+ */
+using System;
+using System.Collections;
+using UnityEngine;
+
+public class WeatherManager : MonoBehaviour
+{
+    public static WeatherManager Instance { get; private set; }
+
+    [Header("Default")]
+    [SerializeField] private WeatherState defaultState; // applied immediately on scene start
+
+    [Header("Debug")]
+    [SerializeField] private bool logValues = true;
+    [SerializeField] private bool showGizmos = true;
+    [SerializeField] private WeatherState testState;
+    [SerializeField] private float testTransitionDuration = 10f;
+
+    // Controllers
+    // private WindController windController;
+    // private RainController rainController;
+    // private WaterController waterController;
+    // private ThunderController thunderController;
+
+    // State and transitions
+    private WeatherState activeState;
+    private Coroutine activeTransition;
+    private WeatherValues snapshotValues; // used to capture values directly before transition
+    private WeatherValues currentValues;
+    private const float minTransitionDuration = 0.01f;
+
+    public event Action<WeatherState> onWeatherTransitionStarted;
+
+    // manager acts as public access point for dynamic wind variation
+    /*public Vector3 windVelocity => windController != null
+        ? windController.currentWindVelocity : ConvertToVector(currentValues.windSpeed, currentValues.windDirectionDegrees); */
+
+    // Controller registration
+    // public void Register(WindController c) => windController = c;
+    // public void Register(RainController c) => rainController = c;
+    // public void Register(WaterController c) => waterController = c;
+    // public void Register(ThunderController c) => thunderController = c;
+    // public void Register(CloudController c) => cloudController = c;
+
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
+    }
+
+    private void Start()
+    {
+        if (defaultState == null)
+        {
+            Debug.LogWarning("No default state assigned in Weather Manager");
+            return;
+        }
+        currentValues = defaultState.values;
+        activeState = defaultState;
+        PushToControllers();     
+    }
+    /// <summary>
+    /// Transitions to target state over the given duration.
+    /// If given, uses the animation curves to control blend between current and target state
+    /// If no curves are given, uses a default ease for all parameters.
+    /// </summary>
+    public void TransitionTo(WeatherState target, float duration, WeatherTransitionCurves curves = null)
+    {
+        if (target == null)
+        {
+            Debug.LogError("Weather manager TransitionTo called with null state.");
+            return;
+        }
+
+        snapshotValues = currentValues;
+        if (activeTransition != null)
+        {
+            StopCoroutine(activeTransition);
+        }
+        activeState = target;
+        activeTransition = StartCoroutine(RunTransition(target, duration, curves));
+
+        onWeatherTransitionStarted?.Invoke(target);
+    }
+
+    private IEnumerator RunTransition(WeatherState target, float duration, WeatherTransitionCurves curves)
+    {
+        float elapsed = 0f;
+        duration = Mathf.Max(duration, minTransitionDuration);
+
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            ApplyAtTime(target, Mathf.Clamp01(elapsed / duration), curves);
+            yield return null;
+        }
+
+        ApplyAtTime(target, 1f, curves); // apply final values (1 represents fully elapsed duration)
+        activeTransition = null;
+    }
+
+    private void ApplyAtTime(WeatherState target, float t, WeatherTransitionCurves curves)
+    {
+        currentValues.windSpeed = BlendValue(snapshotValues.windSpeed, target.values.windSpeed,
+                                             t, curves, c => c.windCurve);
+
+        currentValues.windDirectionDegrees = Mathf.LerpAngle(snapshotValues.windDirectionDegrees,
+                                                             target.values.windDirectionDegrees, t);
+
+        currentValues.rainIntensity = BlendValue(snapshotValues.rainIntensity, target.values.rainIntensity,
+                                                 t, curves, c => c.rainCurve);
+
+        currentValues.waveAmplitude = BlendValue(snapshotValues.waveAmplitude, target.values.waveAmplitude,
+                                                 t, curves, c => c.waveCurve);
+
+        currentValues.oceanCurrentSpeed = BlendValue(snapshotValues.oceanCurrentSpeed, target.values.oceanCurrentSpeed,
+                                                     t, curves, c => c.currentCurve);
+
+        currentValues.thunderIntensity = BlendValue(snapshotValues.thunderIntensity, target.values.thunderIntensity,
+                                                    t, curves, c => c.thunderCurve);
+
+        PushToControllers();
+    }
+    private void PushToControllers()
+    {
+        Vector3 currentWindVelocity = ConvertToVector(currentValues.windSpeed, currentValues.windDirectionDegrees);
+        /*
+        windController?.SetWind(currentWindVelocity);
+        rainController?.SetRainIntensity(currentValues.rainIntensity);
+        waterController?.SetWaveAmplitude(currentValues.waveAmplitude);
+        waterController?.SetOceanCurrentSpeed(currentValues.oceanCurrentSpeed);
+        thunderController?.SetThunderIntensity(currentValues.thunderIntensity);
+        */
+    }
+
+    private static float BlendValue(float snapshotValue, float targetValue, float t,
+                                    WeatherTransitionCurves allWeatherCurves,
+                                    Func<WeatherTransitionCurves, AnimationCurve> getCurveForParameter) // caller selects target curve for parameter
+    {
+        AnimationCurve curve = allWeatherCurves != null ? getCurveForParameter(allWeatherCurves) : null;
+        // use default transition if no curve is found for the parameter
+        float blend = curve != null ? Mathf.Clamp01(curve.Evaluate(t)) : Mathf.SmoothStep(0f, 1f, t); 
+
+        // blend is 0-1 weight: 0 = fully at snapshot, 1 = fully at target
+        return Mathf.Lerp(snapshotValue, targetValue, blend);
+    }
+
+    private static Vector3 ConvertToVector(float magnitude, float degrees)
+    {
+        float rad = degrees * Mathf.Deg2Rad;
+        return new Vector3(Mathf.Sin(rad), 0f, Mathf.Cos(rad)) * magnitude;
+    }
+}
