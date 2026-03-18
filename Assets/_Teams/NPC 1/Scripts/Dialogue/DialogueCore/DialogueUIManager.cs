@@ -170,10 +170,33 @@ public class DialogueUIManager : MonoBehaviour
     {
         dialogueText.text = "";
 
-        foreach (char c in fullText)
+        for (int i = 0; i < fullText.Length; i++)
         {
-            dialogueText.text += c;
-            yield return new WaitForSeconds(speed);
+            // Detect tags like <pause=1>
+            if (fullText[i] == '<')
+            {
+                int endIndex = fullText.IndexOf('>', i);
+                if (endIndex != -1)
+                {
+                    string tag = fullText.Substring(i + 1, endIndex - i - 1);
+
+                    if (tag.StartsWith("pause="))
+                    {
+                        string value = tag.Replace("pause=", "");
+                        if (float.TryParse(value, out float pauseTime))
+                        {
+                            yield return new WaitForSeconds(pauseTime);
+                        }
+                    }
+
+                    i = endIndex;
+                    continue;
+                }
+            }
+
+            dialogueText.text += fullText[i];
+            float multiplier = Input.GetMouseButton(0) ? 5f : 1f;
+            yield return new WaitForSeconds(speed / multiplier);
         }
 
         typewriterCoroutine = null;

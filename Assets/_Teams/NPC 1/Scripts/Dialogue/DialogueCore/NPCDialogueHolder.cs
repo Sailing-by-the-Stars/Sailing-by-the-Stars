@@ -78,7 +78,7 @@ public class NPCDialogueHolder : MonoBehaviour, IInteractable
 
     void StartConversation()
     {
-        InteractionPromptUI.Instance.HidePrompt();
+        //InteractionPromptUI.Instance.HidePrompt();
         if (GetComponent<Animator>() != null)
         {
             GetComponent<Animator>().SetBool("IsTalking", true);
