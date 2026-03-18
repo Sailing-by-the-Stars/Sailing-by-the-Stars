@@ -704,6 +704,75 @@ MonoBehaviour:
   m_ObsoleteUseShadowQualitySettings: 0
   m_ObsoleteCustomShadowResolution: 512
   m_ObsoleteContactShadows: 0
+--- !u!1001 &6454251006599317073
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1284825517622095781, guid: 4403c7a3401dcd94596a164f74684081, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 24.97466
+      objectReference: {fileID: 0}
+    - target: {fileID: 1284825517622095781, guid: 4403c7a3401dcd94596a164f74684081, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 12.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 1284825517622095781, guid: 4403c7a3401dcd94596a164f74684081, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 42.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 1284825517622095781, guid: 4403c7a3401dcd94596a164f74684081, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.49996692
+      objectReference: {fileID: 0}
+    - target: {fileID: 1284825517622095781, guid: 4403c7a3401dcd94596a164f74684081, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.49996692
+      objectReference: {fileID: 0}
+    - target: {fileID: 1284825517622095781, guid: 4403c7a3401dcd94596a164f74684081, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.50003314
+      objectReference: {fileID: 0}
+    - target: {fileID: 1284825517622095781, guid: 4403c7a3401dcd94596a164f74684081, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0.50003314
+      objectReference: {fileID: 0}
+    - target: {fileID: 1284825517622095781, guid: 4403c7a3401dcd94596a164f74684081, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 1284825517622095781, guid: 4403c7a3401dcd94596a164f74684081, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1284825517622095781, guid: 4403c7a3401dcd94596a164f74684081, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: -90.008
+      objectReference: {fileID: 0}
+    - target: {fileID: 2527857577195567333, guid: 4403c7a3401dcd94596a164f74684081, type: 3}
+      propertyPath: NoiseModule.separateAxes
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2527857577195567333, guid: 4403c7a3401dcd94596a164f74684081, type: 3}
+      propertyPath: NoiseModule.strengthY.scalar
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2527857577195567333, guid: 4403c7a3401dcd94596a164f74684081, type: 3}
+      propertyPath: NoiseModule.strengthZ.scalar
+      value: 0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 5387749198984058057, guid: 4403c7a3401dcd94596a164f74684081, type: 3}
+      propertyPath: m_Name
+      value: Wind trails
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 4403c7a3401dcd94596a164f74684081, type: 3}
 --- !u!1001 &8419190850793329886
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -756,6 +825,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Rain Particles
       objectReference: {fileID: 0}
+    - target: {fileID: 8754990168727665895, guid: 0946b951edaa35f44a6d79cc174140f3, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -769,3 +842,4 @@ SceneRoots:
   - {fileID: 1353804063}
   - {fileID: 968010465}
   - {fileID: 8419190850793329886}
+  - {fileID: 6454251006599317073}
