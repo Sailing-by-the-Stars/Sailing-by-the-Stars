@@ -202,6 +202,27 @@ public class DialogueUIManager : MonoBehaviour
         typewriterCoroutine = null;
         onTypewriterComplete?.Invoke();
     }
+    private string StripTags(string input)
+    {
+        string result = "";
+
+        for (int i = 0; i < input.Length; i++)
+        {
+            if (input[i] == '<')
+            {
+                int endIndex = input.IndexOf('>', i);
+                if (endIndex != -1)
+                {
+                    i = endIndex;
+                    continue;
+                }
+            }
+
+            result += input[i];
+        }
+
+        return result;
+    }
 
     /// <summary>
     /// Skips the typewriter effect and instantly shows the full dialogue text.
@@ -212,8 +233,8 @@ public class DialogueUIManager : MonoBehaviour
         {
             StopCoroutine(typewriterCoroutine);
             typewriterCoroutine = null;
-
-            dialogueText.text = currentFullText;
+            
+            dialogueText.text = StripTags(currentFullText);
             onTypewriterComplete?.Invoke();
         }
     }

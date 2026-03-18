@@ -8,7 +8,5 @@ public abstract class DialogueNode
     
     [TextArea(3,6)]
     public string text;
-    public Vector2 position; // for editor
-    [System.NonSerialized] public Rect rect;
-
+    
 }
