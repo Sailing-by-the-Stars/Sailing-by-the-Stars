@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class WindObject : MonoBehaviour
 {
-    [SerializeField] private WindController windController;
     [SerializeField] private Transform windArrow;
     [SerializeField] private Vector3 currentWindDirection = Vector3.forward;
 
@@ -10,41 +9,11 @@ public class WindObject : MonoBehaviour
 
     private void OnEnable()
     {
-        if (windArrow == null)
-        {
-            Transform arrowChild = transform.Find("Wind Arrow");
-            if (arrowChild != null)
-            {
-                windArrow = arrowChild;
-            }
-        }
-
-        if (windController == null)
-        {
-            windController = FindFirstObjectByType<WindController>();
-        }
-
-        if (windController == null)
-        {
-            Debug.LogWarning($"[{nameof(WindObject)}] No {nameof(WindController)} found in scene.", this);
-            return;
-        }
-
-        windController.WindDirectionChanged += HandleWindDirectionChanged;
-        HandleWindDirectionChanged(windController.CurrentWindDirection);
+        CacheWindArrow();
+        RotateWindArrow(currentWindDirection.normalized);
     }
 
-    private void OnDisable()
-    {
-        if (windController == null)
-        {
-            return;
-        }
-
-        windController.WindDirectionChanged -= HandleWindDirectionChanged;
-    }
-
-    private void HandleWindDirectionChanged(Vector3 newDirection)
+    public void SetWindDirection(Vector3 newDirection)
     {
         if (newDirection.sqrMagnitude <= 0.0001f)
         {
@@ -55,13 +24,28 @@ public class WindObject : MonoBehaviour
         RotateWindArrow(currentWindDirection);
     }
 
-    private void RotateWindArrow(Vector3 direction)
+    private void CacheWindArrow()
     {
-        if (windArrow == null)
+        if (windArrow != null)
         {
             return;
         }
 
+        Transform arrowChild = transform.Find("Wind Arrow");
+        if (arrowChild != null)
+        {
+            windArrow = arrowChild;
+        }
+    }
+
+    private void RotateWindArrow(Vector3 direction)
+    {
+        if (windArrow == null || direction.sqrMagnitude <= 0.0001f)
+        {
+            return;
+        }
+    
+        Debug.Log("Rotating wind arrow to direction: " + direction );
         windArrow.rotation = Quaternion.LookRotation(direction, Vector3.up);
     }
 }

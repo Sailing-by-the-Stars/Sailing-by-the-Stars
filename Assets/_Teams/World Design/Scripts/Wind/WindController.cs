@@ -12,6 +12,9 @@ public class WindController : MonoBehaviour
     [SerializeField] private bool autoReroll;
     [SerializeField] private float rerollIntervalSeconds = 10f;
 
+    [Header("Wind Object")]
+    [SerializeField] private WindObject windObject;
+
     private float rerollTimer;
 
     public Vector3 CurrentWindDirection => currentWindDirection;
@@ -20,6 +23,8 @@ public class WindController : MonoBehaviour
 
     private void Awake()
     {
+        ResolveWindObjectReference();
+
         if (randomizeOnStart || currentWindDirection.sqrMagnitude <= Mathf.Epsilon)
         {
             RerollWindDirection();
@@ -27,6 +32,7 @@ public class WindController : MonoBehaviour
         }
 
         currentWindDirection = currentWindDirection.normalized;
+        SyncWindObject();
     }
 
     private void Update()
@@ -41,7 +47,7 @@ public class WindController : MonoBehaviour
         {
             return;
         }
-        
+
         rerollTimer = 0f;
         RerollWindDirection();
     }
@@ -50,13 +56,34 @@ public class WindController : MonoBehaviour
     {
         currentWindDirection = GenerateRandomDirection();
         WindDirectionChanged?.Invoke(currentWindDirection);
-        PrintWindDirection();
+        SyncWindObject();
+        // PrintWindDirection();
     }
 
     [ContextMenu("Print Wind Direction")]
     public void PrintWindDirection()
     {
         Debug.Log($"[{nameof(WindController)}] Wind direction: {currentWindDirection}", this);
+    }
+
+    private void ResolveWindObjectReference()
+    {
+        if (windObject != null)
+        {
+            return;
+        }
+
+        windObject = FindFirstObjectByType<WindObject>();
+    }
+
+    private void SyncWindObject()
+    {
+        if (windObject == null)
+        {
+            return;
+        }
+
+        windObject.SetWindDirection(currentWindDirection);
     }
 
     private Vector3 GenerateRandomDirection()
