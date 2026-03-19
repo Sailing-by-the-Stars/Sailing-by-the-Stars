@@ -259,7 +259,7 @@ Transform:
   m_GameObject: {fileID: 7051391685873645361}
   serializedVersion: 2
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -0, z: 0}
   m_LocalScale: {x: 4.376656, y: 12.37924, z: 0.31548}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -280,7 +280,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7051391685873645361}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -470,7 +470,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f31cc82436a1f92418631ab7456400e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BuoyancyController
-  draft: 0
+  draft: -0.4
+  accuracy: 3
+  waveTorqueStrength: 10
+  centerOfMass: {x: 0, y: -0.3, z: 0.5}
   waterSurface: {fileID: 0}
   buoyancyQuadObject: {fileID: 7051391685873645361}
 --- !u!1 &9149714384611208506

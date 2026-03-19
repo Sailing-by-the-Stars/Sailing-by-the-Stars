@@ -4,27 +4,49 @@
 */
 
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering.HighDefinition;
 
+[RequireComponent(typeof(Rigidbody))]
 public class BuoyancyController : MonoBehaviour
 {
+    [Header("Physics settings")]
     [SerializeField] private float draft = 0f;
+    [SerializeField] [Range(1, 4)] private int accuracy = 1;
+    [SerializeField] float waveTorqueStrength = 1f;
+    [SerializeField] Vector3 centerOfMass = Vector3.zero;
+
+    [Header("Object references")]
+
     [SerializeField] private WaterSurface waterSurface;
     [SerializeField] private GameObject buoyancyQuadObject;
-    private Mesh buoyancyMesh;
-    private List<Vector3> buoyancyVertices = new List<Vector3>();
+    private List<Vector3> buoyancyVertices = new();
+
+    private WaterSearchResult[] searchResult;
+    private Rigidbody rigidBody;
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        buoyancyMesh = buoyancyQuadObject.GetComponent<MeshFilter>().mesh;
-        Debug.Log("Amount of vertices: " + buoyancyMesh.vertices.Length);
+        CreateExtraVertices();
 
-        foreach (Vector3 vertex in buoyancyMesh.vertices)
-        {
-            Debug.Log("Vertex: " + vertex);
-            buoyancyVertices.Add(buoyancyQuadObject.transform.TransformPoint(vertex));
+        searchResult = new WaterSearchResult[buoyancyVertices.Count];
+
+        rigidBody = GetComponent<Rigidbody>();
+        rigidBody.centerOfMass = centerOfMass;
+
+        Debug.Log("CoM: " + rigidBody.centerOfMass);
+    }
+
+    void CreateExtraVertices()
+    {
+        for (int x = 0; x < accuracy + 1; x++) {
+            for (int y = 0; y < accuracy + 1; y++)
+            {
+                buoyancyVertices.Add(new Vector3(-0.5f + ((float)x / accuracy), -0.5f + ((float)y /accuracy)));
+            }
         }
     }
 
@@ -32,30 +54,49 @@ public class BuoyancyController : MonoBehaviour
     void FixedUpdate()
     {
         UpdateHeight();
+        UpdateWaveTorque();
     }
 
-    WaterSearchParameters searchParameters = new WaterSearchParameters();
-    WaterSearchResult searchResult = new WaterSearchResult();
+    private WaterSearchParameters searchParameters = new();
+    private float waterHeight = 0f;
 
     void UpdateHeight()
     {
-        float waterHeight = 0f;
-        foreach (Vector3 vertex in buoyancyVertices)
-        {
-            searchParameters.targetPositionWS = vertex;
-            searchParameters.error = 0.1f;
-            searchParameters.maxIterations = 4;
+        waterHeight = 0f;
 
-            if (waterSurface.ProjectPointOnWaterSurface(searchParameters, out searchResult))
+        for (int i = 0; i < buoyancyVertices.Count; i++)
+        {
+            Vector3 globalVertex = transform.TransformPoint(buoyancyVertices[i]);
+
+            searchParameters.startPositionWS = searchResult[i].projectedPositionWS;
+            searchParameters.targetPositionWS = globalVertex;
+            searchParameters.error = 0.01f;
+            searchParameters.maxIterations = 6;
+
+            if (waterSurface.ProjectPointOnWaterSurface(searchParameters, out searchResult[i]))
             {
-                waterHeight += searchResult.projectedPositionWS.y;
+                waterHeight += searchResult[i].projectedPositionWS.y;
             }
         }
 
         waterHeight /= buoyancyVertices.Count;
 
-        Debug.Log("Average water height: " + waterHeight);
+        Vector3 boatPosition = transform.position;
+        boatPosition.y = waterHeight - draft;
+        transform.position = boatPosition;
+    }
 
-        transform.position = new Vector3(0f, waterHeight - draft, 0f);
+    void UpdateWaveTorque()
+    {
+        for (int i = 0; i < buoyancyVertices.Count; i++)
+        {
+            Vector3 globalVertex = transform.TransformPoint(buoyancyVertices[i]);
+
+            float deltaHeight = globalVertex.y - searchResult[i].projectedPositionWS.y;
+            float accuracyDivider = 1f / Mathf.Pow(accuracy + 1, 2f); 
+
+            Vector3 torqueVector = new Vector3(-buoyancyVertices[i].y * 3 * deltaHeight * waveTorqueStrength * accuracyDivider, 0f, -buoyancyVertices[i].x * deltaHeight * waveTorqueStrength * accuracyDivider);
+            rigidBody.AddRelativeTorque(torqueVector, ForceMode.Force);
+        }
     }
 }
