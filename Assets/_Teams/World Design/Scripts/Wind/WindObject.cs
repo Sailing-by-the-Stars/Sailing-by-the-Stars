@@ -38,6 +38,7 @@ public class WindObject : MonoBehaviour
         }
     }
 
+    // ReSharper disable Unity.PerformanceAnalysis
     private void RotateWindArrow(Vector3 direction)
     {
         if (!windArrow || direction.sqrMagnitude <= 0.0001f)

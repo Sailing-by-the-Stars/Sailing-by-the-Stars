@@ -1,13 +1,13 @@
 using System;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public class WindController : MonoBehaviour
 {
     [Header("Direction")]
     [SerializeField] private bool horizontalOnly = true;
     [SerializeField] private bool randomizeOnStart = true;
-    [SerializeField] private Vector3 currentWindDirection = Vector3.forward;
+    [SerializeField] private Vector3 windDirectionOnStart = Vector3.forward;
+    [SerializeField] private Vector3? influencedWindDirectionOnStart = null;
 
     [Header("Auto Reroll")]
     [SerializeField] private bool autoReroll;
@@ -18,28 +18,16 @@ public class WindController : MonoBehaviour
 
     private float rerollTimer;
 
-    public event Action<Vector3> WindDirectionChanged;
 
     private void Awake()
     {
         ResolveWindObjectReference();
-
-        if (randomizeOnStart || currentWindDirection.sqrMagnitude <= Mathf.Epsilon)
-        {
-            RerollWindDirection();
-            return;
-        }
-
-        currentWindDirection = currentWindDirection.normalized;
-        SyncWindObject();
+        SetWindDirectionForObject(randomizeOnStart ? GenerateRandomDirection() : windDirectionOnStart);
     }
 
     private void Update()
     {
-        if (!autoReroll || rerollIntervalSeconds <= 0f)
-        {
-            return;
-        }
+
 
         rerollTimer += Time.deltaTime;
         if (rerollTimer < rerollIntervalSeconds)
@@ -48,20 +36,42 @@ public class WindController : MonoBehaviour
         }
 
         rerollTimer = 0f;
-        RerollWindDirection();
+        HandleWindDirectionChange();
     }
 
-    public void RerollWindDirection()
+    // ReSharper disable Unity.PerformanceAnalysis
+    public void HandleWindDirectionChange()
     {
-        currentWindDirection = GenerateRandomDirection();
-        WindDirectionChanged?.Invoke(currentWindDirection);
-        SyncWindObject();
+        Debug.Log("WindDirectionChange");
+        Vector3 newWindDirection;
+        if (autoReroll)
+        {
+            Debug.Log("Auto rerolling wind direction.");
+            newWindDirection = GenerateRandomDirection();
+        }
+        else if (influencedWindDirectionOnStart.HasValue)
+        {
+            Debug.Log("Using influenced wind direction on start: " + influencedWindDirectionOnStart.Value);
+            newWindDirection = influencedWindDirectionOnStart.Value;
+        }
+        else
+        {
+            Debug.LogWarning("No wind direction source available. Defaulting to forward.");
+            newWindDirection = Vector3.forward;
+        }
+
+        SetWindDirectionForObject(newWindDirection);
     }
 
-    [ContextMenu("Print Wind Direction")]
-    public void PrintWindDirection()
+
+    private void SetWindDirectionForObject(Vector3 newWindDirection)
     {
-        Debug.Log($"[{nameof(WindController)}] Wind direction: {currentWindDirection}", this);
+        if (!windObject)
+        {
+            return;
+        }
+
+        windObject.SetWindDirection(newWindDirection);
     }
 
     private void ResolveWindObjectReference()
@@ -72,16 +82,6 @@ public class WindController : MonoBehaviour
         }
 
         windObject = FindFirstObjectByType<WindObject>();
-    }
-
-    private void SyncWindObject()
-    {
-        if (!windObject)
-        {
-            return;
-        }
-
-        windObject.SetWindDirection(currentWindDirection);
     }
 
     private Vector3 GenerateRandomDirection()
@@ -99,5 +99,19 @@ public class WindController : MonoBehaviour
         }
 
         return Vector3.forward;
+    }
+
+    public void SetInfluencedWindDirection(Vector3 newWindDirection)
+    {
+        influencedWindDirectionOnStart = newWindDirection;
+    }
+    
+    public void SetAutoReroll(bool enable)
+    {
+        autoReroll = enable;
+        if (!autoReroll)
+        {
+            rerollTimer = 0f;
+        }
     }
 }
