@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class WindController : MonoBehaviour
 {
@@ -16,8 +17,6 @@ public class WindController : MonoBehaviour
     [SerializeField] private WindObject windObject;
 
     private float rerollTimer;
-
-    public Vector3 CurrentWindDirection => currentWindDirection;
 
     public event Action<Vector3> WindDirectionChanged;
 
@@ -57,7 +56,6 @@ public class WindController : MonoBehaviour
         currentWindDirection = GenerateRandomDirection();
         WindDirectionChanged?.Invoke(currentWindDirection);
         SyncWindObject();
-        // PrintWindDirection();
     }
 
     [ContextMenu("Print Wind Direction")]
@@ -78,7 +76,7 @@ public class WindController : MonoBehaviour
 
     private void SyncWindObject()
     {
-        if (windObject == null)
+        if (!windObject)
         {
             return;
         }

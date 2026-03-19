@@ -40,7 +40,7 @@ public class WindObject : MonoBehaviour
 
     private void RotateWindArrow(Vector3 direction)
     {
-        if (windArrow == null || direction.sqrMagnitude <= 0.0001f)
+        if (!windArrow || direction.sqrMagnitude <= 0.0001f)
         {
             return;
         }

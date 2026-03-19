@@ -867,8 +867,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b0c0345354e40bf974cf4384985d050, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WindObject
-  windController: {fileID: 1427473739}
-  windArrow: {fileID: 0}
+  windArrow: {fileID: 91187412}
   currentWindDirection: {x: 0, y: 0, z: 1}
 --- !u!1 &1190200764
 GameObject:
@@ -975,7 +974,7 @@ GameObject:
   - component: {fileID: 1427473740}
   - component: {fileID: 1427473739}
   m_Layer: 0
-  m_Name: Cube
+  m_Name: WindController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -995,9 +994,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::WindWeatherController
   horizontalOnly: 1
   randomizeOnStart: 1
-  currentWindDirection: {x: 0, y: 0, z: 1}
+  currentWindDirection: {x: 0, y: 0, z: 1000}
+  windIntensity: 3
   autoReroll: 1
   rerollIntervalSeconds: 10
+  windObject: {fileID: 1172888503}
 --- !u!65 &1427473740
 BoxCollider:
   m_ObjectHideFlags: 0
