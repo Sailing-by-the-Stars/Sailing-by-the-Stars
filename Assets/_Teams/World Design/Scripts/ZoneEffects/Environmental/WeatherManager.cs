@@ -31,8 +31,8 @@ public class WeatherManager : MonoBehaviour
     [SerializeField] private float ambientChangeTransitionTime = 20f;
 
     // Controllers
-    // private WindController windController;
-    // private RainController rainController;
+    private WindController windController;
+    private TestRainController rainController;
     // private WaterController waterController;
     // private ThunderController thunderController;
 
@@ -47,12 +47,13 @@ public class WeatherManager : MonoBehaviour
     public event Action<WeatherState> onWeatherTransitionStarted;
 
     // manager acts as public access point for dynamic wind variation
-    /*public Vector3 windVelocity => windController != null
-        ? windController.currentWindVelocity : ConvertToVector(currentValues.windSpeed, currentValues.windDirectionDegrees); */
+    //public Vector3 windVelocity => windController != null
+      //  ? windController.currentWindVelocity : ConvertToVector(currentValues.windSpeed, currentValues.windDirectionDegrees); 
+      public Vector3 windVelocity => ConvertToVector(currentValues.windSpeed, currentValues.windDirectionDegrees);
 
     // Controller registration
     // public void Register(WindController c) => windController = c;
-    // public void Register(RainController c) => rainController = c;
+    public void Register(TestRainController c) => rainController = c;
     // public void Register(WaterController c) => waterController = c;
     // public void Register(ThunderController c) => thunderController = c;
     // public void Register(CloudController c) => cloudController = c;
@@ -171,7 +172,7 @@ public class WeatherManager : MonoBehaviour
             Debug.LogError("Weather manager TransitionTo called with null state.");
             return;
         }
-
+        Debug.Log("Transition To called");
         snapshotValues = currentValues;
         if (activeTransition != null)
         {
@@ -185,6 +186,7 @@ public class WeatherManager : MonoBehaviour
 
     private IEnumerator RunTransition(WeatherState target, float duration, WeatherTransitionCurves curves)
     {
+        Debug.Log("Run Transition started.");
         float elapsed = 0f;
         duration = Mathf.Max(duration, 0.01f); // prevent division by zero
 
@@ -224,9 +226,13 @@ public class WeatherManager : MonoBehaviour
     private void PushToControllers()
     {
         Vector3 currentWindVelocity = ConvertToVector(currentValues.windSpeed, currentValues.windDirectionDegrees);
+ 
+        // windController?.SetWind(currentWindVelocity);
+        if (rainController != null)
+        {
+            rainController.SetRainIntensity(currentValues.rainIntensity);
+        }
         /*
-        windController?.SetWind(currentWindVelocity);
-        rainController?.SetRainIntensity(currentValues.rainIntensity);
         waterController?.SetWaveIntensity(currentValues.waveIntensity);
         waterController?.SetOceanCurrentSpeed(currentValues.oceanCurrentSpeed);
         thunderController?.SetThunderIntensity(currentValues.thunderIntensity);
