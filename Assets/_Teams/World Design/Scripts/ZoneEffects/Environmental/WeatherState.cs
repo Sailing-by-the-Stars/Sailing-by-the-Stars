@@ -16,8 +16,8 @@ public struct WeatherValues
     [Range(0f, 1f)] public float rainIntensity;
     [Tooltip("Thunder and lightning: 0 = no thunder")]
     [Range(0f, 1f)] public float thunderIntensity;
-    [Tooltip("Base wave amplitude in m before wind contribution")]
-    public float waveAmplitude;
+    [Tooltip("0 = calmest 1 = highest waves (max driven by HDRP water surface values)")]
+    public float waveIntensity;
     [Tooltip("Ocean current speed in m/s")]
     public float oceanCurrentSpeed;
 }

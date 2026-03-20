@@ -6,18 +6,29 @@ using System;
 using System.Collections;
 using UnityEngine;
 
+// used for random variation of weather states - values do not need to add up to a specific amount
+[Serializable]
+public struct AmbientWeatherState
+{
+    public WeatherState state;
+    [Tooltip("Relative chance of this state being selected (higher is more likely)")]
+    public float weight;
+}
+
 public class WeatherManager : MonoBehaviour
 {
     public static WeatherManager Instance { get; private set; }
 
     [Header("Default")]
     [SerializeField] private WeatherState defaultState; // applied immediately on scene start
-
-    [Header("Debug")]
-    [SerializeField] private bool logValues = true;
-    [SerializeField] private bool showGizmos = true;
-    [SerializeField] private WeatherState testState;
-    [SerializeField] private float testTransitionDuration = 10f;
+    
+    [Tooltip("States to randomly cycle between during normal sailing " +
+        "(leave empty to disable auto variation, include default state if using)")]
+    [SerializeField] private AmbientWeatherState[] ambientStates;
+    [Tooltip("Length of time before choosing a new state. Time is not counted during transitions.")]
+    [SerializeField] private float minAmbientChangeInterval = 60f;
+    [SerializeField] private float maxAmbientChangeInterval = 300f;
+    [SerializeField] private float ambientChangeTransitionTime = 20f;
 
     // Controllers
     // private WindController windController;
@@ -28,9 +39,10 @@ public class WeatherManager : MonoBehaviour
     // State and transitions
     private WeatherState activeState;
     private Coroutine activeTransition;
+    private Coroutine ambientCycle;
+    private bool autoWeatherSuspended;
     private WeatherValues snapshotValues; // used to capture values directly before transition
     private WeatherValues currentValues;
-    private const float minTransitionDuration = 0.01f;
 
     public event Action<WeatherState> onWeatherTransitionStarted;
 
@@ -64,7 +76,88 @@ public class WeatherManager : MonoBehaviour
         }
         currentValues = defaultState.values;
         activeState = defaultState;
+
+        if (ambientStates != null && ambientStates.Length > 0)
+        {
+            ambientCycle = StartCoroutine(CycleAmbientWeather());
+        }
         PushToControllers();     
+    }
+    
+    private IEnumerator CycleAmbientWeather()
+    {
+        while (true)
+        {
+            if (autoWeatherSuspended || activeTransition != null)
+            {
+                yield return null;
+            }
+            else
+            {
+                float interval = UnityEngine.Random.Range(minAmbientChangeInterval, maxAmbientChangeInterval);
+                yield return new WaitForSeconds(interval);
+
+                WeatherState next = GetRandomAmbientState();
+                // ignore irrelevant changes due to probability settings
+                if (next == null || next == activeState)
+                {
+                    continue;
+                }
+                TransitionTo(next, ambientChangeTransitionTime);
+            }
+        }
+    }
+    /// <summary>
+    /// Randomly selects one of the ambient weather states based on weighted probability.
+    /// </summary>
+    public WeatherState GetRandomAmbientState()
+    {
+        if (ambientStates == null || ambientStates.Length == 0)
+        {
+            return null;
+        }
+        float total = 0f;
+        foreach (AmbientWeatherState ambientState in ambientStates)
+        {
+            total += ambientState.weight;
+        }
+
+        float randomValue = UnityEngine.Random.Range(0f, total);
+        float cumulative = 0f;
+        foreach (AmbientWeatherState ambientState in ambientStates)
+        {
+            cumulative += ambientState.weight;
+            if (randomValue <= cumulative)
+            {
+                return ambientState.state;
+            }
+        }
+        return null;
+
+    }
+    /// <summary>
+    /// Suspend auto weather variation (for example for scripted events or inside trigger areas)
+    /// </summary>
+    public void SuspendAutoWeather()
+    {
+        autoWeatherSuspended = true;
+        if (ambientCycle != null)
+        {
+            StopCoroutine(ambientCycle);
+            ambientCycle = null;
+        }
+    }
+    /// <summary>
+    /// Resume auto weather variation (for example when exiting scripted events or triggers)
+    /// </summary>
+    public void ResumeAutoWeather()
+    {
+        autoWeatherSuspended = false;
+        if (ambientStates != null && ambientStates.Length > 0)
+        {
+            ambientCycle = StartCoroutine(CycleAmbientWeather());
+        }
+
     }
     /// <summary>
     /// Transitions to target state over the given duration.
@@ -93,7 +186,7 @@ public class WeatherManager : MonoBehaviour
     private IEnumerator RunTransition(WeatherState target, float duration, WeatherTransitionCurves curves)
     {
         float elapsed = 0f;
-        duration = Mathf.Max(duration, minTransitionDuration);
+        duration = Mathf.Max(duration, 0.01f); // prevent division by zero
 
         while (elapsed < duration)
         {
@@ -117,7 +210,7 @@ public class WeatherManager : MonoBehaviour
         currentValues.rainIntensity = BlendValue(snapshotValues.rainIntensity, target.values.rainIntensity,
                                                  t, curves, c => c.rainCurve);
 
-        currentValues.waveAmplitude = BlendValue(snapshotValues.waveAmplitude, target.values.waveAmplitude,
+        currentValues.waveIntensity = BlendValue(snapshotValues.waveIntensity, target.values.waveIntensity,
                                                  t, curves, c => c.waveCurve);
 
         currentValues.oceanCurrentSpeed = BlendValue(snapshotValues.oceanCurrentSpeed, target.values.oceanCurrentSpeed,
@@ -134,7 +227,7 @@ public class WeatherManager : MonoBehaviour
         /*
         windController?.SetWind(currentWindVelocity);
         rainController?.SetRainIntensity(currentValues.rainIntensity);
-        waterController?.SetWaveAmplitude(currentValues.waveAmplitude);
+        waterController?.SetWaveIntensity(currentValues.waveIntensity);
         waterController?.SetOceanCurrentSpeed(currentValues.oceanCurrentSpeed);
         thunderController?.SetThunderIntensity(currentValues.thunderIntensity);
         */
