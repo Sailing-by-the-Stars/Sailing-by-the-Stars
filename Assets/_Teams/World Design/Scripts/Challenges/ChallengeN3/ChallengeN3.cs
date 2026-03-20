@@ -18,6 +18,7 @@ public class ChallengeN3 : MonoBehaviour
     [SerializeField] private GameObject ocean;
     [SerializeField] private GameObject triggerZone;
     [SerializeField] private string targetTag = "Player";
+    [SerializeField] private GameObject AudioManager;
     
 
     [Header("Original value of the properties")]
@@ -38,21 +39,10 @@ public class ChallengeN3 : MonoBehaviour
     private float targetChaos = 1f;
     private float windTarget = 4f;
 
-    [Header("Bool")]
-    [HideInInspector] public bool sounds = false;
-    [HideInInspector] public event Action<bool> OnSoundsChanged;
+    
 
-    private void Start()
-    {
-        //windController = triggerZone.GetComponent<SetParameterByID>();
-    }
 
-    private void SetSounds(bool value)
-    {
-        if (sounds == value) return;
-        sounds = value;
-        OnSoundsChanged?.Invoke(sounds);
-    }
+
 
     private void OnTriggerEnter(Collider other)
     {
@@ -85,6 +75,7 @@ public class ChallengeN3 : MonoBehaviour
     private IEnumerator IncreaseValues(float duration)
     {
         WaterSurface ws = ocean.GetComponent<WaterSurface>();
+        SetWind sw = AudioManager.GetComponent<SetWind>();
 
         // Obtener campos por nombre (publicos o no)
         System.Type wsType = ws.GetType();
@@ -108,9 +99,7 @@ public class ChallengeN3 : MonoBehaviour
             if (fWindSpeed != null) fWindSpeed.SetValue(ws, Mathf.Lerp(windSpeedO, targetWind, time));
             if (fChaos != null) fChaos.SetValue(ws, Mathf.Lerp(chaosO, targetChaos, time));
 
-            SetSounds(true);
-
-            //if (windController != null) windController.wind = Mathf.Lerp(windStart, windTarget, time);
+            sw.SetWindF(0.8f);
 
             elapsed += Time.deltaTime;
             yield return null;
@@ -121,6 +110,7 @@ public class ChallengeN3 : MonoBehaviour
     private IEnumerator DecreaseValues(float duration)
     {
         WaterSurface ws = ocean.GetComponent<WaterSurface>();
+        SetWind sw = AudioManager.GetComponent<SetWind>();
 
         System.Type wsType = ws.GetType();
 
@@ -159,9 +149,7 @@ public class ChallengeN3 : MonoBehaviour
 
             if (fChaos != null) fChaos.SetValue(ws, Mathf.Lerp(startChaos, chaosO, time));
 
-            //if (windController != null) windController.wind = Mathf.Lerp(startWindFMOD, windStart, time);
-
-            SetSounds(false);
+            sw.ResetWind();
 
             elapsed += Time.deltaTime;
             yield return null;

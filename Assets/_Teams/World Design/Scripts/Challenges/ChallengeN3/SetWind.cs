@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using UnityEngine;
 using FMODUnity;
@@ -10,71 +9,65 @@ using FMOD.Studio;
 
 public class SetWind : MonoBehaviour
 {
-    private EventInstance instance;
-    private PARAMETER_ID windParameter;
-
     [SerializeField] private EventReference fmodEvent;
-    [SerializeField] private ChallengeN3 challenge;
 
-    [Header("Settings")]
-    private float valueWhenOn = 0.8f;
-    private float valueWhenOff = 0f;
-    private float changeDuration = 3f;
-    private float currentValue = 0f;
+    [Header("Values")]
+    private float originalValue = 0f;
+    private float duration = 3f;
+    private float currentValue;
 
     [Header("Reference")]
-    private Coroutine changeCoroutine;
-    
-    /*[Range(-12f, 12f)]
-    [HideInInspector] public float wind;*/
+    private Coroutine routine;
+    private EventInstance instance;
+    private PARAMETER_ID windParameter;
     void Start()
     {
         instance = RuntimeManager.CreateInstance(fmodEvent);
 
-        EventDescription desc;
-        instance.getDescription(out desc);
-        PARAMETER_DESCRIPTION pdesc;
-        desc.getParameterDescriptionByName("WeatherIntensity", out pdesc);
+        instance.getDescription(out EventDescription desc);
+        desc.getParameterDescriptionByName("WeatherIntensity", out PARAMETER_DESCRIPTION pdesc);
         windParameter = pdesc.id;
 
-        // Inicia parámetro
+        currentValue = originalValue;
+
         instance.start();
         instance.setParameterByID(windParameter, currentValue);
-
-        if (challenge == null)
-            challenge = FindObjectOfType<ChallengeN3>();
-
-        if (challenge != null)
-            challenge.OnSoundsChanged += HandleSoundsChanged;
     }
 
-    private void HandleSoundsChanged(bool on)
+    //Function to set a new value to the wind
+    public void SetWindF(float target)
     {
-        float target = on ? valueWhenOn : valueWhenOff;
-        if (changeCoroutine != null) StopCoroutine(changeCoroutine);
-        changeCoroutine = StartCoroutine(ChangeParamRoutine(currentValue, target, changeDuration));
+        if (routine != null) StopCoroutine(routine);
+        routine = StartCoroutine(LerpWind(target));
     }
 
-    private IEnumerator ChangeParamRoutine(float from, float to, float duration)
+    //Funtion to reset the wind
+    public void ResetWind()
     {
-        float elapsed = 0f;
-        while (elapsed < duration)
+        SetWindF(originalValue);
+    }
+
+    //Coroutine that changes the wind value in a progression
+    private IEnumerator LerpWind(float target)
+    {
+        float start = currentValue;
+        float time = 0f;
+
+        while (time < duration)
         {
-            float t = Mathf.SmoothStep(0f, 1f, elapsed / duration);
-            currentValue = Mathf.Lerp(from, to, t);
+            currentValue = Mathf.Lerp(start, target, time / duration);
             instance.setParameterByID(windParameter, currentValue);
-            elapsed += Time.deltaTime;
+
+            time += Time.deltaTime;
             yield return null;
         }
-        currentValue = to;
+
+        currentValue = target;
         instance.setParameterByID(windParameter, currentValue);
-        changeCoroutine = null;
     }
 
     private void OnDestroy()
     {
-        if (challenge != null)
-            challenge.OnSoundsChanged -= HandleSoundsChanged;
         instance.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
         instance.release();
     }
