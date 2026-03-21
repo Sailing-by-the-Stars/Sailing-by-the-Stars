@@ -126,6 +126,7 @@ GameObject:
   - component: {fileID: 7700588203812096221}
   - component: {fileID: 1666019398203547534}
   - component: {fileID: 2250183035012353954}
+  - component: {fileID: 1062980865115586910}
   m_Layer: 0
   m_Name: star
   m_TagString: Untagged
@@ -426,3 +427,73 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GraphNode
   nextNodes: []
+--- !u!114 &1062980865115586910
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2784278811919334118}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d40e59aea1f787244b027d8b57e3fe08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TwinklingStar
+  debugState: 0
+  twinkleCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0.0005945433
+      value: 0.25064754
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.48598826
+      value: 1.0243843
+      inSlope: 1.235641
+      outSlope: 1.235641
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.034645952
+    - serializedVersion: 3
+      time: 0.9934319
+      value: 0.24742183
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  dimCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
