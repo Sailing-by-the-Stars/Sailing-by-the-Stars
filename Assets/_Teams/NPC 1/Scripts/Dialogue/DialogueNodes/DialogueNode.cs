@@ -8,5 +8,5 @@ public abstract class DialogueNode
     
     [TextArea(3,6)]
     public string text;
-
+    
 }
