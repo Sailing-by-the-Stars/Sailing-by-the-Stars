@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class PShadowGridManager : MonoBehaviour
@@ -10,11 +12,11 @@ public class PShadowGridManager : MonoBehaviour
     [Tooltip("Keep this low aprox. around 0.08 - 0.25")]
     [SerializeField] private float slidingTime = 0.15f;
 
-    private Pillar[,] grid;
+    private PShadowPillar[,] grid;
 
     private void Awake()
     {
-        grid = new Pillar[width, height];
+        grid = new PShadowPillar[width, height];
     }
     
     private void OnDrawGizmos()
@@ -45,16 +47,24 @@ public class PShadowGridManager : MonoBehaviour
         return transform.position + new Vector3((pos.x + .5f) * step, pillarY, (pos.y + .5f) * step);
     }
 
-    public void RegisterPillar(Pillar pillar, Vector2Int pos)
+    public void RegisterPillar(PShadowPillar pillar, Vector2Int pos)
     {
         grid[pos.x, pos.y] = pillar;
-        pillar.gridPos = pos;
         pillar.transform.position = GridToWorld(pos, pillar.transform.position.y);
+    }
+
+    public void ResetPillars()
+    {
+        List<PShadowPillar> pillarsToRegister = grid.Cast<PShadowPillar>().Where(pillar => pillar != null).ToList();
+        foreach (PShadowPillar pillar in pillarsToRegister)
+        {
+            RegisterPillar(pillar, pillar.startPosition);
+        }
     }
 
     private void MovePillar(Vector2Int from, Vector2Int to)
     {
-        Pillar pillar = grid[from.x, from.y];
+        PShadowPillar pillar = grid[from.x, from.y];
 
         grid[to.x, to.y] = pillar;
         grid[from.x, from.y] = null;
