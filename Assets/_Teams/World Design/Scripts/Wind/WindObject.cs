@@ -7,7 +7,8 @@ public class WindObject : MonoBehaviour
     [SerializeField] private float intensity = 1f;
 
     [Header("Wind Trails")]
-    [SerializeField] private ParticleSystem windTrails;
+    [SerializeField] private ParticleSystem windTrailsPrimary;
+    [SerializeField] private ParticleSystem windTrailsSecondary;
     [SerializeField, Min(0f)] private float restartAngleThreshold = 1f;
 
     // Stores the normalized world-space heading used for arrow orientation.
@@ -46,7 +47,6 @@ public class WindObject : MonoBehaviour
             return;
         }
 
-        Vector3 previousDirection = worldWindDirection;
         worldWindDirection = newDirection;
         currentWindDirection = worldWindDirection * intensity;
         RotateWindArrow(worldWindDirection);
@@ -70,34 +70,68 @@ public class WindObject : MonoBehaviour
 
     private void CacheWindTrails()
     {
-        if (windTrails != null)
+        if (windTrailsPrimary != null && windTrailsSecondary != null)
         {
             return;
         }
 
-        Transform trailsChild = transform.Find("wind trails");
-        if (trailsChild != null)
+        Transform primaryChild = transform.Find("wind trails");
+        if (windTrailsPrimary == null && primaryChild != null)
         {
-            windTrails = trailsChild.GetComponent<ParticleSystem>();
+            windTrailsPrimary = primaryChild.GetComponent<ParticleSystem>();
+        }
+
+        Transform secondaryChild = transform.Find("wind trails 2");
+        if (windTrailsSecondary == null && secondaryChild != null)
+        {
+            windTrailsSecondary = secondaryChild.GetComponent<ParticleSystem>();
+        }
+
+        if (windTrailsPrimary != null && windTrailsSecondary != null)
+        {
+            return;
+        }
+
+        ParticleSystem[] childTrails = GetComponentsInChildren<ParticleSystem>(true);
+        foreach (ParticleSystem childTrail in childTrails)
+        {
+            if (windTrailsPrimary == null)
+            {
+                windTrailsPrimary = childTrail;
+                continue;
+            }
+
+            if (windTrailsSecondary == null && childTrail != windTrailsPrimary)
+            {
+                windTrailsSecondary = childTrail;
+                break;
+            }
         }
     }
 
 
     private void HardResetWindTrails()
     {
-        Debug.Log("Hard Reset Wind Trails");
-        
-        // if (windTrails == null)
-        // {
-            // return;
-        // }
-        Debug.Log("Hard Reset Wind Trails 2");
+        foreach (ParticleSystem trail in EnumerateWindTrails())
+        {
+            trail.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+            trail.Clear(true);
+            trail.Simulate(0f, true, true, true);
+            trail.Play(true);
+        }
+    }
 
-        windTrails.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
-        windTrails.Clear(true);
-        windTrails.Simulate(0f, true, true, true);
-        
-        windTrails.Play(true);
+    private System.Collections.Generic.IEnumerable<ParticleSystem> EnumerateWindTrails()
+    {
+        if (windTrailsPrimary != null)
+        {
+            yield return windTrailsPrimary;
+        }
+
+        if (windTrailsSecondary != null && windTrailsSecondary != windTrailsPrimary)
+        {
+            yield return windTrailsSecondary;
+        }
     }
 
     // ReSharper disable Unity.PerformanceAnalysis
