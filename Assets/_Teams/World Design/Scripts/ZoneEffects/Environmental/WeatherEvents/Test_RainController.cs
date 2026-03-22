@@ -12,7 +12,7 @@ using UnityEngine.UIElements;
 public class TestRainController : MonoBehaviour
 {
     [SerializeField] private ParticleSystem rainParticleSystem;
-    [SerializeField] private float windInfluence = 0.3f;
+    [SerializeField] private float windInfluence = 2f;
     [Header("Location Settings")]
     [Tooltip("Target for the rain system to follow for positioning")]
     [SerializeField] private Transform followTarget;
@@ -66,12 +66,20 @@ public class TestRainController : MonoBehaviour
 
         WeatherManager.Instance.Register(this);
     }
+
     private void LateUpdate()
     {
-        if (followTarget != null)
-            transform.position = followTarget.position + Vector3.up * emitterHeight;
-
         Vector3 wind = WeatherManager.Instance.windVelocity;
+        // Debug.Log($"Wind: {wind} x={wind.x:F2} z={wind.z:F2} dir ={WeatherManager.Instance.currentValues.windDirectionDegrees}");
+
+        // Only horizontal wind
+        Vector3 horizontalWind = new Vector3(wind.x, 0, wind.z);
+
+        if (followTarget != null)
+        {
+            transform.position = followTarget.position + Vector3.up * emitterHeight;
+        }
+
         velocityOverLifetime.x = new ParticleSystem.MinMaxCurve(wind.x * windInfluence);
         velocityOverLifetime.y = new ParticleSystem.MinMaxCurve(0f);
         velocityOverLifetime.z = new ParticleSystem.MinMaxCurve(wind.z * windInfluence);
@@ -85,11 +93,14 @@ public class TestRainController : MonoBehaviour
         {
             return;
         }
-        // Debug.Log($"Rain controller SetRainIntensity called: {intensity:F2}");
+        Debug.Log($"Rain controller SetRainIntensity called: {intensity:F2}");
         // turn rain off below threshold
         if (intensity < rainStopThreshold)
         {
-            rainParticleSystem.Stop();
+            if (rainParticleSystem.isPlaying)
+            {
+                rainParticleSystem.Stop(true, ParticleSystemStopBehavior.StopEmitting);
+            }
             return;
         }
         if (!rainParticleSystem.isPlaying)

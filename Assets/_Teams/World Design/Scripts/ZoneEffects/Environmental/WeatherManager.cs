@@ -44,7 +44,7 @@ public class WeatherManager : MonoBehaviour
     
     // Old 
     private WeatherValues snapshotValues; // used to capture values directly before transition
-    private WeatherValues currentValues;
+    public WeatherValues currentValues;
 
     public event Action<WeatherState> onWeatherTransitionStarted;
 
@@ -209,9 +209,10 @@ public class WeatherManager : MonoBehaviour
         currentValues.windSpeed = BlendValue(snapshotValues.windSpeed, target.values.windSpeed,
                                              t, curves, c => c.windCurve);
 
-        currentValues.windDirectionDegrees = Mathf.LerpAngle(snapshotValues.windDirectionDegrees,
-                                                             target.values.windDirectionDegrees, t);
-        
+        // normalize degrees
+        currentValues.windDirectionDegrees = (Mathf.LerpAngle(snapshotValues.windDirectionDegrees,
+                                                              target.values.windDirectionDegrees, t) + 360f) % 360f;
+
         currentValues.windRandomEventsActive = target.values.windRandomEventsActive;
         
         currentValues.windAutoRerollIntensity = BlendValue(
