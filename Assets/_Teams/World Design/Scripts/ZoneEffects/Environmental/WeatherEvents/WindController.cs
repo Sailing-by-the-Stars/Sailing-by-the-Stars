@@ -1,23 +1,24 @@
 using System;
+using _Teams.World_Design.Scripts.ZoneEffects.Environmental.WeatherEvents;
 using UnityEngine;
+using UnityEngine.Serialization;
 
-public class WindController : MonoBehaviour
+public class WindController : MonoBehaviour, IWeatherEventController
 {
     [Header("Direction")]
     [SerializeField] private bool horizontalOnly = true;
     [SerializeField] private bool randomizeOnStart = true;
     [SerializeField] private Vector3 windDirectionOnStart = Vector3.forward;
-    [SerializeField] private Vector3? influencedWindDirectionOnStart = null;
 
     [Header("Auto Reroll")]
-    [SerializeField] private bool autoReroll;
     [SerializeField] private float rerollIntervalSeconds = 10f;
+    [SerializeField] private bool randomEventsActive = true;
+    [SerializeField] private float autoRerollWindIntensity = 1f;
 
     [Header("Wind Object")]
     [SerializeField] private WindObject windObject;
 
     private float rerollTimer;
-
 
     private void Awake()
     {
@@ -27,8 +28,11 @@ public class WindController : MonoBehaviour
 
     private void Update()
     {
-
-
+        if (!randomEventsActive )
+        {
+            return;
+        }
+        
         rerollTimer += Time.deltaTime;
         if (rerollTimer < rerollIntervalSeconds)
         {
@@ -36,31 +40,14 @@ public class WindController : MonoBehaviour
         }
 
         rerollTimer = 0f;
-        HandleWindDirectionChange();
+        HandleWindReroll();
     }
 
     // ReSharper disable Unity.PerformanceAnalysis
-    public void HandleWindDirectionChange()
+    private void HandleWindReroll()
     {
-        Debug.Log("WindDirectionChange");
-        Vector3 newWindDirection;
-        if (autoReroll)
-        {
-            Debug.Log("Auto rerolling wind direction.");
-            newWindDirection = GenerateRandomDirection();
-        }
-        else if (influencedWindDirectionOnStart.HasValue)
-        {
-            Debug.Log("Using influenced wind direction on start: " + influencedWindDirectionOnStart.Value);
-            newWindDirection = influencedWindDirectionOnStart.Value;
-        }
-        else
-        {
-            Debug.LogWarning("No wind direction source available. Defaulting to forward.");
-            newWindDirection = Vector3.forward;
-        }
-
-        SetWindDirectionForObject(newWindDirection);
+        Vector3 newWindDirection = GenerateRandomDirection() * autoRerollWindIntensity;
+        ChangeDirection(newWindDirection);
     }
 
 
@@ -80,7 +67,6 @@ public class WindController : MonoBehaviour
         {
             return;
         }
-
         windObject = FindFirstObjectByType<WindObject>();
     }
 
@@ -101,17 +87,37 @@ public class WindController : MonoBehaviour
         return Vector3.forward;
     }
 
-    public void SetInfluencedWindDirection(Vector3 newWindDirection)
+    public void ChangeWeatherEventValues(WeatherValues weatherValues)
     {
-        influencedWindDirectionOnStart = newWindDirection;
+        // Debug.Log("Random events: " + weatherValues.windRandomEventsActive);
+        float radians = weatherValues.windDirectionDegrees * Mathf.Deg2Rad;
+        Vector3 currentWindDirection = new Vector3(Mathf.Sin(radians), 0f, Mathf.Cos(radians));
+        
+        SetRandomEventsActive(weatherValues.windRandomEventsActive);
+        ChangeDirection(currentWindDirection * weatherValues.windSpeed);
+        // Debug.Log("LogWind Reroll. New Direction: " + currentWindDirection * weatherValues.windSpeed);
+        ChangeAutoRerollWindIntensity(weatherValues.windAutoRerollIntensity);
+        
+        // Debug.Log("Wind Direction Changed: " + currentWindDirection);   
+    }
+
+    public void ChangeDirection(Vector3 direction)
+    {
+        if (!windObject)
+        {
+            return;
+        }
+
+        windObject.SetWindDirection(direction);
+    }
+
+    public void SetRandomEventsActive(bool isActive)
+    {
+        randomEventsActive = isActive;
     }
     
-    public void SetAutoReroll(bool enable)
+    public void ChangeAutoRerollWindIntensity(float intensity)
     {
-        autoReroll = enable;
-        if (!autoReroll)
-        {
-            rerollTimer = 0f;
-        }
+        autoRerollWindIntensity = intensity;
     }
 }
