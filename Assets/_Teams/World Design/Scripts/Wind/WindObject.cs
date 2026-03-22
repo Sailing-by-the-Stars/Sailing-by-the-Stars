@@ -14,6 +14,8 @@ public class WindObject : MonoBehaviour
     // Stores the normalized world-space heading used for arrow orientation.
     private Vector3 worldWindDirection = Vector3.forward;
 
+    private bool isPrimaryTrailActive = true;
+
     public Vector3 CurrentWindDirection => currentWindDirection;
 
     private void OnEnable()
@@ -27,11 +29,12 @@ public class WindObject : MonoBehaviour
         }
 
         RotateWindArrow(worldWindDirection);
+        InitializeWindTrailEmission();
     }
 
     private void OnDisable()
     {
-        HardResetWindTrails();
+        StopAllWindTrailEmission();
     }
 
     private void LateUpdate()
@@ -47,11 +50,19 @@ public class WindObject : MonoBehaviour
             return;
         }
 
-        worldWindDirection = newDirection;
+        Vector3 normalizedDirection = newDirection.normalized;
+        float angleDelta = worldWindDirection.sqrMagnitude > 0.0001f
+            ? Vector3.Angle(worldWindDirection, normalizedDirection)
+            : 180f;
+
+        worldWindDirection = normalizedDirection;
         currentWindDirection = worldWindDirection * intensity;
         RotateWindArrow(worldWindDirection);
-            
-        HardResetWindTrails();
+
+        if (angleDelta >= restartAngleThreshold)
+        {
+            SwapActiveWindTrail();
+        }
     }
 
     private void CacheWindArrow()
@@ -110,27 +121,65 @@ public class WindObject : MonoBehaviour
     }
 
 
-    private void HardResetWindTrails()
+    private void InitializeWindTrailEmission()
     {
-        foreach (ParticleSystem trail in EnumerateWindTrails())
+        isPrimaryTrailActive = true;
+
+        if (windTrailsPrimary != null)
         {
-            trail.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
-            trail.Clear(true);
-            trail.Simulate(0f, true, true, true);
-            trail.Play(true);
+            windTrailsPrimary.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+            windTrailsPrimary.Play(true);
+        }
+
+        if (windTrailsSecondary != null)
+        {
+            windTrailsSecondary.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+        }
+
+        // If primary is missing, fall back to secondary as the active emitter.
+        if (windTrailsPrimary == null && windTrailsSecondary != null)
+        {
+            isPrimaryTrailActive = false;
+            windTrailsSecondary.Play(true);
         }
     }
 
-    private System.Collections.Generic.IEnumerable<ParticleSystem> EnumerateWindTrails()
+    private void SwapActiveWindTrail()
+    {
+        ParticleSystem activeTrail = isPrimaryTrailActive ? windTrailsPrimary : windTrailsSecondary;
+        ParticleSystem nextTrail = isPrimaryTrailActive ? windTrailsSecondary : windTrailsPrimary;
+
+        if (nextTrail == null)
+        {
+            if (activeTrail != null && !activeTrail.isPlaying)
+            {
+                activeTrail.Play(true);
+            }
+
+            return;
+        }
+
+        if (activeTrail != null)
+        {
+            // Stop emitting only, so already-spawned particles finish naturally.
+            activeTrail.Stop(true, ParticleSystemStopBehavior.StopEmitting);
+        }
+
+        nextTrail.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+        nextTrail.Play(true);
+        isPrimaryTrailActive = !isPrimaryTrailActive;
+    }
+
+    private void StopAllWindTrailEmission()
     {
         if (windTrailsPrimary != null)
         {
-            yield return windTrailsPrimary;
+            windTrailsPrimary.Stop(true, ParticleSystemStopBehavior.StopEmitting);
         }
 
-        if (windTrailsSecondary != null && windTrailsSecondary != windTrailsPrimary)
+        if (windTrailsSecondary != null)
         {
-            yield return windTrailsSecondary;
+            windTrailsSecondary.Stop(true, ParticleSystemStopBehavior.StopEmitting);
         }
     }
 
