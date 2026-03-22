@@ -32,6 +32,9 @@ public class BuoyancyController : MonoBehaviour
     {
         CreateExtraVertices();
 
+        Vector3 buoyancyObjectPosition = new Vector3(0f, -draft, 0f);
+        buoyancyQuadObject.transform.position = buoyancyObjectPosition;
+
         searchResult = new WaterSearchResult[buoyancyVertices.Count];
 
         rigidBody = GetComponent<Rigidbody>();
@@ -66,7 +69,7 @@ public class BuoyancyController : MonoBehaviour
 
         for (int i = 0; i < buoyancyVertices.Count; i++)
         {
-            Vector3 globalVertex = transform.TransformPoint(buoyancyVertices[i]);
+            Vector3 globalVertex = buoyancyQuadObject.transform.TransformPoint(buoyancyVertices[i]);
 
             searchParameters.startPositionWS = searchResult[i].projectedPositionWS;
             searchParameters.targetPositionWS = globalVertex;
@@ -82,7 +85,7 @@ public class BuoyancyController : MonoBehaviour
         waterHeight /= buoyancyVertices.Count;
 
         Vector3 boatPosition = transform.position;
-        boatPosition.y = waterHeight - draft;
+        boatPosition.y = waterHeight + draft;
         transform.position = boatPosition;
     }
 
@@ -90,12 +93,12 @@ public class BuoyancyController : MonoBehaviour
     {
         for (int i = 0; i < buoyancyVertices.Count; i++)
         {
-            Vector3 globalVertex = transform.TransformPoint(buoyancyVertices[i]);
+            Vector3 globalVertex = buoyancyQuadObject.transform.TransformPoint(buoyancyVertices[i]);
 
             float deltaHeight = globalVertex.y - searchResult[i].projectedPositionWS.y;
             float accuracyDivider = 1f / Mathf.Pow(accuracy + 1, 2f); 
 
-            Vector3 torqueVector = new Vector3(-buoyancyVertices[i].y * 3 * deltaHeight * waveTorqueStrength * accuracyDivider, 0f, -buoyancyVertices[i].x * deltaHeight * waveTorqueStrength * accuracyDivider);
+            Vector3 torqueVector = new Vector3(buoyancyVertices[i].y * 3 * deltaHeight * waveTorqueStrength * accuracyDivider, 0f, -buoyancyVertices[i].x * deltaHeight * waveTorqueStrength * accuracyDivider);
             rigidBody.AddRelativeTorque(torqueVector, ForceMode.Force);
         }
     }
