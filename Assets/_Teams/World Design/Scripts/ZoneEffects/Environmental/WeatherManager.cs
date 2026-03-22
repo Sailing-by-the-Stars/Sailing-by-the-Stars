@@ -242,26 +242,12 @@ public class WeatherManager : MonoBehaviour
     // ReSharper disable Unity.PerformanceAnalysis
     private void PushToControllers()
     {
-        // Vector3 currentWindVelocity = ConvertToVector(currentValues.windSpeed, currentValues.windDirectionDegrees);
-        // Debug.Log( "Wind intencity is" + currentWindVelocity, this);
- 
-        //Print all current values for debugging
-        Debug.Log("Current Weather Values: " +
-                  "\nWind Speed: " + currentValues.windSpeed +
-                  "\nWind Direction: " + currentValues.windDirectionDegrees +
-                  "\nWind random events active: " + currentValues.windRandomEventsActive +
-                  "\nWind windAutoRerollIntensity: " + currentValues.windAutoRerollIntensity +
-                  "\nRain Intensity: " + currentValues.rainIntensity +
-                  "\nWave Intensity: " + currentValues.waveIntensity +
-                  "\nOcean Current Speed: " + currentValues.oceanCurrentSpeed +
-                  "\nThunder Intensity: " + currentValues.thunderIntensity, this);
-        
-                  
         windController?.ChangeWeatherEventValues(currentValues);
         if (rainController != null)
         {
             rainController.SetRainIntensity(currentValues.rainIntensity);
         }
+        
         /*
         waterController?.SetWaveIntensity(currentValues.waveIntensity);
         waterController?.SetOceanCurrentSpeed(currentValues.oceanCurrentSpeed);

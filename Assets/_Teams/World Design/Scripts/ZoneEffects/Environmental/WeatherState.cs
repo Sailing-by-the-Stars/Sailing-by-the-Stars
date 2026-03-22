@@ -7,6 +7,9 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
 
+/// <summary>
+/// Use this class to add weather specific parameters.
+/// </summary>
 [System.Serializable]
 public struct WeatherValues
 {

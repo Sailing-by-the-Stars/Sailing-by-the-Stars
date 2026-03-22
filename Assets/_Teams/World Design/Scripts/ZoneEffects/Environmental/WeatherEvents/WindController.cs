@@ -48,7 +48,6 @@ public class WindController : MonoBehaviour, IWeatherEventController
     {
         Vector3 newWindDirection = GenerateRandomDirection() * autoRerollWindIntensity;
         ChangeDirection(newWindDirection);
-        Debug.Log("Wind Reroll. New Direction: " + newWindDirection);
     }
 
 
@@ -94,7 +93,6 @@ public class WindController : MonoBehaviour, IWeatherEventController
         float radians = weatherValues.windDirectionDegrees * Mathf.Deg2Rad;
         Vector3 currentWindDirection = new Vector3(Mathf.Sin(radians), 0f, Mathf.Cos(radians));
         
-        Debug.Log(weatherValues.windRandomEventsActive);
         SetRandomEventsActive(weatherValues.windRandomEventsActive);
         ChangeDirection(currentWindDirection * weatherValues.windSpeed);
         // Debug.Log("LogWind Reroll. New Direction: " + currentWindDirection * weatherValues.windSpeed);

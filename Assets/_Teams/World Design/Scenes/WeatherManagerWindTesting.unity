@@ -173,7 +173,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 578223750586730049, guid: 7486d414037d69f409129b22a6c4a2b3, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1312480447}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7486d414037d69f409129b22a6c4a2b3, type: 3}
 --- !u!114 &130744036 stripped
@@ -301,7 +304,7 @@ Transform:
   m_GameObject: {fileID: 200966676}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5.91, y: -0.11, z: -48.1}
+  m_LocalPosition: {x: 5.91, y: -0.11, z: -34.6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -917,6 +920,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &689674561 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 578223750586730049, guid: 7486d414037d69f409129b22a6c4a2b3, type: 3}
+  m_PrefabInstance: {fileID: 130608802}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &710406257
 GameObject:
   m_ObjectHideFlags: 0
@@ -1029,6 +1037,79 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 710406257}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1001 &793526043
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 689674561}
+    m_Modifications:
+    - target: {fileID: 1284825517622095781, guid: 4403c7a3401dcd94596a164f74684081, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.6612442
+      objectReference: {fileID: 0}
+    - target: {fileID: 1284825517622095781, guid: 4403c7a3401dcd94596a164f74684081, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.30782628
+      objectReference: {fileID: 0}
+    - target: {fileID: 1284825517622095781, guid: 4403c7a3401dcd94596a164f74684081, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.4520725
+      objectReference: {fileID: 0}
+    - target: {fileID: 1284825517622095781, guid: 4403c7a3401dcd94596a164f74684081, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.09
+      objectReference: {fileID: 0}
+    - target: {fileID: 1284825517622095781, guid: 4403c7a3401dcd94596a164f74684081, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 6.08
+      objectReference: {fileID: 0}
+    - target: {fileID: 1284825517622095781, guid: 4403c7a3401dcd94596a164f74684081, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -9.9
+      objectReference: {fileID: 0}
+    - target: {fileID: 1284825517622095781, guid: 4403c7a3401dcd94596a164f74684081, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7064507
+      objectReference: {fileID: 0}
+    - target: {fileID: 1284825517622095781, guid: 4403c7a3401dcd94596a164f74684081, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.7064507
+      objectReference: {fileID: 0}
+    - target: {fileID: 1284825517622095781, guid: 4403c7a3401dcd94596a164f74684081, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.030453706
+      objectReference: {fileID: 0}
+    - target: {fileID: 1284825517622095781, guid: 4403c7a3401dcd94596a164f74684081, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0.030453706
+      objectReference: {fileID: 0}
+    - target: {fileID: 1284825517622095781, guid: 4403c7a3401dcd94596a164f74684081, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 1284825517622095781, guid: 4403c7a3401dcd94596a164f74684081, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1284825517622095781, guid: 4403c7a3401dcd94596a164f74684081, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: -4.937
+      objectReference: {fileID: 0}
+    - target: {fileID: 2527857577195567333, guid: 4403c7a3401dcd94596a164f74684081, type: 3}
+      propertyPath: InitialModule.startRotation.scalar
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5387749198984058057, guid: 4403c7a3401dcd94596a164f74684081, type: 3}
+      propertyPath: m_Name
+      value: Wind trails
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 4403c7a3401dcd94596a164f74684081, type: 3}
 --- !u!1 &1156236004
 GameObject:
   m_ObjectHideFlags: 0
@@ -1146,8 +1227,12 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1289637738}
     - target: {fileID: 3310494730039011532, guid: d0a36e955f6438641b02431b33a3551e, type: 3}
-      propertyPath: rerollIntervalSeconds
+      propertyPath: randomEventsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3310494730039011532, guid: d0a36e955f6438641b02431b33a3551e, type: 3}
+      propertyPath: rerollIntervalSeconds
+      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1246,6 +1331,11 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 1592107113}
   m_SourcePrefab: {fileID: 100100000, guid: 0946b951edaa35f44a6d79cc174140f3, type: 3}
+--- !u!4 &1312480447 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1284825517622095781, guid: 4403c7a3401dcd94596a164f74684081, type: 3}
+  m_PrefabInstance: {fileID: 793526043}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1592107109 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8754990168727665895, guid: 0946b951edaa35f44a6d79cc174140f3, type: 3}
@@ -1289,7 +1379,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WeatherZoneEffect
   enterState: {fileID: 11400000, guid: 063b38f51e92d994eb16379785c7976c, type: 2}
-  enterDuration: 60
+  enterDuration: 1
   enterCurves: {fileID: 11400000, guid: 199c74952d3cab445a39f13892aff68b, type: 2}
   randomAmbientOnExit: 0
   exitState: {fileID: 11400000, guid: fafba6abdce518446a4565c944aadab7, type: 2}
