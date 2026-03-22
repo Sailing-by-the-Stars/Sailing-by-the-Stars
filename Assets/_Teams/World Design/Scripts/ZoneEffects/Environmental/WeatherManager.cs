@@ -189,7 +189,6 @@ public class WeatherManager : MonoBehaviour
 
     private IEnumerator RunTransition(WeatherState target, float duration, WeatherTransitionCurves curves)
     {
-        Debug.Log("Run Transition started.");
         float elapsed = 0f;
         duration = Mathf.Max(duration, 0.01f); // prevent division by zero
 
