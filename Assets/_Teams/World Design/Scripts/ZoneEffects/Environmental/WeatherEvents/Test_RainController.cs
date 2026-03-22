@@ -85,7 +85,7 @@ public class TestRainController : MonoBehaviour
         {
             return;
         }
-        Debug.Log($"Rain controller SetRainIntensity called: {intensity:F2}");
+        // Debug.Log($"Rain controller SetRainIntensity called: {intensity:F2}");
         // turn rain off below threshold
         if (intensity < rainStopThreshold)
         {

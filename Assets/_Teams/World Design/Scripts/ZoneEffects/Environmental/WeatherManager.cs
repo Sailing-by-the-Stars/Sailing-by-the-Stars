@@ -31,7 +31,7 @@ public class WeatherManager : MonoBehaviour
     [SerializeField] private float ambientChangeTransitionTime = 20f;
 
     // Controllers
-    private WindController windController;
+    [SerializeField] private WindController windController;
     private TestRainController rainController;
     // private WaterController waterController;
     // private ThunderController thunderController;
@@ -41,6 +41,8 @@ public class WeatherManager : MonoBehaviour
     private Coroutine activeTransition;
     private Coroutine ambientCycle;
     private bool autoWeatherSuspended;
+    
+    // Old 
     private WeatherValues snapshotValues; // used to capture values directly before transition
     private WeatherValues currentValues;
 
@@ -49,7 +51,7 @@ public class WeatherManager : MonoBehaviour
     // manager acts as public access point for dynamic wind variation
     //public Vector3 windVelocity => windController != null
       //  ? windController.currentWindVelocity : ConvertToVector(currentValues.windSpeed, currentValues.windDirectionDegrees); 
-      public Vector3 windVelocity => ConvertToVector(currentValues.windSpeed, currentValues.windDirectionDegrees);
+    public Vector3 windVelocity => ConvertToVector(currentValues.windSpeed, currentValues.windDirectionDegrees);
 
     // Controller registration
     // public void Register(WindController c) => windController = c;
@@ -82,6 +84,7 @@ public class WeatherManager : MonoBehaviour
         {
             ambientCycle = StartCoroutine(CycleAmbientWeather());
         }
+        
         PushToControllers();     
     }
     
@@ -223,11 +226,24 @@ public class WeatherManager : MonoBehaviour
 
         PushToControllers();
     }
+    
+    // ReSharper disable Unity.PerformanceAnalysis
     private void PushToControllers()
     {
-        Vector3 currentWindVelocity = ConvertToVector(currentValues.windSpeed, currentValues.windDirectionDegrees);
+        // Vector3 currentWindVelocity = ConvertToVector(currentValues.windSpeed, currentValues.windDirectionDegrees);
+        // Debug.Log( "Wind intencity is" + currentWindVelocity, this);
  
-        // windController?.SetWind(currentWindVelocity);
+        //Print all current values for debugging
+        // Debug.Log("Current Weather Values: " +
+                  // "\nWind Speed: " + currentValues.windSpeed +
+                  // "\nWind Direction: " + currentValues.windDirectionDegrees +
+                  // "\nWind Random: " + currentValues.windAutoRerollIntensity +
+                  // "\nRain Intensity: " + currentValues.rainIntensity +
+                  // "\nWave Intensity: " + currentValues.waveIntensity +
+                  // "\nOcean Current Speed: " + currentValues.oceanCurrentSpeed +
+                  // "\nThunder Intensity: " + currentValues.thunderIntensity, this);
+        
+        windController?.ChangeWeatherEventValues(currentValues);
         if (rainController != null)
         {
             rainController.SetRainIntensity(currentValues.rainIntensity);

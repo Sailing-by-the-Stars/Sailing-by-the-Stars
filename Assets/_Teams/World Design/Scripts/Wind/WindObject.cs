@@ -4,6 +4,7 @@ public class WindObject : MonoBehaviour
 {
     [SerializeField] private Transform windArrow;
     [SerializeField] private Vector3 currentWindDirection = Vector3.forward;
+    [SerializeField] private float intensity = 1f;
 
     public Vector3 CurrentWindDirection => currentWindDirection;
 
@@ -15,13 +16,7 @@ public class WindObject : MonoBehaviour
 
     public void SetWindDirection(Vector3 newDirection)
     {
-        if (newDirection.sqrMagnitude <= 0.0001f)
-        {
-            return;
-        }
-
-        currentWindDirection = newDirection.normalized;
-        RotateWindArrow(currentWindDirection);
+        RotateWindArrow(newDirection);
     }
 
     private void CacheWindArrow()
@@ -46,7 +41,6 @@ public class WindObject : MonoBehaviour
             return;
         }
     
-        Debug.Log("Rotating wind arrow to direction: " + direction );
         windArrow.rotation = Quaternion.LookRotation(direction, Vector3.up);
     }
 }
