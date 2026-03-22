@@ -16,7 +16,8 @@ public class WindObject : MonoBehaviour
 
     public void SetWindDirection(Vector3 newDirection)
     {
-        RotateWindArrow(newDirection);
+        currentWindDirection = newDirection.normalized * intensity;
+        RotateWindArrow(currentWindDirection);
     }
 
     private void CacheWindArrow()

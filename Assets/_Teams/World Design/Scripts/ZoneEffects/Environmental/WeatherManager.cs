@@ -206,21 +206,33 @@ public class WeatherManager : MonoBehaviour
 
     private void ApplyAtTime(WeatherState target, float t, WeatherTransitionCurves curves)
     {
+        // Wind 
         currentValues.windSpeed = BlendValue(snapshotValues.windSpeed, target.values.windSpeed,
                                              t, curves, c => c.windCurve);
 
         currentValues.windDirectionDegrees = Mathf.LerpAngle(snapshotValues.windDirectionDegrees,
                                                              target.values.windDirectionDegrees, t);
+        
+        currentValues.windRandomEventsActive = target.values.windRandomEventsActive;
+        
+        currentValues.windAutoRerollIntensity = BlendValue(
+            snapshotValues.windAutoRerollIntensity,
+            target.values.windAutoRerollIntensity,
+            t, curves, c => c.windCurve
+        );
 
+        // Rain 
         currentValues.rainIntensity = BlendValue(snapshotValues.rainIntensity, target.values.rainIntensity,
                                                  t, curves, c => c.rainCurve);
 
+        // Ocean
         currentValues.waveIntensity = BlendValue(snapshotValues.waveIntensity, target.values.waveIntensity,
                                                  t, curves, c => c.waveCurve);
 
         currentValues.oceanCurrentSpeed = BlendValue(snapshotValues.oceanCurrentSpeed, target.values.oceanCurrentSpeed,
                                                      t, curves, c => c.currentCurve);
 
+        // Thunder
         currentValues.thunderIntensity = BlendValue(snapshotValues.thunderIntensity, target.values.thunderIntensity,
                                                     t, curves, c => c.thunderCurve);
 
@@ -234,15 +246,17 @@ public class WeatherManager : MonoBehaviour
         // Debug.Log( "Wind intencity is" + currentWindVelocity, this);
  
         //Print all current values for debugging
-        // Debug.Log("Current Weather Values: " +
-                  // "\nWind Speed: " + currentValues.windSpeed +
-                  // "\nWind Direction: " + currentValues.windDirectionDegrees +
-                  // "\nWind Random: " + currentValues.windAutoRerollIntensity +
-                  // "\nRain Intensity: " + currentValues.rainIntensity +
-                  // "\nWave Intensity: " + currentValues.waveIntensity +
-                  // "\nOcean Current Speed: " + currentValues.oceanCurrentSpeed +
-                  // "\nThunder Intensity: " + currentValues.thunderIntensity, this);
+        Debug.Log("Current Weather Values: " +
+                  "\nWind Speed: " + currentValues.windSpeed +
+                  "\nWind Direction: " + currentValues.windDirectionDegrees +
+                  "\nWind random events active: " + currentValues.windRandomEventsActive +
+                  "\nWind windAutoRerollIntensity: " + currentValues.windAutoRerollIntensity +
+                  "\nRain Intensity: " + currentValues.rainIntensity +
+                  "\nWave Intensity: " + currentValues.waveIntensity +
+                  "\nOcean Current Speed: " + currentValues.oceanCurrentSpeed +
+                  "\nThunder Intensity: " + currentValues.thunderIntensity, this);
         
+                  
         windController?.ChangeWeatherEventValues(currentValues);
         if (rainController != null)
         {
