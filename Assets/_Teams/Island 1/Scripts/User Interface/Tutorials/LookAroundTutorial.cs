@@ -23,7 +23,7 @@ namespace Assets._Teams.Island_1.Scripts.User_Interface
 
             if (mouseTravelDistance > requiredMouseTravelDistance)
             {
-                TutorialManager.Instance.CompleteStep(Step);
+                Complete();
             }
         }
 

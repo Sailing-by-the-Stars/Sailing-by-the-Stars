@@ -6,5 +6,10 @@ namespace Assets._Teams.Island_1.Scripts.User_Interface
     public class TutorialPopup: MonoBehaviour
     {
         public TutorialStep Step;
+
+        public virtual void Complete()
+        {
+            TutorialManager.Instance.CompleteStep(Step);
+        }
     }
 }

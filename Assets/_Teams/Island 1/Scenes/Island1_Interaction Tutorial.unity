@@ -169,12 +169,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7839110262597485865, guid: 6f3b39befabf093429034cebe9fec1c5, type: 3}
       propertyPath: m_Name
-      value: Torch
+      value: TutorialTorch
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 3417972698173297893, guid: 6f3b39befabf093429034cebe9fec1c5, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7839110262597485865, guid: 6f3b39befabf093429034cebe9fec1c5, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 632862879}
   m_SourcePrefab: {fileID: 100100000, guid: 6f3b39befabf093429034cebe9fec1c5, type: 3}
 --- !u!1001 &223740076
 PrefabInstance:
@@ -256,6 +260,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1787329908}
     m_Modifications:
+    - target: {fileID: 149645666805414969, guid: 8253a55ace190744d8c134b0634488c4, type: 3}
+      propertyPath: tutorialPickupItem
+      value: 
+      objectReference: {fileID: 632862879}
     - target: {fileID: 1986526211816994735, guid: 8253a55ace190744d8c134b0634488c4, type: 3}
       propertyPath: m_Pivot.x
       value: 1
@@ -678,6 +686,33 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 336a57cab867e5b448234aafba896d9a, type: 3}
+--- !u!1 &632862874 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7839110262597485865, guid: 6f3b39befabf093429034cebe9fec1c5, type: 3}
+  m_PrefabInstance: {fileID: 137101918}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &632862879
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 632862874}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a66d287e7f4fe243aebea2039cbf85f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TutorialPickup
+  pickupPositionOffset: {x: 0, y: 0, z: 0}
+  OnGrab:
+    m_PersistentCalls:
+      m_Calls: []
+  OnUse:
+    m_PersistentCalls:
+      m_Calls: []
+  OnDrop:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &636649163 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1734266668719860970, guid: 2bca4eabfcdde6949b5e11e926281700, type: 3}

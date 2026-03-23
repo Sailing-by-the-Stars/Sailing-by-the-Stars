@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1986526211816994735}
   - component: {fileID: 149645666805414969}
   m_Layer: 5
-  m_Name: Popups
+  m_Name: Tutorial Popups
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -54,6 +54,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   delay: 2
+  tutorialPickupItem: {fileID: 0}
+  pickupPopup: {fileID: 2213854598281212825}
+  usePopup: {fileID: 6915517923371282891}
+  dropPopup: {fileID: 6834627237235726041}
 --- !u!1001 &1030399599899983852
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -156,6 +160,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 2755631744394848597, guid: 18959c9486d266c4b99ca54b0837628e, type: 3}
   m_PrefabInstance: {fileID: 1030399599899983852}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &6834627237235726041 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5806775687353936181, guid: 18959c9486d266c4b99ca54b0837628e, type: 3}
+  m_PrefabInstance: {fileID: 1030399599899983852}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac39856871fdcf049b7581df176d92ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Assets._Teams.Island_1.Scripts.User_Interface.Tutorials.DropItemTutorial
 --- !u!1001 &1387787353757323912
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -258,6 +273,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 2755631744394848597, guid: 9b5137b9c77f49b4e880db0eddc19c47, type: 3}
   m_PrefabInstance: {fileID: 1387787353757323912}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &6915517923371282891 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5528929231101780803, guid: 9b5137b9c77f49b4e880db0eddc19c47, type: 3}
+  m_PrefabInstance: {fileID: 1387787353757323912}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 898685d6bc667eb4e8767a4f04a4398a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Assets._Teams.Island_1.Scripts.User_Interface.Tutorials.UseItemTutorial
 --- !u!1001 &2539590658029749207
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -364,6 +390,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 2755631744394848597, guid: 152f01d74904bcd4b930f2ecad967c92, type: 3}
   m_PrefabInstance: {fileID: 2539590658029749207}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2213854598281212825 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4433584069429243982, guid: 152f01d74904bcd4b930f2ecad967c92, type: 3}
+  m_PrefabInstance: {fileID: 2539590658029749207}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d1b6b020ae3a0c4fb9e608ee588db44, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Assets._Teams.Island_1.Scripts.User_Interface.Tutorials.PickupItemTutorial
 --- !u!1001 &3123233272132648880
 PrefabInstance:
   m_ObjectHideFlags: 0

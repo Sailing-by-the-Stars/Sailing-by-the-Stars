@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 // Author: Sander Kleine
@@ -9,8 +10,15 @@ namespace Assets._Teams.Island_1.Scripts.User_Interface
     {
         public static TutorialManager Instance;
 
+
         [Header("Display Settings")]
         [SerializeField] float delay = 2f;
+
+        [Header("Refrences")]
+        [SerializeField] TempPhysicsPickup tutorialPickupItem;
+        [SerializeField] private TutorialPopup pickupPopup;
+        [SerializeField] private TutorialPopup usePopup;
+        [SerializeField] private TutorialPopup dropPopup;
 
         private Dictionary<TutorialStep, TutorialPopup> popups;
         private TutorialPopup currentPopup;
@@ -108,6 +116,41 @@ namespace Assets._Teams.Island_1.Scripts.User_Interface
 
             isBusy = false;
             TryProcessQueue();
+        }
+
+        void OnEnable()
+        {
+            if (tutorialPickupItem)
+            {
+                tutorialPickupItem.OnGrab.AddListener(OnTutorialItemGrab);
+                tutorialPickupItem.OnUse.AddListener(OnTutorialItemUse);
+                tutorialPickupItem.OnDrop.AddListener(OnTutorialItemDrop);
+            }
+        }
+
+        void OnDisable()
+        {
+            if (tutorialPickupItem)
+            {
+                tutorialPickupItem.OnGrab.RemoveListener(OnTutorialItemGrab);
+                tutorialPickupItem.OnUse.RemoveListener(OnTutorialItemUse);
+                tutorialPickupItem.OnDrop.RemoveListener(OnTutorialItemDrop);
+            }
+        }
+
+        private void OnTutorialItemGrab()
+        {
+            pickupPopup.Complete();
+        }
+
+        private void OnTutorialItemUse()
+        {
+            usePopup.Complete();
+        }
+
+        private void OnTutorialItemDrop()
+        {
+            dropPopup.Complete();
         }
     }
 }

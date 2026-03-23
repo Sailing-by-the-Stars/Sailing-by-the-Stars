@@ -25,7 +25,7 @@ namespace Assets._Teams.Island_1.Scripts.User_Interface
 
             if (timeMovementKeyPressed > requiredTimeMovementKeysPressedMs)
             {
-                TutorialManager.Instance.CompleteStep(Step);
+                Complete();
             }
         }
 
