@@ -58,6 +58,7 @@ public class WeatherManager : MonoBehaviour
         if (controller is WindController wind)
         {
             windController = wind;
+            Debug.Log("wind controller registered");
         }
     }
 

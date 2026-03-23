@@ -43,6 +43,8 @@ public class RainController : MonoBehaviour, IWeatherEventController
 
     private const float rainStopThreshold = 0.01f; // rain stops when intensity is below this value
 
+    private SetRainAndThunder audioController;
+
     private void Awake()
     {
         WeatherManager.Instance.Register(this);
@@ -50,6 +52,7 @@ public class RainController : MonoBehaviour, IWeatherEventController
 
     private void Start()
     {
+        audioController = FindFirstObjectByType<SetRainAndThunder>();
         if (rainParticleSystem == null)
         {
             Debug.LogError("No ParticleSystem assigned to rain controller.");
@@ -72,7 +75,6 @@ public class RainController : MonoBehaviour, IWeatherEventController
 
     private void LateUpdate()
     {
-        // Debug.Log($"Wind: {wind} x={wind.x:F2} z={wind.z:F2} dir ={WeatherManager.Instance.currentValues.windDirectionDegrees}");
         ChangeDirection(WeatherManager.Instance.WindVelocity);
 
         if (followTarget != null)
@@ -89,6 +91,10 @@ public class RainController : MonoBehaviour, IWeatherEventController
         if (rainParticleSystem == null)
         {
             return;
+        }
+        if (audioController != null)
+        {
+            audioController.SetRainAudioImmediate(intensity);
         }
         // Debug.Log($"Rain controller SetRainIntensity called: {intensity:F2}");
         // turn rain off below threshold

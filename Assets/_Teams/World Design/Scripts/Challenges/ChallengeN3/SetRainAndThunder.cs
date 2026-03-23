@@ -84,7 +84,20 @@ public class SetRainAndThunder : MonoBehaviour
         currentValueRain = target;
         instance.setParameterByID(rainParameter, currentValueRain);
     }
-
+    /// <summary>
+    /// Use immediate value changes for weather events driven by curves (already smoothed) so transition time and values match
+    /// </summary>
+    /// <param name="intensity">value from 0-1</param>
+    public void SetRainAudioImmediate(float intensity)
+    {
+        if (routine != null)
+        {
+            StopCoroutine(routine);
+        }
+        currentValueRain = Mathf.Clamp01(intensity);
+        Debug.Log("Rain volume intensity:" + intensity);
+        instance.setParameterByID(rainParameter, currentValueRain);
+    }
     private void OnDestroy()
     {
         instance.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
