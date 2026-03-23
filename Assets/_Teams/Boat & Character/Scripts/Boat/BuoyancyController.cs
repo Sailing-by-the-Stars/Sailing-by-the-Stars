@@ -13,14 +13,18 @@ public class BuoyancyController : MonoBehaviour
 {
     [Header("Physics settings")]
     [SerializeField] private float draft = 0f;
+
+    [Tooltip("Controls the amount of points, the waterheight is checked under the boat. When this is set higher, the result will be beter, but also more performance is needed")]
     [SerializeField] [Range(1, 4)] private int accuracy = 1;
     [SerializeField] float waveTorqueStrength = 1f;
     [SerializeField] Vector3 centerOfMass = Vector3.zero;
 
     [Header("Object references")]
-
     [SerializeField] private WaterSurface waterSurface;
     [SerializeField] private GameObject buoyancyQuadObject;
+
+    [Header("Physics stats (Debugging!)")]
+    [SerializeField] private float currentWaterHeight = 0f;
     private List<Vector3> buoyancyVertices = new();
 
     private WaterSearchResult[] searchResult;
@@ -30,6 +34,14 @@ public class BuoyancyController : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        if (!waterSurface)
+        {
+            Debug.LogError("Please set the watersurface reference in the buoyancy controller!");
+            enabled = false;
+            return;
+        }
+        
+
         CreateExtraVertices();
 
         Vector3 buoyancyObjectPosition = new Vector3(0f, -draft, 0f);
@@ -83,6 +95,7 @@ public class BuoyancyController : MonoBehaviour
         }
 
         waterHeight /= buoyancyVertices.Count;
+        currentWaterHeight = waterHeight;
 
         Vector3 boatPosition = transform.position;
         boatPosition.y = waterHeight + draft;
