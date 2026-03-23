@@ -112,6 +112,7 @@ public class WeatherManager : MonoBehaviour
                 {
                     continue;
                 }
+                Debug.Log("Ambient weather: " + next);
                 TransitionTo(next, ambientChangeTransitionTime);
             }
         }

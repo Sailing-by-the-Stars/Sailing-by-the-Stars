@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 9090530551266403614}
   - component: {fileID: 6113912613054820985}
   - component: {fileID: 5662462678758272535}
+  - component: {fileID: 1665365188434338193}
   m_Layer: 0
   m_Name: WeatherManager
   m_TagString: Untagged
@@ -113,6 +114,31 @@ MonoBehaviour:
   maxStartSpeed: 15
   maxStartSize: 0.15
   maxSpeedScale: 0.05
+--- !u!114 &1665365188434338193
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3952349830340933742}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40d763709f46be54ea7843d94a1e6d5f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Test_WaveController
+  ocean: {fileID: 0}
+  minLargeWindSpeed: 5
+  maxLargeWindSpeed: 60
+  minLargeChaos: 0.2
+  maxLargeChaos: 1
+  minFirstBandMultiplier: 0.2
+  maxFirstBandMultiplier: 1
+  minSecondBandMultiplier: 0.2
+  maxSecondBandMultiplier: 1
+  minRipplesWindSpeed: 4
+  maxRipplesWindSpeed: 10
+  minRipplesChaos: 0.2
+  maxRipplesChaos: 1
 --- !u!1001 &5889526842155983288
 PrefabInstance:
   m_ObjectHideFlags: 0
