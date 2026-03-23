@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
-using UnityEngine.Events;
 
-namespace Assets.Team_Island_1.Scripts.User_Interface
+namespace Assets._Teams.Island_1.Scripts.User_Interface
 {
+    // Author: Sander Kleine
     public class TutorialPopup: MonoBehaviour
     {
-        public UnityEvent DoneEvent = new();
+        public TutorialStep Step;
     }
 }

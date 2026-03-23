@@ -1,36 +1,38 @@
 using UnityEngine;
-
-public class WaypointFollower : MonoBehaviour
+namespace Assets._Teams.Island_1.Scripts.User_Interface
 {
-    [Header("Movement Settings")]
-    [SerializeField] private float movementSpeed = 1f;
-    
-    [Header("References")]
-    [SerializeField] private GameObject[] waypoints;
-
-    private readonly float switchDistance = .01f;
-    private int currentWaypointIndex = 0;
-
-    void Update()
+    public class WaypointFollower : MonoBehaviour
     {
-        UpdateWaypointIndex();
-        MoveTowardsCurrentWaypoint();
-    }
+        [Header("Movement Settings")]
+        [SerializeField] private float movementSpeed = 1f;
 
-    void UpdateWaypointIndex()
-    {
-        if (Vector3.Distance(transform.position, waypoints[currentWaypointIndex].transform.position) < switchDistance)
+        [Header("References")]
+        [SerializeField] private GameObject[] waypoints;
+
+        private readonly float switchDistance = .01f;
+        private int currentWaypointIndex = 0;
+
+        void Update()
         {
-            currentWaypointIndex = currentWaypointIndex + 1;
-            if (currentWaypointIndex >= waypoints.Length)
+            UpdateWaypointIndex();
+            MoveTowardsCurrentWaypoint();
+        }
+
+        void UpdateWaypointIndex()
+        {
+            if (Vector3.Distance(transform.position, waypoints[currentWaypointIndex].transform.position) < switchDistance)
             {
-                currentWaypointIndex = 0;
+                currentWaypointIndex = currentWaypointIndex + 1;
+                if (currentWaypointIndex >= waypoints.Length)
+                {
+                    currentWaypointIndex = 0;
+                }
             }
         }
-    }
 
-    void MoveTowardsCurrentWaypoint()
-    {
-        transform.position = Vector3.MoveTowards(transform.position, waypoints[currentWaypointIndex].transform.position, movementSpeed * Time.deltaTime);
+        void MoveTowardsCurrentWaypoint()
+        {
+            transform.position = Vector3.MoveTowards(transform.position, waypoints[currentWaypointIndex].transform.position, movementSpeed * Time.deltaTime);
+        }
     }
 }
