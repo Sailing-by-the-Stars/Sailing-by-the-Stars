@@ -12,7 +12,8 @@ namespace _Teams.World_Design.Scripts.ZoneEffects.Environmental.WeatherEvents
         // Main method that should be implemented in all weather events, used to change weather event values (like intensity, duration, etc.)
         void ChangeWeatherEventValues(WeatherValues weatherValues);
 
-        // 
+        // Optional weather methods. 
+        // Ignore if weather event doesn't need them
         void ChangeDirection(Vector3 direction);
         
         void SetRandomEventsActive(bool isActive);

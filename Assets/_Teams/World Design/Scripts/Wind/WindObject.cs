@@ -5,18 +5,21 @@ public class WindObject : MonoBehaviour
     [SerializeField] private Transform windArrowPrimary;
     [SerializeField] private Transform windArrowSecondary;
     [SerializeField] private Vector3 currentWindDirection = Vector3.forward;
-    [SerializeField] private float intensity = 1f;
 
     [Header("Wind Trails")]
     [SerializeField] private ParticleSystem windTrailsPrimary;
     [SerializeField] private ParticleSystem windTrailsSecondary;
     [SerializeField, Min(0f)] private float restartAngleThreshold = 1f;
+    [SerializeField, Min(0f)] private float windTrailIntensity = 1f;
 
     private Vector3 worldWindDirection = Vector3.forward;
     private Vector3 primaryAssignedDirection = Vector3.forward;
     private Vector3 secondaryAssignedDirection = Vector3.forward;
 
     private bool isPrimaryTrailActive = true;
+    private float windTrailsPrimaryBaseSpeedMultiplier = 1f;
+    private float windTrailsSecondaryBaseSpeedMultiplier = 1f;
+    private bool hasCachedWindTrailBaseSpeed;
 
     public Vector3 CurrentWindDirection => currentWindDirection;
 
@@ -24,6 +27,7 @@ public class WindObject : MonoBehaviour
     {
         CacheWindArrow();
         CacheWindTrails();
+        CacheWindTrailBaseSpeed();
 
         if (currentWindDirection.sqrMagnitude > 0.0001f)
         {
@@ -33,6 +37,7 @@ public class WindObject : MonoBehaviour
         primaryAssignedDirection = worldWindDirection;
         secondaryAssignedDirection = worldWindDirection;
 
+        ApplyWindTrailIntensityToSpeed();
         InitializeWindTrailEmission();
         RotateWindArrowsByAssignedDirections();
     }
@@ -58,15 +63,14 @@ public class WindObject : MonoBehaviour
         Vector3 normalizedDirection = newDirection.normalized;
         float angleDelta = Vector3.Angle(GetActiveAssignedDirection(), normalizedDirection);
 
-        worldWindDirection = normalizedDirection;
-        currentWindDirection = worldWindDirection * intensity;
+        currentWindDirection = normalizedDirection;
 
         if (angleDelta >= restartAngleThreshold)
         {
             SwapActiveWindTrail();
         }
 
-        SetActiveAssignedDirection(worldWindDirection);
+        SetActiveAssignedDirection(currentWindDirection);
         RotateWindArrowsByAssignedDirections();
     }
 
@@ -147,6 +151,43 @@ public class WindObject : MonoBehaviour
         }
     }
 
+    private void CacheWindTrailBaseSpeed()
+    {
+        if (hasCachedWindTrailBaseSpeed)
+        {
+            return;
+        }
+
+        if (windTrailsPrimary != null)
+        {
+            windTrailsPrimaryBaseSpeedMultiplier = windTrailsPrimary.main.startSpeedMultiplier;
+        }
+
+        if (windTrailsSecondary != null)
+        {
+            windTrailsSecondaryBaseSpeedMultiplier = windTrailsSecondary.main.startSpeedMultiplier;
+        }
+
+        hasCachedWindTrailBaseSpeed = true;
+    }
+
+    private void ApplyWindTrailIntensityToSpeed()
+    {
+        CacheWindTrailBaseSpeed();
+        ApplyWindTrailSpeed(windTrailsPrimary, windTrailsPrimaryBaseSpeedMultiplier);
+        ApplyWindTrailSpeed(windTrailsSecondary, windTrailsSecondaryBaseSpeedMultiplier);
+    }
+
+    private void ApplyWindTrailSpeed(ParticleSystem trail, float baseSpeedMultiplier)
+    {
+        if (trail == null)
+        {
+            return;
+        }
+
+        ParticleSystem.MainModule main = trail.main;
+        main.startSpeedMultiplier = baseSpeedMultiplier * windTrailIntensity;
+    }
 
     private void InitializeWindTrailEmission()
     {
@@ -239,5 +280,11 @@ public class WindObject : MonoBehaviour
         {
             secondaryAssignedDirection = direction;
         }
+    }
+    
+    public void SetWindIntensity(float newIntensity)
+    {
+        windTrailIntensity = Mathf.Max(0f, newIntensity);
+        ApplyWindTrailIntensityToSpeed();
     }
 }
