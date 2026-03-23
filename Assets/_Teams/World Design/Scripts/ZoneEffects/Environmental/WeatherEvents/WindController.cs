@@ -19,11 +19,16 @@ public class WindController : MonoBehaviour, IWeatherEventController
     [SerializeField] private WindObject windObject;
 
     private float rerollTimer;
+    public Vector3 currentWindVelocity { get; private set; }
 
     private void Awake()
     {
         ResolveWindObjectReference();
         SetWindDirectionForObject(randomizeOnStart ? GenerateRandomDirection() : windDirectionOnStart);
+        if (WeatherManager.Instance != null)
+        {
+            WeatherManager.Instance.Register(this);
+        }
     }
 
     private void Update()
@@ -94,6 +99,8 @@ public class WindController : MonoBehaviour, IWeatherEventController
         Vector3 currentWindDirection = new Vector3(Mathf.Sin(radians), 0f, Mathf.Cos(radians));
         
         SetRandomEventsActive(weatherValues.windRandomEventsActive);
+        // TODO: These don't need to be updated every frame. Decide if they will be updated in Manager for
+        // each new state or use event system / logic internally
         ChangeDirection(currentWindDirection * weatherValues.windSpeed);
         // Debug.Log("LogWind Reroll. New Direction: " + currentWindDirection * weatherValues.windSpeed);
         ChangeAutoRerollWindIntensity(weatherValues.windAutoRerollIntensity);
@@ -107,8 +114,9 @@ public class WindController : MonoBehaviour, IWeatherEventController
         {
             return;
         }
-
+        currentWindVelocity = direction;
         windObject.SetWindDirection(direction);
+
     }
 
     public void SetRandomEventsActive(bool isActive)

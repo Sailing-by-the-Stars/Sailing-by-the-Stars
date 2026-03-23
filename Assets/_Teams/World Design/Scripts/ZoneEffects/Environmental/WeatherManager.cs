@@ -4,7 +4,9 @@
  */
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
+using _Teams.World_Design.Scripts.ZoneEffects.Environmental.WeatherEvents;
 
 // used for random variation of weather states - values do not need to add up to a specific amount
 [Serializable]
@@ -31,10 +33,8 @@ public class WeatherManager : MonoBehaviour
     [SerializeField] private float ambientChangeTransitionTime = 20f;
 
     // Controllers
-    [SerializeField] private WindController windController;
-    private TestRainController rainController;
-    // private WaterController waterController;
-    // private ThunderController thunderController;
+    private readonly List<IWeatherEventController> controllers = new List<IWeatherEventController>();
+    private WindController windController;
 
     // State and transitions
     private WeatherState activeState;
@@ -42,23 +42,24 @@ public class WeatherManager : MonoBehaviour
     private Coroutine ambientCycle;
     private bool autoWeatherSuspended;
     
-    // Old 
+    // Used for blending
     private WeatherValues snapshotValues; // used to capture values directly before transition
-    public WeatherValues currentValues;
+    private WeatherValues currentValues;
 
-    public event Action<WeatherState> onWeatherTransitionStarted;
+    public Vector3 WindVelocity => windController != null ? windController.currentWindVelocity 
+        : ConvertToVector(currentValues.windSpeed, currentValues.windDirectionDegrees); // fallback
 
-    // manager acts as public access point for dynamic wind variation
-    //public Vector3 windVelocity => windController != null
-      //  ? windController.currentWindVelocity : ConvertToVector(currentValues.windSpeed, currentValues.windDirectionDegrees); 
-    public Vector3 windVelocity => ConvertToVector(currentValues.windSpeed, currentValues.windDirectionDegrees);
-
-    // Controller registration
-    // public void Register(WindController c) => windController = c;
-    public void Register(TestRainController c) => rainController = c;
-    // public void Register(WaterController c) => waterController = c;
-    // public void Register(ThunderController c) => thunderController = c;
-    // public void Register(CloudController c) => cloudController = c;
+    /// <summary>
+    /// Register a controller to receive weather updates. Call in Awake.
+    /// </summary>
+    public void Register(IWeatherEventController controller)
+    {
+        controllers.Add(controller);
+        if (controller is WindController wind)
+        {
+            windController = wind;
+        }
+    }
 
     private void Awake()
     {
@@ -170,12 +171,12 @@ public class WeatherManager : MonoBehaviour
     /// </summary>
     public void TransitionTo(WeatherState target, float duration, WeatherTransitionCurves curves = null)
     {
+        // TODO: May need to turn off auto roll here too during transition
         if (target == null)
         {
             Debug.LogError("Weather manager TransitionTo called with null state.");
             return;
         }
-        Debug.Log("Transition To called");
         snapshotValues = currentValues;
         if (activeTransition != null)
         {
@@ -184,7 +185,9 @@ public class WeatherManager : MonoBehaviour
         activeState = target;
         activeTransition = StartCoroutine(RunTransition(target, duration, curves));
 
-        onWeatherTransitionStarted?.Invoke(target);
+        // values that only need to be applied once without blending during transition
+        currentValues.windRandomEventsActive = target.values.windRandomEventsActive;
+        currentValues.windAutoRerollIntensity = target.values.windAutoRerollIntensity;
     }
 
     private IEnumerator RunTransition(WeatherState target, float duration, WeatherTransitionCurves curves)
@@ -209,17 +212,20 @@ public class WeatherManager : MonoBehaviour
         currentValues.windSpeed = BlendValue(snapshotValues.windSpeed, target.values.windSpeed,
                                              t, curves, c => c.windCurve);
 
-        // normalize degrees
+        // normalize degrees to 0-360 to prevent negative values from LerpAngle's shortest path
         currentValues.windDirectionDegrees = (Mathf.LerpAngle(snapshotValues.windDirectionDegrees,
                                                               target.values.windDirectionDegrees, t) + 360f) % 360f;
-
-        currentValues.windRandomEventsActive = target.values.windRandomEventsActive;
         
+        /* TODO: the current reroll multiplies a random direcion vector by the intensity
+         * effectively changing magnitude rather than limiting variance around the base direction
+         * AutoRerollIntensity does not need to blend during transition as it is on a timer
+       
         currentValues.windAutoRerollIntensity = BlendValue(
             snapshotValues.windAutoRerollIntensity,
             target.values.windAutoRerollIntensity,
             t, curves, c => c.windCurve
         );
+        */
 
         // Rain 
         currentValues.rainIntensity = BlendValue(snapshotValues.rainIntensity, target.values.rainIntensity,
@@ -242,19 +248,16 @@ public class WeatherManager : MonoBehaviour
     // ReSharper disable Unity.PerformanceAnalysis
     private void PushToControllers()
     {
-        windController?.ChangeWeatherEventValues(currentValues);
-        if (rainController != null)
+        foreach (IWeatherEventController controller in controllers)
         {
-            rainController.SetRainIntensity(currentValues.rainIntensity);
+            controller.ChangeWeatherEventValues(currentValues);
         }
         
-        /*
-        waterController?.SetWaveIntensity(currentValues.waveIntensity);
-        waterController?.SetOceanCurrentSpeed(currentValues.oceanCurrentSpeed);
-        thunderController?.SetThunderIntensity(currentValues.thunderIntensity);
-        */
     }
-
+    /// <summary>
+    /// Helper that blends a single weather parameter from snapshot to target value.
+    /// Use for parameters that blend using a curve in WeatherValues only.
+    /// </summary>
     private static float BlendValue(float snapshotValue, float targetValue, float t,
                                     WeatherTransitionCurves allWeatherCurves,
                                     Func<WeatherTransitionCurves, AnimationCurve> getCurveForParameter) // caller selects target curve for parameter

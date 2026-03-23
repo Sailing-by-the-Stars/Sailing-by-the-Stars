@@ -2,14 +2,14 @@
  * Created by Christina Pence
  * Contributed to by:
  */
+using _Teams.World_Design.Scripts.ZoneEffects.Environmental.WeatherEvents;
 using UnityEngine;
-using UnityEngine.UIElements;
 /// <summary>
 /// Drives rain particle system intensity from WeatherManager.
 /// Reads baseline values from the particle system on Awake (used as lightest rain)
 /// Rain intensity of 0 represents no rain
 /// </summary>
-public class TestRainController : MonoBehaviour
+public class RainController : MonoBehaviour, IWeatherEventController
 {
     [SerializeField] private ParticleSystem rainParticleSystem;
     [SerializeField] private float windInfluence = 2f;
@@ -43,6 +43,11 @@ public class TestRainController : MonoBehaviour
 
     private const float rainStopThreshold = 0.01f; // rain stops when intensity is below this value
 
+    private void Awake()
+    {
+        WeatherManager.Instance.Register(this);
+    }
+
     private void Start()
     {
         if (rainParticleSystem == null)
@@ -63,37 +68,29 @@ public class TestRainController : MonoBehaviour
         minSpeedScale = rainRenderer.velocityScale;
         minStartSpeed = main.startSpeed.constant;
         minStartSize = main.startSize.constant;
-
-        WeatherManager.Instance.Register(this);
     }
 
     private void LateUpdate()
     {
-        Vector3 wind = WeatherManager.Instance.windVelocity;
         // Debug.Log($"Wind: {wind} x={wind.x:F2} z={wind.z:F2} dir ={WeatherManager.Instance.currentValues.windDirectionDegrees}");
-
-        // Only horizontal wind
-        Vector3 horizontalWind = new Vector3(wind.x, 0, wind.z);
+        ChangeDirection(WeatherManager.Instance.WindVelocity);
 
         if (followTarget != null)
         {
             transform.position = followTarget.position + Vector3.up * emitterHeight;
         }
-
-        velocityOverLifetime.x = new ParticleSystem.MinMaxCurve(wind.x * windInfluence);
-        velocityOverLifetime.y = new ParticleSystem.MinMaxCurve(0f);
-        velocityOverLifetime.z = new ParticleSystem.MinMaxCurve(wind.z * windInfluence);
     }
     /// <summary>
     /// Receives 0-1 value already blended by WeatherManager and applies rain intensity to particle system properties.
     /// </summary>
-    public void SetRainIntensity(float intensity)
+    public void ChangeWeatherEventValues(WeatherValues values)
     {
+        float intensity = values.rainIntensity;
         if (rainParticleSystem == null)
         {
             return;
         }
-        Debug.Log($"Rain controller SetRainIntensity called: {intensity:F2}");
+        // Debug.Log($"Rain controller SetRainIntensity called: {intensity:F2}");
         // turn rain off below threshold
         if (intensity < rainStopThreshold)
         {
@@ -114,4 +111,16 @@ public class TestRainController : MonoBehaviour
         main.startSize = Mathf.Lerp(minStartSize, maxStartSize, intensity);
         rainRenderer.velocityScale = Mathf.Lerp(minSpeedScale, maxSpeedScale, intensity);
     }
+    public void ChangeDirection(Vector3 direction)
+    {
+        if (rainParticleSystem == null)
+        {
+            return;
+        }
+        velocityOverLifetime.x = new ParticleSystem.MinMaxCurve(direction.x * windInfluence);
+        velocityOverLifetime.y = new ParticleSystem.MinMaxCurve(0f);  // Only horizontal wind
+        velocityOverLifetime.z = new ParticleSystem.MinMaxCurve(direction.z * windInfluence);
+    }
+
+    public void SetRandomEventsActive(bool isActive) { } // not applicable for rain
 }

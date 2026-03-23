@@ -331,13 +331,6 @@ MonoBehaviour:
   minAmbientChangeInterval: 60
   maxAmbientChangeInterval: 300
   ambientChangeTransitionTime: 20
-  currentValues:
-    windSpeed: 0
-    windDirectionDegrees: 0
-    rainIntensity: 0
-    thunderIntensity: 0
-    waveIntensity: 0
-    oceanCurrentSpeed: 0
 --- !u!4 &206073876
 Transform:
   m_ObjectHideFlags: 0
@@ -848,6 +841,63 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &1115754542
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 2139512088700178792, guid: d0a36e955f6438641b02431b33a3551e, type: 3}
+      propertyPath: m_Name
+      value: WindController
+      objectReference: {fileID: 0}
+    - target: {fileID: 3146594157937317345, guid: d0a36e955f6438641b02431b33a3551e, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -150.31339
+      objectReference: {fileID: 0}
+    - target: {fileID: 3146594157937317345, guid: d0a36e955f6438641b02431b33a3551e, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -109.38895
+      objectReference: {fileID: 0}
+    - target: {fileID: 3146594157937317345, guid: d0a36e955f6438641b02431b33a3551e, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 238.33276
+      objectReference: {fileID: 0}
+    - target: {fileID: 3146594157937317345, guid: d0a36e955f6438641b02431b33a3551e, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3146594157937317345, guid: d0a36e955f6438641b02431b33a3551e, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3146594157937317345, guid: d0a36e955f6438641b02431b33a3551e, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3146594157937317345, guid: d0a36e955f6438641b02431b33a3551e, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3146594157937317345, guid: d0a36e955f6438641b02431b33a3551e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3146594157937317345, guid: d0a36e955f6438641b02431b33a3551e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3146594157937317345, guid: d0a36e955f6438641b02431b33a3551e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: d0a36e955f6438641b02431b33a3551e, type: 3}
 --- !u!1 &1156236004
 GameObject:
   m_ObjectHideFlags: 0
@@ -1475,3 +1525,4 @@ SceneRoots:
   - {fileID: 200966681}
   - {fileID: 8583449257900227060}
   - {fileID: 206073876}
+  - {fileID: 1115754542}
