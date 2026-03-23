@@ -35,9 +35,8 @@ public struct WeatherValues
 
     [Header("Ocean")]
     [Tooltip("0 = calmest 1 = highest waves (max driven by HDRP water surface values)")]
-    public float waveIntensity;
-    [Tooltip("Ocean current speed in m/s")]
-    public float oceanCurrentSpeed;
+    [Range(0f, 1f)] public float waveIntensity;
+
 }
 
 /// <summary>

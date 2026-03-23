@@ -7,7 +7,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Rendering;
 
 // used for random variation of weather states - values do not need to add up to a specific amount
 [Serializable]
@@ -193,7 +192,6 @@ public class WeatherManager : MonoBehaviour
 
         // values that only need to be applied once without blending during transition
         currentValues.windRandomEventsActive = target.values.windRandomEventsActive;
-        currentValues.windAutoRerollIntensity = target.values.windAutoRerollIntensity;
     }
 
     private IEnumerator RunTransition(WeatherState target, float duration, WeatherTransitionCurves curves)
@@ -221,17 +219,13 @@ public class WeatherManager : MonoBehaviour
         // normalize degrees to 0-360 to prevent negative values from LerpAngle's shortest path
         currentValues.windDirectionDegrees = (Mathf.LerpAngle(snapshotValues.windDirectionDegrees,
                                                               target.values.windDirectionDegrees, t) + 360f) % 360f;
-        
-        /* TODO: the current reroll multiplies a random direcion vector by the intensity
-         * effectively changing magnitude rather than limiting variance around the base direction
-         * AutoRerollIntensity does not need to blend during transition as it is on a timer
+        currentValues.windAutoRerollIntensity = target.values.windAutoRerollIntensity;
        
         currentValues.windAutoRerollIntensity = BlendValue(
             snapshotValues.windAutoRerollIntensity,
             target.values.windAutoRerollIntensity,
             t, curves, c => c.windCurve
         );
-        */
 
         // Rain 
         currentValues.rainIntensity = BlendValue(snapshotValues.rainIntensity, target.values.rainIntensity,
@@ -241,8 +235,6 @@ public class WeatherManager : MonoBehaviour
         currentValues.waveIntensity = BlendValue(snapshotValues.waveIntensity, target.values.waveIntensity,
                                                  t, curves, c => c.waveCurve);
 
-        currentValues.oceanCurrentSpeed = BlendValue(snapshotValues.oceanCurrentSpeed, target.values.oceanCurrentSpeed,
-                                                     t, curves, c => c.currentCurve);
 
         // Thunder
         currentValues.thunderIntensity = BlendValue(snapshotValues.thunderIntensity, target.values.thunderIntensity,
