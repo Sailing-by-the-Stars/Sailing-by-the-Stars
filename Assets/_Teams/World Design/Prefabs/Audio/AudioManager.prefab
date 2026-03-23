@@ -13,6 +13,9 @@ GameObject:
   - component: {fileID: 9067168094063595181}
   - component: {fileID: 4984845928692878351}
   - component: {fileID: 4800982428029969675}
+  - component: {fileID: 789255817896913124}
+  - component: {fileID: 2237365108461603770}
+  - component: {fileID: 6857875092842816198}
   m_Layer: 0
   m_Name: AudioManager
   m_TagString: Untagged
@@ -85,7 +88,7 @@ MonoBehaviour:
       Data2: 1217276976
       Data3: -1287881057
       Data4: -1800389706
-    Path: event:/Event_Boatsplashing
+    Path: event:/event_BoatAmbience
   Event: 
   EventPlayTrigger: 1
   EventStopTrigger: 2
@@ -115,7 +118,7 @@ MonoBehaviour:
       Data2: 1312112227
       Data3: 193244844
       Data4: 1167070184
-    Path: event:/Event_WindSystem
+    Path: event:/event_Weather_WindSystem
 --- !u!114 &4800982428029969675
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -135,3 +138,60 @@ MonoBehaviour:
       Data3: 2025991602
       Data4: 682676542
     Path: event:/event_Weather_Rainstorm
+--- !u!114 &789255817896913124
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5406605107057671251}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4cd28d67801efd044ace8b3bcac4b967, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SetThunderStrike
+  fmodEvent:
+    Guid:
+      Data1: -2023030739
+      Data2: 1211429254
+      Data3: 52692110
+      Data4: -1398106780
+    Path: event:/event_Weather_ThunderStrikeSingle
+--- !u!114 &2237365108461603770
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5406605107057671251}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 07c05706324eb8343b3648acb8bbb057, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SetStormMusic
+  fmodEvent:
+    Guid:
+      Data1: -1834102024
+      Data2: 1101561857
+      Data3: 1523838115
+      Data4: -615451135
+    Path: event:/mus_StormMusic
+--- !u!114 &6857875092842816198
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5406605107057671251}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e67c56fde944594ba5f3e31da53fd85, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SetSanity
+  fmodEvent:
+    Guid:
+      Data1: 687277345
+      Data2: 1207688506
+      Data3: -2132639604
+      Data4: -948113825
+    Path: event:/event_Sanity

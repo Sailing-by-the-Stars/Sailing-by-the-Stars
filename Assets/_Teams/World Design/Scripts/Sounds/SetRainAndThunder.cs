@@ -14,7 +14,9 @@ public class SetRainAndThunder : MonoBehaviour
     private float originalValueRain = 0f;
     private float currentValueRain;
     private float duration = 3f;
-    private bool Thunder = false;
+
+    [Header("Thunder")]
+    private bool distantThunderOnOff = false;
 
     [Header("Reference")]
     private Coroutine routine;
@@ -31,14 +33,14 @@ public class SetRainAndThunder : MonoBehaviour
         desc.getParameterDescriptionByName("RainIntensity", out PARAMETER_DESCRIPTION rainDesc);
         rainParameter = rainDesc.id;
 
-        desc.getParameterDescriptionByName("Thunder", out PARAMETER_DESCRIPTION thunderDesc);
+        desc.getParameterDescriptionByName("DistantThunder-OnOff", out PARAMETER_DESCRIPTION thunderDesc);
         thunderParameter = thunderDesc.id;
 
         currentValueRain = originalValueRain;
 
         instance.start();
         instance.setParameterByID(rainParameter, currentValueRain);
-        instance.setParameterByID(thunderParameter, Thunder ? 1f : 0f);
+        instance.setParameterByID(thunderParameter, distantThunderOnOff ? 1f : 0f);
     }
 
     //Function to set a new value to the rain
@@ -55,15 +57,16 @@ public class SetRainAndThunder : MonoBehaviour
     }
 
     //Function to turn on the thunder
-    public void SetThunder(bool on)
+    public void SetDistantThunder(bool on)
     {
+        distantThunderOnOff = on;
         instance.setParameterByID(thunderParameter, on ? 1f : 0f);
     }
 
     //Function to turn off the thunder
     public void ResetThunder()
     {
-        SetThunder(Thunder);
+        SetDistantThunder(false);
     }
 
     //Coroutine that changes the rain value in a progression
