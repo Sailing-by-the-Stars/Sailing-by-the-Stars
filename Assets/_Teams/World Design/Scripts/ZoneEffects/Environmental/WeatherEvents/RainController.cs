@@ -47,18 +47,6 @@ public class RainController : MonoBehaviour, IWeatherEventController
 
     private void Awake()
     {
-        WeatherManager.Instance.Register(this);
-    }
-
-    private void Start()
-    {
-        audioController = FindFirstObjectByType<SetRainAndThunder>();
-        if (rainParticleSystem == null)
-        {
-            Debug.LogError("No ParticleSystem assigned to rain controller.");
-            return;
-        }
-
         // cache references
         main = rainParticleSystem.main;
         emission = rainParticleSystem.emission;
@@ -71,6 +59,18 @@ public class RainController : MonoBehaviour, IWeatherEventController
         minSpeedScale = rainRenderer.velocityScale;
         minStartSpeed = main.startSpeed.constant;
         minStartSize = main.startSize.constant;
+
+        WeatherManager.Instance.Register(this);
+    }
+
+    private void Start()
+    {
+        audioController = FindFirstObjectByType<SetRainAndThunder>();
+        if (rainParticleSystem == null)
+        {
+            Debug.LogError("No ParticleSystem assigned to rain controller.");
+            return;
+        }
     }
 
     private void LateUpdate()

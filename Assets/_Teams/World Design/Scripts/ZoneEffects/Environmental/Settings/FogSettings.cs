@@ -12,6 +12,4 @@ public class FogSettings : ScriptableObject
     public Color albedo = new Color(0.78f, 0.82f, 0.86f);
     [Tooltip("0 = uniform scatter, 1 = forward scatter")]
     [Range(0,1)] public float anisotropy = 0.6f;
-
-    
 }

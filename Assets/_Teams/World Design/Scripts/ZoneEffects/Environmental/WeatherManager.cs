@@ -2,11 +2,12 @@
  * Created by Christina Pence
  * Contributed to by:
  */
+using _Teams.World_Design.Scripts.ZoneEffects.Environmental.WeatherEvents;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using _Teams.World_Design.Scripts.ZoneEffects.Environmental.WeatherEvents;
+using UnityEngine.Rendering;
 
 // used for random variation of weather states - values do not need to add up to a specific amount
 [Serializable]
@@ -23,7 +24,8 @@ public class WeatherManager : MonoBehaviour
 
     [Header("Default")]
     [SerializeField] private WeatherState defaultState; // applied immediately on scene start
-    
+
+    [Header("Ambient Weather")]
     [Tooltip("States to randomly cycle between during normal sailing " +
         "(leave empty to disable auto variation, include default state if using)")]
     [SerializeField] private AmbientWeatherState[] ambientStates;
@@ -41,14 +43,16 @@ public class WeatherManager : MonoBehaviour
     private Coroutine activeTransition;
     private Coroutine ambientCycle;
     private bool autoWeatherSuspended;
-    
     // Used for blending
     private WeatherValues snapshotValues; // used to capture values directly before transition
     private WeatherValues currentValues;
 
+    // broadcast target state and duration of transition (use for fog, clouds, etc)
+    public event Action<WeatherState, float> OnWeatherTransitionStarted;
+
     public Vector3 WindVelocity => windController != null ? windController.currentWindVelocity 
         : ConvertToVector(currentValues.windSpeed, currentValues.windDirectionDegrees); // fallback
-
+   
     /// <summary>
     /// Register a controller to receive weather updates. Call in Awake.
     /// </summary>
@@ -185,6 +189,7 @@ public class WeatherManager : MonoBehaviour
         }
         activeState = target;
         activeTransition = StartCoroutine(RunTransition(target, duration, curves));
+        OnWeatherTransitionStarted(target, duration);
 
         // values that only need to be applied once without blending during transition
         currentValues.windRandomEventsActive = target.values.windRandomEventsActive;
@@ -270,7 +275,6 @@ public class WeatherManager : MonoBehaviour
         // blend is 0-1 weight: 0 = fully at snapshot, 1 = fully at target
         return Mathf.Lerp(snapshotValue, targetValue, blend);
     }
-
     private static Vector3 ConvertToVector(float magnitude, float degrees)
     {
         float rad = degrees * Mathf.Deg2Rad;

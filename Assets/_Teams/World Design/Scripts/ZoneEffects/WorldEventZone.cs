@@ -5,8 +5,6 @@
 
 using UnityEngine;
 using System.Collections;
-using System.Collections.Generic;
-using System;
 
 public class WorldEventZone : MonoBehaviour
 {
@@ -15,6 +13,8 @@ public class WorldEventZone : MonoBehaviour
     [SerializeField] private float exitDelay = 0.25f;
     [Tooltip("Tag of the object that triggers this zone.")]
     [SerializeField] private string instigatorTag = "boat";
+    [Tooltip("If ticked, zone only triggers once and disables itself after exit.")]
+    [SerializeField] private bool oneShot = false;
 
     private bool isInside = false; // logical inside state of instigator
     private Coroutine exitCoroutine; // Track effect coroutines for cancellation
@@ -43,7 +43,6 @@ public class WorldEventZone : MonoBehaviour
         {
             effect.OnEnter(other.gameObject);
         }
-
     }
 
     private void OnTriggerExit(Collider other)
@@ -70,5 +69,9 @@ public class WorldEventZone : MonoBehaviour
             effect.OnExit(instigator);
         }
         exitCoroutine = null;
+        if (oneShot)
+        {
+            gameObject.SetActive(false);
+        }
     }
 }

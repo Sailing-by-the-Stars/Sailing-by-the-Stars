@@ -27,18 +27,15 @@ public struct WeatherValues
     [Tooltip("Intensity of random wind direction changes in m/s.")]
     public float windAutoRerollIntensity;
 
-    [Header("Rain")]
+    [Header("Storm")]
     [Tooltip("0 = no rain. 1 = heaviest rain")]
     [Range(0f, 1f)] public float rainIntensity;
-
-    [Header("Thunder")]
     [Tooltip("Thunder and lightning: 0 = no thunder")]
     [Range(0f, 1f)] public float thunderIntensity;
 
     [Header("Ocean")]
     [Tooltip("0 = calmest 1 = highest waves (max driven by HDRP water surface values)")]
     public float waveIntensity;
-
     [Tooltip("Ocean current speed in m/s")]
     public float oceanCurrentSpeed;
 }
@@ -51,4 +48,7 @@ public class WeatherState : ScriptableObject
 {
     [Tooltip("The target values at peak intensity for each weather parameter")]
     public WeatherValues values;
+    [Header("Fog")]
+    [Tooltip("Set fog state. Leave empty to use default state assigned in fog controller.")]
+    public FogSettings fogSettings;
 }

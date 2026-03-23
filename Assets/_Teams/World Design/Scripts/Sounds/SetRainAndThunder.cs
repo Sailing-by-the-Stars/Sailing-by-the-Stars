@@ -98,7 +98,6 @@ public class SetRainAndThunder : MonoBehaviour
             StopCoroutine(routine);
         }
         currentValueRain = Mathf.Clamp01(intensity);
-        Debug.Log("Rain volume intensity:" + intensity);
         instance.setParameterByID(rainParameter, currentValueRain);
     }
     private void OnDestroy()
