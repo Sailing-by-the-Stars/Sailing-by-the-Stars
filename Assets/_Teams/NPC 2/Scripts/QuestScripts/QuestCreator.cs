@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 // Programmer: Boas
 
@@ -9,12 +10,18 @@ public class Quest : ScriptableObject
 {
     [Header("Quest ID")]
     [SerializeField] private string questID;
+
     [Header("Quest name")]
     [SerializeField] private string questName;
-    [Header("Quest description (can be blank for now)")]
+
+    [Header("Quest description")]
     [SerializeField] private string description;
+
     [Header("Quest objectives")]
     [SerializeField] private List<QuestObjective> objectives = new();
+
+    [Header("On Complete (optional)")]
+    public UnityEvent onCompleted;
 
     public string QuestID => questID;
     public string QuestName => questName;
@@ -27,5 +34,10 @@ public class Quest : ScriptableObject
         {
             questID = System.Guid.NewGuid().ToString();
         }
-    }   
+    }
+
+    public void InvokeCompleted()
+    {
+        onCompleted?.Invoke();
+    }
 }
