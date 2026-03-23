@@ -130,6 +130,101 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
+--- !u!1 &144642707 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 95552372257539486, guid: a1243ecb4f0d55846a259cf3c9eb98fd, type: 3}
+  m_PrefabInstance: {fileID: 7228336610639368349}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &144642708
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 144642707}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c80cf677d9383164aa58d5167ff5eddb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Island2.Lava.LavaPhysics
+  lavaMaterial: {fileID: 0}
+  particlePrefab: {fileID: 0}
+  neighborSearchRadius: 0.5
+  collisionRestitution: 0.3
+  useDebugRendering: 1
+  showParticleCount: 1
+--- !u!114 &144642709
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 144642707}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c80cf677d9383164aa58d5167ff5eddb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Island2.Lava.LavaPhysics
+  lavaMaterial: {fileID: 0}
+  particlePrefab: {fileID: 0}
+  neighborSearchRadius: 0.5
+  collisionRestitution: 0.3
+  useDebugRendering: 1
+  showParticleCount: 1
+--- !u!114 &144642710
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 144642707}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c80cf677d9383164aa58d5167ff5eddb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Island2.Lava.LavaPhysics
+  lavaMaterial: {fileID: 0}
+  particlePrefab: {fileID: 0}
+  neighborSearchRadius: 0.5
+  collisionRestitution: 0.3
+  useDebugRendering: 1
+  showParticleCount: 1
+--- !u!114 &144642711
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 144642707}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c80cf677d9383164aa58d5167ff5eddb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Island2.Lava.LavaPhysics
+  lavaMaterial: {fileID: 0}
+  particlePrefab: {fileID: 0}
+  neighborSearchRadius: 0.5
+  collisionRestitution: 0.3
+  useDebugRendering: 1
+  showParticleCount: 1
+--- !u!114 &144642712
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 144642707}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c80cf677d9383164aa58d5167ff5eddb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Island2.Lava.LavaPhysics
+  lavaMaterial: {fileID: 0}
+  particlePrefab: {fileID: 0}
+  neighborSearchRadius: 0.5
+  collisionRestitution: 0.3
+  useDebugRendering: 1
+  showParticleCount: 1
 --- !u!1 &228470317
 GameObject:
   m_ObjectHideFlags: 0
@@ -492,7 +587,47 @@ Transform:
   m_GameObject: {fileID: 532995888}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -675, y: -375, z: 574}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1082000486
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1082000488}
+  - component: {fileID: 1082000487}
+  m_Layer: 0
+  m_Name: LavaParticle
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!33 &1082000487
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1082000486}
+  m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!4 &1082000488
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1082000486}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 10, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -510,6 +645,12 @@ GameObject:
   - component: {fileID: 1205652577}
   - component: {fileID: 1205652576}
   - component: {fileID: 1205652575}
+  - component: {fileID: 1205652584}
+  - component: {fileID: 1205652583}
+  - component: {fileID: 1205652582}
+  - component: {fileID: 1205652581}
+  - component: {fileID: 1205652580}
+  - component: {fileID: 1205652579}
   m_Layer: 0
   m_Name: Ground
   m_TagString: Untagged
@@ -605,12 +746,120 @@ Transform:
   m_GameObject: {fileID: 1205652574}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0.81, y: -0.18, z: 15.23}
   m_LocalScale: {x: 50, y: 50, z: 50}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1205652579
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1205652574}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c80cf677d9383164aa58d5167ff5eddb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Island2.Lava.LavaPhysics
+  lavaMaterial: {fileID: 0}
+  particlePrefab: {fileID: 0}
+  neighborSearchRadius: 0.5
+  collisionRestitution: 0.3
+  useDebugRendering: 1
+  showParticleCount: 1
+--- !u!114 &1205652580
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1205652574}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c80cf677d9383164aa58d5167ff5eddb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Island2.Lava.LavaPhysics
+  lavaMaterial: {fileID: 0}
+  particlePrefab: {fileID: 0}
+  neighborSearchRadius: 0.5
+  collisionRestitution: 0.3
+  useDebugRendering: 1
+  showParticleCount: 1
+--- !u!114 &1205652581
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1205652574}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c80cf677d9383164aa58d5167ff5eddb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Island2.Lava.LavaPhysics
+  lavaMaterial: {fileID: 0}
+  particlePrefab: {fileID: 0}
+  neighborSearchRadius: 0.5
+  collisionRestitution: 0.3
+  useDebugRendering: 1
+  showParticleCount: 1
+--- !u!114 &1205652582
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1205652574}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c80cf677d9383164aa58d5167ff5eddb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Island2.Lava.LavaPhysics
+  lavaMaterial: {fileID: 0}
+  particlePrefab: {fileID: 0}
+  neighborSearchRadius: 0.5
+  collisionRestitution: 0.3
+  useDebugRendering: 1
+  showParticleCount: 1
+--- !u!114 &1205652583
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1205652574}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c80cf677d9383164aa58d5167ff5eddb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Island2.Lava.LavaPhysics
+  lavaMaterial: {fileID: 0}
+  particlePrefab: {fileID: 0}
+  neighborSearchRadius: 0.5
+  collisionRestitution: 0.3
+  useDebugRendering: 1
+  showParticleCount: 1
+--- !u!114 &1205652584
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1205652574}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c80cf677d9383164aa58d5167ff5eddb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Island2.Lava.LavaPhysics
+  lavaMaterial: {fileID: 0}
+  particlePrefab: {fileID: 0}
+  neighborSearchRadius: 0.5
+  collisionRestitution: 0.3
+  useDebugRendering: 1
+  showParticleCount: 1
 --- !u!1 &1378568182
 GameObject:
   m_ObjectHideFlags: 1
@@ -1136,6 +1385,56 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1760185957
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1760185960}
+  - component: {fileID: 1760185958}
+  m_Layer: 0
+  m_Name: LavaEmitter
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1760185958
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1760185957}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c80cf677d9383164aa58d5167ff5eddb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Island2.Lava.LavaPhysics
+  lavaMaterial: {fileID: 2100000, guid: a280debc9aa330547a82106a9e91c07f, type: 2}
+  particlePrefab: {fileID: 1082000486}
+  neighborSearchRadius: 0.5
+  collisionRestitution: 0.3
+  useDebugRendering: 1
+  showParticleCount: 1
+--- !u!4 &1760185960
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1760185957}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 10, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1811357689
 GameObject:
   m_ObjectHideFlags: 1
@@ -1569,7 +1868,22 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 95552372257539486, guid: a1243ecb4f0d55846a259cf3c9eb98fd, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 144642712}
+    - targetCorrespondingSourceObject: {fileID: 95552372257539486, guid: a1243ecb4f0d55846a259cf3c9eb98fd, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 144642711}
+    - targetCorrespondingSourceObject: {fileID: 95552372257539486, guid: a1243ecb4f0d55846a259cf3c9eb98fd, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 144642710}
+    - targetCorrespondingSourceObject: {fileID: 95552372257539486, guid: a1243ecb4f0d55846a259cf3c9eb98fd, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 144642709}
+    - targetCorrespondingSourceObject: {fileID: 95552372257539486, guid: a1243ecb4f0d55846a259cf3c9eb98fd, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 144642708}
   m_SourcePrefab: {fileID: 100100000, guid: a1243ecb4f0d55846a259cf3c9eb98fd, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
@@ -1588,3 +1902,5 @@ SceneRoots:
   - {fileID: 5569935455435651931}
   - {fileID: 7017782533705792444}
   - {fileID: 228470319}
+  - {fileID: 1760185960}
+  - {fileID: 1082000488}
