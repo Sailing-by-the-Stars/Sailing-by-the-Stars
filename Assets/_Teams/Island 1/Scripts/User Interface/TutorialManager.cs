@@ -14,7 +14,6 @@ namespace Assets._Teams.Island_1.Scripts.User_Interface
         [SerializeField] float delay = 2f;
 
         [Header("References")]
-        [SerializeField] TempPhysicsPickup tutorialPickupItem;
         [SerializeField] private TutorialPopup pickupPopup;
         [SerializeField] private TutorialPopup usePopup;
         [SerializeField] private TutorialPopup dropPopup;
@@ -131,35 +130,29 @@ namespace Assets._Teams.Island_1.Scripts.User_Interface
 
         void OnEnable()
         {
-            if (tutorialPickupItem)
-            {
-                tutorialPickupItem.OnGrab.AddListener(OnTutorialItemGrab);
-                tutorialPickupItem.OnUse.AddListener(OnTutorialItemUse);
-                tutorialPickupItem.OnDrop.AddListener(OnTutorialItemDrop);
-            }
+            GameEvents.OnPickup += OnTutorialItemGrab;
+            GameEvents.OnUse += OnTutorialItemUse;
+            GameEvents.OnDrop += OnTutorialItemDrop;
         }
 
         void OnDisable()
         {
-            if (tutorialPickupItem)
-            {
-                tutorialPickupItem.OnGrab.RemoveListener(OnTutorialItemGrab);
-                tutorialPickupItem.OnUse.RemoveListener(OnTutorialItemUse);
-                tutorialPickupItem.OnDrop.RemoveListener(OnTutorialItemDrop);
-            }
+            GameEvents.OnPickup -= OnTutorialItemGrab;
+            GameEvents.OnUse -= OnTutorialItemUse;
+            GameEvents.OnDrop -= OnTutorialItemDrop;
         }
 
-        private void OnTutorialItemGrab()
+        private void OnTutorialItemGrab(IPickup pickup)
         {
             pickupPopup.Complete();
         }
 
-        private void OnTutorialItemUse()
+        private void OnTutorialItemUse(IPickup pickup)
         {
             usePopup.Complete();
         }
 
-        private void OnTutorialItemDrop()
+        private void OnTutorialItemDrop(IPickup pickup)
         {
             dropPopup.Complete();
         }
