@@ -20,6 +20,8 @@ public class TorchPickup : PhysicsPickup
     public override void Use()
     {
         SetTorchLight(!torchLight.isActiveAndEnabled);
+        
+        GameEvents.ExecOnUse(this);
     }
 
     public override void Drop(PickupController pickupController)
