@@ -2,6 +2,7 @@
  * Created by Christina Pence
  * Contributed to by:
  */
+using System.Collections;
 using UnityEngine;
 
 /// <summary>
@@ -30,44 +31,63 @@ public class WeatherZoneEffect : MonoBehaviour, IZoneEffect
     [SerializeField] private WeatherState exitState;
 
     [Tooltip("Duration of the exit transition in seconds.")]
-    [SerializeField] private float exitDuration = 20f;
+    [SerializeField] private float exitTransitionDuration = 20f;
 
     [Tooltip("Curve shapes defining how weather fades from this zone's state. " +
              "Leave null for a smooth default transition.")]
     [SerializeField] private WeatherTransitionCurves exitCurves;
 
+    [Tooltip("Additional length of time to play exit state past autoweather settings in manager" +
+        "Leave at 0 to use regular autoweather settings.")]
+    [SerializeField] private float exitStateDuration = 0f;
+
+    private Coroutine delayRoutine;
+
     public void OnEnter(GameObject instigator)
     {
+        if (delayRoutine != null)
+        {
+            StopCoroutine(delayRoutine);
+            delayRoutine = null;
+        }
         if (enterState == null)
         {
-            Debug.Log("No enter state for weather event on " + gameObject.name);
             return;
         }
-        Debug.Log("Weather transition called " + enterState);
         WeatherManager.Instance.SuspendAutoWeather();
         WeatherManager.Instance.TransitionTo(enterState, enterDuration, enterCurves);
     }
     public void OnExit(GameObject instigator)
     {
-        // start timer for ambient weather
-        WeatherManager.Instance.ResumeAutoWeather();
+        WeatherState target = GetExitTarget();
 
-        WeatherState target;
-        // chose random state or given exit state
-        if (randomAmbientOnExit)
+        if (target == null)
         {
-            WeatherState random = WeatherManager.Instance.GetRandomAmbientState();
-            target = random != null ? random : exitState;
+            WeatherManager.Instance.ResumeAutoWeather();
+            return;
+        }
+        WeatherManager.Instance.TransitionTo(target, exitTransitionDuration, exitCurves);
+        if (exitStateDuration != 0f)
+        {
+            delayRoutine = StartCoroutine(ResumeAfterDelay(exitStateDuration + exitTransitionDuration));
         }
         else
         {
-            target = exitState;
+            WeatherManager.Instance.ResumeAutoWeather();
         }
-        if (target == null)
+    }
+    private IEnumerator ResumeAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        WeatherManager.Instance.ResumeAutoWeather();
+    }
+    private WeatherState GetExitTarget()
+    {
+        if (randomAmbientOnExit)
         {
-            Debug.Log("No exit state for weather event on " + gameObject.name);
-            return;
+            WeatherState random = WeatherManager.Instance.GetRandomAmbientState();
+            return random != null ? random : WeatherManager.Instance.DefaultState;
         }
-        WeatherManager.Instance.TransitionTo(target, exitDuration, exitCurves);
+        return exitState != null ? exitState : WeatherManager.Instance.DefaultState;
     }
 }

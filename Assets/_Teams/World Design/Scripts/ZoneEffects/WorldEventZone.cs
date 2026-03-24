@@ -71,7 +71,7 @@ public class WorldEventZone : MonoBehaviour
         exitCoroutine = null;
         if (oneShot)
         {
-            gameObject.SetActive(false);
+            GetComponent<Collider>().enabled = false;
         }
     }
 }

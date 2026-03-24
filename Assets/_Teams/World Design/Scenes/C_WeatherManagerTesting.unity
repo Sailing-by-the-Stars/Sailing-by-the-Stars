@@ -535,7 +535,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 558718708}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 528c4b940b50d5943a4ffee303914ab4, type: 3}
   m_Name: 
@@ -1397,9 +1397,9 @@ MonoBehaviour:
     weight: 2
   - state: {fileID: 11400000, guid: 80bd15c948fb9b74bb9c403cf0c37b59, type: 2}
     weight: 2
-  minAmbientChangeInterval: 40
-  maxAmbientChangeInterval: 60
-  ambientChangeTransitionTime: 20
+  minAmbientChangeInterval: 30
+  maxAmbientChangeInterval: 30
+  ambientChangeTransitionTime: 10
 --- !u!1001 &7711046046164393733
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1415,6 +1415,22 @@ PrefabInstance:
     - target: {fileID: 425872217862469510, guid: 63a6508c1e5eef040ad7d229c65c5552, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5001924447397558165, guid: 63a6508c1e5eef040ad7d229c65c5552, type: 3}
+      propertyPath: oneShot
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7713373409814050156, guid: 63a6508c1e5eef040ad7d229c65c5552, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 7713373409814050156, guid: 63a6508c1e5eef040ad7d229c65c5552, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 7713373409814050156, guid: 63a6508c1e5eef040ad7d229c65c5552, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 7713373409814050156, guid: 63a6508c1e5eef040ad7d229c65c5552, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1455,6 +1471,22 @@ PrefabInstance:
     - target: {fileID: 7713373409814050156, guid: 63a6508c1e5eef040ad7d229c65c5552, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9031465966490677983, guid: 63a6508c1e5eef040ad7d229c65c5552, type: 3}
+      propertyPath: exitState
+      value: 
+      objectReference: {fileID: 11400000, guid: cb8aa58f8d8af074284fee78705fad6d, type: 2}
+    - target: {fileID: 9031465966490677983, guid: 63a6508c1e5eef040ad7d229c65c5552, type: 3}
+      propertyPath: enterState
+      value: 
+      objectReference: {fileID: 11400000, guid: fafba6abdce518446a4565c944aadab7, type: 2}
+    - target: {fileID: 9031465966490677983, guid: 63a6508c1e5eef040ad7d229c65c5552, type: 3}
+      propertyPath: exitStateDuration
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9031465966490677983, guid: 63a6508c1e5eef040ad7d229c65c5552, type: 3}
+      propertyPath: exitTransitionDuration
+      value: 5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

@@ -23,6 +23,7 @@ public class WeatherManager : MonoBehaviour
 
     [Header("Default")]
     [SerializeField] private WeatherState defaultState; // applied immediately on scene start
+    public WeatherState DefaultState => defaultState;
 
     [Header("Ambient Weather")]
     [Tooltip("States to randomly cycle between during normal sailing " +
@@ -61,7 +62,6 @@ public class WeatherManager : MonoBehaviour
         if (controller is WindController wind)
         {
             windController = wind;
-            Debug.Log("wind controller registered");
         }
     }
 
@@ -105,7 +105,6 @@ public class WeatherManager : MonoBehaviour
             {
                 float interval = UnityEngine.Random.Range(minAmbientChangeInterval, maxAmbientChangeInterval);
                 yield return new WaitForSeconds(interval);
-
                 WeatherState next = GetRandomAmbientState();
                 // ignore irrelevant changes due to probability settings
                 if (next == null || next == activeState)
@@ -167,6 +166,10 @@ public class WeatherManager : MonoBehaviour
         {
             ambientCycle = StartCoroutine(CycleAmbientWeather());
         }
+        else if (defaultState != null)
+        {
+            TransitionTo(defaultState, ambientChangeTransitionTime);
+        }
 
     }
     /// <summary>
@@ -176,7 +179,6 @@ public class WeatherManager : MonoBehaviour
     /// </summary>
     public void TransitionTo(WeatherState target, float duration, WeatherTransitionCurves curves = null)
     {
-        // TODO: May need to turn off auto roll here too during transition
         if (target == null)
         {
             Debug.LogError("Weather manager TransitionTo called with null state.");
@@ -189,7 +191,7 @@ public class WeatherManager : MonoBehaviour
         }
         activeState = target;
         activeTransition = StartCoroutine(RunTransition(target, duration, curves));
-        OnWeatherTransitionStarted(target, duration);
+        OnWeatherTransitionStarted?.Invoke(target, duration);
 
         // values that only need to be applied once without blending during transition
         currentValues.windRandomEventsActive = target.values.windRandomEventsActive;
