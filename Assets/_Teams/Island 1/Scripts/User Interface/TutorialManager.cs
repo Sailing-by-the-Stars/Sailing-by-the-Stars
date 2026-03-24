@@ -44,7 +44,10 @@ namespace Assets._Teams.Island_1.Scripts.User_Interface
 
             foreach (var popup in GetComponentsInChildren<TutorialPopup>(true))
             {
-                popups.Add(popup.Step, popup);
+                if (popup != null && popup.Step != TutorialStep.None && !popups.ContainsKey(popup.Step))
+                {
+                    popups.Add(popup.Step, popup);
+                }
                 popup.gameObject.SetActive(false);
             }
 
