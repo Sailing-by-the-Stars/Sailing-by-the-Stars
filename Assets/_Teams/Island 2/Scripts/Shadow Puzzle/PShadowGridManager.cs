@@ -10,7 +10,7 @@ public class PShadowGridManager : MonoBehaviour
     [SerializeField] private float cellSize = 1f;
     [SerializeField] private float cellSpacing = .2f;
     
-    [Tooltip("Keep this low aprox. around 0.08 - 0.25")]
+    [Tooltip("Keep this low aprox. around 0.08 - 0.25. Free to experiment though.")]
     [SerializeField] private float slidingTime = 0.15f;
 
     private PShadowPillar[,] grid;
@@ -26,31 +26,46 @@ public class PShadowGridManager : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.green;
-        
         float step = cellSize + cellSpacing;
+        float half = step * 0.5f;
+        
+        // Draw everything in the GridManager's local space
+        Matrix4x4 oldMatrix = Gizmos.matrix;
+        Gizmos.matrix = transform.localToWorldMatrix;
 
         for (int x = 0; x < width; x++)
         {
             for (int y = 0; y < height; y++)
             {
-                Vector3 worldPos = transform.position + new Vector3((x + 0.5f) * step, 0f, (y + 0.5f) * step);
+                int flippedY = (height - 1) - y;
 
-                Gizmos.DrawWireCube(worldPos, new Vector3(cellSize, 0.01f, cellSize));
-
-                UnityEditor.Handles.Label(worldPos + Vector3.up * 0.1f, $"({y},{x})");
+                Vector3 localPos = new(x * step + half, 0f, flippedY * step + half);
+                Gizmos.DrawWireCube(localPos, new Vector3(cellSize, 0.01f, cellSize));
+                
+                Vector3 worldPos = transform.TransformPoint(localPos);
+                UnityEditor.Handles.Label(worldPos + Vector3.up * 0.1f, $"C{x}, R{y}");
             }
         }
+        
+        Gizmos.matrix = oldMatrix;
     }
 #endif
 
     private Vector3 GridToWorld(Vector2Int pos, float pillarY)
     {
         float step = cellSize + cellSpacing;
+        float half = step * 0.5f;
+        // Flip Y so row 0 is on top -> brain not breaking when looking at the grid
+        int flippedY = (height - 1) - pos.y;
+
+        Vector3 origin = transform.position;
+        Vector3 right = transform.right;
+        Vector3 forward = transform.forward;
         
-        return transform.position + new Vector3((pos.x + .5f) * step, pillarY, (pos.y + .5f) * step);
+        return origin + right * (pos.x * step + half) + forward * (flippedY * step + half) + new Vector3(0f, pillarY, 0f);
     }
 
-    public bool IsInBounds(Vector2Int pos)
+    private bool IsInBounds(Vector2Int pos)
     {
         return pos.x >= 0 && pos.x < width && pos.y >= 0 && pos.y < height;
     }
@@ -70,12 +85,14 @@ public class PShadowGridManager : MonoBehaviour
         
         grid[pos.x, pos.y] = pillar;
         pillar.transform.position = GridToWorld(pos, pillar.transform.position.y);
+        pillar.transform.rotation = transform.rotation;
+        
         return true;
     }
 
     public void ResetPillars()
     {
-        List<PShadowPillar> pillarsToRegister = grid.Cast<PShadowPillar>().Where(pillar => pillar != null).ToList();
+        List<PShadowPillar> pillarsToRegister = grid.Cast<PShadowPillar>().Where(pillar => pillar).ToList();
         foreach (PShadowPillar pillar in pillarsToRegister)
         {
             RegisterPillar(pillar, pillar.startPosition);
@@ -205,6 +222,8 @@ public class PShadowGridManager : MonoBehaviour
             // Animate the pillar
             move.pillar.MoveTo(
                 GridToWorld(move.to, move.pillar.transform.position.y),
+                transform.rotation,
+                move.to,
                 slidingTime,
                 OnPillarFinishedMoving
             );
@@ -218,6 +237,17 @@ public class PShadowGridManager : MonoBehaviour
         
         activeMoves = 0;
         isMoving = false;
+
+        CheckSolvedCondition();
+    }
+
+    private void CheckSolvedCondition()
+    {
+        List<PShadowPillar> pillarsToCheck = grid.Cast<PShadowPillar>().Where(pillar => pillar).ToList();
+        if (pillarsToCheck.Any(pillar => !pillar.IsInCorrectPosition())) return;
+        
+        // TODO: Do things here when puzzle is solved
+        Debug.Log("PUZZLE SOLVED!");
     }
 
     private struct MoveRequest

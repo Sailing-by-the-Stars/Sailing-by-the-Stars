@@ -23,6 +23,10 @@ public class PShadowPillarButton : MonoBehaviour, IInteractable
         {
             gridManager = FindFirstObjectByType<PShadowGridManager>();
         }
+        if (gridManager == null)
+        {
+            Debug.LogError($"{name} could not find the PShadowGridManager!");
+        }
     }
     
     public void Interact(InteractionController interactionController)
