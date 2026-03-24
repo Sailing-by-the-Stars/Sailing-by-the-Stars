@@ -1,136 +1,252 @@
+using System;
 using System.Collections;
-using UnityEditor;
+using System.Collections.Generic;
 using UnityEngine;
+
+public enum StarState
+{
+    none,
+    minigame,
+    highlighted,
+    selected,
+}
+
+public interface IStarState
+{
+    void Enter(TwinklingStar star);
+    void Tick(TwinklingStar star);
+    void Exit(TwinklingStar star);
+}
+
 
 public class TwinklingStar : MonoBehaviour
 {
+    [SerializeField] StarState debugState;
+
+    StarState prevStarState;
+    StarState StarState;
+    public StarState starState
+    {
+        get { return StarState; }
+        set
+        {
+            if (StarState == value) return;
+            StarState = value;
+            UpdateStar(StarState, prevStarState);
+            Debug.Log($"starState changed to: {StarState}");
+            prevStarState = StarState;
+        }
+    }
+
+    private static readonly Dictionary<StarState, IStarState> _states = new()
+    {
+        { StarState.none, new NoneState() },
+        { StarState.minigame, new MinigameState() },
+        { StarState.highlighted, new HighlightedState() },
+        { StarState.selected, new SelectedState() },
+    };
+    
     [SerializeField] AnimationCurve twinkleCurve;
     [SerializeField] AnimationCurve dimCurve;
-
-    [SerializeField] Vector2 luminosityRange;
-    [SerializeField] Vector2 positionRange;
-
-    [SerializeField] bool twinkle = false;
-    [SerializeField] bool dim = false;
-
-    private Coroutine twinkleRoutine;
-    private Coroutine dimRoutine;
-    private Coroutine brightenRoutine;
-
-    [SerializeField] Light light;
-
-    [SerializeField] float twinkleTime = 2f;
-    [SerializeField] float dimTime = 2f;
-
-
+    
+    private Color initialEmission;
+    private bool twinkle;
+    
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        light = GetComponent<Light>();
+        //Set the emission of the star before making changes
+        initialEmission = GetComponent<Renderer>().material.GetColor("_EmissiveColor");
     }
 
     // Update is called once per frame
     void Update()
     {
-        //Start the twinkle animation if twinkling is enabled
-        if (twinkle && twinkleRoutine == null)
+        if (_states.TryGetValue(starState, out var curState))
         {
-            twinkleRoutine = StartCoroutine(Twinkle());
+            curState.Tick(this);
         }
-    }
-
-
-
-    private IEnumerator Twinkle()
-    {
-        float timer = 0;
-
-        while (twinkle)
-        {
-            timer += Time.deltaTime;
-
-            if (timer > twinkleTime)
-            {
-                timer -= twinkleTime;
-            }
-
-            //Find current position on the animation curve
-            float T = timer / twinkleTime;
-        
-            float curveOutput = twinkleCurve.Evaluate(T);
-            
-            //Change the light intensity based on the position on the animation curve
-            light.intensity = Mathf.Lerp(luminosityRange.x, luminosityRange.y, T);
-
-            transform.position =  new Vector3(transform.position.x, Mathf.Lerp(positionRange.x, positionRange.y, curveOutput), transform.position.z);
-
-            yield return new WaitForEndOfFrame();
-        }
-
-        //Reset the luminosity to the value set in the inspector
-        StopCoroutine(twinkleRoutine);
-        twinkleRoutine = null;
-        light.intensity = luminosityRange.x;
-    }
-
-    private IEnumerator Brighten()
-    {
-        float timer = 0;
-
-        //Play the animation as long as the value of dimTime
-        while (timer < dimTime)
-        {
-            timer += Time.deltaTime;
-
-            //Find position on the animation curve
-            float T = timer / dimTime;
-            float curveOutput = dimCurve.Evaluate(T);
-
-            //Change the luminosity based on position on the animation curve (changes position for now as a test)
-            transform.position = new Vector3(transform.position.x, Mathf.Lerp(positionRange.x, positionRange.y, curveOutput), transform.position.z);
-            
-            yield return new WaitForEndOfFrame();
-
-        }
-
-        StopCoroutine(brightenRoutine);
-        brightenRoutine = null;
-    }
-
-    private IEnumerator Dim()
-    {
-        float timer = dimTime;
-
-        while (timer > 0)
-        {
-            timer -= Time.deltaTime;
-
-            //Find position on the animation curve
-            float T = timer / dimTime;
-            float curveOutput = dimCurve.Evaluate(T);
-
-            //Change the luminosity based on position on the animation curve (changes position for now as a test)
-            transform.position = new Vector3(transform.position.x, Mathf.Lerp(positionRange.x, positionRange.y, curveOutput), transform.position.z);
-
-            yield return new WaitForEndOfFrame();
-        }
-
-        StopCoroutine(dimRoutine);
-        dimRoutine = null;
     }
 
     private void OnValidate()
     {
-        //If the value of the dim boolean changes, start the dim or brighten animation
-        if (!dim && brightenRoutine == null)
+        if (debugState != starState)
         {
-            brightenRoutine = StartCoroutine(Brighten());
+            starState = debugState;
         }
 
-        if (dim && dimRoutine == null)
+    }
+
+
+    //state machine things:
+    public void UpdateStar(StarState state, StarState prevState)
+    {
+        if (_states.TryGetValue(prevState, out var oldState))
         {
-            dimRoutine = StartCoroutine(Dim());
+            oldState.Exit(this);
+        }
+        else
+        {
+            if (oldState != null)
+            {
+                Debug.LogError($"State {oldState} not registered");
+            }
+        }
+
+        if (_states.TryGetValue(state, out var newState))
+        {
+            newState.Enter(this);
+        }
+        else
+        {
+            Debug.LogError($"State {newState.ToString()} not registered");
+        }
+    }
+
+    public class NoneState : IStarState
+    {
+        public void Enter(TwinklingStar star)
+        {
+            
+        }
+
+        public void Tick(TwinklingStar star)
+        {
+            
+        }
+
+        public void Exit(TwinklingStar star)
+        {
+            
+        }
+    }
+
+    public class MinigameState : IStarState
+    {
+        public void Enter(TwinklingStar star)
+        {
+            star.GetComponent<Renderer>().material.SetColor("_EmissiveColor", Color.red * 2000000);
+        }
+
+        public void Tick(TwinklingStar star)
+        {
+
+        }
+
+        public void Exit(TwinklingStar star)
+        {
+            star.GetComponent<Renderer>().material.SetColor("_EmissiveColor", star.initialEmission);
+        }
+    }
+
+    public class HighlightedState : IStarState
+    {
+        public void Enter(TwinklingStar star)
+        {
+            star.twinkle = true;
+            star.StartCoroutine(Twinkle(star));
+        }
+
+        public void Tick(TwinklingStar star)
+        {
+
+        }
+
+        public void Exit(TwinklingStar star)
+        {
+            star.twinkle = false;
+            star.StopCoroutine(Twinkle(star));
+            
+            star.GetComponent<Renderer>().material.SetColor("_EmissiveColor", star.initialEmission);
+        }
+        
+        private IEnumerator Twinkle(TwinklingStar star)
+        {
+            float timer = 0;
+            int animationLength = star.twinkleCurve.length;
+            
+            //Loop animation if current state is selected
+            while (star.twinkle)
+            {
+                timer += Time.deltaTime;
+
+                if (timer > animationLength)
+                {
+                    timer -= animationLength;
+                }
+                
+                //Find current position on the animation curve
+                float T = timer / animationLength;
+                float curveOutput = star.twinkleCurve.Evaluate(T);
+
+                //Change emission intensity based on position on the animation curve
+                star.GetComponent<Renderer>().material.SetColor("_EmissiveColor", star.initialEmission * curveOutput);
+                
+                yield return new WaitForEndOfFrame();
+            }
+        }
+    }
+
+    public class SelectedState : IStarState
+    {
+        public void Enter(TwinklingStar star)
+        {
+            star.StartCoroutine(Brighten(star));
+        }
+
+        public void Tick(TwinklingStar star)
+        {
+
+        }
+
+        public void Exit(TwinklingStar star)
+        {
+            star.StartCoroutine(Dim(star));
+        }
+        
+        private IEnumerator Brighten(TwinklingStar star)
+        {
+            float timer = 0;
+            int animationLength = star.dimCurve.length;
+            
+            while (timer < animationLength)
+            {
+                timer += Time.deltaTime;
+
+                //Find position on the animation curve
+                float T = timer / animationLength;
+                float curveOutput = star.dimCurve.Evaluate(T);
+
+                //Change emission intensity based on position on the animation curve
+                float animationMultiplier = curveOutput + 1;
+                float intensityMultiplier = animationMultiplier * animationMultiplier;
+                star.GetComponent<Renderer>().material.SetColor("_EmissiveColor", star.initialEmission * intensityMultiplier);
+
+                yield return new WaitForEndOfFrame();
+            }
+        }
+
+        private IEnumerator Dim(TwinklingStar star)
+        {
+            int animationLength = star.dimCurve.length;
+            float timer = animationLength;
+            
+            while (timer > 0)
+            {
+                timer -= Time.deltaTime;
+
+                //Find position on the animation curve
+                float T = timer / animationLength;
+                float curveOutput = star.dimCurve.Evaluate(T);
+                
+                //Change emission intensity based on position on the animation curve
+                float animationMultiplier = curveOutput + 1;
+                float intensityMultiplier = animationMultiplier * animationMultiplier;
+                star.GetComponent<Renderer>().material.SetColor("_EmissiveColor", star.initialEmission * intensityMultiplier); 
+
+                yield return new WaitForEndOfFrame();
+            }
         }
     }
 }
