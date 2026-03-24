@@ -16,27 +16,32 @@ public class DockingPoint : MonoBehaviour
 
     [Header("References")]
     [SerializeField] private DockingPrompt dockingPrompt;
-
-    [Tooltip("The player GameObject (the one with the Movement script and player camera).")]
     [SerializeField] private GameObject player;
+
+    [Header("Undock Prompt Settings")]
+    [Tooltip("How close the player must be to the docked boat to see the undock prompt.")]
+    [SerializeField] private float undockPromptRadius = 5f;
 
     private GameObject boat;
     private Rigidbody boatRigidbody;
     private BoatController boatController;
+    private BuoyancyController buoyancyController;
+    private Collider boatCollider;
     private bool boatIsInRange = false;
     private bool isDocked = false;
+    private bool isUndocking = false;
+
+    private int physicsRestoreToken = 0;
 
     private void Update()
     {
         if (isDocked)
         {
-            if (IsPlayerAboard())
+            if (IsPlayerNearDockedBoat())
             {
                 dockingPrompt.ShowPrompt("Press F to Undock");
                 if (Keyboard.current.fKey.wasPressedThisFrame)
-                {
                     UndockBoat();
-                }
             }
             else
             {
@@ -49,15 +54,19 @@ public class DockingPoint : MonoBehaviour
             {
                 dockingPrompt.ShowPrompt("Press F to Dock");
                 if (Keyboard.current.fKey.wasPressedThisFrame)
-                {
                     DockBoat();
-                }
             }
             else
             {
                 dockingPrompt.HidePrompt();
             }
         }
+    }
+
+    private bool IsPlayerNearDockedBoat()
+    {
+        if (player == null || dockSnapTransform == null) return false;
+        return Vector3.Distance(player.transform.position, dockSnapTransform.position) <= undockPromptRadius;
     }
 
     private bool IsPlayerAboard()
@@ -71,6 +80,12 @@ public class DockingPoint : MonoBehaviour
     {
         isDocked = true;
         DisableBoatPhysics();
+
+        // Disable the boat's collider so Movement.OnTriggerEnter can't
+        // fire and let the player board while the boat is docked.
+        if (boatCollider != null)
+            boatCollider.enabled = false;
+
         StartCoroutine(DisembarkSequence());
         dockingPrompt.HidePrompt();
     }
@@ -96,13 +111,16 @@ public class DockingPoint : MonoBehaviour
     {
         if (boatRigidbody != null)
         {
+            boatRigidbody.isKinematic = true;
             boatRigidbody.linearVelocity = Vector3.zero;
             boatRigidbody.angularVelocity = Vector3.zero;
-            boatRigidbody.isKinematic = true;
         }
 
         if (boatController != null)
             boatController.enabled = false;
+
+        if (buoyancyController != null)
+            buoyancyController.enabled = false;
     }
 
     private void DisembarkPlayer()
@@ -126,32 +144,45 @@ public class DockingPoint : MonoBehaviour
             Debug.LogWarning("[DockingPoint] playerSpawnTransform is not assigned!");
         }
 
-        StartCoroutine(EnablePlayerPhysics());
+        physicsRestoreToken++;
+        StartCoroutine(EnablePlayerPhysics(physicsRestoreToken));
     }
 
-    private IEnumerator EnablePlayerPhysics()
+    private IEnumerator EnablePlayerPhysics(int token)
     {
+        Rigidbody playerRb = player.GetComponent<Rigidbody>();
+        if (playerRb != null)
+        {
+            playerRb.isKinematic = true;
+            playerRb.useGravity = false;
+        }
+
         yield return new WaitForSeconds(0.2f);
 
-        Rigidbody playerRb = player.GetComponent<Rigidbody>();
+        if (token != physicsRestoreToken) yield break;
+
         if (playerRb != null)
         {
             playerRb.isKinematic = false;
             playerRb.useGravity = true;
+            playerRb.linearVelocity = Vector3.zero;
+            playerRb.angularVelocity = Vector3.zero;
         }
     }
 
     public void UndockBoat()
     {
+        isUndocking = true;
         isDocked = false;
+
+        physicsRestoreToken++;
 
         if (boat == null)
         {
             Debug.LogWarning("[DockingPoint] UndockBoat: boat reference is null!");
+            isUndocking = false;
             return;
         }
-
-        BoardPlayer();
 
         if (boatSpawnTransform != null)
         {
@@ -163,52 +194,38 @@ public class DockingPoint : MonoBehaviour
             Debug.LogWarning("[DockingPoint] boatSpawnTransform is not assigned!");
         }
 
+        if (buoyancyController != null)
+            buoyancyController.enabled = true;
+
         if (boatRigidbody != null)
+        {
             boatRigidbody.isKinematic = false;
+            boatRigidbody.linearVelocity = Vector3.zero;
+            boatRigidbody.angularVelocity = Vector3.zero;
+        }
 
         if (boatController != null)
             boatController.enabled = true;
 
+        // Re-enable the collider now the boat is back in the water
+        // so the player can board normally again.
+        if (boatCollider != null)
+            boatCollider.enabled = true;
+
         dockingPrompt.HidePrompt();
+
+        StartCoroutine(ClearUndockingFlag());
     }
 
-    private void BoardPlayer()
+    private IEnumerator ClearUndockingFlag()
     {
-        player.transform.SetParent(boat.transform);
-
-        Transform seatPosition = FindDeepChild(boat.transform, "SeatPosition");
-        if (seatPosition != null)
-        {
-            player.transform.position = seatPosition.position;
-            player.transform.rotation = seatPosition.rotation;
-        }
-        else
-        {
-            player.transform.localPosition = Vector3.up * 1.5f;
-            Debug.LogWarning("[DockingPoint] SeatPosition not found on boat!");
-        }
-
-        Rigidbody playerRb = player.GetComponent<Rigidbody>();
-        if (playerRb != null)
-        {
-            playerRb.isKinematic = true;
-            playerRb.useGravity = false;
-        }
-    }
-
-    private Transform FindDeepChild(Transform parent, string childName)
-    {
-        foreach (Transform child in parent.GetComponentsInChildren<Transform>(true))
-        {
-            if (child.name == childName)
-                return child;
-        }
-        return null;
+        yield return null;
+        isUndocking = false;
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("boat"))
+        if (other.CompareTag("boat") && !isDocked && !isUndocking)
         {
             boat = other.attachedRigidbody != null
                 ? other.attachedRigidbody.gameObject
@@ -216,6 +233,8 @@ public class DockingPoint : MonoBehaviour
 
             boatRigidbody = boat.GetComponent<Rigidbody>();
             boatController = boat.GetComponent<BoatController>();
+            buoyancyController = boat.GetComponent<BuoyancyController>();
+            boatCollider = other; // store the specific collider that entered
             boatIsInRange = true;
         }
     }
@@ -226,11 +245,13 @@ public class DockingPoint : MonoBehaviour
         {
             boatIsInRange = false;
 
-            if (!isDocked)
+            if (!isDocked && !isUndocking)
             {
                 boat = null;
                 boatRigidbody = null;
                 boatController = null;
+                buoyancyController = null;
+                boatCollider = null;
             }
 
             dockingPrompt.HidePrompt();
@@ -251,6 +272,9 @@ public class DockingPoint : MonoBehaviour
             Gizmos.color = Color.blue;
             Gizmos.DrawWireCube(dockSnapTransform.position, Vector3.one);
             Gizmos.DrawRay(dockSnapTransform.position, dockSnapTransform.forward * 3f);
+
+            Gizmos.color = Color.magenta;
+            Gizmos.DrawWireSphere(dockSnapTransform.position, undockPromptRadius);
         }
 
         if (boatSpawnTransform != null)
@@ -258,6 +282,13 @@ public class DockingPoint : MonoBehaviour
             Gizmos.color = Color.green;
             Gizmos.DrawWireCube(boatSpawnTransform.position, Vector3.one);
             Gizmos.DrawRay(boatSpawnTransform.position, boatSpawnTransform.forward * 3f);
+        }
+
+        if (playerSpawnTransform != null)
+        {
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawWireCube(playerSpawnTransform.position, Vector3.one * 0.5f);
+            Gizmos.DrawRay(playerSpawnTransform.position, playerSpawnTransform.forward * 2f);
         }
     }
 }
