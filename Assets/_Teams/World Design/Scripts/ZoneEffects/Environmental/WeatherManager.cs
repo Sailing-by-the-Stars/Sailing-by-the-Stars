@@ -179,6 +179,8 @@ public class WeatherManager : MonoBehaviour
     /// </summary>
     public void TransitionTo(WeatherState target, float duration, WeatherTransitionCurves curves = null)
     {
+        // attempt fallback to default state if no target
+        target = target != null ? target : defaultState;
         if (target == null)
         {
             Debug.LogError("Weather manager TransitionTo called with null state.");

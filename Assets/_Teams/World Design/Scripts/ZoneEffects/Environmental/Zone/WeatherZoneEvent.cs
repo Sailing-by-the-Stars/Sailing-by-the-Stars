@@ -41,10 +41,14 @@ public class WeatherZoneEffect : MonoBehaviour, IZoneEffect
         "Leave at 0 to use regular autoweather settings.")]
     [SerializeField] private float exitStateDuration = 0f;
 
+    private static WeatherZoneEffect activeZone; // track current zone (in case of overlap)
     private Coroutine delayRoutine;
 
     public void OnEnter(GameObject instigator)
     {
+        // prioritize most recently entered zone
+        activeZone = this;
+
         if (delayRoutine != null)
         {
             StopCoroutine(delayRoutine);
@@ -59,6 +63,13 @@ public class WeatherZoneEffect : MonoBehaviour, IZoneEffect
     }
     public void OnExit(GameObject instigator)
     {
+        // ignore exit transition if another zone has taken over control
+        if (activeZone != this)
+        {
+            return;
+        }
+        activeZone = null;
+
         WeatherState target = GetExitTarget();
 
         if (target == null)
