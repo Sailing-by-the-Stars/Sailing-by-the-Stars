@@ -235,6 +235,10 @@ public class WeatherManager : MonoBehaviour
         // normalize degrees to 0-360 to prevent negative values from LerpAngle's shortest path
         currentValues.windDirectionDegrees = (Mathf.LerpAngle(snapshotValues.windDirectionDegrees,
                                                               target.values.windDirectionDegrees, t) + 360f) % 360f;
+
+        currentValues.chanceOfThunderStrikePerInterval = target.values.chanceOfThunderStrikePerInterval;
+
+        currentValues.thunderActive = target.values.thunderActive; 
         
         /* TODO: the current reroll multiplies a random direcion vector by the intensity
          * effectively changing magnitude rather than limiting variance around the base direction
@@ -259,7 +263,7 @@ public class WeatherManager : MonoBehaviour
                                                      t, curves, c => c.currentCurve);
 
         // Thunder
-        currentValues.thunderIntensity = BlendValue(snapshotValues.thunderIntensity, target.values.thunderIntensity,
+        currentValues.chanceOfThunderStrikePerInterval = BlendValue(snapshotValues.chanceOfThunderStrikePerInterval, target.values.chanceOfThunderStrikePerInterval,
                                                     t, curves, c => c.thunderCurve);
 
         PushToControllers();

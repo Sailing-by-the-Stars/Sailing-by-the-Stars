@@ -48,8 +48,6 @@ public class SetThunderStrike : MonoBehaviour
         currentReverbDryr = originalReverbDryr;
         currentVolume = originalVolume;
 
-        instance.start();
-
         instance.setParameterByID(thunderStrikeEQParameter, currentEQ);
         instance.setParameterByID(thunderStrikeReverbDryrParameter, currentReverbDryr);
         instance.setParameterByID(thunderStrikeVolumeParameter, currentVolume);
@@ -58,8 +56,13 @@ public class SetThunderStrike : MonoBehaviour
     // Function to set new values for thunder strike
     public void SetThunderStrikeF(float targetEQ, float targetReverbDryr, float targetVolume)
     {
+        if (!instance.isValid()) return;
+
         if (routine != null) StopCoroutine(routine);
         routine = StartCoroutine(LerpThunderStrike(targetEQ, targetReverbDryr, targetVolume));
+        
+        instance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+        instance.start();
     }
 
     // Function to reset thunder strike
@@ -104,6 +107,7 @@ public class SetThunderStrike : MonoBehaviour
 
     private void OnDestroy()
     {
+        if (!instance.isValid()) return;
         instance.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
         instance.release();
     }

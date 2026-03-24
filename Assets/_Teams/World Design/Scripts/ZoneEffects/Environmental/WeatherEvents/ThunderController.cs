@@ -23,6 +23,8 @@ namespace _Teams.World_Design.Scripts.ZoneEffects.Environmental.WeatherEvents
         [Header("Liked thunder objects")]
         [Tooltip("List of Thunder objects that are currently linked to a controller. Only objects that are linked to this weather controller will be used to spawn thunder")]
         [SerializeField] private List<GameObject> thunderSpawnerObjects;
+        
+        private SetThunderStrike thunderAudioController;
 
         private float thunderCheckTimer;
         private float nextThunderStrickCheckTime;
@@ -30,6 +32,7 @@ namespace _Teams.World_Design.Scripts.ZoneEffects.Environmental.WeatherEvents
         private void OnEnable()
         {
             ScheduleNextThunderCheck();
+            thunderAudioController = FindFirstObjectByType<SetThunderStrike>();
         }
         
         private void Awake()
@@ -42,26 +45,22 @@ namespace _Teams.World_Design.Scripts.ZoneEffects.Environmental.WeatherEvents
 
         private void Update()
         {
-            Debug.Log("test 1");
             if (!enable)
             {
                 return;
             }
 
-            Debug.Log("test 1");
             thunderCheckTimer += Time.deltaTime;
             
             if (thunderCheckTimer >= nextThunderStrickCheckTime)
             {
-                Debug.Log("test 1");
-                // Debug.Log("Thunder list: " + thunderSpawnerObjects?.Count);
                 thunderCheckTimer = 0f;
                 ScheduleNextThunderCheck();
 
                 if (Random.value < chanceOfThunderStrikePerInterval)
                 {
-                    Debug.Log("Thunder strike!");
                     TriggerThunderStrike();
+                    thunderAudioController?.SetThunderStrikeF(1f, 1f, 100f);
                 }
             }
         }
@@ -70,7 +69,6 @@ namespace _Teams.World_Design.Scripts.ZoneEffects.Environmental.WeatherEvents
         {
             if (thunderSpawnerObjects == null || thunderSpawnerObjects.Count == 0)
             {
-                Debug.LogWarning("No thunder spawner objects linked to ThunderController on " + gameObject.name);
                 return;
             }
 
@@ -78,17 +76,15 @@ namespace _Teams.World_Design.Scripts.ZoneEffects.Environmental.WeatherEvents
             GameObject selectedSpawner = thunderSpawnerObjects[Random.Range(0, thunderSpawnerObjects.Count)];
             if (selectedSpawner.TryGetComponent(out ThunderSpawnObject thunderSpawn))
             {
-                Debug.Log("Thunder stick spawning from ");
                 thunderSpawn.TriggerSpawn();
-            }
-            else
-            {
-                Debug.LogWarning("Selected thunder spawner object does not have a ThunderSpawnObject component: " + selectedSpawner.name);
+                
             }
         }
         
         public void ChangeWeatherEventValues(WeatherValues weatherValues)
         {
+            enable = weatherValues.thunderActive;
+            chanceOfThunderStrikePerInterval = weatherValues.chanceOfThunderStrikePerInterval;
             // throw new System.NotImplementedException();
         }
 
@@ -114,12 +110,10 @@ namespace _Teams.World_Design.Scripts.ZoneEffects.Environmental.WeatherEvents
         {
             
             thunderSpawnerObjects = thunderSpawnObjects;
-            Debug.Log("Trying to add thunder spawner objects to weather manager: " + thunderSpawnObjects.Count);
         }
         
         public void ClearThunderSpawnerObjects()
         {
-            Debug.Log("Clearing thunder spawner objects");
             thunderSpawnerObjects = null;
         }
     }
