@@ -3,8 +3,17 @@ using UnityEngine.SceneManagement;
 
 public class SceneSwitcherTemp : MonoBehaviour
 {
+    public static SceneSwitcherTemp Instance { get; private set; }
+
     private void Awake()
     {
+        if(Instance != null && Instance != this)
+        {
+            Destroy(this);
+            return;
+        }
+
+        Instance = this;
         DontDestroyOnLoad(this);
     }
 
