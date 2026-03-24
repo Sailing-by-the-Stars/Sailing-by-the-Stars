@@ -24,6 +24,10 @@ public class Movement : MonoBehaviour
     float xCamRotation = 0f;
     float yCamRotation = 0f;
 
+    [Header("Player walk on boat")]
+    [SerializeField] private Transform boat;
+    [SerializeField] private Transform seatPosition;
+
     private void Awake()
     {
         playerControls = new PlayerControls();
@@ -101,4 +105,17 @@ public class Movement : MonoBehaviour
         }
         return rotation;
     }
+
+    //set the player to be able to go on top of the boat
+    private void OnTriggerEnter(Collider other)
+    {
+        Debug.LogWarning("IT HITS");
+        if (other.CompareTag("boat"))
+        {
+            transform.SetParent(boat);
+            transform.position = seatPosition.position;
+
+        }
+    }
+
 }
