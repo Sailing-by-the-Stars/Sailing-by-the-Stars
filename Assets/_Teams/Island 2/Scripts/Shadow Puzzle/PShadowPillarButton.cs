@@ -32,14 +32,7 @@ public class PShadowPillarButton : MonoBehaviour, IInteractable
             gridManager.ResetPillars();
             return;
         }
-        
-        if (isRowButton)
-        {
-            gridManager.PushRow(index, direction);
-        }
-        else
-        {
-            gridManager.PushColumn(index, direction);
-        }
+
+        gridManager.TryPushLine(isRowButton, index, direction);
     }
 }
