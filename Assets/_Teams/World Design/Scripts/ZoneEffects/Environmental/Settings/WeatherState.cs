@@ -27,12 +27,18 @@ public struct WeatherValues
     [Tooltip("Intensity of random wind direction changes in m/s.")]
     public float windAutoRerollIntensity;
 
-    [Header("Storm")]
+    [Header("Rain")]
     [Tooltip("0 = no rain. 1 = heaviest rain")]
     [Range(0f, 1f)] public float rainIntensity;
-    [Tooltip("Thunder and lightning: 0 = no thunder")]
-    [Range(0f, 1f)] public float thunderIntensity;
 
+    [Header("Thunder")]
+    [Tooltip("If true, thunder strikes will occur at random intervals based on chance.")]
+    public bool thunderActive;
+    
+    [FormerlySerializedAs("thunderIntensity")]
+    [Tooltip("Thunder and lightning chance per interval: 0 = no thunder")]
+    [Range(0f, 1f)] public float chanceOfThunderStrikePerInterval;
+    
     [Header("Ocean")]
     [Tooltip("0 = calmest 1 = highest waves (max driven by HDRP water surface values)")]
     [Range(0f, 1f)] public float waveIntensity;

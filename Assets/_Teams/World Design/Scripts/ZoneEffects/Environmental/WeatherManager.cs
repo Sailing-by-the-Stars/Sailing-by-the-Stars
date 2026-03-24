@@ -37,6 +37,7 @@ public class WeatherManager : MonoBehaviour
     // Controllers
     private readonly List<IWeatherEventController> controllers = new List<IWeatherEventController>();
     private WindController windController;
+    private ThunderController? thunderController;
 
     // State and transitions
     private WeatherState activeState;
@@ -62,6 +63,11 @@ public class WeatherManager : MonoBehaviour
         if (controller is WindController wind)
         {
             windController = wind;
+        }
+
+        if (controller is ThunderController thunder)
+        {
+            thunderController = thunder;
         }
     }
 
@@ -198,6 +204,16 @@ public class WeatherManager : MonoBehaviour
         // values that only need to be applied once without blending during transition
         currentValues.windRandomEventsActive = target.values.windRandomEventsActive;
     }
+    
+    public void LinkThunderSpawnerObjects(List<GameObject> thunderSpawnObject)
+    {
+        thunderController?.SetThunderSpawnerObjects(thunderSpawnObject);
+    }
+
+    public void ClearThunderSpawnerObjects()
+    {
+        thunderController?.ClearThunderSpawnerObjects(); 
+    }
 
     private IEnumerator RunTransition(WeatherState target, float duration, WeatherTransitionCurves curves)
     {
@@ -225,7 +241,11 @@ public class WeatherManager : MonoBehaviour
         currentValues.windDirectionDegrees = (Mathf.LerpAngle(snapshotValues.windDirectionDegrees,
                                                               target.values.windDirectionDegrees, t) + 360f) % 360f;
         currentValues.windAutoRerollIntensity = target.values.windAutoRerollIntensity;
-       
+
+        currentValues.chanceOfThunderStrikePerInterval = target.values.chanceOfThunderStrikePerInterval;
+
+        currentValues.thunderActive = target.values.thunderActive; 
+        
         currentValues.windAutoRerollIntensity = BlendValue(
             snapshotValues.windAutoRerollIntensity,
             target.values.windAutoRerollIntensity,
@@ -242,7 +262,7 @@ public class WeatherManager : MonoBehaviour
 
 
         // Thunder
-        currentValues.thunderIntensity = BlendValue(snapshotValues.thunderIntensity, target.values.thunderIntensity,
+        currentValues.chanceOfThunderStrikePerInterval = BlendValue(snapshotValues.chanceOfThunderStrikePerInterval, target.values.chanceOfThunderStrikePerInterval,
                                                     t, curves, c => c.thunderCurve);
 
         PushToControllers();
