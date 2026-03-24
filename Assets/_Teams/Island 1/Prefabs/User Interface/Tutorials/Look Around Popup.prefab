@@ -148,7 +148,7 @@ GameObject:
   - component: {fileID: 403985352079748596}
   - component: {fileID: 5540728151577792250}
   m_Layer: 5
-  m_Name: Looking Popup
+  m_Name: Look Around Popup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -190,6 +190,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1d0724a4bd7e7d459a3f6ab0f84bd50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LookTutorial
+  Step: 1
+  DoneEvent:
+    m_PersistentCalls:
+      m_Calls: []
   requiredMouseTravelDistance: 1000
   progressbarMask: {fileID: 4202133831326070165}
 --- !u!1001 &541152527447462703
