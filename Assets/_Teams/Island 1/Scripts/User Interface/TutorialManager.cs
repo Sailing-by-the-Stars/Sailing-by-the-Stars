@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 
 // Author: Sander Kleine
@@ -14,7 +13,7 @@ namespace Assets._Teams.Island_1.Scripts.User_Interface
         [Header("Display Settings")]
         [SerializeField] float delay = 2f;
 
-        [Header("Refrences")]
+        [Header("References")]
         [SerializeField] TempPhysicsPickup tutorialPickupItem;
         [SerializeField] private TutorialPopup pickupPopup;
         [SerializeField] private TutorialPopup usePopup;
@@ -63,8 +62,17 @@ namespace Assets._Teams.Island_1.Scripts.User_Interface
         {
             isBusy = true;
 
+            if (!popups.TryGetValue(step, out var popup) || popup == null)
+            {
+                // Auto-complete steps that have no associated popup
+                completedSteps.Add(step);
+                isBusy = false;
+                TryProcessQueue();
+                return;
+            }
+
             currentStep = step;
-            currentPopup = popups[step];
+            currentPopup = popup;
             currentPopup.gameObject.SetActive(true);
         }
 

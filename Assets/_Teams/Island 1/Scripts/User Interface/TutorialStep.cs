@@ -22,19 +22,19 @@
         // This will be the third step, most likely there won't be a popup, but it's here just in case
         GoToTown,
 
-        // This will be the forth step, most likely there won't be a popup, but it's here just in case 
+        // This will be the fourth step, most likely there won't be a popup, but it's here just in case 
         TalkToNPC,
 
-        // This will be the fith step, most likely there won't be a popup, but it's here just in case
+        // This will be the fifth step, most likely there won't be a popup, but it's here just in case
         FindItem,
 
-        // This will be the sixth step, this will be triggerd when the player finds the item, so that they can get used to picking up items
+        // This will be the sixth step, this will be triggered when the player finds the item, so that they can get used to picking up items
         PickUpItem,
 
-        // This will be the seventh step, this will be triggerd when the player picks up the item, so that they can get used to using items
+        // This will be the seventh step, this will be triggered when the player picks up the item, so that they can get used to using items
         UseItem,
 
-        // This will be the eighth step, this will be triggerd when the player uses the item, so that they can get used to dropping items
+        // This will be the eighth step, this will be triggered when the player uses the item, so that they can get used to dropping items
         DropItem,
 
         // This is the last step, most likely there won't be a popup, but it's here just in case 
