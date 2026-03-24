@@ -2,6 +2,8 @@
  * Created by Christina Pence
  * Contributed to by:
  */
+
+#nullable enable
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -35,6 +37,7 @@ public class WeatherManager : MonoBehaviour
     // Controllers
     private readonly List<IWeatherEventController> controllers = new List<IWeatherEventController>();
     private WindController windController;
+    private ThunderController? thunderController;
 
     // State and transitions
     private WeatherState activeState;
@@ -59,6 +62,12 @@ public class WeatherManager : MonoBehaviour
         {
             windController = wind;
             Debug.Log("wind controller registered");
+        }
+
+        if (controller is ThunderController thunder)
+        {
+            thunderController = thunder;
+            Debug.Log("thunder controller registered");
         }
     }
 
@@ -190,6 +199,16 @@ public class WeatherManager : MonoBehaviour
         currentValues.windRandomEventsActive = target.values.windRandomEventsActive;
         currentValues.windAutoRerollIntensity = target.values.windAutoRerollIntensity;
     }
+    
+    public void LinkThunderSpawnerObjects(List<GameObject> thunderSpawnObject)
+    {
+        thunderController?.SetThunderSpawnerObjects(thunderSpawnObject);
+    }
+
+    public void ClearThunderSpawnerObjects()
+    {
+        thunderController?.ClearThunderSpawnerObjects(); 
+    }
 
     private IEnumerator RunTransition(WeatherState target, float duration, WeatherTransitionCurves curves)
     {
@@ -276,4 +295,5 @@ public class WeatherManager : MonoBehaviour
         float rad = degrees * Mathf.Deg2Rad;
         return new Vector3(Mathf.Sin(rad), 0f, Mathf.Cos(rad)) * magnitude;
     }
+
 }

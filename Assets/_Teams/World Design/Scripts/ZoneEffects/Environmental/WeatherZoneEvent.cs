@@ -2,6 +2,8 @@
  * Created by Christina Pence
  * Contributed to by:
  */
+
+using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -26,7 +28,7 @@ public class WeatherZoneEffect : MonoBehaviour, IZoneEffect
     [SerializeField] private bool randomAmbientOnExit = false;
 
     [Tooltip("Weather state to transition to when leaving this zone. " +
-             "Explicitly set — this zone does not assume what the world looks like outside it.")]
+             "Explicitly set ï¿½ this zone does not assume what the world looks like outside it.")]
     [SerializeField] private WeatherState exitState;
 
     [Tooltip("Duration of the exit transition in seconds.")]
@@ -35,6 +37,10 @@ public class WeatherZoneEffect : MonoBehaviour, IZoneEffect
     [Tooltip("Curve shapes defining how weather fades from this zone's state. " +
              "Leave null for a smooth default transition.")]
     [SerializeField] private WeatherTransitionCurves exitCurves;
+    
+    [Header("Linked weather objects")]
+    [Tooltip("Used to link thunder events to the gamme zone")]
+    [SerializeField] private List<GameObject> thunderSpawnerObjects;
 
     public void OnEnter(GameObject instigator)
     {
@@ -45,6 +51,7 @@ public class WeatherZoneEffect : MonoBehaviour, IZoneEffect
         }
         Debug.Log("Weather transition called " + enterState);
         WeatherManager.Instance.SuspendAutoWeather();
+        WeatherManager.Instance.LinkThunderSpawnerObjects(thunderSpawnerObjects);
         WeatherManager.Instance.TransitionTo(enterState, enterDuration, enterCurves);
     }
     public void OnExit(GameObject instigator)
@@ -69,5 +76,7 @@ public class WeatherZoneEffect : MonoBehaviour, IZoneEffect
             return;
         }
         WeatherManager.Instance.TransitionTo(target, exitDuration, exitCurves);
+        
+        WeatherManager.Instance.ClearThunderSpawnerObjects();
     }
 }
