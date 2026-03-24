@@ -26,6 +26,7 @@ public class DialogueSystem : MonoBehaviour
     private void Awake()
     {
         Instance = this;
+        uiManager = FindFirstObjectByType<DialogueUIManager>();
     }
 
     private void Update()
