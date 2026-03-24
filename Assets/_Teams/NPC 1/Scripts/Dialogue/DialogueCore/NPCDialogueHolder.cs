@@ -77,7 +77,8 @@ public class NPCDialogueHolder : MonoBehaviour, IInteractable
     }
 
     void StartConversation()
-    {
+    {  
+        Debug.Log("Raarg");
         //InteractionPromptUI.Instance.HidePrompt();
         if (GetComponent<Animator>() != null)
         {

@@ -160,11 +160,14 @@ public class DialogueObjectEditor : Editor
             }
             if (element.managedReferenceValue is EventNode)
             {
-                SerializedProperty eventProp = element.FindPropertyRelative("onEvent");
-                EditorGUILayout.PropertyField(eventProp, new GUIContent("On Event"), true);
-
+                SerializedProperty eventIDProp = element.FindPropertyRelative("eventID");
                 SerializedProperty nextNodeProp = element.FindPropertyRelative("nextNodeID");
+
+                // Optional: dropdown of all scene events (designer-friendly)
+                DrawEventIDDropdown(eventIDProp);
+
                 DrawNextNodeDropdown(nextNodeProp, "Next Node");
+
                 if (string.IsNullOrEmpty(nextNodeProp.stringValue))
                 {
                     EditorGUILayout.HelpBox("This node ends the dialogue.", MessageType.Info);
@@ -187,6 +190,19 @@ public class DialogueObjectEditor : Editor
         }
     }
 
+    void DrawEventIDDropdown(SerializedProperty eventIDProp)
+    {
+    #if UNITY_EDITOR
+        EventManager registry = Object.FindObjectOfType<EventManager>();
+        string[] options = registry != null ? registry.events.ConvertAll(e => e.eventID).ToArray() : new string[0];
+
+        int index = Mathf.Max(0, System.Array.IndexOf(options, eventIDProp.stringValue));
+        index = EditorGUILayout.Popup("Event ID", index, options);
+
+        if (options.Length > 0)
+            eventIDProp.stringValue = options[index];
+    #endif
+    }
     void AddNode(DialogueNode node)
     {
         serializedObject.Update();
