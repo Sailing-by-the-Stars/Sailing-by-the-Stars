@@ -171,6 +171,11 @@ public class GlobeShape : MonoBehaviour
 
     private void OnValidate()
     {
+        if (Camera.main == null)
+        {
+            return;
+        }
+
         myMesh = new Mesh();
         meshFilter = GetComponent<MeshFilter>();
         meshFilter.mesh = myMesh;
