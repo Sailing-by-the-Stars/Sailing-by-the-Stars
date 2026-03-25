@@ -43,6 +43,7 @@ public class QuestManager : MonoBehaviour
     public void RegisterItemCollected(int itemID)
     {
         bool updated = false;
+        List<QuestProgress> completedQuests = new();
 
         foreach (var quest in activeQuests)
         {
@@ -54,10 +55,20 @@ public class QuestManager : MonoBehaviour
                     updated = true;
                 }
             }
+
+            if (quest.IsCompleted)
+            {
+                completedQuests.Add(quest);
+            }
         }
 
         if (updated)
         {
+            foreach (var quest in completedQuests)
+            {
+                quest.Quest.InvokeCompleted();
+            }
+
             activeQuests.RemoveAll(q => q.IsCompleted);
 
             questUI.UpdateQuestUI();
