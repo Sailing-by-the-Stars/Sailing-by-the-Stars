@@ -37,7 +37,7 @@ public class WeatherManager : MonoBehaviour
     // Controllers
     private readonly List<IWeatherEventController> controllers = new List<IWeatherEventController>();
     private WindController windController;
-    private ThunderController? thunderController;
+    private ThunderController thunderController;
 
     // State and transitions
     private WeatherState activeState;
@@ -200,19 +200,24 @@ public class WeatherManager : MonoBehaviour
         activeState = target;
         activeTransition = StartCoroutine(RunTransition(target, duration, curves));
         OnWeatherTransitionStarted?.Invoke(target, duration);
-
         // values that only need to be applied once without blending during transition
+        // these could be moved to event subscription
         currentValues.windRandomEventsActive = target.values.windRandomEventsActive;
+        currentValues.thunderActive = target.values.thunderActive;
     }
-    
+    // these could also be moved to thunder controller and use subscription
+    // (ie if weather transition state has thunder - link the objects. if it doesn't, clear the objects)
+    // this would handle too if we have states in ambient weather with thunder instead of relying on zone triggers
     public void LinkThunderSpawnerObjects(List<GameObject> thunderSpawnObject)
     {
-        thunderController?.SetThunderSpawnerObjects(thunderSpawnObject);
+        if (thunderController != null)
+            thunderController.SetThunderSpawnerObjects(thunderSpawnObject);
     }
 
     public void ClearThunderSpawnerObjects()
     {
-        thunderController?.ClearThunderSpawnerObjects(); 
+        if (thunderController != null)
+            thunderController.ClearThunderSpawnerObjects(); 
     }
 
     private IEnumerator RunTransition(WeatherState target, float duration, WeatherTransitionCurves curves)
@@ -240,17 +245,11 @@ public class WeatherManager : MonoBehaviour
         // normalize degrees to 0-360 to prevent negative values from LerpAngle's shortest path
         currentValues.windDirectionDegrees = (Mathf.LerpAngle(snapshotValues.windDirectionDegrees,
                                                               target.values.windDirectionDegrees, t) + 360f) % 360f;
-        currentValues.windAutoRerollIntensity = target.values.windAutoRerollIntensity;
-
-        currentValues.chanceOfThunderStrikePerInterval = target.values.chanceOfThunderStrikePerInterval;
-
-        currentValues.thunderActive = target.values.thunderActive; 
-        
         currentValues.windAutoRerollIntensity = BlendValue(
             snapshotValues.windAutoRerollIntensity,
             target.values.windAutoRerollIntensity,
             t, curves, c => c.windCurve
-        );
+            );
 
         // Rain 
         currentValues.rainIntensity = BlendValue(snapshotValues.rainIntensity, target.values.rainIntensity,
