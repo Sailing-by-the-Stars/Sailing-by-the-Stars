@@ -59,10 +59,6 @@ public class BoatController : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (WeatherManager.Instance != null)
-        {
-            wind = WeatherManager.Instance.WindVelocity;
-        }
         apparentWind = wind - rigidBody.linearVelocity;
         Vector3 mastDirection = Vector3.ProjectOnPlane(-mastObject.transform.up, Vector3.up).normalized;
         Vector3 windDirection = Vector3.ProjectOnPlane(apparentWind, Vector3.up).normalized;
