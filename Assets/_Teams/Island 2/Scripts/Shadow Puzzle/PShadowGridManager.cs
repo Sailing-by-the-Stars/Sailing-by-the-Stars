@@ -61,8 +61,9 @@ public class PShadowGridManager : MonoBehaviour
         Vector3 origin = transform.position;
         Vector3 right = transform.right;
         Vector3 forward = transform.forward;
-        
-        return origin + right * (pos.x * step + half) + forward * (flippedY * step + half) + new Vector3(0f, pillarY, 0f);
+
+        Vector3 nonYPos = origin + right * (pos.x * step + half) + forward * (flippedY * step + half);
+        return new Vector3(nonYPos.x, pillarY, nonYPos.z);
     }
 
     private bool IsInBounds(Vector2Int pos)
