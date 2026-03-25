@@ -14,7 +14,7 @@ public class RainController : MonoBehaviour, IWeatherEventController
     [SerializeField] private ParticleSystem rainParticleSystem;
     [SerializeField] private float windInfluence = 2f;
     [Header("Location Settings")]
-    [Tooltip("Target for the rain system to follow for positioning")]
+    [Tooltip("Target for the rain system to follow for positioning. Leave null if parented to target (camera/player)")]
     [SerializeField] private Transform followTarget;
     [Tooltip("How many units above target the particle system should be")]
     [SerializeField] private float emitterHeight = 5f;
@@ -47,20 +47,27 @@ public class RainController : MonoBehaviour, IWeatherEventController
 
     private void Awake()
     {
-        // cache references
-        main = rainParticleSystem.main;
-        emission = rainParticleSystem.emission;
-        rainRenderer = rainParticleSystem.GetComponent<ParticleSystemRenderer>();
-        velocityOverLifetime = rainParticleSystem.velocityOverLifetime;
+        if (rainParticleSystem == null)
+        {
+            rainParticleSystem = GetComponent<ParticleSystem>();
+        }
+        if (rainParticleSystem != null)
+        {
+            // cache references
+            main = rainParticleSystem.main;
+            emission = rainParticleSystem.emission;
+            rainRenderer = rainParticleSystem.GetComponent<ParticleSystemRenderer>();
+            velocityOverLifetime = rainParticleSystem.velocityOverLifetime;
 
-        velocityOverLifetime.enabled = true;
-        // Read baseline values from particle system
-        minRateOverTime = rainParticleSystem.emission.rateOverTime.constant;
-        minSpeedScale = rainRenderer.velocityScale;
-        minStartSpeed = main.startSpeed.constant;
-        minStartSize = main.startSize.constant;
+            velocityOverLifetime.enabled = true;
+            // Read baseline values from particle system
+            minRateOverTime = rainParticleSystem.emission.rateOverTime.constant;
+            minSpeedScale = rainRenderer.velocityScale;
+            minStartSpeed = main.startSpeed.constant;
+            minStartSize = main.startSize.constant;
 
-        WeatherManager.Instance.Register(this);
+            WeatherManager.Instance.Register(this);
+        }
     }
 
     private void Start()
