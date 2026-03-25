@@ -14,8 +14,8 @@ public class RainController : MonoBehaviour, IWeatherEventController
     [SerializeField] private ParticleSystem rainParticleSystem;
     [SerializeField] private float windInfluence = 2f;
     [Header("Location Settings")]
-    [Tooltip("Target for the rain system to follow for positioning. Leave null if parented to target (camera/player)")]
-    [SerializeField] private Transform followTarget;
+    [Tooltip("Tag of the GameObject the rain system should follow (e.g. MainCamera, Player). Leave empty to disable following.")]
+    [SerializeField] private string followTargetTag = "Player";
     [Tooltip("How many units above target the particle system should be")]
     [SerializeField] private float emitterHeight = 5f;
 
@@ -44,6 +44,7 @@ public class RainController : MonoBehaviour, IWeatherEventController
     private const float rainStopThreshold = 0.01f; // rain stops when intensity is below this value
 
     private SetRainAndThunder audioController;
+    private Transform followTarget;
 
     private void Awake()
     {
@@ -84,9 +85,27 @@ public class RainController : MonoBehaviour, IWeatherEventController
     {
         ChangeDirection(WeatherManager.Instance.WindVelocity);
 
+        FindFollowTarget();
         if (followTarget != null)
         {
             transform.position = followTarget.position + Vector3.up * emitterHeight;
+        }
+    }
+    private void FindFollowTarget()
+    {
+        if (string.IsNullOrEmpty(followTargetTag))
+        {
+            return;
+        }
+
+        GameObject found = GameObject.FindWithTag(followTargetTag);
+        if (found != null)
+        {
+            followTarget = found.transform;
+        }
+        else
+        {
+            Debug.LogWarning($"RainController: No GameObject found with tag '{followTargetTag}'. Following disabled.");
         }
     }
     /// <summary>
