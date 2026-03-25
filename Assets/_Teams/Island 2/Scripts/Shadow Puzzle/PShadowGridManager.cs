@@ -9,115 +9,258 @@ public class PShadowGridManager : MonoBehaviour
     [SerializeField] private int height = 3;
     [SerializeField] private float cellSize = 1f;
     [SerializeField] private float cellSpacing = .2f;
-    [Tooltip("Keep this low aprox. around 0.08 - 0.25")]
+    
+    [Tooltip("Keep this low aprox. around 0.08 - 0.25. Free to experiment though.")]
     [SerializeField] private float slidingTime = 0.15f;
 
     private PShadowPillar[,] grid;
+    private bool isMoving;
+    private int activeMoves;
 
     private void Awake()
     {
         grid = new PShadowPillar[width, height];
     }
     
+#if UNITY_EDITOR
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.green;
-        
         float step = cellSize + cellSpacing;
+        float half = step * 0.5f;
+        
+        // Draw everything in the GridManager's local space
+        Matrix4x4 oldMatrix = Gizmos.matrix;
+        Gizmos.matrix = transform.localToWorldMatrix;
 
         for (int x = 0; x < width; x++)
         {
             for (int y = 0; y < height; y++)
             {
-                Vector3 worldPos = transform.position + new Vector3((x + 0.5f) * step, 0f, (y + 0.5f) * step);
+                int flippedY = (height - 1) - y;
 
-                Gizmos.DrawWireCube(worldPos, new Vector3(cellSize, 0.01f, cellSize));
-
-#if UNITY_EDITOR
-                UnityEditor.Handles.Label(worldPos + Vector3.up * 0.1f, $"({x},{y})");
-#endif
+                Vector3 localPos = new(x * step + half, 0f, flippedY * step + half);
+                Gizmos.DrawWireCube(localPos, new Vector3(cellSize, 0.01f, cellSize));
+                
+                Vector3 worldPos = transform.TransformPoint(localPos);
+                UnityEditor.Handles.Label(worldPos + Vector3.up * 0.1f, $"C{x}, R{y}");
             }
         }
+        
+        Gizmos.matrix = oldMatrix;
     }
+#endif
 
     private Vector3 GridToWorld(Vector2Int pos, float pillarY)
     {
         float step = cellSize + cellSpacing;
+        float half = step * 0.5f;
+        // Flip Y so row 0 is on top -> brain not breaking when looking at the grid
+        int flippedY = (height - 1) - pos.y;
+
+        Vector3 origin = transform.position;
+        Vector3 right = transform.right;
+        Vector3 forward = transform.forward;
         
-        return transform.position + new Vector3((pos.x + .5f) * step, pillarY, (pos.y + .5f) * step);
+        return origin + right * (pos.x * step + half) + forward * (flippedY * step + half) + new Vector3(0f, pillarY, 0f);
     }
 
-    public void RegisterPillar(PShadowPillar pillar, Vector2Int pos)
+    private bool IsInBounds(Vector2Int pos)
     {
+        return pos.x >= 0 && pos.x < width && pos.y >= 0 && pos.y < height;
+    }
+
+    public bool RegisterPillar(PShadowPillar pillar, Vector2Int pos)
+    {
+        if (!IsInBounds(pos))
+        {
+            Debug.LogError($"{pillar.name} startPos {pos} is out of bounds!");
+            return false;
+        }
+        if (grid[pos.x, pos.y])
+        {
+            Debug.LogError($"Cell {pos} is already occupied by {grid[pos.x, pos.y].name}!");
+            return false;
+        }
+        
         grid[pos.x, pos.y] = pillar;
         pillar.transform.position = GridToWorld(pos, pillar.transform.position.y);
+        pillar.transform.rotation = transform.rotation;
+        
+        return true;
     }
 
     public void ResetPillars()
     {
-        List<PShadowPillar> pillarsToRegister = grid.Cast<PShadowPillar>().Where(pillar => pillar != null).ToList();
+        List<PShadowPillar> pillarsToRegister = grid.Cast<PShadowPillar>().Where(pillar => pillar).ToList();
         foreach (PShadowPillar pillar in pillarsToRegister)
         {
             RegisterPillar(pillar, pillar.startPosition);
         }
     }
 
-    private void MovePillar(Vector2Int from, Vector2Int to)
+    public void TryPushLine(bool isRow, int index, int direction)
     {
-        PShadowPillar pillar = grid[from.x, from.y];
+        if (isMoving) return;
+        if (direction != -1 && direction != 1) return;
 
-        grid[to.x, to.y] = pillar;
-        grid[from.x, from.y] = null;
-        
-        Vector3 target = GridToWorld(to, pillar.transform.position.y);
-        pillar.MoveTo(target, to, slidingTime);
-    }
-
-    public void PushColumn(int column, int direction)
-    {
-        if (direction == -1)    // direction = -1 (down) or 1 (up)
+        if (isRow)
         {
-            for (int x = 1; x < width; x++)
-            {
-                if (grid[x, column] != null && grid[x - 1, column] == null)
-                {
-                    MovePillar(new Vector2Int(x, column), new Vector2Int(x - 1, column));
-                }
-            }
+            if (index < 0 || index >= height) return;
+            PushRow(index, direction);
         }
         else
         {
-            for (int x = width - 2; x >= 0; x--)
-            {
-                if (grid[x, column] != null && grid[x + 1, column] == null)
-                {
-                    MovePillar(new Vector2Int(x, column), new Vector2Int(x + 1, column));
-                }
-            }
+            if (index < 0 || index >= width) return;
+            PushColumn(index, direction);
         }
     }
     
-    public void PushRow(int row, int direction)
+    // direction = -1 (left) or 1 (right)
+    private void PushRow(int row, int direction)
     {
+        List<MoveRequest> moves = new();
+        
         if (direction == -1)
         {
-            for (int y = 1; y < height; y++)
+            // Pack towards the left edge
+            int targetX = 0;
+
+            for (int x = 0; x < width; x++)
             {
-                if (grid[row, y] != null && grid[row, y - 1] == null)
+                PShadowPillar pillar = grid[x, row];
+                if (!pillar) continue;
+
+                if (x != targetX)
                 {
-                    MovePillar(new Vector2Int(row, y), new Vector2Int(row, y - 1));
+                    moves.Add(new MoveRequest(pillar, new(x, row), new(targetX, row)));
                 }
+
+                targetX++;
             }
         }
         else
         {
-            for (int y = height - 2; y >= 0; y--)
+            // Pack towards the right edge
+            int targetX = width - 1;
+
+            for (int x = width - 1; x >= 0; x--)
             {
-                if (grid[row, y] != null && grid[row, y + 1] == null)
+                PShadowPillar pillar = grid[x, row];
+                if (!pillar) continue;
+
+                if (x != targetX)
                 {
-                    MovePillar(new Vector2Int(row, y), new Vector2Int(row, y + 1));
+                    moves.Add(new MoveRequest(pillar, new(x, row), new(targetX, row)));
                 }
+                
+                targetX--;
             }
+        }
+
+        StartMoves(moves);
+    }
+    
+    // direction = -1 (down) or 1 (up)
+    private void PushColumn(int column, int direction)
+    {
+        List<MoveRequest> moves = new();
+        
+        if (direction == -1)    
+        {
+            // Pack towards the bottom edge
+            int targetY = 0;
+            
+            for (int y = 0; y < height; y++)
+            {
+                PShadowPillar pillar = grid[column, y];
+                if (!pillar) continue;
+
+                if (y != targetY)
+                {
+                    moves.Add(new MoveRequest(pillar, new(column, y), new(column, targetY)));
+                }
+                
+                targetY++;
+            }
+        }
+        else
+        {
+            // Pack towards the top edge
+            int targetY = height - 1;
+            
+            for (int y = height - 1; y >= 0; y--)
+            {
+                PShadowPillar pillar = grid[column, y];
+                if  (!pillar) continue;
+
+                if (y != targetY)
+                {
+                    moves.Add(new MoveRequest(pillar, new(column, y), new(column, targetY)));
+                }
+                
+                targetY--;
+            }
+        }
+
+        StartMoves(moves);
+    }
+
+    private void StartMoves(List<MoveRequest> moves)
+    {
+        if (moves.Count == 0) return;
+        
+        isMoving = true;
+        activeMoves = moves.Count;
+
+        foreach (MoveRequest move in moves)
+        {
+            // Update logical grid immediately to the final state
+            grid[move.from.x, move.from.y] = null;
+            grid[move.to.x, move.to.y] = move.pillar;
+            
+            // Animate the pillar
+            move.pillar.MoveTo(
+                GridToWorld(move.to, move.pillar.transform.position.y),
+                transform.rotation,
+                move.to,
+                slidingTime,
+                OnPillarFinishedMoving
+            );
+        }
+    }
+
+    private void OnPillarFinishedMoving()
+    {
+        activeMoves--;
+        if (activeMoves > 0) return;
+        
+        activeMoves = 0;
+        isMoving = false;
+
+        CheckSolvedCondition();
+    }
+
+    private void CheckSolvedCondition()
+    {
+        List<PShadowPillar> pillarsToCheck = grid.Cast<PShadowPillar>().Where(pillar => pillar).ToList();
+        if (pillarsToCheck.Any(pillar => !pillar.IsInCorrectPosition())) return;
+        
+        // TODO: Do things here when puzzle is solved
+        Debug.Log("PUZZLE SOLVED!");
+    }
+
+    private struct MoveRequest
+    {
+        public readonly PShadowPillar pillar;
+        public readonly Vector2Int from;
+        public readonly Vector2Int to;
+
+        public MoveRequest(PShadowPillar pillar, Vector2Int from, Vector2Int to)
+        {
+            this.pillar = pillar;
+            this.from = from;
+            this.to = to;
         }
     }
 }
