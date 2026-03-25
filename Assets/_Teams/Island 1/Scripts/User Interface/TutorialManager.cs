@@ -55,7 +55,7 @@ namespace Assets._Teams.Island_1.Scripts.User_Interface
 
         private IEnumerator StartWithDelay()
         {
-            yield return _waitForSecondsRealtime;
+            yield return new WaitForSecondsRealtime(10f);
             EnqueueStep(TutorialStep.LookAround);
             EnqueueStep(TutorialStep.Move);
         }
