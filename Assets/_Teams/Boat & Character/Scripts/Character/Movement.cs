@@ -8,6 +8,7 @@ public class Movement : MonoBehaviour
     [Header("Movement Settings")]
     [SerializeField] float movementSpeed = 4f;
     [SerializeField] float sprintMultiplier;
+    [SerializeField] float jumpStrength = 20f;
 
     [Header("Camera Setting")]
     [SerializeField] float mouseSensitivity = 10f;
@@ -16,6 +17,9 @@ public class Movement : MonoBehaviour
 
     [Header("Collision Handling")]
     [SerializeField] Rigidbody rb;
+
+    [SerializeField] Transform[] groundChecks;
+    bool isGrounded = false;
 
     PlayerControls playerControls;
 
@@ -48,11 +52,26 @@ public class Movement : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         cam = GetComponentInChildren<Camera>();
+        rb = GetComponent<Rigidbody>();
     }
 
     private void Update()
     {
+        Jump();
+        IsGrounded();
 
+        if (isGrounded)
+        {
+            /*if (rb.linearVelocity.x > 0 || rb.linearVelocity.z > 0)
+            {
+                rb.linearVelocity += new Vector3(-rb.linearVelocity.x, 0, -rb.linearVelocity.z);
+            }*/
+            /*if (rb.angularVelocity.x > 0 || rb.angularVelocity.z > 0)
+            {
+                rb.angularVelocity += new Vector3(-rb.angularVelocity.x, 0, -rb.angularVelocity.z);
+            }*/
+            rb.AddForce(-rb.linearVelocity);
+        }
     }
 
     void FixedUpdate()
@@ -118,4 +137,38 @@ public class Movement : MonoBehaviour
         }
     }
 
+    void Jump()
+    {
+        if (isGrounded)
+        {
+            if (playerControls.Land.Jump.triggered)
+            {
+                print("Jumped");
+                rb.AddForce(new Vector3(0, jumpStrength, 0));
+            }
+        }
+    }
+
+    void IsGrounded()
+    {
+        /*RaycastHit hit;
+        if(Physics.Raycast(transform.position, -Vector3.up, out hit, gameObject.GetComponent<SphereCollider>().bounds.extents.y + 0.1f))
+        {
+            print(hit);
+            return true;
+        }*/
+        isGrounded = false;
+
+        for (int i = 0; i < groundChecks.Length; i++)
+        {
+            RaycastHit hit;
+            if (Physics.Raycast(groundChecks[i].position, -Vector3.up, out hit, gameObject.GetComponent<CapsuleCollider>().bounds.extents.y + 0.1f))
+            {
+                //print(hit);
+                isGrounded = true;
+                return;
+            }
+        }
+        isGrounded = false;
+    }
 }
