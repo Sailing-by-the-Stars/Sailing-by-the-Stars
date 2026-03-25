@@ -266,9 +266,12 @@ GameObject:
   - component: {fileID: 7396955086683503908}
   - component: {fileID: 1658142731576847673}
   - component: {fileID: 8736095831419434310}
+  - component: {fileID: 2970586315135662903}
+  - component: {fileID: 9053754794473673188}
+  - component: {fileID: 3201630360258636512}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -289,6 +292,7 @@ Transform:
   - {fileID: 7924571754428787233}
   - {fileID: 514209028001536256}
   - {fileID: 5669442944510602948}
+  - {fileID: 8791254863621369714}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7396955086683503908
@@ -372,6 +376,48 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 80
   m_CollisionDetection: 0
+--- !u!114 &2970586315135662903
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1734266668719860970}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd9698859dd3acf40924d7f74f64e8fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerState
+  completedQuests: []
+  inventory: []
+--- !u!114 &9053754794473673188
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1734266668719860970}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ffd8abfbc914e76a8b7af21b01649d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InteractionController
+  playerCamera: {fileID: 1656572733483448602}
+  interactionText: {fileID: 0}
+  interactionDistance: 5
+--- !u!114 &3201630360258636512
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1734266668719860970}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd8187373b384602848775a47b49e3e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PickupController
+  pickupHolder: {fileID: 8791254863621369714}
 --- !u!1 &1864151664177842068
 GameObject:
   m_ObjectHideFlags: 0
@@ -415,6 +461,7 @@ GameObject:
   - component: {fileID: 1656572733483448602}
   - component: {fileID: 6512407107322423575}
   - component: {fileID: 8399012855573861907}
+  - component: {fileID: 3644698604077259406}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -636,6 +683,20 @@ MonoBehaviour:
       enableFptlForForwardOpaque: 0
       enableBigTilePrepass: 0
       isFptlEnabled: 0
+--- !u!114 &3644698604077259406
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2008432602510907173}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86c6556701af9e04380698b89f691b6e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: FMODUnity::FMODUnity.StudioListener
+  nonRigidbodyVelocity: 0
+  attenuationObject: {fileID: 0}
 --- !u!1 &4491130258137127229
 GameObject:
   m_ObjectHideFlags: 0
@@ -697,6 +758,37 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5669442944510602948}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &6021780029233420911
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8791254863621369714}
+  m_Layer: 0
+  m_Name: PickupHolder
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8791254863621369714
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6021780029233420911}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.515, y: 1.105, z: 0.899}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1265744426693029446}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8212436251472478745
 GameObject:
