@@ -1,7 +1,5 @@
-using System;
 using _Teams.World_Design.Scripts.ZoneEffects.Environmental.WeatherEvents;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public class WindController : MonoBehaviour, IWeatherEventController
 {
@@ -18,12 +16,21 @@ public class WindController : MonoBehaviour, IWeatherEventController
     [Header("Wind Object")]
     [SerializeField] private WindObject windObject;
 
+    [Header("Wind Audio (m/s -> 0..1)")]
+    [SerializeField, Min(0.01f)] private float minAudibleWindSpeedMps = 1f;
+    [SerializeField, Range(0f, 1f)] private float minAudibleAudioValue = 0.12f;
+    [SerializeField, Min(0.02f)] private float maxWindSpeedForFullAudioMps = 20f;
+    [SerializeField, Min(0.1f)] private float audioResponseExponent = 0.8f;
+
+    private SetWind windAudioController;
+    
     private float rerollTimer;
     public Vector3 currentWindVelocity { get; private set; }
 
     private void Awake()
     {
         ResolveWindObjectReference();
+        windAudioController = FindFirstObjectByType<SetWind>();
         SetWindDirectionForObject(randomizeOnStart ? GenerateRandomDirection() : windDirectionOnStart);
         if (WeatherManager.Instance != null)
         {
@@ -101,10 +108,40 @@ public class WindController : MonoBehaviour, IWeatherEventController
         // TODO: These don't need to be updated every frame. Decide if they will be updated in Manager for
         // each new state or use event system / logic internally
         ChangeDirection(currentWindDirection * weatherValues.windSpeed);
+
+        if (windAudioController != null)
+        {
+            float normalizedWindAudio = NormalizeWindSpeedToAudio(weatherValues.windSpeed);
+            windAudioController.SetWindF(normalizedWindAudio);
+        }
         
         SetWindObjectIntensity(weatherValues.windSpeed);
         
         ChangeAutoRerollWindIntensity(weatherValues.windAutoRerollIntensity);
+    }
+
+    // Converts physical wind speed (m/s) to range [0..1].
+    private float NormalizeWindSpeedToAudio(float windSpeedMps)
+    {
+        float speed = Mathf.Max(0f, windSpeedMps);
+
+        if (speed <= 0f)
+        {
+            return 0f;
+        }
+
+        float fullAudioSpeed = Mathf.Max(minAudibleWindSpeedMps + 0.01f, maxWindSpeedForFullAudioMps);
+
+        if (speed <= minAudibleWindSpeedMps)
+        {
+            float nearZeroT = speed / minAudibleWindSpeedMps;
+            return Mathf.Lerp(0f, minAudibleAudioValue, nearZeroT);
+        }
+
+        float t = Mathf.InverseLerp(minAudibleWindSpeedMps, fullAudioSpeed, speed);
+        t = Mathf.Pow(t, audioResponseExponent);
+
+        return Mathf.Lerp(minAudibleAudioValue, 1f, t);
     }
 
     public void ChangeDirection(Vector3 direction)

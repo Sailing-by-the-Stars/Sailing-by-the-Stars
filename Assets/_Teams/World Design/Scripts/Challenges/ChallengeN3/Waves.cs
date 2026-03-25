@@ -1,11 +1,7 @@
 using System.Collections;
 using System.Reflection;
-using System.Runtime.CompilerServices;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.Rendering.HighDefinition;
-using System.Reflection;
-using System;
 
 /// <summary>
 /// Code by Alonso

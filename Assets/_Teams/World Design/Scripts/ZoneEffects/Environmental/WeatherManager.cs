@@ -23,6 +23,7 @@ public class WeatherManager : MonoBehaviour
 
     [Header("Default")]
     [SerializeField] private WeatherState defaultState; // applied immediately on scene start
+    public WeatherState DefaultState => defaultState;
 
     [Header("Ambient Weather")]
     [Tooltip("States to randomly cycle between during normal sailing " +
@@ -36,6 +37,7 @@ public class WeatherManager : MonoBehaviour
     // Controllers
     private readonly List<IWeatherEventController> controllers = new List<IWeatherEventController>();
     private WindController windController;
+    private ThunderController thunderController;
 
     // State and transitions
     private WeatherState activeState;
@@ -61,7 +63,11 @@ public class WeatherManager : MonoBehaviour
         if (controller is WindController wind)
         {
             windController = wind;
-            Debug.Log("wind controller registered");
+        }
+
+        if (controller is ThunderController thunder)
+        {
+            thunderController = thunder;
         }
     }
 
@@ -105,7 +111,6 @@ public class WeatherManager : MonoBehaviour
             {
                 float interval = UnityEngine.Random.Range(minAmbientChangeInterval, maxAmbientChangeInterval);
                 yield return new WaitForSeconds(interval);
-
                 WeatherState next = GetRandomAmbientState();
                 // ignore irrelevant changes due to probability settings
                 if (next == null || next == activeState)
@@ -167,6 +172,10 @@ public class WeatherManager : MonoBehaviour
         {
             ambientCycle = StartCoroutine(CycleAmbientWeather());
         }
+        else if (defaultState != null)
+        {
+            TransitionTo(defaultState, ambientChangeTransitionTime);
+        }
 
     }
     /// <summary>
@@ -176,7 +185,8 @@ public class WeatherManager : MonoBehaviour
     /// </summary>
     public void TransitionTo(WeatherState target, float duration, WeatherTransitionCurves curves = null)
     {
-        // TODO: May need to turn off auto roll here too during transition
+        // attempt fallback to default state if no target
+        target = target != null ? target : defaultState;
         if (target == null)
         {
             Debug.LogError("Weather manager TransitionTo called with null state.");
@@ -189,10 +199,25 @@ public class WeatherManager : MonoBehaviour
         }
         activeState = target;
         activeTransition = StartCoroutine(RunTransition(target, duration, curves));
-        OnWeatherTransitionStarted(target, duration);
-
+        OnWeatherTransitionStarted?.Invoke(target, duration);
         // values that only need to be applied once without blending during transition
+        // these could be moved to event subscription
         currentValues.windRandomEventsActive = target.values.windRandomEventsActive;
+        currentValues.thunderActive = target.values.thunderActive;
+    }
+    // these could also be moved to thunder controller and use subscription
+    // (ie if weather transition state has thunder - link the objects. if it doesn't, clear the objects)
+    // this would handle too if we have states in ambient weather with thunder instead of relying on zone triggers
+    public void LinkThunderSpawnerObjects(List<GameObject> thunderSpawnObject)
+    {
+        if (thunderController != null)
+            thunderController.SetThunderSpawnerObjects(thunderSpawnObject);
+    }
+
+    public void ClearThunderSpawnerObjects()
+    {
+        if (thunderController != null)
+            thunderController.ClearThunderSpawnerObjects(); 
     }
 
     private IEnumerator RunTransition(WeatherState target, float duration, WeatherTransitionCurves curves)
@@ -220,13 +245,11 @@ public class WeatherManager : MonoBehaviour
         // normalize degrees to 0-360 to prevent negative values from LerpAngle's shortest path
         currentValues.windDirectionDegrees = (Mathf.LerpAngle(snapshotValues.windDirectionDegrees,
                                                               target.values.windDirectionDegrees, t) + 360f) % 360f;
-        currentValues.windAutoRerollIntensity = target.values.windAutoRerollIntensity;
-       
         currentValues.windAutoRerollIntensity = BlendValue(
             snapshotValues.windAutoRerollIntensity,
             target.values.windAutoRerollIntensity,
             t, curves, c => c.windCurve
-        );
+            );
 
         // Rain 
         currentValues.rainIntensity = BlendValue(snapshotValues.rainIntensity, target.values.rainIntensity,
@@ -238,7 +261,7 @@ public class WeatherManager : MonoBehaviour
 
 
         // Thunder
-        currentValues.thunderIntensity = BlendValue(snapshotValues.thunderIntensity, target.values.thunderIntensity,
+        currentValues.chanceOfThunderStrikePerInterval = BlendValue(snapshotValues.chanceOfThunderStrikePerInterval, target.values.chanceOfThunderStrikePerInterval,
                                                     t, curves, c => c.thunderCurve);
 
         PushToControllers();

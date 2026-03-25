@@ -13,7 +13,7 @@ using _Teams.World_Design.Scripts.ZoneEffects.Environmental.WeatherEvents;
 /// Min values are the baseline values at calm (0). Max values are highest values in strongest storm.
 /// These values can be adjusted to give the appropriate range but should be within the water surface parameters.
 /// </summary>
-public class Test_WaveController: MonoBehaviour, IWeatherEventController
+public class WaveController: MonoBehaviour, IWeatherEventController
 {
     [Header("References")]
     [SerializeField] private WaterSurface ocean;

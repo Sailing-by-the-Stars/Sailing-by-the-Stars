@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &2139512088700178792
+--- !u!1 &1930723364792945986
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,49 +8,49 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 3146594157937317345}
-  - component: {fileID: 693311205456316692}
-  - component: {fileID: 4919896622080142813}
-  - component: {fileID: 5350964129187962099}
-  - component: {fileID: 3310494730039011532}
+  - component: {fileID: 6819482468549805783}
+  - component: {fileID: 5302143413829322490}
+  - component: {fileID: 774740298307165507}
+  - component: {fileID: 4559752148917334511}
+  - component: {fileID: 3833383116424382210}
   m_Layer: 0
-  m_Name: WindController
+  m_Name: ThunderController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &3146594157937317345
+--- !u!4 &6819482468549805783
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2139512088700178792}
+  m_GameObject: {fileID: 1930723364792945986}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 9.95, y: 0.52, z: -89.76}
+  m_LocalPosition: {x: 7.70239, y: 0, z: -57.43}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &693311205456316692
+--- !u!33 &5302143413829322490
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2139512088700178792}
+  m_GameObject: {fileID: 1930723364792945986}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!23 &4919896622080142813
+--- !u!23 &774740298307165507
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2139512088700178792}
-  m_Enabled: 1
+  m_GameObject: {fileID: 1930723364792945986}
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -92,13 +92,13 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &5350964129187962099
+--- !u!65 &4559752148917334511
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2139512088700178792}
+  m_GameObject: {fileID: 1930723364792945986}
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -113,26 +113,20 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &3310494730039011532
+--- !u!114 &3833383116424382210
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2139512088700178792}
+  m_GameObject: {fileID: 1930723364792945986}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 10ef995a644206b47a6d5150eba27e6f, type: 3}
+  m_Script: {fileID: 11500000, guid: 58c43b5ee0494a2e98c028bffe008b0e, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::WindWeatherController
-  horizontalOnly: 1
-  randomizeOnStart: 1
-  windDirectionOnStart: {x: 0, y: 0, z: 1}
-  rerollIntervalSeconds: 10
-  randomEventsActive: 1
-  autoRerollWindIntensity: 1
-  windObject: {fileID: 0}
-  minAudibleWindSpeedMps: 1
-  minAudibleAudioValue: 0.12
-  maxWindSpeedForFullAudioMps: 20
-  audioResponseExponent: 0.8
+  m_EditorClassIdentifier: Assembly-CSharp::_Teams.World_Design.Scripts.ZoneEffects.Environmental.WeatherEvents.ThunderController
+  enable: 1
+  chanceOfThunderStrikePerInterval: 1
+  thunderStrickCheckTimeMin: 1
+  thunderStrickCheckTimeMax: 2
+  thunderSpawnerObjects: []

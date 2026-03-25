@@ -96,10 +96,8 @@ public class GlobalFogController : MonoBehaviour
 
     private IEnumerator TransitionTo(FogSettings target, float duration)
     {
-        Debug.Log("Coroutine started");
         if (target == null || fogOverride == null)
         {
-            Debug.Log("Coroutine canceled");
             yield break;
         }
         // store starting values (edge case for exiting and re-entering before fade to original settings was complete)
