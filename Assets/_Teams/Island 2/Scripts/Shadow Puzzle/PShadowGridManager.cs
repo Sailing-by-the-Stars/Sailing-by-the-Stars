@@ -78,11 +78,11 @@ public class PShadowGridManager : MonoBehaviour
             Debug.LogError($"{pillar.name} startPos {pos} is out of bounds!");
             return false;
         }
-        if (grid[pos.x, pos.y])
-        {
-            Debug.LogError($"Cell {pos} is already occupied by {grid[pos.x, pos.y].name}!");
-            return false;
-        }
+        //if (grid[pos.x, pos.y])
+        //{
+        //    Debug.LogError($"Cell {pos} is already occupied by {grid[pos.x, pos.y].name}!");
+        //    return false;
+        //}
         
         grid[pos.x, pos.y] = pillar;
         pillar.transform.position = GridToWorld(pos, pillar.transform.position.y);
