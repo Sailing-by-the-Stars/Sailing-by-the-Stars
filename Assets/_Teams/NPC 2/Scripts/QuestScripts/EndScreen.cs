@@ -59,7 +59,7 @@ public class EndScreen : MonoBehaviour
     /// <summary>
     /// Activates the end screen panel and starts visual effects.
     /// </summary>
-    private void TriggerEndScreen()
+    public void TriggerEndScreen()
     {
         if (endScreenPanel != null && !endScreenPanel.activeSelf)
         {
