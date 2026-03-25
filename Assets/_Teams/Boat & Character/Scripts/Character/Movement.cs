@@ -1,8 +1,10 @@
 using Unity.VisualScripting;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 //Creator: Joost
+//Edited by: Johan
 public class Movement : MonoBehaviour
 {
     [Header("Movement Settings")]
@@ -20,6 +22,7 @@ public class Movement : MonoBehaviour
 
     [SerializeField] Transform[] groundChecks;
     bool isGrounded = false;
+    bool isOnBoat = false;
 
     PlayerControls playerControls;
 
@@ -29,8 +32,11 @@ public class Movement : MonoBehaviour
     float yCamRotation = 0f;
 
     [Header("Player walk on boat")]
-    [SerializeField] private Transform boat;
+    [SerializeField] private GameObject boat;
     [SerializeField] private Transform seatPosition;
+
+    private BoatController boatController;
+    private BuoyancyController buoyancyController;
 
     private void Awake()
     {
@@ -53,31 +59,39 @@ public class Movement : MonoBehaviour
         Cursor.visible = false;
         cam = GetComponentInChildren<Camera>();
         rb = GetComponent<Rigidbody>();
+
+        boatController = boat.GetComponent<BoatController>();
+        buoyancyController = boat.GetComponent<BuoyancyController>();
     }
 
     private void Update()
     {
-        Jump();
-        IsGrounded();
-
-        if (isGrounded)
+        if (!isOnBoat)
         {
-            /*if (rb.linearVelocity.x > 0 || rb.linearVelocity.z > 0)
+            Jump();
+            IsGrounded();
+
+            if (isGrounded)
             {
-                rb.linearVelocity += new Vector3(-rb.linearVelocity.x, 0, -rb.linearVelocity.z);
-            }*/
-            /*if (rb.angularVelocity.x > 0 || rb.angularVelocity.z > 0)
-            {
-                rb.angularVelocity += new Vector3(-rb.angularVelocity.x, 0, -rb.angularVelocity.z);
-            }*/
-            rb.AddForce(-rb.linearVelocity);
-        }
+                /*if (rb.linearVelocity.x > 0 || rb.linearVelocity.z > 0)
+                {
+                    rb.linearVelocity += new Vector3(-rb.linearVelocity.x, 0, -rb.linearVelocity.z);
+                }*/
+                /*if (rb.angularVelocity.x > 0 || rb.angularVelocity.z > 0)
+                {
+                    rb.angularVelocity += new Vector3(-rb.angularVelocity.x, 0, -rb.angularVelocity.z);
+                }*/
+                rb.AddForce(-rb.linearVelocity);
+            }
+            }
     }
 
     void FixedUpdate()
     {
         RotateCamera();
-        MovePlayer();
+
+        if (!isOnBoat)
+            MovePlayer();
     }
 
     void MovePlayer()
@@ -130,11 +144,32 @@ public class Movement : MonoBehaviour
     {
         if (other.CompareTag("boat"))
         {
+            isOnBoat = true;
             Debug.LogWarning("IT HITS");
-            transform.SetParent(boat);
+            transform.SetParent(boat.transform);
             transform.position = seatPosition.position;
 
+            EntersBoat();
         }
+    }
+
+    void EntersBoat()
+    {
+        Destroy(rb);
+        isOnBoat = true;
+
+        buoyancyController.enabled = true;
+        boatController.enabled = true;
+    }
+
+    public void ExitBoat()
+    {
+        gameObject.AddComponent(typeof(Rigidbody));
+        rb = GetComponent<Rigidbody>();
+        isOnBoat = false;
+
+        buoyancyController.enabled = false;
+        boatController.enabled = false;
     }
 
     void Jump()

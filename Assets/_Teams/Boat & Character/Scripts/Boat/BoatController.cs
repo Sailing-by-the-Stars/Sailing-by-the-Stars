@@ -9,7 +9,6 @@ using UnityEngine;
 public class BoatController : MonoBehaviour
 {
     [Header("Physics")]
-    [SerializeField] private Vector3 wind = Vector3.zero;
     [SerializeField] private float dragCoefficient = 1.1f;
     [SerializeField] private float liftCoefficient = 1.5f;
     [SerializeField] private float sailArea = 20;
@@ -24,6 +23,7 @@ public class BoatController : MonoBehaviour
     [SerializeField] private float drag;
     [SerializeField] private float lift;
     [SerializeField] private float rudderTorque;
+    [SerializeField] private Vector3 wind = Vector3.zero;
     [SerializeField] private Vector3 apparentWind = Vector3.zero;
 
     [Header("Boat stats")]
