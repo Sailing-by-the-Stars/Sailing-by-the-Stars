@@ -91,7 +91,7 @@ MonoBehaviour:
   rerollIntervalSeconds: 40
   randomEventsActive: 1
   autoRerollWindIntensity: 5
-  windObject: {fileID: 3068005113080785254}
+  windObject: {fileID: 0}
   minAudibleWindSpeedMps: 1
   minAudibleAudioValue: 0.12
   maxWindSpeedForFullAudioMps: 20
@@ -108,7 +108,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e703c6e3801ea34197d8d72b463c84b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TestRainController
-  rainParticleSystem: {fileID: 683175360199540163}
+  rainParticleSystem: {fileID: 0}
   windInfluence: 3
   followTargetTag: Player
   emitterHeight: 60
@@ -226,7 +226,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &7690067384250576167
 Transform:
   m_ObjectHideFlags: 0
@@ -1128,17 +1128,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7486d414037d69f409129b22a6c4a2b3, type: 3}
---- !u!114 &3068005113080785254 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1969845471892606471, guid: 7486d414037d69f409129b22a6c4a2b3, type: 3}
-  m_PrefabInstance: {fileID: 3586539173086046049}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b0c0345354e40bf974cf4384985d050, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::WindObject
 --- !u!4 &3160004084336101588 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1882333776742330293, guid: 7486d414037d69f409129b22a6c4a2b3, type: 3}
@@ -1281,7 +1270,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e703c6e3801ea34197d8d72b463c84b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RainController
-  rainParticleSystem: {fileID: 0}
+  rainParticleSystem: {fileID: 683175360199540163}
   windInfluence: 1
   followTargetTag: Player
   emitterHeight: 60
