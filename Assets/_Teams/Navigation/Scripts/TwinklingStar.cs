@@ -58,7 +58,11 @@ public class TwinklingStar : MonoBehaviour
     {
         initpos = transform.position;
         //Set the emission of the star before making changes
-        initialEmission = GetComponent<Renderer>().material.GetColor("_EmissiveColor");
+
+        if (GetComponent<Renderer>())
+        {
+            initialEmission = GetComponent<Renderer>().material.GetColor("_EmissiveColor");
+        }
     }
 
     // Update is called once per frame
