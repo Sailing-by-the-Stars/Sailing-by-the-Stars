@@ -51,11 +51,12 @@ public class TwinklingStar : MonoBehaviour
     
     private Color initialEmission;
     private bool twinkle;
-    
+    public Vector3 initpos;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        initpos = transform.position;
         //Set the emission of the star before making changes
         initialEmission = GetComponent<Renderer>().material.GetColor("_EmissiveColor");
     }
