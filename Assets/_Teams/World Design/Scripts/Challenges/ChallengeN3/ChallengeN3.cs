@@ -1,11 +1,9 @@
 using System.Collections;
-using System.Reflection;
-using System.Runtime.CompilerServices;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 using UnityEngine;
 using UnityEngine.Rendering.HighDefinition;
-using System.Reflection;
-using System;
 
 
 /// Code by Alonso
@@ -81,7 +79,7 @@ public class ChallengeN3 : MonoBehaviour
         sw.ResetWind(); //We call the function to reset the wind
         yield return null;
     }
-
+#if UNITY_EDITOR
     //This funtion prints the water system properties
     private void PrintWaterProperties(WaterSurface ws)
     {
@@ -93,4 +91,5 @@ public class ChallengeN3 : MonoBehaviour
             Debug.Log(prop.propertyPath);
         }
     }
+#endif
 }
