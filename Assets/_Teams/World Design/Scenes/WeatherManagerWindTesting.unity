@@ -423,6 +423,7 @@ GameObject:
   - component: {fileID: 558718709}
   - component: {fileID: 558718713}
   - component: {fileID: 558718712}
+  - component: {fileID: 558718714}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -658,6 +659,20 @@ MonoBehaviour:
       enableFptlForForwardOpaque: 0
       enableBigTilePrepass: 0
       isFptlEnabled: 0
+--- !u!114 &558718714
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 558718708}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86c6556701af9e04380698b89f691b6e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: FMODUnity::FMODUnity.StudioListener
+  nonRigidbodyVelocity: 0
+  attenuationObject: {fileID: 710406257}
 --- !u!1 &563858243
 GameObject:
   m_ObjectHideFlags: 0
@@ -917,6 +932,7 @@ GameObject:
   - component: {fileID: 710406261}
   - component: {fileID: 710406260}
   - component: {fileID: 710406259}
+  - component: {fileID: 710406262}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -933,8 +949,8 @@ Transform:
   m_GameObject: {fileID: 710406257}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.16402006, y: -2.09, z: 2.3700027}
-  m_LocalScale: {x: 3.8726, y: 3.8726, z: 3.8726}
+  m_LocalPosition: {x: 0.16402006, y: -3.73, z: 39.84}
+  m_LocalScale: {x: 1.8188441, y: 1.8188441, z: 1.8188441}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 206073876}
@@ -985,7 +1001,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 73c176f402d2c2f4d929aa5da7585d17, type: 2}
+  - {fileID: 2100000, guid: ff640ac7c02658542aada0f4138854cc, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1017,6 +1033,37 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 710406257}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &710406262
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 710406257}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: FMODUnity::FMODUnity.StudioEventEmitter
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: 1222449737
+      Data2: 1217276976
+      Data3: -1287881057
+      Data4: -1800389706
+    Path: event:/event_BoatAmbience
+  Event: 
+  EventPlayTrigger: 1
+  EventStopTrigger: 2
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  NonRigidbodyVelocity: 0
+  Params: []
+  OverrideAttenuation: 1
+  OverrideMinDistance: 5.19
+  OverrideMaxDistance: 12
 --- !u!1001 &792584356
 PrefabInstance:
   m_ObjectHideFlags: 0
