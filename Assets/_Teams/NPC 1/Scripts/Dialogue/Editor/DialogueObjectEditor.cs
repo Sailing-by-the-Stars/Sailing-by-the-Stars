@@ -7,7 +7,7 @@ public class DialogueObjectEditor : Editor
 {
     SerializedProperty talkingSpeed_prop;
     SerializedProperty hasName_prop;
-    SerializedProperty npcName_prop;
+    SerializedProperty npcName_prop, hasItemID_prop, itemID_prop;
     SerializedProperty nodes_prop;
 
     Dictionary<int, bool> foldouts = new Dictionary<int, bool>();
@@ -16,6 +16,8 @@ public class DialogueObjectEditor : Editor
     {
         hasName_prop = serializedObject.FindProperty("hasName");
         npcName_prop = serializedObject.FindProperty("npcName");
+        hasItemID_prop = serializedObject.FindProperty("hasItemID");
+        itemID_prop = serializedObject.FindProperty("itemID");
         nodes_prop = serializedObject.FindProperty("nodes");
         talkingSpeed_prop = serializedObject.FindProperty("talkingSpeed");
     }
@@ -28,6 +30,9 @@ public class DialogueObjectEditor : Editor
         EditorGUILayout.PropertyField(hasName_prop, new GUIContent("Does it have a name?"));
         if (hasName_prop.boolValue)
             EditorGUILayout.PropertyField(npcName_prop, new GUIContent("Name"));
+        EditorGUILayout.PropertyField(hasItemID_prop, new GUIContent("Does it have an itemID (Quest system)?"));
+        if (hasItemID_prop.boolValue)
+            EditorGUILayout.PropertyField(itemID_prop, new GUIContent("ItemID"));
         EditorGUILayout.PropertyField(talkingSpeed_prop, new GUIContent("Talking Speed"));
         EditorGUILayout.Space();
         EditorGUILayout.LabelField("Add Node", EditorStyles.boldLabel);
@@ -35,6 +40,7 @@ public class DialogueObjectEditor : Editor
         if (GUILayout.Button("Add Choice Node")) AddNode(new ChoiceNode());
         if (GUILayout.Button("Add Conditional Node")) AddNode(new ConditionalNode());
         if (GUILayout.Button("Give a Quest Node")) AddNode(new StartQuestNode());
+        if (GUILayout.Button("Add Event Node")) AddNode(new EventNode());
 
         EditorGUILayout.Space();
         EditorGUILayout.LabelField("Dialogue Nodes", EditorStyles.boldLabel);
@@ -53,8 +59,11 @@ public class DialogueObjectEditor : Editor
 
             SerializedProperty nodeIDProp = element.FindPropertyRelative("nodeID");
             SerializedProperty textProp = element.FindPropertyRelative("text");
+            string previewText = textProp.stringValue;
+            if (!string.IsNullOrEmpty(previewText) && previewText.Length > 25)
+                previewText = previewText.Substring(0, 25) + "...";
 
-            string header = !string.IsNullOrEmpty(nodeIDProp.stringValue) ? nodeIDProp.stringValue : $"Node {i}";
+            string header = $"{nodeIDProp.stringValue} - {previewText}";
             if (!foldouts.ContainsKey(i)) foldouts[i] = true;
             foldouts[i] = EditorGUILayout.Foldout(foldouts[i], header, true);
             if (!foldouts[i]) continue;
@@ -67,6 +76,10 @@ public class DialogueObjectEditor : Editor
             {
                 SerializedProperty nextNodeProp = element.FindPropertyRelative("nextNodeID");
                 DrawNextNodeDropdown(nextNodeProp, "Next Node");
+                if (string.IsNullOrEmpty(nextNodeProp.stringValue))
+                {
+                    EditorGUILayout.HelpBox("This node ends the dialogue.", MessageType.Info);
+                }
             }
 
             if (element.managedReferenceValue is ChoiceNode)
@@ -80,9 +93,27 @@ public class DialogueObjectEditor : Editor
                     SerializedProperty choiceTextProp = choiceProp.FindPropertyRelative("choiceText");
                     SerializedProperty nextNodeProp = choiceProp.FindPropertyRelative("nextNodeID");
 
+                    GUIStyle wrappedTextArea = new GUIStyle(EditorStyles.textArea)
+                    {
+                        wordWrap = true
+                    };
+
                     EditorGUILayout.BeginHorizontal();
-                    EditorGUILayout.PropertyField(choiceTextProp, new GUIContent($"Choice {c + 1}"));
+
+                    EditorGUILayout.LabelField($"Choice {c + 1}", GUILayout.Width(70));
+
+                    choiceTextProp.stringValue = EditorGUILayout.TextArea(
+                        choiceTextProp.stringValue,
+                        wrappedTextArea,
+                        GUILayout.Height(50),
+                        GUILayout.MinWidth(200)
+                    );
+
                     DrawNextNodeDropdown(nextNodeProp, "Next Node");
+                    if (string.IsNullOrEmpty(nextNodeProp.stringValue))
+                    {
+                        EditorGUILayout.HelpBox("This node ends the dialogue.", MessageType.Info);
+                    }
                     EditorGUILayout.EndHorizontal();
                 }
 
@@ -100,6 +131,14 @@ public class DialogueObjectEditor : Editor
                 EditorGUILayout.LabelField("Condition Branches", EditorStyles.boldLabel);
                 DrawNextNodeDropdown(trueNodeProp, "True Node");
                 DrawNextNodeDropdown(falseNodeProp, "False Node");
+                if (string.IsNullOrEmpty(trueNodeProp.stringValue))
+                {
+                    EditorGUILayout.HelpBox("This node ends the dialogue.", MessageType.Info);
+                }
+                if (string.IsNullOrEmpty(falseNodeProp.stringValue))
+                {
+                    EditorGUILayout.HelpBox("This node ends the dialogue.", MessageType.Info);
+                }
 
                 SerializedProperty conditionsProp = element.FindPropertyRelative("conditions");
                 EditorGUILayout.PropertyField(conditionsProp, true);
@@ -114,8 +153,27 @@ public class DialogueObjectEditor : Editor
                 EditorGUILayout.PropertyField(questProp, new GUIContent("Quest To Start"));
 
                 DrawNextNodeDropdown(nextNodeProp, "Next Node");
+                if (string.IsNullOrEmpty(nextNodeProp.stringValue))
+                {
+                    EditorGUILayout.HelpBox("This node ends the dialogue.", MessageType.Info);
+                }
             }
+            if (element.managedReferenceValue is EventNode)
+            {
+                SerializedProperty eventIDProp = element.FindPropertyRelative("eventID");
+                SerializedProperty nextNodeProp = element.FindPropertyRelative("nextNodeID");
 
+                // Optional: dropdown of all scene events (designer-friendly)
+                DrawEventIDDropdown(eventIDProp);
+
+                DrawNextNodeDropdown(nextNodeProp, "Next Node");
+
+                if (string.IsNullOrEmpty(nextNodeProp.stringValue))
+                {
+                    EditorGUILayout.HelpBox("This node ends the dialogue.", MessageType.Info);
+                }
+            }
+                        
             EditorGUILayout.Space();
             if (GUILayout.Button("Delete Node"))
             {
@@ -132,15 +190,69 @@ public class DialogueObjectEditor : Editor
         }
     }
 
+    void DrawEventIDDropdown(SerializedProperty eventIDProp)
+    {
+    #if UNITY_EDITOR
+        EventManager registry = Object.FindObjectOfType<EventManager>();
+        string[] options = registry != null ? registry.events.ConvertAll(e => e.eventID).ToArray() : new string[0];
+
+        int index = Mathf.Max(0, System.Array.IndexOf(options, eventIDProp.stringValue));
+        index = EditorGUILayout.Popup("Event ID", index, options);
+
+        if (options.Length > 0)
+            eventIDProp.stringValue = options[index];
+    #endif
+    }
     void AddNode(DialogueNode node)
     {
         serializedObject.Update();
+
+        string baseName = GetNodeTypeName(node);
+        int number = GetNextNodeNumber(baseName);
+
+        node.nodeID = $"{baseName}_{number}";
+
         nodes_prop.arraySize++;
         SerializedProperty element = nodes_prop.GetArrayElementAtIndex(nodes_prop.arraySize - 1);
         element.managedReferenceValue = node;
+
         serializedObject.ApplyModifiedProperties();
     }
+    string GetNodeTypeName(DialogueNode node)
+    {
+        if (node is DialogueLineNode) return "Line";
+        if (node is ChoiceNode) return "Choice";
+        if (node is ConditionalNode) return "Condition";
+        if (node is StartQuestNode) return "Quest";
+        if (node is EventNode) return "Event";
 
+        return "Node";
+    }
+
+    int GetNextNodeNumber(string baseName)
+    {
+        int highest = 0;
+
+        for (int i = 0; i < nodes_prop.arraySize; i++)
+        {
+            SerializedProperty element = nodes_prop.GetArrayElementAtIndex(i);
+            SerializedProperty idProp = element.FindPropertyRelative("nodeID");
+
+            if (idProp == null || string.IsNullOrEmpty(idProp.stringValue)) continue;
+
+            if (idProp.stringValue.StartsWith(baseName))
+            {
+                string[] parts = idProp.stringValue.Split('_');
+                if (parts.Length > 1 && int.TryParse(parts[1], out int num))
+                {
+                    if (num > highest)
+                        highest = num;
+                }
+            }
+        }
+
+        return highest + 1;
+    }
     string[] GetAllNodeIDs()
     {
         var dialogue = (Dialogue)target;

@@ -94,7 +94,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: b158004de861f0c4392023fc2fe2ff88, type: 3}
       propertyPath: m_Name
-      value: CultistNPC
+      value: CultistNPC 1
       objectReference: {fileID: 0}
     - target: {fileID: 2051830432454018963, guid: b158004de861f0c4392023fc2fe2ff88, type: 3}
       propertyPath: m_LocalRotation.x
@@ -144,10 +144,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 727ffce1f89102743b4b943882b1a791, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NPCDialogueHolder
-  firstDialogue: {fileID: 11400000, guid: 9b8c544aa52a1074b80caaa7755930f7, type: 2}
+  firstDialogue: {fileID: 0}
   hasRepeatDialogue: 0
   repeatDialogue: {fileID: 0}
   hasInteractedBefore: 0
+  interactMessage: Press E to Talk
 --- !u!136 &7447805977381940634
 CapsuleCollider:
   m_ObjectHideFlags: 0

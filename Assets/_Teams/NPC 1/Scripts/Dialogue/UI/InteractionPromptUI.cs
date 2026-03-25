@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro;
+using System.Diagnostics;
 
 /// <summary>
 /// Controls the interaction prompt shown when near an NPC.
@@ -26,5 +27,11 @@ public class InteractionPromptUI : MonoBehaviour
     public void HidePrompt()
     {
         promptObject.SetActive(false);
+        
+    }
+
+    public void TestingAThing()
+    {
+        UnityEngine.Debug.Log("Hello World");
     }
 }
