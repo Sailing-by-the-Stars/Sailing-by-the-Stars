@@ -128,9 +128,9 @@ public class Movement : MonoBehaviour
     //set the player to be able to go on top of the boat
     private void OnTriggerEnter(Collider other)
     {
-        Debug.LogWarning("IT HITS");
         if (other.CompareTag("boat"))
         {
+            Debug.LogWarning("IT HITS");
             transform.SetParent(boat);
             transform.position = seatPosition.position;
 

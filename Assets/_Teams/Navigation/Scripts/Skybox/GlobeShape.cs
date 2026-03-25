@@ -1,10 +1,12 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class GlobeShape : MonoBehaviour
 {
     [SerializeField] float globeRadius = 5;
     [SerializeField] int resolution = 10;
+    [SerializeField] float offsetY = 5000f;
 
     List<Vector3> verticePositions = new();
     List<Vector3> vertices = new();
@@ -16,11 +18,16 @@ public class GlobeShape : MonoBehaviour
     List<TwinklingStar> relatedStars = new();
 
 
+
+
     private void Awake()
     {
         myMesh = new Mesh();
         meshFilter = GetComponent<MeshFilter>();
         meshFilter.mesh = myMesh;
+
+
+        relatedStars = GetComponentsInChildren<TwinklingStar>().ToList();
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -43,6 +50,8 @@ public class GlobeShape : MonoBehaviour
         targetpos.x -= globeRadius;
         targetpos.z -= globeRadius;
 
+        targetpos.y -= offsetY;
+
         transform.position = targetpos;
 
 
@@ -50,12 +59,14 @@ public class GlobeShape : MonoBehaviour
         {
             Vector3 starTargetpos = star.initpos;
 
-            starTargetpos.y = GetY(globeRadius, star.initpos.x, star.initpos.y);
+            star.transform.position = starTargetpos;
 
-            star.transform.LookAt(transform.position);
-            star.transform.Rotate(0, 180, 0);
+            starTargetpos.y = GetY(star.transform.localPosition.x, star.transform.localPosition.z);
 
             star.transform.position = starTargetpos;
+
+            star.transform.LookAt(Camera.main.transform.position);
+            star.transform.Rotate(0, 180, 0);
         }
     }
 
@@ -91,7 +102,26 @@ public class GlobeShape : MonoBehaviour
             y = 0;
         }
 
-        Debug.Log($"radius '{radius}', x '{x}', and y '{z}' give z '{y}'");
+        //Debug.Log($"radius '{radius}', x '{x}', and y '{z}' give z '{y}'");
+        return y;
+    }
+
+    float GetY(float x, float z)
+    {
+        x += transform.position.x;
+        z += transform.position.z;
+
+        float y = 0;
+        y = Mathf.Sqrt(Mathf.Pow(globeRadius, 2) - (Mathf.Pow(x, 2) + Mathf.Pow(z, 2)));
+
+        y += transform.position.y;
+
+        if (y.ToString() == "NaN")
+        {
+            y = 0;
+        }
+
+        Debug.Log($"x '{x}', and z '{z}' give y '{y}'");
         return y;
     }
 
@@ -100,13 +130,13 @@ public class GlobeShape : MonoBehaviour
     {
         vertices = new List<Vector3>();
         float xStepSize = (size) / resolution;
-        float yStepSize = (size) / resolution;
+        float zStepSize = (size) / resolution;
 
-        for (int y = 0; y < resolution + 1; y++)
+        for (int z = 0; z < resolution + 1; z++)
         {
             for (int x = 0; x < resolution + 1; x++)
             {
-                vertices.Add(new Vector3(x * xStepSize, 0, y * yStepSize));
+                vertices.Add(new Vector3(x * xStepSize, 0, z * zStepSize));
             }
         }
 
@@ -151,6 +181,8 @@ public class GlobeShape : MonoBehaviour
 
         targetpos.x -= globeRadius;
         targetpos.z -= globeRadius;
+
+        targetpos.y -= offsetY;
 
         transform.position = targetpos;
     }

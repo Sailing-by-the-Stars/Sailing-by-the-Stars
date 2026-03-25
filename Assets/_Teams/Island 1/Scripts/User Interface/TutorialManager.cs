@@ -112,10 +112,18 @@ namespace Assets._Teams.Island_1.Scripts.User_Interface
         {
             if (step != currentStep) return;
 
-            completedSteps.Add(step);
+            if (completedSteps.Contains(step))
+            {
+                Debug.LogWarning($"this tutorialstep has already been completed: {step}");
+            }
+            else
+            {
+                completedSteps.Add(step);
 
-            currentPopup.gameObject.SetActive(false);
-            currentPopup = null;
+                currentPopup.gameObject.SetActive(false);
+                currentPopup = null;
+            }
+
 
             StartCoroutine(DelayThenContinue());
         }
