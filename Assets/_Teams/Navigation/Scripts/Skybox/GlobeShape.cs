@@ -13,9 +13,6 @@ public class GlobeShape : MonoBehaviour
     MeshFilter meshFilter;
 
 
-    List<TwinklingStar> relatedStars = new();
-
-
     private void Awake()
     {
         myMesh = new Mesh();
@@ -26,42 +23,16 @@ public class GlobeShape : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        DrawSphere();
+        //DrawShape(resolution, resolution);
+
+        //myMesh = GetComponent<MeshFilter>().mesh;
+        //myMesh = new();
     }
 
     // Update is called once per frame
     void Update()
     {
-        MoveSphere();
-    }
 
-
-    void MoveSphere()
-    {
-        Vector3 targetpos = Camera.main.transform.position;
-
-        targetpos.x -= globeRadius;
-        targetpos.z -= globeRadius;
-
-        transform.position = targetpos;
-
-
-        foreach (TwinklingStar star in relatedStars)
-        {
-            Vector3 starTargetpos = star.initpos;
-
-            starTargetpos.y = GetY(globeRadius, star.initpos.x, star.initpos.y);
-
-            star.transform.LookAt(transform.position);
-            star.transform.Rotate(0, 180, 0);
-
-            star.transform.position = starTargetpos;
-        }
-    }
-
-
-    void DrawSphere()
-    {
         GeneratePlane(globeRadius * 2, resolution);
 
         OffsetMesh();
@@ -76,23 +47,53 @@ public class GlobeShape : MonoBehaviour
         for (int i = 0; i < vertices.Count; i++)
         {
             Vector3 vertex = vertices[i];
-            vertex.y = GetY(globeRadius, vertex.x - globeRadius, vertex.z - globeRadius);
+            vertex.y = GetZ(globeRadius, vertex.x - globeRadius, vertex.z - globeRadius);
             vertices[i] = vertex;
         }
     }
 
-    float GetY(float radius, float x, float z)
-    {
-        float y = 0;
-        y = Mathf.Sqrt(Mathf.Pow(radius, 2) - (Mathf.Pow(x, 2) + Mathf.Pow(z, 2)));
 
-        if(y.ToString() == "NaN")
+
+
+    void DrawShape(int xSteps, int ySteps)
+    {
+        float currentX = -globeRadius;
+        float currentY = -globeRadius;
+        float currentZ = 0;
+
+        float xStepSize = (globeRadius * 2) / xSteps; 
+        float yStepSize = (globeRadius * 2) / ySteps;
+
+        verticePositions.Clear();
+
+        for (int i = 0; i < xSteps; i++)
         {
-            y = 0;
+            for (int j = 0; j < ySteps; j++)
+            {
+                currentZ = 0;
+                currentZ = GetZ(globeRadius, xStepSize * i, yStepSize * j);
+
+                verticePositions.Add(new Vector3(currentX, currentY, currentZ));
+            }
         }
 
-        Debug.Log($"radius '{radius}', x '{x}', and y '{z}' give z '{y}'");
-        return y;
+
+    }
+
+
+
+    float GetZ(float radius, float x, float y)
+    {
+        float z = 0;
+        z = Mathf.Sqrt(Mathf.Pow(radius, 2) - (Mathf.Pow(x, 2) + Mathf.Pow(y, 2)));
+
+        if(z.ToString() == "NaN")
+        {
+            z = 0;
+        }
+
+        Debug.Log($"radius '{radius}', x '{x}', and y '{y}' give z '{z}'");
+        return z;
     }
 
 
@@ -136,22 +137,5 @@ public class GlobeShape : MonoBehaviour
         myMesh.Clear();
         myMesh.vertices = vertices.ToArray();
         myMesh.triangles = triangles.ToArray();
-    }
-
-
-    private void OnValidate()
-    {
-        myMesh = new Mesh();
-        meshFilter = GetComponent<MeshFilter>();
-        meshFilter.mesh = myMesh;
-
-        DrawSphere();
-
-        Vector3 targetpos = Camera.main.transform.position;
-
-        targetpos.x -= globeRadius;
-        targetpos.z -= globeRadius;
-
-        transform.position = targetpos;
     }
 }
