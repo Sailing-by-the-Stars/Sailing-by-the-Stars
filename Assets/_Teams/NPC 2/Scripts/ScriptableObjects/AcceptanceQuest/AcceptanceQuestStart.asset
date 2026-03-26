@@ -16,16 +16,23 @@ MonoBehaviour:
   npcName: 
   talkingSpeed: 0.95
   nodes:
-  - rid: 2042809626776305740
+  - rid: 2042809626776305754
+  - rid: 2042809626776305755
   hasItemID: 0
   itemID: 0
   references:
     version: 2
     RefIds:
-    - rid: 2042809626776305740
+    - rid: 2042809626776305754
+      type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: Line_1
+        text: Let me see if you ready to leave this place.
+        nextNodeID: Quest_1
+    - rid: 2042809626776305755
       type: {class: StartQuestNode, ns: , asm: Assembly-CSharp}
       data:
         nodeID: Quest_1
-        text: You aren't ready yet. Seek out Anger, Bargaining and Depression first
+        text: No you are not, seek out Anger, Bargaining and Depression.
         questToStart: {fileID: 11400000, guid: e4fe6399c04766640b61281c437e2bf2, type: 2}
         nextNodeID: 

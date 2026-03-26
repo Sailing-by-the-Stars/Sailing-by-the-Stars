@@ -7,6 +7,8 @@ public class QuestManager : MonoBehaviour
 {
     public static QuestManager Instance { get; private set; }
 
+    private PlayerState playerState;
+
     private List<QuestProgress> activeQuests = new();
     public IReadOnlyList<QuestProgress> ActiveQuests => activeQuests;
     private QuestUI questUI;
@@ -20,6 +22,8 @@ public class QuestManager : MonoBehaviour
         }
 
         Instance = this;
+
+        playerState = FindFirstObjectByType<PlayerState>();
 
         if (questUI == null)
         {
@@ -58,6 +62,7 @@ public class QuestManager : MonoBehaviour
 
             if (quest.IsCompleted)
             {
+                playerState.completedQuests.Add(quest.QuestID);
                 completedQuests.Add(quest);
             }
         }

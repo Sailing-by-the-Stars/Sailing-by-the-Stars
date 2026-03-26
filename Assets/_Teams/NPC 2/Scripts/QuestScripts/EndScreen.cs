@@ -1,4 +1,5 @@
 using System.Collections;
+// using System.Diagnostics;
 using UnityEngine;
 
 // Programmer: Arch
@@ -15,6 +16,8 @@ public class EndScreen : MonoBehaviour
 
     private bool questsStarted = false;
 
+    private PlayerState playerState;
+
     private void Awake()
     {
         // hide end screen at start
@@ -23,6 +26,8 @@ public class EndScreen : MonoBehaviour
             endScreenPanel.SetActive(false);
         }
         
+        playerState = FindFirstObjectByType<PlayerState>();
+
         // set alpha to zero for fade in
         if (endScreenCanvasGroup != null)
         {
@@ -46,8 +51,11 @@ public class EndScreen : MonoBehaviour
             questsStarted = true;
         }
 
+        // edited by Boas.
+        // needs to be changed to something more dynamic.
+
         // if quests were started and now the list is empty, turn on end screen and fade
-        if (questsStarted && currentQuestCount == 0)
+        if (questsStarted && playerState.completedQuests.Contains("312a0283-06ac-4260-9759-999f2225e226"))
         {
             TriggerEndScreen();
             
@@ -62,7 +70,8 @@ public class EndScreen : MonoBehaviour
     public void TriggerEndScreen()
     {
         if (endScreenPanel != null && !endScreenPanel.activeSelf)
-        {
+        {   
+            Debug.Log("End is working");
             endScreenPanel.SetActive(true);
             
             if (starParticles != null)
