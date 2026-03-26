@@ -1,43 +1,32 @@
 using System;
 using Unity.Mathematics;
 using UnityEngine;
-using static StarDataLoader;
 
-[ExecuteAlways]
+
 public class StarInfo : MonoBehaviour
 {
-    [SerializeField]
-    public StarDataLoader.Star starData;
-
-    public AnimationCurve brightnessCurve;
     public float emissionMult;
-    public float starSizeMax;
-
-
+    public Vector3 initpos;
 
     private void Start()
     {
-        /*Material material = GetComponent<MeshRenderer>().material;
+        
+        initpos = transform.position;
+
+
+
+        Material material = GetComponent<MeshRenderer>().material;
         material.shader = Shader.Find("HDRP/Unlit");
 
-        //material.SetFloat("_Size", Mathf.Lerp(starSizeMin, starSizeMax, star.size));
-        float sizeM = Mathf.Lerp(0, 1, starData.size);
-        sizeM = brightnessCurve.Evaluate(sizeM);
+        float starSize = transform.localScale.x;
 
-        float starSize = sizeM * starSizeMax;
-
-
-        Vector3 size = new Vector3(starSize, starSize, starSize);
-
-        transform.localScale = size;
-
-        material.color = starData.colour * 2;
+        material.color = Color.white * 2;
         material.EnableKeyword("_EMISSION");
 
         // base color (no intensity baked in)
-        material.SetColor("_EmissiveColor", starData.colour);
+        material.SetColor("_EmissiveColor", Color.white);
 
         half intensityMul = (half)MathF.Pow(2.0f, emissionMult * starSize);
-        material.color *= intensityMul;*/
+        material.color *= intensityMul;
     }
 }

@@ -1,10 +1,8 @@
-using Unity.VisualScripting;
-using UnityEditor.SceneManagement;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 //Creator: Joost
 //Edited by: Johan
+//edited by: Jardi (the sprint working, hacky though it is)
 public class Movement : MonoBehaviour
 {
     [Header("Movement Settings")]
