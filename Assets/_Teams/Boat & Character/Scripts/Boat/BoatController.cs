@@ -17,6 +17,8 @@ public class BoatController : MonoBehaviour
     [SerializeField] private float waterDensity = 1000f;
     [SerializeField] private float rudderTorqueStrength = 10f;
     [SerializeField] private float keelDragStrength = 10f;
+    [SerializeField] private float baseForwardForce = 5000f;
+    [SerializeField] private float baseForwardMaxSpeed = 10f;
 
     [Header("Physics stats (Debugging!)")]
     [SerializeField] private float AoA;
@@ -25,6 +27,7 @@ public class BoatController : MonoBehaviour
     [SerializeField] private float rudderTorque;
     [SerializeField] private Vector3 wind = Vector3.zero;
     [SerializeField] private Vector3 apparentWind = Vector3.zero;
+    [SerializeField] private float appliedBaseForwardForce;
 
     [Header("Boat stats")]
     [SerializeField] private float maxRudderDeflection = 20f;
@@ -74,6 +77,7 @@ public class BoatController : MonoBehaviour
 
         AoA = mastDirectionIntoWind;
 
+        ApplyBaseForwardForce();
         ApplyRudderTorque();
         ApplyKeelDrag();
         applyWaterDrag();
@@ -191,6 +195,16 @@ public class BoatController : MonoBehaviour
         float waterDrag = .5f * waterDensity * Mathf.Pow(localVelocity.z, 2f) * .9f * underwaterFrontArea * Mathf.Sign(localVelocity.z);
 
         rigidBody.AddRelativeForce(-Vector3.forward * waterDrag);
+    }
+
+    void ApplyBaseForwardForce()
+    {
+        float forwardVelocity = transform.InverseTransformVector(rigidBody.linearVelocity).z;
+
+        float speedScale = baseForwardMaxSpeed <= 0f ? 1f : Mathf.Clamp01(1f - (forwardVelocity / baseForwardMaxSpeed));
+        appliedBaseForwardForce = baseForwardForce * speedScale;
+
+        rigidBody.AddRelativeForce(Vector3.forward * appliedBaseForwardForce, ForceMode.Force);
     }
 
     private float currentMastAngle = 0f;

@@ -121,7 +121,6 @@ public class GlobeShape : MonoBehaviour
             y = 0;
         }
 
-        Debug.Log($"x '{x}', and z '{z}' give y '{y}'");
         return y;
     }
 
