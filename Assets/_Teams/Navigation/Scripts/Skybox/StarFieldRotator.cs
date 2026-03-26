@@ -22,7 +22,7 @@ public class StarFieldRotator : MonoBehaviour
 
 
 
-    globeType editorGlobeType;
+    [SerializeField] globeType editorGlobeType;
     globeType GlobeType;
     [HideInInspector]
     public globeType globeType
@@ -108,13 +108,13 @@ public class StarFieldRotator : MonoBehaviour
             switch (globeType)
             {
                 case globeType.relative:
-                    globeType = globeType.manual;
+                    globeType = globeType.positional;
                     break;
                 case globeType.positional:
-                    globeType = globeType.relative;
+                    globeType = globeType.manual;
                     break;
                 case globeType.manual:
-                    globeType = globeType.positional;
+                    globeType = globeType.relative;
                     break;
                 default:
                     break;
