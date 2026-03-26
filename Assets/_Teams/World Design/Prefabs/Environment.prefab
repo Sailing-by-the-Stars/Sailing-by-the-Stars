@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 172259460954949992}
   - component: {fileID: 2569649153911754233}
   - component: {fileID: 7304271885700303262}
-  - component: {fileID: 8690551997761316048}
   - component: {fileID: 5921118654873255721}
   m_Layer: 0
   m_Name: WeatherManager
@@ -96,26 +95,6 @@ MonoBehaviour:
   minAudibleAudioValue: 0.12
   maxWindSpeedForFullAudioMps: 20
   audioResponseExponent: 0.8
---- !u!114 &8690551997761316048
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 659198907192854000}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3e703c6e3801ea34197d8d72b463c84b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TestRainController
-  rainParticleSystem: {fileID: 0}
-  windInfluence: 3
-  followTargetTag: Player
-  emitterHeight: 60
-  maxRateOverTime: 1500
-  maxStartSpeed: 15
-  maxStartSize: 0.008
-  maxSpeedScale: 0.05
 --- !u!114 &5921118654873255721
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -445,7 +424,7 @@ MonoBehaviour:
   m_AngularDiameter: 7.98
   diameterMultiplerMode: 0
   diameterMultiplier: 1
-  diameterOverride: 1.5
+  diameterOverride: 0
   celestialBodyShadingSource: 2
   sunLightOverride: {fileID: 0}
   sunColor: {r: 1, g: 1, b: 1, a: 1}

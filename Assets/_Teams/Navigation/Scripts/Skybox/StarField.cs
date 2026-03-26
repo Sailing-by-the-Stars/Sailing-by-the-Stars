@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.Rendering.HighDefinition;
 using static StarDataLoader;
 
 [Serializable]
@@ -13,14 +15,13 @@ public class manualStar
 
 public class StarField : MonoBehaviour
 {
-    [Range(0, 100)]
-    [SerializeField] private float starSizeMin = 0f;
+    [SerializeField] private AnimationCurve brightnessCurve;
     [Range(0, 100)]
     [SerializeField] private float starSizeMax = 5f;
     [SerializeField] private float emissionMult = 2;
 
     private List<StarDataLoader.Star> stars;
-    private List<GameObject> starObjects;
+    public List<GameObject> starObjects;
     private Dictionary<int, GameObject> constellationVisible = new();
 
     [SerializeField] List<manualStar> manualStars = new();
@@ -47,13 +48,25 @@ public class StarField : MonoBehaviour
             material.shader = Shader.Find("HDRP/Unlit");
 
             //material.SetFloat("_Size", Mathf.Lerp(starSizeMin, starSizeMax, star.size));
-            Vector3 size = new Vector3(Mathf.Lerp(starSizeMin, starSizeMax, star.size), Mathf.Lerp(starSizeMin, starSizeMax, star.size), Mathf.Lerp(starSizeMin, starSizeMax, star.size));
+            float sizeM = Mathf.Lerp(0, 1, star.size);
+            sizeM = brightnessCurve.Evaluate(sizeM);
+            
+            float starSize = sizeM * starSizeMax;
+
+
+            Vector3 size = new Vector3(starSize, starSize, starSize);
 
             stargo.transform.localScale = size;
             
-            material.color = star.colour;
+            material.color = star.colour * 2;
             material.EnableKeyword("_EMISSION");
-            material.SetColor("_EmissiveColor", star.colour * emissionMult);
+
+            // base color (no intensity baked in)
+            material.SetColor("_EmissiveColor", star.colour);
+
+            half intensityMul = (half) MathF.Pow(2.0f, emissionMult * starSize);
+            material.color *= intensityMul;
+
             starObjects.Add(stargo);
         }
 
@@ -95,9 +108,32 @@ public class StarField : MonoBehaviour
         {
             for (int i = 0; i < starObjects.Count; i++)
             {
+                if (starObjects[i].GetComponent<MeshRenderer>() == null)
+                {
+                    continue;
+                }
+
                 // Update the size set in the shader.
                 Material material = starObjects[i].GetComponent<MeshRenderer>().material;
-                material.SetFloat("_Size", Mathf.Lerp(starSizeMin, starSizeMax, stars[i].size));
+
+                float sizeM = Mathf.Lerp(0, 1, stars[i].size);
+                sizeM = brightnessCurve.Evaluate(sizeM);
+
+                float starSize = sizeM * starSizeMax;
+
+
+                Vector3 size = new Vector3(starSize, starSize, starSize);
+
+                starObjects[i].transform.localScale = size;
+
+                material.color = stars[i].colour * 2;
+                material.EnableKeyword("_EMISSION");
+
+                // base color (no intensity baked in)
+                material.SetColor("_EmissiveColor", stars[i].colour);
+
+                half intensityMul = (half)MathF.Pow(2.0f, emissionMult * starSize);
+                material.color *= intensityMul;
             }
         }
     }
