@@ -17,7 +17,45 @@ public class GlobeShape : MonoBehaviour
 
     List<TwinklingStar> relatedStars = new();
 
+    private void OnEnable()
+    {
+        StarFieldRotator.globeTypeChanged += ToggleStars;
+    }
 
+    private void OnDisable()
+    {
+        StarFieldRotator.globeTypeChanged -= ToggleStars;
+    }
+
+
+
+    void ToggleStars(globeType globeType)
+    {
+        switch (globeType)
+        {
+            case globeType.relative:
+                foreach (TwinklingStar star in relatedStars)
+                {
+                    star.gameObject.SetActive(false);
+                }
+                break;
+            case globeType.positional:
+                foreach (TwinklingStar star in relatedStars)
+                {
+                    star.gameObject.SetActive(false);
+                }
+                break;
+            case globeType.manual:
+                foreach (TwinklingStar star in relatedStars)
+                {
+                    star.gameObject.SetActive(true);
+                }
+                break;
+            default:
+                Debug.LogError("it should never switch to this state!");
+                break;
+        }
+    }
 
 
     private void Awake()

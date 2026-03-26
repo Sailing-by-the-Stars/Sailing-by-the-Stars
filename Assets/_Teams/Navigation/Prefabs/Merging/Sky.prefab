@@ -771,7 +771,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 3676767411333885950}
   - {fileID: 2825623589997650463}
   - {fileID: 3074190147049121556}
   m_Father: {fileID: 4978647240634046230}
@@ -858,7 +857,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3797419422745476293}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -940,7 +939,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &2825623589997650463
 Transform:
   m_ObjectHideFlags: 0
@@ -967,7 +966,7 @@ Light:
   serializedVersion: 12
   m_Type: 1
   m_Color: {r: 0.6367924, g: 0.77719206, b: 1, a: 1}
-  m_Intensity: 500
+  m_Intensity: 5
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -1070,7 +1069,7 @@ MonoBehaviour:
   m_AngularDiameter: 28.6
   diameterMultiplerMode: 0
   diameterMultiplier: 1
-  diameterOverride: 2.1
+  diameterOverride: 0
   celestialBodyShadingSource: 1
   sunLightOverride: {fileID: 0}
   sunColor: {r: 1, g: 1, b: 1, a: 1}
@@ -1083,7 +1082,7 @@ MonoBehaviour:
   flareFalloff: 12.28
   flareMultiplier: 0.103
   surfaceTexture: {fileID: 2800000, guid: cce9f0cf7e606e547a7317aedb4ad6d9, type: 3}
-  surfaceTint: {r: 0.066037714, g: 0.06572621, b: 0.06572621, a: 1}
+  surfaceTint: {r: 0.066037714, g: 0.06572621, b: 0.06572621, a: 0}
   m_Distance: 384400000
   m_UseRayTracedShadows: 0
   m_NumRayTracingSamples: 4
@@ -1905,55 +1904,6 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   initpos: {x: -189.80005, y: 435.96, z: -1283.8}
---- !u!1 &7048491144163257050
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 3676767411333885950}
-  - component: {fileID: 1826639984355458600}
-  m_Layer: 0
-  m_Name: Sky and Fog Global Volume
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!4 &3676767411333885950
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7048491144163257050}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 4430873107048627971}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1826639984355458600
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7048491144163257050}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 172515602e62fb746b5d573b38a5fe58, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.RenderPipelines.Core.Runtime::UnityEngine.Rendering.Volume
-  m_IsGlobal: 1
-  priority: 0
-  blendDistance: 0
-  weight: 1
-  sharedProfile: {fileID: 11400000, guid: 3a445cccf974f6a4a951162dbcc48770, type: 2}
 --- !u!1 &7152969943105392120
 GameObject:
   m_ObjectHideFlags: 0
@@ -3111,7 +3061,7 @@ Light:
   serializedVersion: 12
   m_Type: 1
   m_Color: {r: 0.24270204, g: 0.39932957, b: 0.509434, a: 1}
-  m_Intensity: 94.03934
+  m_Intensity: 2
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -3352,9 +3302,50 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0e8a0949bcee6e4b8c4d567f6661440, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StarField
-  starSizeMin: 0
-  starSizeMax: 5
-  emissionMult: 2
+  brightnessCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.20251706
+      value: 0.24512038
+      inSlope: 1.8504472
+      outSlope: 1.8504472
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.046758905
+    - serializedVersion: 3
+      time: 0.692602
+      value: 0.9014476
+      inSlope: 0.7001763
+      outSlope: 0.7001763
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.44419536
+      outWeight: 0.1751869
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  starSizeMax: 3
+  emissionMult: 0.5
   manualStars:
   - starID: 4295
     starPrefab: {fileID: 5899873260775259234, guid: cdb7c3ef8dd52424baabdad87820c07d, type: 3}
