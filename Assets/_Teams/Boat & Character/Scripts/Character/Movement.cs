@@ -98,8 +98,22 @@ public class Movement : MonoBehaviour
     {
         Vector2 moveDirection = playerControls.Land.Move.ReadValue<Vector2>();
         
+        //replace everything in the //'s with your own code
+        //this is just so we can test even if the ship doesn't work
+        //>
+        if (Input.GetKey(KeyCode.LeftShift))
+        {
+            rb.MovePosition(rb.position + rb.transform.forward * moveDirection.y * movementSpeed * sprintMultiplier * Time.deltaTime);
+            rb.MovePosition(rb.position + rb.transform.right * moveDirection.x * movementSpeed * sprintMultiplier * Time.deltaTime);
+        }
+        else
+        {
+        //<
         rb.MovePosition(rb.position + rb.transform.forward * moveDirection.y * movementSpeed * Time.deltaTime);
         rb.MovePosition(rb.position + rb.transform.right * moveDirection.x * movementSpeed * Time.deltaTime);
+        //>
+        }
+        //<
     }
 
     void RotateCamera()
