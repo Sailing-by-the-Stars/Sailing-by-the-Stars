@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Dialogue
   hasName: 1
   npcName: Cultist
-  talkingSpeed: 0.95
+  talkingSpeed: 0.5
   nodes:
   - rid: 6341597381389189120
   - rid: 6341597381389189121
@@ -26,6 +26,8 @@ MonoBehaviour:
   - rid: 6341597381389189127
   - rid: 6341597381389189129
   - rid: 6341597381389189130
+  hasItemID: 0
+  itemID: 0
   references:
     version: 2
     RefIds:
@@ -33,21 +35,25 @@ MonoBehaviour:
       type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
       data:
         nodeID: Greeting
-        text: 'Ahoy there chap.
+        text: 'Ahoy there chap. <pause=1>
 
-          I see you''ve been washed ashore like
-          I did many years ago.'
+          I see you''ve been washed ashore
+          like I did many years ago.'
+        position: {x: 800.05756, y: 143.3946}
         nextNodeID: WhereAreYouFrom
     - rid: 6341597381389189121
       type: {class: ChoiceNode, ns: , asm: Assembly-CSharp}
       data:
         nodeID: WhereAreYouFrom
         text: Do ye know where you came from?
+        position: {x: 1118.2393, y: 84.51031}
         choices:
         - choiceText: I can't remember
           nextNodeID: NoWorries
         - choiceText: ...
           nextNodeID: NoWorries
+        - choiceText: 
+          nextNodeID: 
     - rid: 6341597381389189122
       type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
       data:
@@ -55,6 +61,7 @@ MonoBehaviour:
         text: 'No worries mate. Ye see, I got here many years ago after my ship ran
           ashore. The bloody captain must have had too much grog and hit some nasty
           cliff on our starboard. '
+        position: {x: 842.41284, y: 598.9731}
         nextNodeID: NoWorries2
     - rid: 6341597381389189123
       type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
@@ -63,6 +70,7 @@ MonoBehaviour:
         text: I've only just started to learn the ropes as a Jack back then. But
           those lovely people here were nearby and helped me ashore, otherwise I
           would have been in Davy Jones Locker with my fellow mates.
+        position: {x: 1177.1235, y: 580.378}
         nextNodeID: Rehua
     - rid: 6341597381389189124
       type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
@@ -71,6 +79,7 @@ MonoBehaviour:
         text: 'It must have been divine intervention, because they followed a shooting
           star and found myself on the way. It must have been in the will of Rehua,
           that they found me here. '
+        position: {x: 254.72337, y: 103.57828}
         nextNodeID: Rehua2
     - rid: 6341597381389189125
       type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
@@ -79,6 +88,7 @@ MonoBehaviour:
         text: The stories differ from island to island, but I know him as one of
           the star gods and the brightest star on the southern hemisphere. Ye might
           know it in the Canis Majoris, as the star Sirius.
+        position: {x: 325.92355, y: 381.9782}
         nextNodeID: UpForTheTask
     - rid: 6341597381389189126
       type: {class: ChoiceNode, ns: , asm: Assembly-CSharp}
@@ -86,6 +96,7 @@ MonoBehaviour:
         nodeID: UpForTheTask
         text: Are ye going to sail in that old Waka to the next island? That sounds
           rough. Ye don't even have one for a dog watch. Are ye up for the task?
+        position: {x: 669.82294, y: 368.0824}
         choices:
         - choiceText: I think so ...
           nextNodeID: SoundGood
@@ -97,6 +108,7 @@ MonoBehaviour:
         nodeID: SoundGood
         text: "Sounds convincing enough. \nBut before ye run off, I got something
           for ye."
+        position: {x: 1026.7239, y: 384.3783}
         nextNodeID: Sextant
     - rid: 6341597381389189129
       type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
@@ -105,6 +117,7 @@ MonoBehaviour:
         text: This is a Sextant. I found it in the remaining shipwrecks, that washed
           ashore. It should come in use if ye want to know which way ye want to sail.
           Focus on the stars and find the South Star to find yer nautical direction.
+        position: {x: 1401.1233, y: 386.77826}
         nextNodeID: Bye
     - rid: 6341597381389189130
       type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
@@ -113,4 +126,5 @@ MonoBehaviour:
         text: If ye need any help with Star Constellations, I'll be here watching
           the star night. I am waiting on a sign from Rehua, to know why he saved
           me. If you see any signs from him out there, be sure tell me about them.
+        position: {x: 1748.3232, y: 384.37823}
         nextNodeID: 

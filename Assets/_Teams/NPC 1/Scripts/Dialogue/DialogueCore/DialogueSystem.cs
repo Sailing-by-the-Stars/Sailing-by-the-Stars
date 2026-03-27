@@ -13,9 +13,6 @@ public class DialogueSystem : MonoBehaviour
     [Tooltip("Handles all dialogue UI such as text, choices and typewriter effects.")]
     [SerializeField] private DialogueUIManager uiManager;
 
-    [Tooltip("Reference to the player state used for evaluating dialogue conditions.")]
-    [SerializeField] private PlayerState player;
-
     public static DialogueSystem Instance;
     private Dictionary<string, DialogueNode> nodeLookup;
 
@@ -29,12 +26,7 @@ public class DialogueSystem : MonoBehaviour
     private void Awake()
     {
         Instance = this;
-
-        if (player == null)
-        {
-            GameObject placeholder = new GameObject("PlayerState");
-            player = placeholder.AddComponent<PlayerState>();
-        }
+        uiManager = FindFirstObjectByType<DialogueUIManager>();
     }
 
     private void Update()
@@ -59,7 +51,7 @@ public class DialogueSystem : MonoBehaviour
 
                 foreach (var condition in condNodeClick.conditions)
                 {
-                    if (!condition.Evaluate(player))
+                    if (!condition.Evaluate(PlayerState.Instance))
                     {
                         allPass = false;
                         break;
@@ -70,22 +62,12 @@ public class DialogueSystem : MonoBehaviour
 
                 if (string.IsNullOrEmpty(nextID))
                 {
-                    uiManager.EndDialogue();
-                    if (sendingObject.GetComponent<NPCDialogueHolder>() != null)
-                    {
-                        sendingObject.GetComponent<NPCDialogueHolder>().EndConversation();
-                    }
-                    currentNode = null;
+                    EndDialogue();
                 }
                 else if (!nodeLookup.TryGetValue(nextID, out currentNode))
                 {
                     Debug.LogWarning($"Node '{nextID}' not found. Ending dialogue.");
-                    uiManager.EndDialogue();
-                    if (sendingObject.GetComponent<NPCDialogueHolder>() != null)
-                    {
-                        sendingObject.GetComponent<NPCDialogueHolder>().EndConversation();
-                    }
-                    currentNode = null;
+                    EndDialogue();
                 }
                 else
                 {
@@ -122,11 +104,12 @@ public class DialogueSystem : MonoBehaviour
     public void StartDialogue(Dialogue dialogue, GameObject sender)
     {
         if (currentDialogue == null || uiManager == null) return;
-
+        Debug.Log("Reeee");
         sendingObject = sender;
         currentDialogue = dialogue;
         BuildNodeLookup();
         isDialogueActive = true;
+        if (currentDialogue.hasItemID == true) QuestManager.Instance.RegisterItemCollected(currentDialogue.itemID);
 
         if (currentDialogue.nodes.Count == 0) return;
 
@@ -141,12 +124,7 @@ public class DialogueSystem : MonoBehaviour
     {
         if (currentNode == null)
         {
-            uiManager.EndDialogue();
-            if (sendingObject.GetComponent<NPCDialogueHolder>() != null)
-            {
-                sendingObject.GetComponent<NPCDialogueHolder>().EndConversation();
-            }
-            
+            EndDialogue();
             return;
         }
 
@@ -156,7 +134,7 @@ public class DialogueSystem : MonoBehaviour
         lineFullyRevealed = false;
         waitingForPlayerInput = true;
 
-        float speed = 1 - currentDialogue.talkingSpeed;
+        float speed = Mathf.Lerp(0.01f, 0.06f, 1f - currentDialogue.talkingSpeed);
 
         if (currentNode is DialogueLineNode lineNode)
         {
@@ -201,6 +179,24 @@ public class DialogueSystem : MonoBehaviour
                 OnTypewriterComplete
             );
         }
+        else if (currentNode is EventNode eventNode)
+        {
+            // Trigger scene event (if any)
+            if (!string.IsNullOrEmpty(eventNode.eventID))
+            {
+                FindFirstObjectByType<EventManager>()?.TriggerEvent(eventNode.eventID);
+            }
+
+            // Show text like a normal DialogueLineNode
+            currentLineNode = new DialogueLineNode { text = eventNode.text };
+
+            uiManager.ShowDialogueNode(
+                currentLineNode,
+                currentDialogue.hasName ? currentDialogue.npcName : "",
+                speed,
+                OnTypewriterComplete
+            );
+}
     }
 
     /// <summary>
@@ -219,6 +215,12 @@ public class DialogueSystem : MonoBehaviour
         if (currentNode is DialogueLineNode lineNode)
             return lineNode.nextNodeID;
 
+        if (currentNode is EventNode eventNode)
+            return eventNode.nextNodeID; // 👈 ADD THIS
+
+        if (currentNode is StartQuestNode questNode)
+            return questNode.nextNodeID; // (you also forgot this btw 👀)
+
         return null;
     }
 
@@ -229,24 +231,14 @@ public class DialogueSystem : MonoBehaviour
     {
         if (string.IsNullOrEmpty(nextNodeID))
         {
-            uiManager.EndDialogue();
-            if (sendingObject.GetComponent<NPCDialogueHolder>() != null)
-            {
-                sendingObject.GetComponent<NPCDialogueHolder>().EndConversation();
-            }
-            currentNode = null;
+            EndDialogue();
             return;
         }
 
         if (!nodeLookup.TryGetValue(nextNodeID, out currentNode))
         {
             Debug.LogWarning($"Node '{nextNodeID}' not found. Ending dialogue.");
-            uiManager.EndDialogue();
-            if (sendingObject.GetComponent<NPCDialogueHolder>() != null)
-            {
-                sendingObject.GetComponent<NPCDialogueHolder>().EndConversation();
-            }
-            currentNode = null;
+            EndDialogue();
             return;
         }
 
@@ -266,27 +258,27 @@ public class DialogueSystem : MonoBehaviour
 
         if (string.IsNullOrEmpty(nextNodeID))
         {
-            uiManager.EndDialogue();
-            if (sendingObject.GetComponent<NPCDialogueHolder>() != null)
-            {
-                sendingObject.GetComponent<NPCDialogueHolder>().EndConversation();
-            }
-            currentNode = null;
+            EndDialogue();
             return;
         }
 
         if (!nodeLookup.TryGetValue(nextNodeID, out currentNode))
         {
             Debug.LogWarning($"Node '{nextNodeID}' not found. Ending dialogue.");
-            uiManager.EndDialogue();
-            if (sendingObject.GetComponent<NPCDialogueHolder>() != null)
-            {
-                sendingObject.GetComponent<NPCDialogueHolder>().EndConversation();
-            }
-            currentNode = null;
+            EndDialogue();
             return;
         }
 
         ProcessNode();
+    }
+    void EndDialogue()
+    {
+        uiManager.EndDialogue();
+
+        var npc = sendingObject?.GetComponent<NPCDialogueHolder>();
+        if (npc != null)
+            npc.EndConversation();
+
+        currentNode = null;
     }
 }

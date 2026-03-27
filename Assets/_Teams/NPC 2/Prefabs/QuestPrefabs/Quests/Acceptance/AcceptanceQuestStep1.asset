@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ba9c8a777ee17d4a9d0cb3822562d09, type: 3}
+  m_Name: AcceptanceQuestStep1
+  m_EditorClassIdentifier: Assembly-CSharp::Quest
+  questID: 1b8c5955-82fb-483b-b3bf-6d5757ae2ba2
+  questName: Collect stages of grief
+  description: Collect all stages
+  objectives:
+  - objectiveID: 0
+    description: Collect Anger
+    requiredAmount: 1
+    currentAmount: 0
+  - objectiveID: 1
+    description: Collect Bargaining
+    requiredAmount: 1
+    currentAmount: 0
+  - objectiveID: 2
+    description: Collect Depression
+    requiredAmount: 1
+    currentAmount: 0
+  onCompleted:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 5408847021079977414, guid: 919c6ea113254904090a6349e7e7807c, type: 3}
+        m_TargetAssemblyTypeName: QuestStarter, Assembly-CSharp
+        m_MethodName: StartQuest
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 11400000, guid: b03ac438ab5d64d44856d3778208f3b2, type: 2}
+          m_ObjectArgumentAssemblyTypeName: Quest, Assembly-CSharp
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
