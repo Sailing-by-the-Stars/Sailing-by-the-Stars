@@ -35,11 +35,12 @@ public class InteractionController : MonoBehaviour
         Debug.DrawRay(ray.origin, ray.direction * interactionDistance, Color.green);
         
         currentTargetedInteractable = hit.collider?.GetComponent<IInteractable>();
+
     }
 
     private void UpdateInteractionText()
     {
-        if (currentTargetedInteractable == null)
+        if (currentTargetedInteractable == null || DialogueSystem.Instance.isDialogueActive)
         {
             interactionText.text = string.Empty;
             return;
@@ -51,7 +52,7 @@ public class InteractionController : MonoBehaviour
     private void CheckForInteractionInput()
     {
         // TODO: replace hardcoded key press with Input Actions
-        if (Keyboard.current.eKey.wasPressedThisFrame && currentTargetedInteractable != null)
+        if (Keyboard.current.eKey.wasPressedThisFrame && currentTargetedInteractable != null && !DialogueSystem.Instance.isDialogueActive)
         {
             currentTargetedInteractable.Interact(this);
         }

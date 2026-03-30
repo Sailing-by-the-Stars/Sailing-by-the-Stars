@@ -127,6 +127,8 @@ public class DockingPoint : MonoBehaviour
     {
         player.transform.SetParent(null);
 
+        player.GetComponent<Movement>().ExitBoat();
+
         Rigidbody playerRb = player.GetComponent<Rigidbody>();
         if (playerRb != null)
         {
