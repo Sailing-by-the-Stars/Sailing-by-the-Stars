@@ -1,8 +1,8 @@
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 //Creator: Joost
+//Edited by: Johan
+//edited by: Jardi (the sprint working, hacky though it is)
 public class Movement : MonoBehaviour
 {
     [Header("Movement Settings")]
@@ -20,6 +20,7 @@ public class Movement : MonoBehaviour
 
     [SerializeField] Transform[] groundChecks;
     bool isGrounded = false;
+    bool isOnBoat = false;
 
     PlayerControls playerControls;
 
@@ -29,8 +30,11 @@ public class Movement : MonoBehaviour
     float yCamRotation = 0f;
 
     [Header("Player walk on boat")]
-    [SerializeField] private Transform boat;
+    [SerializeField] private GameObject boat;
     [SerializeField] private Transform seatPosition;
+
+    private BoatController boatController;
+    private BuoyancyController buoyancyController;
 
     private void Awake()
     {
@@ -53,39 +57,61 @@ public class Movement : MonoBehaviour
         Cursor.visible = false;
         cam = GetComponentInChildren<Camera>();
         rb = GetComponent<Rigidbody>();
+
+        boatController = boat.GetComponent<BoatController>();
+        buoyancyController = boat.GetComponent<BuoyancyController>();
     }
 
     private void Update()
     {
-        Jump();
-        IsGrounded();
-
-        if (isGrounded)
+        if (!isOnBoat)
         {
-            /*if (rb.linearVelocity.x > 0 || rb.linearVelocity.z > 0)
+            Jump();
+            IsGrounded();
+
+            if (isGrounded)
             {
-                rb.linearVelocity += new Vector3(-rb.linearVelocity.x, 0, -rb.linearVelocity.z);
-            }*/
-            /*if (rb.angularVelocity.x > 0 || rb.angularVelocity.z > 0)
-            {
-                rb.angularVelocity += new Vector3(-rb.angularVelocity.x, 0, -rb.angularVelocity.z);
-            }*/
-            rb.AddForce(-rb.linearVelocity);
-        }
+                /*if (rb.linearVelocity.x > 0 || rb.linearVelocity.z > 0)
+                {
+                    rb.linearVelocity += new Vector3(-rb.linearVelocity.x, 0, -rb.linearVelocity.z);
+                }*/
+                /*if (rb.angularVelocity.x > 0 || rb.angularVelocity.z > 0)
+                {
+                    rb.angularVelocity += new Vector3(-rb.angularVelocity.x, 0, -rb.angularVelocity.z);
+                }*/
+                rb.AddForce(-rb.linearVelocity);
+            }
+            }
     }
 
     void FixedUpdate()
     {
         RotateCamera();
-        MovePlayer();
+
+        if (!isOnBoat)
+            MovePlayer();
     }
 
     void MovePlayer()
     {
         Vector2 moveDirection = playerControls.Land.Move.ReadValue<Vector2>();
         
+        //replace everything in the //'s with your own code
+        //this is just so we can test even if the ship doesn't work
+        //>
+        if (Input.GetKey(KeyCode.LeftShift))
+        {
+            rb.MovePosition(rb.position + rb.transform.forward * moveDirection.y * movementSpeed * sprintMultiplier * Time.deltaTime);
+            rb.MovePosition(rb.position + rb.transform.right * moveDirection.x * movementSpeed * sprintMultiplier * Time.deltaTime);
+        }
+        else
+        {
+        //<
         rb.MovePosition(rb.position + rb.transform.forward * moveDirection.y * movementSpeed * Time.deltaTime);
         rb.MovePosition(rb.position + rb.transform.right * moveDirection.x * movementSpeed * Time.deltaTime);
+        //>
+        }
+        //<
     }
 
     void RotateCamera()
@@ -128,13 +154,34 @@ public class Movement : MonoBehaviour
     //set the player to be able to go on top of the boat
     private void OnTriggerEnter(Collider other)
     {
-        Debug.LogWarning("IT HITS");
         if (other.CompareTag("boat"))
         {
-            transform.SetParent(boat);
+            isOnBoat = true;
+            Debug.LogWarning("IT HITS");
+            transform.SetParent(boat.transform);
             transform.position = seatPosition.position;
 
+            EntersBoat();
         }
+    }
+
+    void EntersBoat()
+    {
+        Destroy(rb);
+        isOnBoat = true;
+
+        buoyancyController.enabled = true;
+        boatController.enabled = true;
+    }
+
+    public void ExitBoat()
+    {
+        gameObject.AddComponent(typeof(Rigidbody));
+        rb = GetComponent<Rigidbody>();
+        isOnBoat = false;
+
+        buoyancyController.enabled = false;
+        boatController.enabled = false;
     }
 
     void Jump()
