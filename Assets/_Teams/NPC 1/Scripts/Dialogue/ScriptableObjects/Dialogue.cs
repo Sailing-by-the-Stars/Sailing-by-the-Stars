@@ -7,8 +7,11 @@ public class Dialogue : ScriptableObject
     public bool hasName;
     public string npcName;
     [Tooltip("Affects how fast the NPC speaks. Default: 0.95")]
-    [Range(0.8f, 1f)]
+    [Range(0.1f, 1f)]
     public float talkingSpeed = 0.95f;
     [SerializeReference]
     public List<DialogueNode> nodes = new();
+    public bool hasItemID;
+    public int itemID;
+    
 }

@@ -30,15 +30,17 @@ public class PhysicsPickup : MonoBehaviour, IPickup
         if (!pickupController || pickupController.HasPickup) return;
 
         pickupController.GrabPickup(this);
-
         SetPhysicsValue(true);
+        
+        GameEvents.ExecOnPickup(this);
     }
 
     public virtual void Drop(PickupController pickupController)
     {
         transform.parent = null;
-        
         SetPhysicsValue(false);
+        
+        GameEvents.ExecOnDrop(this);
     }
 
     public void SetPositionInParent(Transform newParent)
@@ -51,6 +53,8 @@ public class PhysicsPickup : MonoBehaviour, IPickup
     public virtual void Use()
     {
         Debug.Log("Pickup Used!");
+        
+        GameEvents.ExecOnUse(this);
     }
 
     private void SetPhysicsValue(bool wasPickedUp)

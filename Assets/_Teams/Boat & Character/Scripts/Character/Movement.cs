@@ -1,13 +1,14 @@
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 //Creator: Joost
+//Edited by: Johan
+//edited by: Jardi (the sprint working, hacky though it is)
 public class Movement : MonoBehaviour
 {
     [Header("Movement Settings")]
     [SerializeField] float movementSpeed = 4f;
     [SerializeField] float sprintMultiplier;
+    [SerializeField] float jumpStrength = 20f;
 
     [Header("Camera Setting")]
     [SerializeField] float mouseSensitivity = 10f;
@@ -17,12 +18,23 @@ public class Movement : MonoBehaviour
     [Header("Collision Handling")]
     [SerializeField] Rigidbody rb;
 
+    [SerializeField] Transform[] groundChecks;
+    bool isGrounded = false;
+    bool isOnBoat = false;
+
     PlayerControls playerControls;
 
     Camera cam;
 
     float xCamRotation = 0f;
     float yCamRotation = 0f;
+
+    [Header("Player walk on boat")]
+    [SerializeField] private GameObject boat;
+    [SerializeField] private Transform seatPosition;
+
+    private BoatController boatController;
+    private BuoyancyController buoyancyController;
 
     private void Awake()
     {
@@ -44,24 +56,62 @@ public class Movement : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         cam = GetComponentInChildren<Camera>();
+        rb = GetComponent<Rigidbody>();
+
+        boatController = boat.GetComponent<BoatController>();
+        buoyancyController = boat.GetComponent<BuoyancyController>();
     }
 
     private void Update()
     {
-        RotateCamera();
+        if (!isOnBoat)
+        {
+            Jump();
+            IsGrounded();
+
+            if (isGrounded)
+            {
+                /*if (rb.linearVelocity.x > 0 || rb.linearVelocity.z > 0)
+                {
+                    rb.linearVelocity += new Vector3(-rb.linearVelocity.x, 0, -rb.linearVelocity.z);
+                }*/
+                /*if (rb.angularVelocity.x > 0 || rb.angularVelocity.z > 0)
+                {
+                    rb.angularVelocity += new Vector3(-rb.angularVelocity.x, 0, -rb.angularVelocity.z);
+                }*/
+                rb.AddForce(-rb.linearVelocity);
+            }
+            }
     }
 
     void FixedUpdate()
     {
-        MovePlayer();
+        RotateCamera();
+
+        if (!isOnBoat)
+            MovePlayer();
     }
 
     void MovePlayer()
     {
         Vector2 moveDirection = playerControls.Land.Move.ReadValue<Vector2>();
         
+        //replace everything in the //'s with your own code
+        //this is just so we can test even if the ship doesn't work
+        //>
+        if (Input.GetKey(KeyCode.LeftShift))
+        {
+            rb.MovePosition(rb.position + rb.transform.forward * moveDirection.y * movementSpeed * sprintMultiplier * Time.deltaTime);
+            rb.MovePosition(rb.position + rb.transform.right * moveDirection.x * movementSpeed * sprintMultiplier * Time.deltaTime);
+        }
+        else
+        {
+        //<
         rb.MovePosition(rb.position + rb.transform.forward * moveDirection.y * movementSpeed * Time.deltaTime);
         rb.MovePosition(rb.position + rb.transform.right * moveDirection.x * movementSpeed * Time.deltaTime);
+        //>
+        }
+        //<
     }
 
     void RotateCamera()
@@ -99,5 +149,73 @@ public class Movement : MonoBehaviour
             rotation = -180;
         }
         return rotation;
+    }
+
+    //set the player to be able to go on top of the boat
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("boat"))
+        {
+            isOnBoat = true;
+            Debug.LogWarning("IT HITS");
+            transform.SetParent(boat.transform);
+            transform.position = seatPosition.position;
+
+            EntersBoat();
+        }
+    }
+
+    void EntersBoat()
+    {
+        Destroy(rb);
+        isOnBoat = true;
+
+        buoyancyController.enabled = true;
+        boatController.enabled = true;
+    }
+
+    public void ExitBoat()
+    {
+        gameObject.AddComponent(typeof(Rigidbody));
+        rb = GetComponent<Rigidbody>();
+        isOnBoat = false;
+
+        buoyancyController.enabled = false;
+        boatController.enabled = false;
+    }
+
+    void Jump()
+    {
+        if (isGrounded)
+        {
+            if (playerControls.Land.Jump.triggered)
+            {
+                print("Jumped");
+                rb.AddForce(new Vector3(0, jumpStrength, 0));
+            }
+        }
+    }
+
+    void IsGrounded()
+    {
+        /*RaycastHit hit;
+        if(Physics.Raycast(transform.position, -Vector3.up, out hit, gameObject.GetComponent<SphereCollider>().bounds.extents.y + 0.1f))
+        {
+            print(hit);
+            return true;
+        }*/
+        isGrounded = false;
+
+        for (int i = 0; i < groundChecks.Length; i++)
+        {
+            RaycastHit hit;
+            if (Physics.Raycast(groundChecks[i].position, -Vector3.up, out hit, gameObject.GetComponent<CapsuleCollider>().bounds.extents.y + 0.1f))
+            {
+                //print(hit);
+                isGrounded = true;
+                return;
+            }
+        }
+        isGrounded = false;
     }
 }

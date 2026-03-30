@@ -47,12 +47,13 @@ public class OrbitMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        RotateCamera();
+        
     }
 
     private void FixedUpdate()
     {
         MovePlayer();
+        RotateCamera();
     }
 
     void MovePlayer()
