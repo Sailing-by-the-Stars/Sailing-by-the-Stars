@@ -275,6 +275,10 @@ public class DialogueSystem : MonoBehaviour
     {
         uiManager.EndDialogue();
 
+        if (currentDialogue != null)
+        {
+            PlayerState.Instance.MarkDialogueComplete(currentDialogue);
+        }
         var npc = sendingObject?.GetComponent<NPCDialogueHolder>();
         if (npc != null)
             npc.EndConversation();
