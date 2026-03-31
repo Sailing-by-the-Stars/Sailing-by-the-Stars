@@ -23,12 +23,7 @@ public class SceneSwitcherTemp : MonoBehaviour
     {
         if(Input.GetKeyDown(KeyCode.Equals))
         {
-            SceneManager.LoadScene("Demo1");
-        }
-        if(Input.GetKeyDown(KeyCode.Minus))
-        {
-            SceneManager.LoadScene("DemoOrbit");
-
+            SceneManager.LoadScene(0);
         }
     }
 }

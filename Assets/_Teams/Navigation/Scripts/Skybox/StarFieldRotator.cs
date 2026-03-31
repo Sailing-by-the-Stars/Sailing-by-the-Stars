@@ -1,10 +1,11 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
 
-enum globeType
+public enum globeType
 {
     relative,
     positional,
@@ -21,12 +22,79 @@ public class StarFieldRotator : MonoBehaviour
 
 
 
-    [SerializeField] globeType globeType = globeType.relative;
+    [SerializeField] globeType editorGlobeType;
+    globeType GlobeType;
+    [HideInInspector]
+    public globeType globeType
+    {
+        get { return GlobeType; }
+        set
+        {
+            GlobeType = value;
+            editorGlobeType = value;
+            globeTypeChanged?.Invoke(GlobeType);
+            Debug.Log($"GlobeType changed to: {GlobeType}");
+        }
+    }
 
+    public static Action<globeType> globeTypeChanged;
+
+    StarField StarField;
+
+    private void OnEnable()
+    {
+        StarField = GetComponent<StarField>();
+        globeTypeChanged += GlobeTypeChanged;
+    }
+
+    private void OnDisable()
+    {
+        globeTypeChanged -= GlobeTypeChanged;
+    }
+
+
+    void GlobeTypeChanged(globeType newType)
+    {
+        switch (newType)
+        {
+            case globeType.relative:
+                foreach (GameObject star in StarField.starObjects)
+                {
+                    star.SetActive(true);
+                }
+                break;
+            case globeType.positional:
+                foreach (GameObject star in StarField.starObjects)
+                {
+                    star.SetActive(true);
+                }
+                break;
+            case globeType.manual:
+                foreach (GameObject star in StarField.starObjects)
+                {
+                    star.SetActive(false);
+                }
+                break;
+            default:
+                break;
+        }
+
+        
+    }
 
     void Start()
     {
+        StarField = GetComponent<StarField>();
         lastPlayerPos = Camera.main.transform.position;
+        globeTypeChanged?.Invoke(GlobeType);
+    }
+
+    private void OnValidate()
+    {
+        if (editorGlobeType != globeType)
+        {
+            globeType = editorGlobeType;
+        }
     }
 
     void Update()
@@ -40,13 +108,13 @@ public class StarFieldRotator : MonoBehaviour
             switch (globeType)
             {
                 case globeType.relative:
-                    globeType = globeType.manual;
+                    globeType = globeType.positional;
                     break;
                 case globeType.positional:
-                    globeType = globeType.relative;
+                    globeType = globeType.manual;
                     break;
                 case globeType.manual:
-                    globeType = globeType.positional;
+                    globeType = globeType.relative;
                     break;
                 default:
                     break;

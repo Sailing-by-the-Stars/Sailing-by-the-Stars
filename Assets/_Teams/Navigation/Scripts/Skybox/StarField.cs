@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.Rendering.HighDefinition;
 using static StarDataLoader;
 
 [Serializable]
@@ -13,12 +15,13 @@ public class manualStar
 
 public class StarField : MonoBehaviour
 {
-    [Range(0, 100)]
-    [SerializeField] private float starSizeMin = 0f;
+    [SerializeField] private AnimationCurve brightnessCurve;
     [Range(0, 100)]
     [SerializeField] private float starSizeMax = 5f;
+    [SerializeField] private float emissionMult = 2;
+
     private List<StarDataLoader.Star> stars;
-    private List<GameObject> starObjects;
+    public List<GameObject> starObjects;
     private Dictionary<int, GameObject> constellationVisible = new();
 
     [SerializeField] List<manualStar> manualStars = new();
@@ -43,12 +46,27 @@ public class StarField : MonoBehaviour
             stargo.transform.Rotate(0, 180, 0);
             Material material = stargo.GetComponent<MeshRenderer>().material;
             material.shader = Shader.Find("HDRP/Unlit");
+
             //material.SetFloat("_Size", Mathf.Lerp(starSizeMin, starSizeMax, star.size));
-            Vector3 size = new Vector3(Mathf.Lerp(starSizeMin, starSizeMax, star.size), Mathf.Lerp(starSizeMin, starSizeMax, star.size), Mathf.Lerp(starSizeMin, starSizeMax, star.size));
+            float sizeM = Mathf.Lerp(0, 1, star.size);
+            sizeM = brightnessCurve.Evaluate(sizeM);
+            
+            float starSize = sizeM * starSizeMax;
+
+
+            Vector3 size = new Vector3(starSize, starSize, starSize);
 
             stargo.transform.localScale = size;
-
+            
             material.color = star.colour * 2;
+            material.EnableKeyword("_EMISSION");
+
+            // base color (no intensity baked in)
+            material.SetColor("_EmissiveColor", star.colour);
+
+            half intensityMul = (half) MathF.Pow(2.0f, emissionMult * starSize);
+            material.color *= intensityMul;
+
             starObjects.Add(stargo);
         }
 
@@ -90,9 +108,32 @@ public class StarField : MonoBehaviour
         {
             for (int i = 0; i < starObjects.Count; i++)
             {
+                if (starObjects[i].GetComponent<MeshRenderer>() == null)
+                {
+                    continue;
+                }
+
                 // Update the size set in the shader.
                 Material material = starObjects[i].GetComponent<MeshRenderer>().material;
-                material.SetFloat("_Size", Mathf.Lerp(starSizeMin, starSizeMax, stars[i].size));
+
+                float sizeM = Mathf.Lerp(0, 1, stars[i].size);
+                sizeM = brightnessCurve.Evaluate(sizeM);
+
+                float starSize = sizeM * starSizeMax;
+
+
+                Vector3 size = new Vector3(starSize, starSize, starSize);
+
+                starObjects[i].transform.localScale = size;
+
+                material.color = stars[i].colour * 2;
+                material.EnableKeyword("_EMISSION");
+
+                // base color (no intensity baked in)
+                material.SetColor("_EmissiveColor", stars[i].colour);
+
+                half intensityMul = (half)MathF.Pow(2.0f, emissionMult * starSize);
+                material.color *= intensityMul;
             }
         }
     }
@@ -100,7 +141,7 @@ public class StarField : MonoBehaviour
     // A constellation is a tuple of the stars and the lines that join them.
     private readonly List<(int[], int[])> constellations = new() {
     
-        /*
+        
         // Orion
     (new int[] { 1948, 1903, 1852, 2004, 1713, 2061, 1790, 1907, 2124,
                  2199, 2135, 2047, 2159, 1543, 1544, 1570, 1552, 1567 },
@@ -133,7 +174,7 @@ public class StarField : MonoBehaviour
     (new int[] { 3705, 3690, 3612, 3579, 3275, 2818, 2560, 2238 },
      new int[] { 3705, 3690, 3690, 3612, 3612, 3579, 3579, 3275, 3275, 2818,
                  2818, 2560, 2560, 2238 }),
-        */
+        
     // Ursa Major
     (new int[] { 3569, 3594, 3775, 3888, 3323, 3757, 4301, 4295, 4554, 4660,
                  4905, 5054, 5191, 4518, 4335, 4069, 4033, 4377, 4375 },
@@ -146,6 +187,7 @@ public class StarField : MonoBehaviour
     private void Update()
     {
         // Check for numeric presses and toggle the constellation highlighting.
+        /*
         for (int i = 0; i < 10; i++)
         {
             if (Input.GetKeyDown(KeyCode.Alpha0 + i))
@@ -153,6 +195,7 @@ public class StarField : MonoBehaviour
                 ToggleConstellation(i);
             }
         }
+        */
     }
 
     void ToggleConstellation(int index)

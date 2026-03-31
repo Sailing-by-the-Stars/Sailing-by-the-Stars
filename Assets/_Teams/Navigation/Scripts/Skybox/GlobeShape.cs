@@ -1,10 +1,12 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class GlobeShape : MonoBehaviour
 {
     [SerializeField] float globeRadius = 5;
     [SerializeField] int resolution = 10;
+    [SerializeField] float offsetY = 5000f;
 
     List<Vector3> verticePositions = new();
     List<Vector3> vertices = new();
@@ -14,18 +16,74 @@ public class GlobeShape : MonoBehaviour
 
 
     List<TwinklingStar> relatedStars = new();
+    List<StarInfo> relatedMiniStars = new();
+
+    private void OnEnable()
+    {
+        StarFieldRotator.globeTypeChanged += ToggleStars;
+    }
+
+    private void OnDisable()
+    {
+        StarFieldRotator.globeTypeChanged -= ToggleStars;
+    }
+
+
+
+    void ToggleStars(globeType globeType)
+    {
+        switch (globeType)
+        {
+            case globeType.relative:
+                foreach (TwinklingStar star in relatedStars)
+                {
+                    star.gameObject.SetActive(false);
+                }
+                foreach (StarInfo star in relatedMiniStars)
+                {
+                    star.gameObject.SetActive(false);
+                }
+                break;
+            case globeType.positional:
+                foreach (TwinklingStar star in relatedStars)
+                {
+                    star.gameObject.SetActive(false);
+                }
+                foreach (StarInfo star in relatedMiniStars)
+                {
+                    star.gameObject.SetActive(false);
+                }
+                break;
+            case globeType.manual:
+                foreach (TwinklingStar star in relatedStars)
+                {
+                    star.gameObject.SetActive(true);
+                }
+                foreach (StarInfo star in relatedMiniStars)
+                {
+                    star.gameObject.SetActive(true);
+                }
+                break;
+            default:
+                Debug.LogError("it should never switch to this state!");
+                break;
+        }
+    }
 
 
     private void Awake()
     {
-        myMesh = new Mesh();
-        meshFilter = GetComponent<MeshFilter>();
-        meshFilter.mesh = myMesh;
+        relatedStars = GetComponentsInChildren<TwinklingStar>().ToList();
+        relatedMiniStars = GetComponentsInChildren<StarInfo>().ToList();
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        if (GetComponent<MeshRenderer>() == null && GetComponent<MeshRenderer>().enabled == false)
+        {
+            return;
+        }
         DrawSphere();
     }
 
@@ -43,6 +101,8 @@ public class GlobeShape : MonoBehaviour
         targetpos.x -= globeRadius;
         targetpos.z -= globeRadius;
 
+        targetpos.y -= offsetY;
+
         transform.position = targetpos;
 
 
@@ -50,12 +110,28 @@ public class GlobeShape : MonoBehaviour
         {
             Vector3 starTargetpos = star.initpos;
 
-            starTargetpos.y = GetY(globeRadius, star.initpos.x, star.initpos.y);
+            star.transform.position = starTargetpos;
 
-            star.transform.LookAt(transform.position);
-            star.transform.Rotate(0, 180, 0);
+            starTargetpos.y = GetY(star.transform.localPosition.x, star.transform.localPosition.z);
 
             star.transform.position = starTargetpos;
+
+            star.transform.LookAt(Camera.main.transform.position);
+            star.transform.Rotate(0, 180, 0);
+        }
+
+        foreach (StarInfo star in relatedMiniStars)
+        {
+            Vector3 starTargetpos = star.initpos;
+
+            star.transform.position = starTargetpos;
+
+            starTargetpos.y = GetY(star.transform.localPosition.x, star.transform.localPosition.z);
+
+            star.transform.position = starTargetpos;
+
+            star.transform.LookAt(Camera.main.transform.position);
+            star.transform.Rotate(0, 180, 0);
         }
     }
 
@@ -91,7 +167,25 @@ public class GlobeShape : MonoBehaviour
             y = 0;
         }
 
-        Debug.Log($"radius '{radius}', x '{x}', and y '{z}' give z '{y}'");
+        //Debug.Log($"radius '{radius}', x '{x}', and y '{z}' give z '{y}'");
+        return y;
+    }
+
+    float GetY(float x, float z)
+    {
+        x -= globeRadius;
+        z -= globeRadius;
+
+        float y = 0;
+        y = Mathf.Sqrt(Mathf.Pow(globeRadius, 2) - (Mathf.Pow(x, 2) + Mathf.Pow(z, 2)));
+
+        y += transform.position.y;
+
+        if (y.ToString() == "NaN")
+        {
+            y = 0;
+        }
+
         return y;
     }
 
@@ -100,13 +194,13 @@ public class GlobeShape : MonoBehaviour
     {
         vertices = new List<Vector3>();
         float xStepSize = (size) / resolution;
-        float yStepSize = (size) / resolution;
+        float zStepSize = (size) / resolution;
 
-        for (int y = 0; y < resolution + 1; y++)
+        for (int z = 0; z < resolution + 1; z++)
         {
             for (int x = 0; x < resolution + 1; x++)
             {
-                vertices.Add(new Vector3(x * xStepSize, 0, y * yStepSize));
+                vertices.Add(new Vector3(x * xStepSize, 0, z * zStepSize));
             }
         }
 
@@ -133,6 +227,10 @@ public class GlobeShape : MonoBehaviour
 
     void AssignMesh()
     {
+        if (GetComponent<MeshRenderer>() == null || GetComponent<MeshRenderer>().enabled == false)
+        {
+            return;
+        }
         myMesh.Clear();
         myMesh.vertices = vertices.ToArray();
         myMesh.triangles = triangles.ToArray();
@@ -141,17 +239,30 @@ public class GlobeShape : MonoBehaviour
 
     private void OnValidate()
     {
-        myMesh = new Mesh();
-        meshFilter = GetComponent<MeshFilter>();
-        meshFilter.mesh = myMesh;
+        if (Camera.main == null)
+        {
+            return;
+        }
 
-        DrawSphere();
+
 
         Vector3 targetpos = Camera.main.transform.position;
 
         targetpos.x -= globeRadius;
         targetpos.z -= globeRadius;
 
+        targetpos.y -= offsetY;
+
         transform.position = targetpos;
+        if(GetComponent<MeshRenderer>() == null || GetComponent<MeshRenderer>().enabled == false)
+        {
+            return;
+        }
+        
+        myMesh = new Mesh();
+        meshFilter = GetComponent<MeshFilter>();
+        meshFilter.mesh = myMesh;
+        
+        DrawSphere();
     }
 }

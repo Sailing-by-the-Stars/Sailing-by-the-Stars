@@ -15,16 +15,20 @@ public class Astrolabe : MonoBehaviour
 
     private AnimationCurve zoomCurve;
     
-    private bool zoomedIn;
+    public static bool zoomedIn;
     private bool visible = false;
 
     private List<Renderer> renderers = new();
     private List<TMP_Text> textBoxes = new();
+    private TMP_Text targetText;
 
     private Quaternion initialRot = new();
 
     private Transform pointer;
+    [SerializeField]
     float pointerAngle;
+
+    public static float pointerAngleHax;
 
     private Coroutine coroutine;
 
@@ -55,6 +59,10 @@ public class Astrolabe : MonoBehaviour
 
         foreach (TMP_Text text in textBoxes)
         {
+            if(text.name == "target")
+            {
+                targetText = text;
+            }
             text.enabled = false;
         }
 
@@ -104,7 +112,6 @@ public class Astrolabe : MonoBehaviour
             }
         }
 
-
         if (Input.GetKeyDown(KeyCode.Tab))
         {
             visible = !visible;
@@ -115,16 +122,15 @@ public class Astrolabe : MonoBehaviour
             foreach (TMP_Text text in textBoxes)
             {
                 text.enabled = visible;
-
-                if(visible == false)
+            }
+            if (visible == false)
+            {
+                if (zoomedIn)
                 {
-                    if (zoomedIn)
+                    zoomedIn = false;
+                    if (coroutine == null)
                     {
-                        zoomedIn = false;
-                        if (coroutine == null)
-                        {
-                            coroutine = StartCoroutine(ZoomOut());
-                        }
+                        coroutine = StartCoroutine(ZoomOut());
                     }
                 }
             }
@@ -143,9 +149,20 @@ public class Astrolabe : MonoBehaviour
             pointerAngle = 0;
         }
 
+        pointerAngleHax = Mathf.Round(pointerAngle);
+
         foreach (TMP_Text text in textBoxes)
         {
             text.text = Mathf.Round(pointerAngle).ToString();
+        }
+
+        if (TwinklingStar.currentTarget > 0)
+        {
+            targetText.text = $"Target: {TwinklingStar.currentTarget.ToString()}";
+        }
+        else
+        {
+            targetText.text = "";
         }
 
         if (zoomedIn)

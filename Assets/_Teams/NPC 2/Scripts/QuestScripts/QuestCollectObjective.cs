@@ -27,10 +27,10 @@ public class CollectQuestItem : MonoBehaviour, IInteractable
             InteractionPromptUI.Instance.HidePrompt();
             Destroy(transform.root.gameObject);
         } 
-        else
-        {
-            Destroy(gameObject);
-        }
+        // else
+        // {
+        //     Destroy(gameObject);
+        // }
     }
 
     public void Interact(InteractionController interactionController)

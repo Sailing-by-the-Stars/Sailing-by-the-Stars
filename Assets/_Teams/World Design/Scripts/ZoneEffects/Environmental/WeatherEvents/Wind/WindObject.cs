@@ -29,10 +29,7 @@ public class WindObject : MonoBehaviour
         CacheWindTrails();
         CacheWindTrailBaseSpeed();
 
-        if (currentWindDirection.sqrMagnitude > 0.0001f)
-        {
-            worldWindDirection = currentWindDirection.normalized;
-        }
+        worldWindDirection = currentWindDirection;
 
         primaryAssignedDirection = worldWindDirection;
         secondaryAssignedDirection = worldWindDirection;
@@ -63,7 +60,7 @@ public class WindObject : MonoBehaviour
         Vector3 normalizedDirection = newDirection.normalized;
         float angleDelta = Vector3.Angle(GetActiveAssignedDirection(), normalizedDirection);
 
-        currentWindDirection = normalizedDirection;
+        currentWindDirection = newDirection;
 
         if (angleDelta >= restartAngleThreshold)
         {
