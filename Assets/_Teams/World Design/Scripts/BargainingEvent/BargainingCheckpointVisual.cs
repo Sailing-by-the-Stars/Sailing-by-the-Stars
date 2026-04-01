@@ -122,4 +122,18 @@ public class BargainingCheckpointVisual : MonoBehaviour
             rings[i] = lr;
         }
     }
+    private void OnDestroy()
+    {
+        if (ringMaterialTemplate != null)
+        {
+            ringMaterialTemplate.SetColor("_UnlitColor", baseColor);
+        }
+    }
+    private void OnDisable()
+    {
+        if (ringMaterialTemplate != null)
+        {
+            ringMaterialTemplate.SetColor("_UnlitColor", baseColor);
+        }
+    }
 }

@@ -51,7 +51,6 @@ public class BargainingController : MonoBehaviour
     private bool eventActive = false;
     private int currentCheckpointIndex = 0;
     private float timerRemaining = 0f;
-    private float currentTimerDuration = 0f;
     private BargainingEntity activeEntity;
     private GameObject boat;
 
@@ -92,7 +91,7 @@ public class BargainingController : MonoBehaviour
         boat = instigator;
         currentCheckpointIndex = 0;
         ActivateCurrentCheckpoint();
-        ResetTimer(defaultTimerDuration);
+        timerRemaining = defaultTimerDuration;
         SpawnEntity(defaultTimerDuration);
         eventActive = true;
     }
@@ -147,11 +146,6 @@ public class BargainingController : MonoBehaviour
         activeEntity.Despawn();
         activeEntity = null;
     }
-    private void ResetTimer(float duration)
-    {
-        currentTimerDuration = duration;
-        timerRemaining = duration;
-    }
     private void ActivateCurrentCheckpoint()
     {
         for (int i = 0; i < checkpoints.Length; i++)
@@ -169,7 +163,7 @@ public class BargainingController : MonoBehaviour
 
         yield return new WaitForSeconds(cooldown);
 
-        ResetTimer(nextTimerDuration);
+        timerRemaining = nextTimerDuration;
         SpawnEntity(nextTimerDuration);
         eventActive = true;
     }
