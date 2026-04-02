@@ -209,7 +209,7 @@ public class Astrolabe : MonoBehaviour
 
             if (scroll != 0f && !sideView)
             {
-                pointer.Rotate(new Vector3(scroll * 10f, 0, 0) * Time.deltaTime);
+                pointer.Rotate(new Vector3(scroll * 1f, 0, 0));
             }
 
             //Reset astrolabe rotation
