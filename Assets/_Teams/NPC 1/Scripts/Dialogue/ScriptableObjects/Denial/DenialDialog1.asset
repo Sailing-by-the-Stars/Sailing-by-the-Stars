@@ -21,12 +21,27 @@ MonoBehaviour:
   - rid: 6341597701008523267
   - rid: 6341597701008523268
   - rid: 6341597701008523269
-  - rid: 6341597701268308059
+  - rid: 5645095060880228352
+  - rid: 5645095060880228354
   hasItemID: 0
   itemID: 0
   references:
     version: 2
     RefIds:
+    - rid: 5645095060880228352
+      type: {class: EventNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: Thesis Handed
+        text: 'Well, <pause=0.5> this answer is for you to find. '
+        eventID: GiveThesis
+        nextNodeID: GiveQuest
+    - rid: 5645095060880228354
+      type: {class: StartQuestNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: GiveQuest
+        text: As it is the path <pause=0.5>of Mortal.
+        questToStart: {fileID: 11400000, guid: e4fe6399c04766640b61281c437e2bf2, type: 2}
+        nextNodeID: 
     - rid: 6341597701008523264
       type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
       data:
@@ -74,10 +89,3 @@ MonoBehaviour:
           nextNodeID: Thesis Handed
         - choiceText: I am not in "my" world?
           nextNodeID: Thesis Handed
-    - rid: 6341597701268308059
-      type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
-      data:
-        nodeID: Thesis Handed
-        text: Well, <pause=0.5> this answer is for you to find. As it is the path
-          <pause=0.5>of Mortal.
-        nextNodeID: 

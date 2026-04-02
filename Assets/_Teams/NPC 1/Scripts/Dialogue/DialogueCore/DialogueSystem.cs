@@ -104,7 +104,7 @@ public class DialogueSystem : MonoBehaviour
     public void StartDialogue(Dialogue dialogue, GameObject sender)
     {
         if (currentDialogue == null || uiManager == null) return;
-        Debug.Log("Reeee");
+        TempStateMachine.Instance.gameState = GameState.Dialogue;
         sendingObject = sender;
         currentDialogue = dialogue;
         BuildNodeLookup();
@@ -282,7 +282,7 @@ public class DialogueSystem : MonoBehaviour
         var npc = sendingObject?.GetComponent<NPCDialogueHolder>();
         if (npc != null)
             npc.EndConversation();
-
+        TempStateMachine.Instance.gameState = GameState.Moving;
         currentNode = null;
     }
 }
