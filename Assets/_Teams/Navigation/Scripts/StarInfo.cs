@@ -14,7 +14,10 @@ public class StarInfo : MonoBehaviour
         initpos = transform.position;
 
 
-
+        if(GetComponent<MeshRenderer>() == null)
+        {
+            return;
+        }
         Material material = GetComponent<MeshRenderer>().material;
         material.shader = Shader.Find("HDRP/Unlit");
 
