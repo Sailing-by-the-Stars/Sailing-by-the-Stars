@@ -45,6 +45,12 @@ public class SmoothAxis2D : MonoBehaviour
         negativeButton.action.Disable();
     }
 
+    public void Reset()
+    {
+        currentValue = 0f;
+        targetValue = 0f;
+    }
+
     private void OnPositivePressed(InputAction.CallbackContext ctx)
     {
         PositivePressed = true;
