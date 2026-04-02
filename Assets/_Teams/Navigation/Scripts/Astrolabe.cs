@@ -8,13 +8,13 @@ using UnityEngine.UI;
 public class Astrolabe : MonoBehaviour
 {
     private Camera cam;
-    
+
     private float initialFOV;
     private float zoomFOV = 30;
     private float zoomTime = 0.75f;
 
     private AnimationCurve zoomCurve;
-    
+
     public static bool zoomedIn;
     private bool visible = false;
 
@@ -27,6 +27,8 @@ public class Astrolabe : MonoBehaviour
     private Transform pointer;
     [SerializeField]
     float pointerAngle;
+    [SerializeField]
+    float rotationSensitivity = 20;
 
     public static float pointerAngleHax;
 
@@ -172,7 +174,7 @@ public class Astrolabe : MonoBehaviour
 
             if (scroll != 0f)
             {
-                pointer.Rotate(new Vector3(scroll * 10f, 0, 0) * Time.deltaTime);
+                pointer.Rotate(new Vector3(scroll * rotationSensitivity, 0, 0) * Time.deltaTime);
             }
 
             //Reset astrolabe rotation
