@@ -74,6 +74,8 @@ public class TwinklingStar : MonoBehaviour
         {
             initialEmissionColor = GetComponent<Renderer>().material.GetColor("_EmissiveColor");
         }
+
+        UpdateColor(intensity);
     }
 
     // Update is called once per frame
@@ -101,7 +103,7 @@ public class TwinklingStar : MonoBehaviour
         else
         {
             currentTarget = targetAngle;
-            starState = StarState.minigame;
+            starState = StarState.highlighted;
         }
     }
 
@@ -227,7 +229,7 @@ public class TwinklingStar : MonoBehaviour
                 float T = timer / animationLength;
                 float curveOutput = star.twinkleCurve.Evaluate(T);
 
-                star.UpdateColor(star.intensity * (curveOutput + 1));
+                star.UpdateColor(Color.cyan, star.intensity * (curveOutput + 1));
             }
         }
 
@@ -334,6 +336,10 @@ public class TwinklingStar : MonoBehaviour
                 float curveOutput = star.dimCurve.Evaluate(1- T);
 
                 star.UpdateColor(star.intensity * curveOutput);
+            }
+            else
+            {
+                star.UpdateColor(0);
             }
         }
 

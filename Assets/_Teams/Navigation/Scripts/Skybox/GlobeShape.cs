@@ -106,32 +106,31 @@ public class GlobeShape : MonoBehaviour
         transform.position = targetpos;
 
 
+        float starTargetY = 0;
         foreach (TwinklingStar star in relatedStars)
         {
-            Vector3 starTargetpos = star.initpos;
+            starTargetY = GetY(star.initpos.x, star.initpos.z);
 
-            star.transform.position = starTargetpos;
+            star.transform.position = new Vector3(star.initpos.x, starTargetY, star.initpos.z);
 
-            starTargetpos.y = GetY(star.transform.localPosition.x, star.transform.localPosition.z);
 
-            star.transform.position = starTargetpos;
-
-            star.transform.LookAt(Camera.main.transform.position);
-            star.transform.Rotate(0, 180, 0);
+            if (starTargetY > 0)
+            {
+                star.transform.LookAt(Camera.main.transform.position);
+            }
         }
 
         foreach (StarInfo star in relatedMiniStars)
         {
-            Vector3 starTargetpos = star.initpos;
+            starTargetY = GetY(star.initpos.x, star.initpos.z);
 
-            star.transform.position = starTargetpos;
+            star.transform.position = new Vector3(star.initpos.x, starTargetY, star.initpos.z);
 
-            starTargetpos.y = GetY(star.transform.localPosition.x, star.transform.localPosition.z);
-
-            star.transform.position = starTargetpos;
-
-            star.transform.LookAt(Camera.main.transform.position);
-            star.transform.Rotate(0, 180, 0);
+            
+            if(starTargetY > 0)
+            {
+                star.transform.LookAt(Camera.main.transform.position);
+            }
         }
     }
 
@@ -173,19 +172,22 @@ public class GlobeShape : MonoBehaviour
 
     float GetY(float x, float z)
     {
-        x -= globeRadius;
-        z -= globeRadius;
+        x -= globeRadius + transform.position.x;
+        z -= globeRadius + transform.position.z;
 
         float y = 0;
         y = Mathf.Sqrt(Mathf.Pow(globeRadius, 2) - (Mathf.Pow(x, 2) + Mathf.Pow(z, 2)));
 
-        y += transform.position.y;
-
-        if (y.ToString() == "NaN")
+        if (float.IsNaN(y))
         {
             y = 0;
         }
 
+        y += transform.position.y;
+
+
+        //Debug.Log($"global position x '{x}', and y '{z}' give z '{y}'");
+        
         return y;
     }
 
