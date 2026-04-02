@@ -1,0 +1,149 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a27b1591cf442e34da26ab4a98de3513, type: 3}
+  m_Name: DenialDialog2
+  m_EditorClassIdentifier: Assembly-CSharp::Dialogue
+  hasName: 1
+  npcName: Denial
+  talkingSpeed: 0.8
+  nodes:
+  - rid: 6341597701268308043
+  - rid: 6341597701268308045
+  - rid: 6341597701268308047
+  - rid: 6341597701268308048
+  - rid: 6341597701268308049
+  - rid: 6341597701268308050
+  - rid: 6341597701268308051
+  - rid: 6341597701268308052
+  - rid: 6341597701268308053
+  - rid: 6341597701268308054
+  - rid: 6341597701268308055
+  - rid: 6341597701268308056
+  - rid: 6341597701268308057
+  - rid: 6341597701268308058
+  hasItemID: 0
+  itemID: 0
+  references:
+    version: 2
+    RefIds:
+    - rid: 6341597701268308043
+      type: {class: ChoiceNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: Start second dialog
+        text: 'What is it <pause=0.5>Child? '
+        choices:
+        - choiceText: About this world
+          nextNodeID: About this world
+        - choiceText: About the path of Mortal
+          nextNodeID: Path of Mortal
+    - rid: 6341597701268308045
+      type: {class: ChoiceNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: About this world
+        text: This place <pause=0.5>between time and space,<pause=0.5> is here to
+          guide you to the place, <pause=0.5>where you need to go next. <pause=1>But
+          only<pause=1> and only when you are ready for it.
+        choices:
+        - choiceText: About the path of Mortal
+          nextNodeID: Path of Mortal
+    - rid: 6341597701268308047
+      type: {class: ChoiceNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: Path of Mortal
+        text: Well, <pause=0.5>you see young one. The path of all mortals is<pause=0.5>
+          to walk towards their end <pause=0.5> and their new beginning.
+        choices:
+        - choiceText: but you are here to help me
+          nextNodeID: But you are here to help me
+    - rid: 6341597701268308048
+      type: {class: ChoiceNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: But you are here to help me
+        text: No, Child, <pause=0.5>I am not to help. I am to guide, <pause=0.5>on
+          what lies before you.
+        choices:
+        - choiceText: where should I go?
+          nextNodeID: where shoud I go, I understand
+        - choiceText: then help me cheat death!
+          nextNodeID: then help me cheat death!
+    - rid: 6341597701268308049
+      type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: then help me cheat death!
+        text: You!
+        nextNodeID: you dare
+    - rid: 6341597701268308050
+      type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: you dare
+        text: You dare <pause=1>to demand, <pause=0.5>to cheat the order of all that
+          has existed before time itself.
+        nextNodeID: No, Child of mortal
+    - rid: 6341597701268308051
+      type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: No, Child of mortal
+        text: No, Child of mortal, <pause=1>there is no possibility, <pause=0.5>
+          no escape<pause=0.5> to avoid, what has already been done.
+        nextNodeID: Every Being
+    - rid: 6341597701268308052
+      type: {class: ChoiceNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: Every Being
+        text: Everything being, <pause=0.5>every living, <pause=0.5>every breathing,
+          living thing, <pause=0.5>all living have their path written <pause=0.5>
+          from which they cannot escape.
+        choices:
+        - choiceText: NO! This can't be?!
+          nextNodeID: This Can't be
+        - choiceText: I understand
+          nextNodeID: where shoud I go, I understand
+    - rid: 6341597701268308053
+      type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: This Can't be
+        text: Oh, <pause=0.5>my dear Child. Rest assured, <pause=0.5>everything will
+          fall into place.
+        nextNodeID: I implore you
+    - rid: 6341597701268308054
+      type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: I implore you
+        text: I implore you <pause=0.5>to visit all the different Islands. This world
+          is different <pause=0.5>then anything you have ever seen.
+        nextNodeID: Now then
+    - rid: 6341597701268308055
+      type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: Now then
+        text: Now then, <pause=0.5>be on your way. Then these Islands <pause=0.5>are
+          for you to see, <pause=0.5>to learn and to understand.
+        nextNodeID: 
+    - rid: 6341597701268308056
+      type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: where shoud I go, I understand
+        text: In this world, there are different Island. <pause=0.5>Island which
+          you should visit and understand their meaning.
+        nextNodeID: I implore you 2
+    - rid: 6341597701268308057
+      type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: I implore you 2
+        text: I implore you <pause=0.5>to visit all the different Islands.
+        nextNodeID: you will understand
+    - rid: 6341597701268308058
+      type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: you will understand
+        text: You will understand with time, <pause=0.5>my dear Child of mortal.
+        nextNodeID: 

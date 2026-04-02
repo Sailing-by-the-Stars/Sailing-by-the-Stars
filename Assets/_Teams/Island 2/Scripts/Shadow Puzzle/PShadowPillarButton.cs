@@ -23,6 +23,10 @@ public class PShadowPillarButton : MonoBehaviour, IInteractable
         {
             gridManager = FindFirstObjectByType<PShadowGridManager>();
         }
+        if (gridManager == null)
+        {
+            Debug.LogError($"{name} could not find the PShadowGridManager!");
+        }
     }
     
     public void Interact(InteractionController interactionController)
@@ -32,14 +36,7 @@ public class PShadowPillarButton : MonoBehaviour, IInteractable
             gridManager.ResetPillars();
             return;
         }
-        
-        if (isRowButton)
-        {
-            gridManager.PushRow(index, direction);
-        }
-        else
-        {
-            gridManager.PushColumn(index, direction);
-        }
+
+        gridManager.TryPushLine(isRowButton, index, direction);
     }
 }

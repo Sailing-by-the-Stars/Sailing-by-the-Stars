@@ -1,0 +1,281 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3952349830340933742
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1344463067960682572}
+  - component: {fileID: 128271612857378436}
+  - component: {fileID: 9090530551266403614}
+  - component: {fileID: 6113912613054820985}
+  - component: {fileID: 5662462678758272535}
+  - component: {fileID: 1665365188434338193}
+  m_Layer: 0
+  m_Name: WeatherManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1344463067960682572
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3952349830340933742}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -7.26402, y: -0, z: -82.46751}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 7700938994059561318}
+  - {fileID: 1044213602801505989}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &128271612857378436
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3952349830340933742}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e6618edd1bef0941ae44246adfc8a3b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WeatherManager
+  defaultState: {fileID: 11400000, guid: fafba6abdce518446a4565c944aadab7, type: 2}
+  ambientStates:
+  - state: {fileID: 11400000, guid: fafba6abdce518446a4565c944aadab7, type: 2}
+    weight: 6
+  - state: {fileID: 11400000, guid: ba278143124d7d041b7a48dc290ecb6e, type: 2}
+    weight: 2
+  - state: {fileID: 11400000, guid: 80bd15c948fb9b74bb9c403cf0c37b59, type: 2}
+    weight: 2
+  minAmbientChangeInterval: 10
+  maxAmbientChangeInterval: 20
+  ambientChangeTransitionTime: 2
+--- !u!114 &9090530551266403614
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3952349830340933742}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c523e07df6f78f4b932aadcef039e9d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GlobalFogController
+  volume: {fileID: 0}
+  defaultFogSettings: {fileID: 11400000, guid: 0bc26fc80958c9947903ca1cb394dff5, type: 2}
+--- !u!114 &6113912613054820985
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3952349830340933742}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 10ef995a644206b47a6d5150eba27e6f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WindWeatherController
+  horizontalOnly: 1
+  randomizeOnStart: 1
+  windDirectionOnStart: {x: 0, y: 0, z: 1}
+  rerollIntervalSeconds: 10
+  randomEventsActive: 1
+  autoRerollWindIntensity: 5
+  windObject: {fileID: 7752405435474241748}
+--- !u!114 &5662462678758272535
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3952349830340933742}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e703c6e3801ea34197d8d72b463c84b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TestRainController
+  rainParticleSystem: {fileID: 1003409115036372713}
+  windInfluence: 3
+  followTarget: {fileID: 0}
+  emitterHeight: 60
+  maxRateOverTime: 1500
+  maxStartSpeed: 15
+  maxStartSize: 0.15
+  maxSpeedScale: 0.05
+--- !u!114 &1665365188434338193
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3952349830340933742}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40d763709f46be54ea7843d94a1e6d5f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Test_WaveController
+  ocean: {fileID: 0}
+  minLargeWindSpeed: 5
+  maxLargeWindSpeed: 60
+  minLargeChaos: 0.2
+  maxLargeChaos: 1
+  minFirstBandMultiplier: 0.2
+  maxFirstBandMultiplier: 1
+  minSecondBandMultiplier: 0.2
+  maxSecondBandMultiplier: 1
+  minRipplesWindSpeed: 4
+  maxRipplesWindSpeed: 10
+  minRipplesChaos: 0.2
+  maxRipplesChaos: 1
+--- !u!1001 &5889526842155983288
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1344463067960682572}
+    m_Modifications:
+    - target: {fileID: 4295251192955193054, guid: 3e2de0ef496c7524d925d2c8e696db79, type: 3}
+      propertyPath: m_Name
+      value: RainBox
+      objectReference: {fileID: 0}
+    - target: {fileID: 6901212035527784317, guid: 3e2de0ef496c7524d925d2c8e696db79, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.70244026
+      objectReference: {fileID: 0}
+    - target: {fileID: 6901212035527784317, guid: 3e2de0ef496c7524d925d2c8e696db79, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6901212035527784317, guid: 3e2de0ef496c7524d925d2c8e696db79, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 14.801155
+      objectReference: {fileID: 0}
+    - target: {fileID: 6901212035527784317, guid: 3e2de0ef496c7524d925d2c8e696db79, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6901212035527784317, guid: 3e2de0ef496c7524d925d2c8e696db79, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6901212035527784317, guid: 3e2de0ef496c7524d925d2c8e696db79, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6901212035527784317, guid: 3e2de0ef496c7524d925d2c8e696db79, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6901212035527784317, guid: 3e2de0ef496c7524d925d2c8e696db79, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6901212035527784317, guid: 3e2de0ef496c7524d925d2c8e696db79, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6901212035527784317, guid: 3e2de0ef496c7524d925d2c8e696db79, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 3e2de0ef496c7524d925d2c8e696db79, type: 3}
+--- !u!198 &1003409115036372713 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 6653820180532309841, guid: 3e2de0ef496c7524d925d2c8e696db79, type: 3}
+  m_PrefabInstance: {fileID: 5889526842155983288}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1044213602801505989 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6901212035527784317, guid: 3e2de0ef496c7524d925d2c8e696db79, type: 3}
+  m_PrefabInstance: {fileID: 5889526842155983288}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &8124598930696431315
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1344463067960682572}
+    m_Modifications:
+    - target: {fileID: 1882333776742330293, guid: 7486d414037d69f409129b22a6c4a2b3, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.70244026
+      objectReference: {fileID: 0}
+    - target: {fileID: 1882333776742330293, guid: 7486d414037d69f409129b22a6c4a2b3, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1882333776742330293, guid: 7486d414037d69f409129b22a6c4a2b3, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 14.801155
+      objectReference: {fileID: 0}
+    - target: {fileID: 1882333776742330293, guid: 7486d414037d69f409129b22a6c4a2b3, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1882333776742330293, guid: 7486d414037d69f409129b22a6c4a2b3, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1882333776742330293, guid: 7486d414037d69f409129b22a6c4a2b3, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1882333776742330293, guid: 7486d414037d69f409129b22a6c4a2b3, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1882333776742330293, guid: 7486d414037d69f409129b22a6c4a2b3, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1882333776742330293, guid: 7486d414037d69f409129b22a6c4a2b3, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1882333776742330293, guid: 7486d414037d69f409129b22a6c4a2b3, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4693501041906471032, guid: 7486d414037d69f409129b22a6c4a2b3, type: 3}
+      propertyPath: m_Name
+      value: Wind
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 7486d414037d69f409129b22a6c4a2b3, type: 3}
+--- !u!4 &7700938994059561318 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1882333776742330293, guid: 7486d414037d69f409129b22a6c4a2b3, type: 3}
+  m_PrefabInstance: {fileID: 8124598930696431315}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &7752405435474241748 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1969845471892606471, guid: 7486d414037d69f409129b22a6c4a2b3, type: 3}
+  m_PrefabInstance: {fileID: 8124598930696431315}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b0c0345354e40bf974cf4384985d050, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WindObject
