@@ -1195,6 +1195,63 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 5406605107057671251, guid: 2f6a7fdb27b9f854aa195d8b5e61ec6c, type: 3}
   m_PrefabInstance: {fileID: 904279472476440209}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1993839462
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1993839461}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e62e0b434d62e4c48807b6a58cb09781, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SetAngerEventMusic
+  fmodEvent:
+    Guid:
+      Data1: -1931530165
+      Data2: 1261801039
+      Data3: -304735315
+      Data4: 1849102358
+    Path: event:/Music/mus_AngerEvent
+--- !u!114 &1993839463
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1993839461}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ad85828984b39d42b3f7033bea182e2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SetBargainingEventMusic
+  fmodEvent:
+    Guid:
+      Data1: -1452029040
+      Data2: 1095831201
+      Data3: 304856205
+      Data4: 1497172693
+    Path: event:/Music/mus_BargainingEvent
+--- !u!114 &1993839464
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1993839461}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d600ef94645cdd46abf2126bd96b54c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SetDenialEventMusic
+  fmodEvent:
+    Guid:
+      Data1: -1834102024
+      Data2: 1101561857
+      Data3: 1523838115
+      Data4: -615451135
+    Path: event:/Music/mus_DenialEvent
 --- !u!1001 &904279472476440209
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1274,7 +1331,16 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 5406605107057671251, guid: 2f6a7fdb27b9f854aa195d8b5e61ec6c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1993839464}
+    - targetCorrespondingSourceObject: {fileID: 5406605107057671251, guid: 2f6a7fdb27b9f854aa195d8b5e61ec6c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1993839463}
+    - targetCorrespondingSourceObject: {fileID: 5406605107057671251, guid: 2f6a7fdb27b9f854aa195d8b5e61ec6c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1993839462}
   m_SourcePrefab: {fileID: 100100000, guid: 2f6a7fdb27b9f854aa195d8b5e61ec6c, type: 3}
 --- !u!1001 &3002147956303078962
 PrefabInstance:
@@ -1421,94 +1487,6 @@ PrefabInstance:
     - target: {fileID: 2741403500503459629, guid: 336a57cab867e5b448234aafba896d9a, type: 3}
       propertyPath: m_Name
       value: Ocean
-      objectReference: {fileID: 0}
-    - target: {fileID: 4298354372065654481, guid: 336a57cab867e5b448234aafba896d9a, type: 3}
-      propertyPath: foamColor.b
-      value: 0.42326775
-      objectReference: {fileID: 0}
-    - target: {fileID: 4298354372065654481, guid: 336a57cab867e5b448234aafba896d9a, type: 3}
-      propertyPath: foamColor.g
-      value: 0.5209957
-      objectReference: {fileID: 0}
-    - target: {fileID: 4298354372065654481, guid: 336a57cab867e5b448234aafba896d9a, type: 3}
-      propertyPath: foamColor.r
-      value: 0.3515327
-      objectReference: {fileID: 0}
-    - target: {fileID: 4298354372065654481, guid: 336a57cab867e5b448234aafba896d9a, type: 3}
-      propertyPath: endSmoothness
-      value: 0.9
-      objectReference: {fileID: 0}
-    - target: {fileID: 4298354372065654481, guid: 336a57cab867e5b448234aafba896d9a, type: 3}
-      propertyPath: foamSmoothness
-      value: 0.24
-      objectReference: {fileID: 0}
-    - target: {fileID: 4298354372065654481, guid: 336a57cab867e5b448234aafba896d9a, type: 3}
-      propertyPath: startSmoothness
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4298354372065654481, guid: 336a57cab867e5b448234aafba896d9a, type: 3}
-      propertyPath: heightScattering
-      value: 0.14
-      objectReference: {fileID: 0}
-    - target: {fileID: 4298354372065654481, guid: 336a57cab867e5b448234aafba896d9a, type: 3}
-      propertyPath: ambientScattering
-      value: 0.28
-      objectReference: {fileID: 0}
-    - target: {fileID: 4298354372065654481, guid: 336a57cab867e5b448234aafba896d9a, type: 3}
-      propertyPath: refractionColor.b
-      value: 0.036889445
-      objectReference: {fileID: 0}
-    - target: {fileID: 4298354372065654481, guid: 336a57cab867e5b448234aafba896d9a, type: 3}
-      propertyPath: refractionColor.g
-      value: 0.0409152
-      objectReference: {fileID: 0}
-    - target: {fileID: 4298354372065654481, guid: 336a57cab867e5b448234aafba896d9a, type: 3}
-      propertyPath: refractionColor.r
-      value: 0.008568125
-      objectReference: {fileID: 0}
-    - target: {fileID: 4298354372065654481, guid: 336a57cab867e5b448234aafba896d9a, type: 3}
-      propertyPath: scatteringColor.b
-      value: 0.13563335
-      objectReference: {fileID: 0}
-    - target: {fileID: 4298354372065654481, guid: 336a57cab867e5b448234aafba896d9a, type: 3}
-      propertyPath: scatteringColor.g
-      value: 0.14702728
-      objectReference: {fileID: 0}
-    - target: {fileID: 4298354372065654481, guid: 336a57cab867e5b448234aafba896d9a, type: 3}
-      propertyPath: scatteringColor.r
-      value: 0.016807375
-      objectReference: {fileID: 0}
-    - target: {fileID: 4298354372065654481, guid: 336a57cab867e5b448234aafba896d9a, type: 3}
-      propertyPath: absorptionDistance
-      value: 37.3
-      objectReference: {fileID: 0}
-    - target: {fileID: 4298354372065654481, guid: 336a57cab867e5b448234aafba896d9a, type: 3}
-      propertyPath: foamCurrentInfluence
-      value: 0.54
-      objectReference: {fileID: 0}
-    - target: {fileID: 4298354372065654481, guid: 336a57cab867e5b448234aafba896d9a, type: 3}
-      propertyPath: largeBand0Multiplier
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4298354372065654481, guid: 336a57cab867e5b448234aafba896d9a, type: 3}
-      propertyPath: largeBand1Multiplier
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4298354372065654481, guid: 336a57cab867e5b448234aafba896d9a, type: 3}
-      propertyPath: maxRefractionDistance
-      value: 2.02
-      objectReference: {fileID: 0}
-    - target: {fileID: 4298354372065654481, guid: 336a57cab867e5b448234aafba896d9a, type: 3}
-      propertyPath: displacementScattering
-      value: 0.24
-      objectReference: {fileID: 0}
-    - target: {fileID: 4298354372065654481, guid: 336a57cab867e5b448234aafba896d9a, type: 3}
-      propertyPath: directLightTipScattering
-      value: 0.38
-      objectReference: {fileID: 0}
-    - target: {fileID: 4298354372065654481, guid: 336a57cab867e5b448234aafba896d9a, type: 3}
-      propertyPath: directLightBodyScattering
-      value: 0.39
       objectReference: {fileID: 0}
     - target: {fileID: 7767196679497796976, guid: 336a57cab867e5b448234aafba896d9a, type: 3}
       propertyPath: m_LocalPosition.x
