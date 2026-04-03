@@ -11,11 +11,12 @@ public class Astrolabe : MonoBehaviour
     
     private float initialFOV;
     private float zoomFOV = 30;
-    private float zoomTime = 0.75f;
+    private float animationTime = 0.75f;
 
-    private AnimationCurve zoomCurve;
+    private AnimationCurve animationCurve;
     
     public static bool zoomedIn;
+    private bool sideView;
     private bool visible = false;
 
     private List<Renderer> renderers = new();
@@ -30,7 +31,8 @@ public class Astrolabe : MonoBehaviour
 
     public static float pointerAngleHax;
 
-    private Coroutine coroutine;
+    private Coroutine zoomCoroutine;
+    private Coroutine turnCoroutine;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
@@ -70,9 +72,9 @@ public class Astrolabe : MonoBehaviour
         
         initialFOV = cam.fieldOfView;
         
-        zoomCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
+        animationCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
         zoomedIn = false;
-        
+        sideView = false;
     }
 
     // Update is called once per frame
@@ -83,31 +85,66 @@ public class Astrolabe : MonoBehaviour
 
         //transform.rotation = transform.parent.rotation * initialRot;
 
+        Vector3 forward;
+        
+        //Flip the astrolabe to the right
+        if (sideView)
+        {
+            forward = transform.parent.right;
+        }
+        else
+        {
+            forward = transform.parent.forward;
+        }
 
-        Vector3 forward = transform.parent.forward;
         forward.y = 0f; // remove vertical tilt
         forward.Normalize();
-
-        transform.rotation = Quaternion.LookRotation(forward, Vector3.up);
-
-
-
+        
+        //
+        if (Input.GetMouseButtonDown(0) && visible)
+        {
+            if (zoomedIn)
+            {
+                if (sideView)
+                {
+                    sideView = false;
+                    if (turnCoroutine == null)
+                    {
+                        turnCoroutine = StartCoroutine(TurnAstrolabeRight());
+                    }
+                }
+                else
+                {
+                    sideView = true;
+                    if (turnCoroutine == null)
+                    {
+                        turnCoroutine = StartCoroutine(TurnAstrolabeLeft());
+                    }
+                }
+            }
+        }
+        
+        if (turnCoroutine == null)
+        {
+            transform.rotation = Quaternion.LookRotation(forward, Vector3.up);
+        }
+        
         if (Input.GetMouseButtonDown(1) && visible)
         {
             if (zoomedIn)
             {
                 zoomedIn = false;
-                if (coroutine == null)
+                if (zoomCoroutine == null)
                 {
-                    coroutine = StartCoroutine(ZoomOut());
+                    zoomCoroutine = StartCoroutine(ZoomOut());
                 }
             }
             else
             {
                 zoomedIn = true;
-                if (coroutine == null)
+                if (zoomCoroutine == null)
                 {
-                    coroutine = StartCoroutine(ZoomIn());
+                    zoomCoroutine = StartCoroutine(ZoomIn());
                 }
             }
         }
@@ -128,9 +165,9 @@ public class Astrolabe : MonoBehaviour
                 if (zoomedIn)
                 {
                     zoomedIn = false;
-                    if (coroutine == null)
+                    if (zoomCoroutine == null)
                     {
-                        coroutine = StartCoroutine(ZoomOut());
+                        zoomCoroutine = StartCoroutine(ZoomOut());
                     }
                 }
             }
@@ -170,9 +207,9 @@ public class Astrolabe : MonoBehaviour
 
             float scroll = Input.mouseScrollDelta.y;
 
-            if (scroll != 0f)
+            if (scroll != 0f && !sideView)
             {
-                pointer.Rotate(new Vector3(scroll * 10f, 0, 0) * Time.deltaTime);
+                pointer.Rotate(new Vector3(scroll * 1f, 0, 0));
             }
 
             //Reset astrolabe rotation
@@ -187,7 +224,7 @@ public class Astrolabe : MonoBehaviour
     {
         if (timer == 0)
         {
-            timer = zoomTime;
+            timer = animationTime;
         }
 
         while (timer > 0)
@@ -196,19 +233,19 @@ public class Astrolabe : MonoBehaviour
 
             if (zoomedIn == false)
             {
-                coroutine = StartCoroutine(ZoomOut(timer));
+                zoomCoroutine = StartCoroutine(ZoomOut(timer));
                 yield break;
             }
 
-            float T =  timer / zoomTime;
-            float curveOutput = zoomCurve.Evaluate(T);
+            float T =  timer / animationTime;
+            float curveOutput = animationCurve.Evaluate(T);
             
             cam.fieldOfView = zoomFOV + curveOutput * (initialFOV - zoomFOV);
             
             yield return new WaitForEndOfFrame();
         }
 
-        coroutine = null;
+        zoomCoroutine = null;
     }
     
     private IEnumerator ZoomOut(float timer = 0)
@@ -218,24 +255,98 @@ public class Astrolabe : MonoBehaviour
             timer = 0;
         }
 
-        while (timer < zoomTime)
+        while (timer < animationTime)
         {
             timer += Time.deltaTime;
 
             if(zoomedIn == true)
             {
-                coroutine = StartCoroutine(ZoomIn(timer));
+                zoomCoroutine = StartCoroutine(ZoomIn(timer));
                 yield break;
             }
             
-            float T =  timer / zoomTime;
-            float curveOutput = zoomCurve.Evaluate(T);
+            float T =  timer / animationTime;
+            float curveOutput = animationCurve.Evaluate(T);
             
             cam.fieldOfView = zoomFOV + curveOutput * (initialFOV - zoomFOV);
             
             yield return new WaitForEndOfFrame();
         }
 
-        coroutine = null;
+        zoomCoroutine = null;
+    }
+    
+    private IEnumerator TurnAstrolabeLeft(float timer = 0)
+    {
+        if (timer == 0)
+        {
+            timer = 0;
+        }
+        
+        while (timer < animationTime)
+        {
+            timer += Time.deltaTime;
+
+            if(sideView == false)
+            {
+                turnCoroutine = StartCoroutine(TurnAstrolabeRight(timer));
+                yield break;
+            }
+            
+            float T =  timer / animationTime;
+            float curveOutput = animationCurve.Evaluate(T);
+
+            Vector3 forward = transform.parent.forward;
+            forward.y = 0f; // remove vertical tilt
+
+            Vector3 right = transform.parent.right;
+            right.y = 0f;
+
+            Quaternion forwardLookRotation = Quaternion.LookRotation(forward, Vector3.up);
+            Quaternion rightLookRotation = Quaternion.LookRotation(right, Vector3.up);
+            
+            transform.rotation = Quaternion.Slerp(forwardLookRotation, rightLookRotation, curveOutput);
+            
+            yield return new WaitForEndOfFrame();
+        }
+
+        turnCoroutine = null;
+    }
+    
+    private IEnumerator TurnAstrolabeRight(float timer = 0)
+    {
+        if (timer == 0)
+        {
+            timer = animationTime;
+        }
+        
+        while (timer > 0)
+        {
+            timer -= Time.deltaTime;
+
+            if(sideView == true)
+            {
+                turnCoroutine = StartCoroutine(TurnAstrolabeLeft(timer));
+                yield break;
+            }
+            
+            float T =  timer / animationTime;
+            float curveOutput = animationCurve.Evaluate(T);
+
+            Vector3 forward = transform.parent.forward;
+            forward.y = 0f; // remove vertical tilt
+
+            Vector3 right = transform.parent.right;
+            right.y = 0f;
+            
+            Quaternion forwardLookRotation = Quaternion.LookRotation(forward, Vector3.up);
+            Quaternion rightLookRotation = Quaternion.LookRotation(right, Vector3.up);
+            
+            transform.rotation = Quaternion.Slerp(forwardLookRotation, rightLookRotation, curveOutput);
+            
+            yield return new WaitForEndOfFrame();
+        }
+
+        turnCoroutine = null;
     }
 }
