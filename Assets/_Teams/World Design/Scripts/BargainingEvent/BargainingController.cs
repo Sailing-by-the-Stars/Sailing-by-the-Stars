@@ -16,6 +16,9 @@ using UnityEngine;
 ///      -- assign them to the checkpoints list in order
 ///      -- tick isFinalCheckpoint on the last one
 ///   Add BargainingZoneEffect alongside WorldEventZone on the entry trigger
+///   
+/// NOTE: For now assumes player will be parented to boat when sailing in water. Use "Player" tag in event zone trigger
+///       and do not place trigger in an an area where player will be outside the boat.
 ///
 /// FLOW:
 ///   Entry zone triggered: entity spawns, timer starts immediately
@@ -51,11 +54,27 @@ public class BargainingController : MonoBehaviour
     private bool eventActive = false;
     private int currentCheckpointIndex = 0;
     private float timerRemaining = 0f;
+    private float currentTimerDuration = 0f; // tracks active duration for audio intensity calculation
     private BargainingEntity activeEntity;
-    private GameObject boat;
+    private GameObject eventTarget;
+    // audio
+    private SetBargainingTimer timerAudio;
+    [Tooltip("How much to increase the audio intensity when audio is active")]
+    [SerializeField] private float audioBoost = 0.2f;
+    private float TimerIntensity => eventActive ? 1f - Mathf.Clamp01(timerRemaining / currentTimerDuration) : 0f;
+
+    // respawn visual
+    private ScreenEffects screenEffects;
+
 
     public bool IsCompleted => eventCompleted;
     public bool IsActive => eventActive;
+
+    private void Start()
+    {
+        timerAudio = FindFirstObjectByType<SetBargainingTimer>();
+        screenEffects = FindFirstObjectByType<ScreenEffects>();
+    }
 
     private void Update()
     {
@@ -65,12 +84,16 @@ public class BargainingController : MonoBehaviour
         }
 
         timerRemaining -= Time.deltaTime;
-
-        // TODO: add warning effect when entity is at minimum radius and timer is low
-        // if (activeEntity != null && activeEntity.AtMinimumRadius && timerRemaining < warningThreshold)
-        // {
-        //     TriggerWarningEffect();
-        // }
+        if (timerAudio != null)
+        {
+            float targetAudioIntensity = TimerIntensity;
+            if (TimerIntensity != 0f && audioBoost != 0f)
+            {
+                targetAudioIntensity = TimerIntensity + audioBoost;
+            }
+            timerAudio.SetIntensity(targetAudioIntensity);
+        }
+        // Trigger warning effects if desired here
 
         if (timerRemaining <= 0f)
         {
@@ -87,11 +110,22 @@ public class BargainingController : MonoBehaviour
         {
             return;
         }
-
-        boat = instigator;
+        // assumes boat controller script will be on the teleport target (player parented to boat)
+        BoatController boat = instigator.GetComponentInParent<BoatController>();
+        if (boat != null)
+        {
+            eventTarget = boat.gameObject;
+        }
+        else
+        {
+            eventTarget = instigator;
+        }
         currentCheckpointIndex = 0;
         ActivateCurrentCheckpoint();
+
         timerRemaining = defaultTimerDuration;
+        currentTimerDuration = defaultTimerDuration;
+
         SpawnEntity(defaultTimerDuration);
         eventActive = true;
     }
@@ -125,8 +159,8 @@ public class BargainingController : MonoBehaviour
             Debug.LogWarning($"{gameObject.name} No entity prefab assigned.");
             return;
         }
-
-        GameObject entityObj = Instantiate(entityPrefab, boat.transform.position, Quaternion.identity);
+        
+        GameObject entityObj = Instantiate(entityPrefab, eventTarget.transform.position, Quaternion.identity);
         activeEntity = entityObj.GetComponent<BargainingEntity>();
 
         if (activeEntity == null)
@@ -135,7 +169,7 @@ public class BargainingController : MonoBehaviour
             return;
         }
 
-        activeEntity.Initialize(boat, timerDuration);
+        activeEntity.Initialize(eventTarget, timerDuration);
     }
     private void DespawnEntity()
     {
@@ -160,25 +194,32 @@ public class BargainingController : MonoBehaviour
         DespawnEntity();
 
         eventActive = false; // pause timer during cooldown
+        if (timerAudio != null)
+        {
+            timerAudio.ResetIntensity();
+        }    
 
         yield return new WaitForSeconds(cooldown);
 
         timerRemaining = nextTimerDuration;
+        currentTimerDuration = nextTimerDuration;
+
         SpawnEntity(nextTimerDuration);
         eventActive = true;
     }
     private IEnumerator HandleTimerFail()
     {
         DespawnEntity();
-
-        // TODO:  kill effects when ready
-
-        yield return new WaitForSeconds(0.5f);
-
-        // TODO: replace with proper teleport from checkpoint system
-        if (respawnPoint != null && boat != null)
+        if (timerAudio != null)
         {
-            boat.transform.position = respawnPoint.position;
+            timerAudio.ResetIntensity();
+        }
+        // visuals
+        yield return StartCoroutine(TimerFailRoutine());
+
+        if (respawnPoint != null && eventTarget != null)
+        {
+            eventTarget.transform.position = respawnPoint.position;
         }
         // reset event so it can trigger again
         currentCheckpointIndex = 0;
@@ -197,5 +238,19 @@ public class BargainingController : MonoBehaviour
                 checkpoint.SetActive(false);
             }
         }
+    }
+
+
+    // TODO: replace with final visuals or sequence from screen effects
+    private IEnumerator TimerFailRoutine()
+    {
+        if (screenEffects == null) yield break;
+
+        screenEffects.ScreenShake(magnitude: 0.5f, duration: 1.2f);
+        yield return new WaitForSeconds(0.7f);
+        screenEffects.Vignette(Color.black, alpha: 0.6f, duration: 1.5f);
+        yield return new WaitForSeconds(1.5f);
+        screenEffects.Flash(Color.darkRed, duration: 1f);
+        yield return new WaitForSeconds(0.5f);
     }
 }
