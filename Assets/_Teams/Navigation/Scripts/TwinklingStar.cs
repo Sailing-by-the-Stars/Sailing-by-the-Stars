@@ -351,12 +351,12 @@ public class TwinklingStar : MonoBehaviour
         {
             star.UpdateColor();
         }
-        // for testing world design event
-        [ContextMenu("Simulate Star Found")]
-        private void SimulateStarFound()
-        {
-            OnStarFound?.Invoke();
-        }
+    }
+    // for testing world design event
+    [ContextMenu("Simulate Star Found")]
+    private void SimulateStarFound()
+    {
+        OnStarFound?.Invoke();
     }
 
 }
