@@ -17,6 +17,9 @@ namespace _Teams.World_Design.Scripts.Challenges.Ghost_Boat
 
         [Header("Optional Rotation")]
         [SerializeField] private bool faceTarget;
+        
+        [Header("Death Detection")]
+        [SerializeField] private float deathZoneRange = 1f;
 
         [Header("FMOD Audio")]
         [SerializeField] private EventReference ghostBoatEvent;
@@ -26,6 +29,12 @@ namespace _Teams.World_Design.Scripts.Challenges.Ghost_Boat
         private EventInstance audioInstance;
         private PARAMETER_ID inViewParameterId;
         private bool hasInViewParameter;
+        
+
+        public void SetTarget(Transform newTarget)
+        {
+            target = newTarget;
+        }
 
         private void LateUpdate()
         {
@@ -35,19 +44,18 @@ namespace _Teams.World_Design.Scripts.Challenges.Ghost_Boat
             {
                 return;
             }
+            
+            // Die if player is close enough to the boat
+            if(IsInGhostBoatRange())
+            {
+                Debug.Log("Player died");
+            }
 
             if (!isCentered)
             {
                 MoveToTarget();
             }
-        }
-
-        private void MoveToTarget()
-        {
-            Vector3 desiredPosition = target.position + offset;
-            float speed = followSpeed <= 0f ? 1f : followSpeed * Time.deltaTime;
-            transform.position = Vector3.Lerp(transform.position, desiredPosition, speed);
-
+            
             if (faceTarget)
             {
                 Vector3 lookDirection = target.position - transform.position;
@@ -56,6 +64,20 @@ namespace _Teams.World_Design.Scripts.Challenges.Ghost_Boat
                     transform.rotation = Quaternion.LookRotation(lookDirection.normalized, Vector3.up);
                 }
             }
+        }
+
+        private void MoveToTarget()
+        {
+            Vector3 desiredPosition = target.position + offset;
+            float speed = followSpeed <= 0f ? 1f : followSpeed * Time.deltaTime;
+            transform.position = Vector3.Lerp(transform.position, desiredPosition, speed);
+        }
+
+        private bool IsInGhostBoatRange()
+        {
+            return Mathf.Abs(target.position.y - transform.position.y) < deathZoneRange 
+                   && Mathf.Abs(target.position.x - transform.position.x) < deathZoneRange
+                   && Mathf.Abs(target.position.z - transform.position.z) < deathZoneRange;
         }
 
         private bool IsInCenterView()
