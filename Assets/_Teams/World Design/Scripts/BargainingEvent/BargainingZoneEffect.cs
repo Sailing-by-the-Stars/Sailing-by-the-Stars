@@ -13,10 +13,13 @@ using UnityEngine;
 public class BargainingZoneEffect : MonoBehaviour, IZoneEffect
 {
     private BargainingController controller;
+    private SetBargainingEventMusic eventAudio;
+    [SerializeField] private float audioIntensity = 1.0f;
 
     private void Start()
     {
         controller = FindFirstObjectByType<BargainingController>();
+        eventAudio = FindFirstObjectByType<SetBargainingEventMusic>();
         if (controller == null)
         {
             Debug.LogWarning($"{gameObject.name}: No BargainingController found in scene.");
@@ -33,6 +36,16 @@ public class BargainingZoneEffect : MonoBehaviour, IZoneEffect
             return;
         }
         controller.StartEvent(instigator);
+        if (eventAudio != null)
+        {
+            eventAudio.SetBargainingMusic(audioIntensity);
+        }
     }
-    public void OnExit(GameObject instigator) { }
+    public void OnExit(GameObject instigator)
+    {
+        if (eventAudio != null)
+        {
+            eventAudio.SetBargainingMusic(0f);
+        }
+    }
 }
