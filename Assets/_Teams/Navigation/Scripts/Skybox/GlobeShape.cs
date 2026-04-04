@@ -7,6 +7,9 @@ public class GlobeShape : MonoBehaviour
     [SerializeField] float globeRadius = 5;
     [SerializeField] int resolution = 10;
     [SerializeField] float offsetY = 5000f;
+    [Tooltip("this determines over how manny frames the moving of the stars will be divided")]
+    [SerializeField] int operationDivisions = 3; 
+
 
     List<Vector3> verticePositions = new();
     List<Vector3> vertices = new();
@@ -17,67 +20,23 @@ public class GlobeShape : MonoBehaviour
 
     List<TwinklingStar> relatedStars = new();
     List<StarInfo> relatedMiniStars = new();
-
-    private void OnEnable()
+    List<List<StarInfo>> dividedMiniStars = new();
+    int Iterator;
+    public int iterator
     {
-        StarFieldRotator.globeTypeChanged += ToggleStars;
-    }
-
-    private void OnDisable()
-    {
-        StarFieldRotator.globeTypeChanged -= ToggleStars;
-    }
-
-
-
-    void ToggleStars(globeType globeType)
-    {
-        switch (globeType)
-        {
-            case globeType.relative:
-                foreach (TwinklingStar star in relatedStars)
-                {
-                    star.gameObject.SetActive(false);
-                }
-                foreach (StarInfo star in relatedMiniStars)
-                {
-                    star.gameObject.SetActive(false);
-                }
-                break;
-            case globeType.positional:
-                foreach (TwinklingStar star in relatedStars)
-                {
-                    star.gameObject.SetActive(false);
-                }
-                foreach (StarInfo star in relatedMiniStars)
-                {
-                    star.gameObject.SetActive(false);
-                }
-                break;
-            case globeType.manual:
-                foreach (TwinklingStar star in relatedStars)
-                {
-                    star.gameObject.SetActive(true);
-                }
-                foreach (StarInfo star in relatedMiniStars)
-                {
-                    star.gameObject.SetActive(true);
-                }
-                break;
-            default:
-                Debug.LogError("it should never switch to this state!");
-                break;
-        }
+        get => Iterator;
+        set => Iterator = (value >= dividedMiniStars.Count) ? 0 : value;
     }
 
 
     private void Awake()
     {
         relatedStars = GetComponentsInChildren<TwinklingStar>().ToList();
-        relatedMiniStars = GetComponentsInChildren<StarInfo>().ToList();
+
+        InitializeMiniStars(operationDivisions);
     }
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+
     void Start()
     {
         if (GetComponent<MeshRenderer>() == null && GetComponent<MeshRenderer>().enabled == false)
@@ -87,10 +46,53 @@ public class GlobeShape : MonoBehaviour
         DrawSphere();
     }
 
-    // Update is called once per frame
+
+    void InitializeMiniStars(int divisions)
+    {
+        if (divisions < 1)
+        {
+            divisions = 1;
+        }
+
+        operationDivisions = divisions;
+
+        relatedMiniStars = GetComponentsInChildren<StarInfo>().ToList();
+        dividedMiniStars.Clear();
+
+        if (relatedMiniStars.Count <= operationDivisions)
+        {
+            dividedMiniStars.Add(relatedMiniStars);
+            operationDivisions = 1;
+            return;
+        }
+
+        int starsPerDiv = Mathf.CeilToInt((float)relatedMiniStars.Count / operationDivisions);
+        List<StarInfo> starsToDiv = new(relatedMiniStars);   
+
+        for (int i = 0; i < operationDivisions && starsToDiv.Count > 0; i++)
+        {
+            List<StarInfo> remainderStars = starsToDiv.Take(starsPerDiv).ToList();
+            
+            dividedMiniStars.Add(remainderStars);
+
+            if(remainderStars.Count < starsPerDiv)
+            {
+                break;
+            }
+
+            starsToDiv = starsToDiv.Skip(starsPerDiv).ToList();
+        }
+
+        iterator = 0;
+    }
+
+
     void Update()
     {
         MoveSphere();
+
+        MoveStars(relatedStars, dividedMiniStars[iterator]);
+        iterator++;
     }
 
 
@@ -104,10 +106,12 @@ public class GlobeShape : MonoBehaviour
         targetpos.y -= offsetY;
 
         transform.position = targetpos;
+    }
 
-
+    void MoveStars(List<TwinklingStar> tStars, List<StarInfo> iStars)
+    {
         float starTargetY = 0;
-        foreach (TwinklingStar star in relatedStars)
+        foreach (TwinklingStar star in tStars)
         {
             starTargetY = GetY(star.initpos.x, star.initpos.z);
 
@@ -120,14 +124,14 @@ public class GlobeShape : MonoBehaviour
             }
         }
 
-        foreach (StarInfo star in relatedMiniStars)
+        foreach (StarInfo star in iStars)
         {
             starTargetY = GetY(star.initpos.x, star.initpos.z);
 
             star.transform.position = new Vector3(star.initpos.x, starTargetY, star.initpos.z);
 
-            
-            if(starTargetY > 0)
+
+            if (starTargetY > 0)
             {
                 star.transform.LookAt(Camera.main.transform.position);
             }
@@ -247,7 +251,6 @@ public class GlobeShape : MonoBehaviour
         }
 
 
-
         Vector3 targetpos = Camera.main.transform.position;
 
         targetpos.x -= globeRadius;
@@ -256,7 +259,10 @@ public class GlobeShape : MonoBehaviour
         targetpos.y -= offsetY;
 
         transform.position = targetpos;
-        if(GetComponent<MeshRenderer>() == null || GetComponent<MeshRenderer>().enabled == false)
+
+        InitializeMiniStars(operationDivisions);
+
+        if (GetComponent<MeshRenderer>() == null || GetComponent<MeshRenderer>().enabled == false)
         {
             return;
         }
