@@ -3,6 +3,8 @@
 *   Contributed to by: 
 */
 
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
@@ -20,9 +22,11 @@ public class BoatController : MonoBehaviour
     [SerializeField] private float maxRotationRate = 10f;
     [SerializeField] private float rudderTorqueStrength = 30f;
     [SerializeField] private bool useLocalWindSpeed = true;
+    [SerializeField] private bool enableWindForces = true;
 
     [Header("Physics stats (Debugging!)")]
     [SerializeField] private float forwardSpeed;
+    [SerializeField] private float apparentWindSpeed;
     [SerializeField] private float AoA;
     [SerializeField] private float drag;
     [SerializeField] private float lift;
@@ -41,18 +45,34 @@ public class BoatController : MonoBehaviour
 
     [Header("")]
     [SerializeField] private GameObject hullObject;
-    [SerializeField] private GameObject rudderObject;
-    [SerializeField] private GameObject mastObject;
-    [SerializeField] private GameObject sailObject;
     [SerializeField] private GameObject mastPivot;
+    [SerializeField] private GameObject rudderPivot;
 
 
     private Rigidbody rigidBody;
+    private GameObject[] rudderObjects;
+    private GameObject[] mastObjects;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         rigidBody = GetComponent<Rigidbody>();
+
+        rudderObjects = GameObject.FindGameObjectsWithTag("rudder");
+        if (rudderObjects.Count() == 0)
+        {
+            Debug.LogError("No objects with tag \"rudder\" found");
+            enabled = false;
+            return;
+        }
+
+        mastObjects = GameObject.FindGameObjectsWithTag("mast");
+        if (rudderObjects.Count() == 0)
+        {
+            Debug.LogError("No objects with tag \"mast\" found");
+            enabled = false;
+            return;
+        }
     }
 
     void OnEnable()
@@ -64,7 +84,7 @@ public class BoatController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //RotateRudder();
+        RotateRudder();
         RotateMastAndSail();
     }
 
@@ -76,13 +96,18 @@ public class BoatController : MonoBehaviour
         }
 
         apparentWind = wind - rigidBody.linearVelocity;
-        Vector3 mastDirection = Vector3.ProjectOnPlane(-mastObject.transform.up, Vector3.up).normalized;
+        apparentWindSpeed = apparentWind.magnitude;
+
+        Vector3 mastDirection = Vector3.ProjectOnPlane(mastObjects[0].transform.right, Vector3.up).normalized;
         Vector3 windDirection = Vector3.ProjectOnPlane(apparentWind, Vector3.up).normalized;
 
         float mastDirectionIntoWind = Vector3.SignedAngle(mastDirection, -windDirection, Vector3.up);
 
-        CalculateDrag(apparentWind.magnitude, mastDirectionIntoWind);
-        CalculateLift(apparentWind.magnitude, mastDirectionIntoWind);
+        if (enableWindForces)
+        {
+            CalculateDrag(apparentWind.magnitude, mastDirectionIntoWind);
+            CalculateLift(apparentWind.magnitude, mastDirectionIntoWind);
+        }
 
         AoA = mastDirectionIntoWind;
 
@@ -161,8 +186,8 @@ public class BoatController : MonoBehaviour
 
         liftVector = hullObject.transform.InverseTransformVector(liftVector);
 
-        //retrieve the local y component of the lift vector
-        Vector3 localLiftVector = new Vector3(0f, liftVector.y, 0f);
+        //retrieve the local x component of the lift vector
+        Vector3 localLiftVector = new Vector3(liftVector.x, 0f, 0f);
         liftVector = hullObject.transform.TransformVector(localLiftVector);
 
         rigidBody.AddForce(liftVector, ForceMode.Force);
@@ -175,8 +200,8 @@ public class BoatController : MonoBehaviour
 
         dragVector = hullObject.transform.InverseTransformVector(dragVector);
 
-        //retrieve the local y component of the drag vector
-        Vector3 LocalDragVector = new Vector3(0f, dragVector.y, 0f);
+        //retrieve the local x component of the drag vector
+        Vector3 LocalDragVector = new Vector3(dragVector.x, 0f, 0f);
         dragVector = hullObject.transform.TransformVector(LocalDragVector);
 
         rigidBody.AddForce(dragVector, ForceMode.Force);
@@ -185,7 +210,7 @@ public class BoatController : MonoBehaviour
     void ApplyRudderTorque()
     {
         float forwardVelocity = transform.InverseTransformVector(rigidBody.linearVelocity).z;
-        rigidBody.AddTorque(Vector3.up * rudderAxis.value * rudderTorqueStrength * forwardVelocity, ForceMode.Force);
+        rigidBody.AddTorque(forwardVelocity * rudderAxis.value * rudderTorqueStrength * Vector3.up, ForceMode.Force);
         rudderTorque = rudderAxis.value * rudderTorqueStrength * forwardVelocity;
     }
 
@@ -193,7 +218,7 @@ public class BoatController : MonoBehaviour
     {
         Vector3 localVelocity = transform.InverseTransformVector(rigidBody.linearVelocity);
 
-        Vector3 keelDragVector = Vector3.right * localVelocity.x * keelDragStrength;
+        Vector3 keelDragVector = keelDragStrength * localVelocity.x * localVelocity.x * Mathf.Sign(localVelocity.x) * Vector3.right;
 
         rigidBody.AddRelativeForce(-keelDragVector);
     }
@@ -219,9 +244,26 @@ public class BoatController : MonoBehaviour
         float targetMastAngle = mastAxis.value * maxMastAngle;
         float deltaMastAngle = targetMastAngle - currentMastAngle;
 
-        mastObject.transform.RotateAround(mastPivot.transform.position, Vector3.up, deltaMastAngle);
-        sailObject.transform.RotateAround(mastPivot.transform.position, Vector3.up, deltaMastAngle);
+        foreach(GameObject mastObject in mastObjects)
+        {
+            mastObject.transform.RotateAround(mastPivot.transform.position, Vector3.up, deltaMastAngle);
+        }
 
         currentMastAngle = targetMastAngle;
+    }
+
+    private float currentRudderAngle = 0f;
+    
+    private void RotateRudder()
+    {
+        float targetRudderAngle = rudderAxis.value * -maxRudderDeflection;
+        float deltaRudderAngle = targetRudderAngle - currentRudderAngle;
+
+        foreach(GameObject rudderObject in rudderObjects)
+        {
+            rudderObject.transform.RotateAround(rudderPivot.transform.position, rudderPivot.transform.up, deltaRudderAngle);
+        }
+
+        currentRudderAngle = targetRudderAngle;
     }
 }
