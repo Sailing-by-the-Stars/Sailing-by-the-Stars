@@ -180,7 +180,7 @@ public class BargainingController : MonoBehaviour
     /// </summary>
     public void OnCheckpointReached(BargainingCheckpoint checkpoint)
     {
-        if (!eventActive || eventMode != BargainingEventMode.OrderedCheckpoints)
+        if (eventMode != BargainingEventMode.OrderedCheckpoints)
         {
             return;
         }
@@ -259,7 +259,10 @@ public class BargainingController : MonoBehaviour
     {
         for (int i = 0; i < checkpoints.Length; i++)
         {
-            checkpoints[i]?.SetActive(i == currentCheckpointIndex);
+            if (checkpoints[i] != null)
+            {
+                checkpoints[i].SetActive(i == currentCheckpointIndex);
+            }
         }
     }
     private IEnumerator CheckpointCooldownRoutine(float cooldown, float nextTimerDuration)
@@ -299,6 +302,7 @@ public class BargainingController : MonoBehaviour
         if (respawnPoint != null && eventTarget != null)
         {
             eventTarget.transform.position = respawnPoint.position;
+            eventTarget.transform.rotation = respawnPoint.rotation;
         }
         // reset event so it can trigger again
         if (eventMode == BargainingEventMode.OrderedCheckpoints)
