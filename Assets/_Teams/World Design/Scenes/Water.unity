@@ -1195,63 +1195,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 5406605107057671251, guid: 2f6a7fdb27b9f854aa195d8b5e61ec6c, type: 3}
   m_PrefabInstance: {fileID: 904279472476440209}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1993839462
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1993839461}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e62e0b434d62e4c48807b6a58cb09781, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SetAngerEventMusic
-  fmodEvent:
-    Guid:
-      Data1: -1931530165
-      Data2: 1261801039
-      Data3: -304735315
-      Data4: 1849102358
-    Path: event:/Music/mus_AngerEvent
---- !u!114 &1993839463
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1993839461}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0ad85828984b39d42b3f7033bea182e2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SetBargainingEventMusic
-  fmodEvent:
-    Guid:
-      Data1: -1452029040
-      Data2: 1095831201
-      Data3: 304856205
-      Data4: 1497172693
-    Path: event:/Music/mus_BargainingEvent
---- !u!114 &1993839464
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1993839461}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5d600ef94645cdd46abf2126bd96b54c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SetDenialEventMusic
-  fmodEvent:
-    Guid:
-      Data1: -1834102024
-      Data2: 1101561857
-      Data3: 1523838115
-      Data4: -615451135
-    Path: event:/Music/mus_DenialEvent
 --- !u!1001 &904279472476440209
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1331,16 +1274,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 5406605107057671251, guid: 2f6a7fdb27b9f854aa195d8b5e61ec6c, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1993839464}
-    - targetCorrespondingSourceObject: {fileID: 5406605107057671251, guid: 2f6a7fdb27b9f854aa195d8b5e61ec6c, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1993839463}
-    - targetCorrespondingSourceObject: {fileID: 5406605107057671251, guid: 2f6a7fdb27b9f854aa195d8b5e61ec6c, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1993839462}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2f6a7fdb27b9f854aa195d8b5e61ec6c, type: 3}
 --- !u!1001 &3002147956303078962
 PrefabInstance:
