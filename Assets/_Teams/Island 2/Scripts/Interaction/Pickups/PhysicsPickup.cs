@@ -18,7 +18,12 @@ public class PhysicsPickup : MonoBehaviour, IPickup
         pickupRigidbody = GetComponent<Rigidbody>();
         pickupCollider = GetComponent<Collider>();
     }
-    
+
+    public bool ShouldShowMessage(InteractionController interactionController)
+    {
+        return true;
+    }
+
     public void Interact(InteractionController interactionController)
     {
         var pickupController = interactionController.GetComponent<PickupController>();

@@ -34,8 +34,10 @@ public class InteractionController : MonoBehaviour
         Physics.Raycast(ray, out RaycastHit hit, interactionDistance, ~0, QueryTriggerInteraction.Ignore);
         Debug.DrawRay(ray.origin, ray.direction * interactionDistance, Color.green);
         
-        currentTargetedInteractable = hit.collider?.GetComponent<IInteractable>();
-
+        var interactableTargeted = hit.collider?.GetComponent<IInteractable>();
+        currentTargetedInteractable = interactableTargeted != null &&
+                                      interactableTargeted.ShouldShowMessage(this)
+                                      ? interactableTargeted : null;
     }
 
     private void UpdateInteractionText()

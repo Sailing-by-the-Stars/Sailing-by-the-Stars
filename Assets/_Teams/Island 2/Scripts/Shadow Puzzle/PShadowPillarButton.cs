@@ -12,7 +12,7 @@ public class PShadowPillarButton : MonoBehaviour, IInteractable
     [SerializeField] private int index;
     
     [Tooltip("If this is true, all other settings are irrelevant!")]
-    [SerializeField] private bool isResetButton = false;
+    [SerializeField] private bool isResetButton;
     
     [SerializeField] private string objectInteractMessage = "Press E to Push Pillar(s)";
     public string InteractMessage => objectInteractMessage;

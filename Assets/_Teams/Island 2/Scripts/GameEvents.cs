@@ -22,4 +22,15 @@ public static class GameEvents
         OnDrop?.Invoke(item);
     }
 #endregion
+
+#region BargainPuzzle
+
+    public static event Action<IPickup> OnItemPlaced;
+
+    public static void ExecOnItemPlaced(IPickup item)
+    {
+        OnItemPlaced?.Invoke(item);
+    }
+
+#endregion
 }
