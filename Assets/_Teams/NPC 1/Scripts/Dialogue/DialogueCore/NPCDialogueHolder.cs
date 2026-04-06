@@ -51,6 +51,9 @@ public class NPCDialogueHolder : MonoBehaviour, IInteractable
 
             if (valid)
             {
+                Debug.Log(DialogueSystem.Instance.name);
+                Debug.Log(entry.dialogue.npcName);
+                Debug.Log(gameObject.name);
                 DialogueSystem.Instance.StartDialogue(entry.dialogue, gameObject);
                 return;
             }

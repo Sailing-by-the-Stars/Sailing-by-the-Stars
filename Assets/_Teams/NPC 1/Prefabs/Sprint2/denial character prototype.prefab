@@ -92,9 +92,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 727ffce1f89102743b4b943882b1a791, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NPCDialogueHolder
-  firstDialogue: {fileID: 11400000, guid: ee872b59c9b687845a42a5728cf7c643, type: 2}
-  hasRepeatDialogue: 1
-  repeatDialogue: {fileID: 11400000, guid: 3f9f95eb1d9236f4cb9f481ba8f2416e, type: 2}
+  dialogues:
+  - dialogue: {fileID: 11400000, guid: ee872b59c9b687845a42a5728cf7c643, type: 2}
+    conditions: []
+  - dialogue: {fileID: 11400000, guid: 3f9f95eb1d9236f4cb9f481ba8f2416e, type: 2}
+    conditions:
+    - conditionType: 2
+      questID: 
+      itemID: 
+      dialogue: {fileID: 11400000, guid: ee872b59c9b687845a42a5728cf7c643, type: 2}
   hasInteractedBefore: 0
   interactMessage: Press E to Talk
 --- !u!136 &4898787679067752023
