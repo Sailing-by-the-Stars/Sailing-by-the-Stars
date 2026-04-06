@@ -182,78 +182,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 8796580515757296188}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &5396089907498331327
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1654967976618218186}
-  - component: {fileID: 7232390984532271784}
-  - component: {fileID: 4472122751725453688}
-  m_Layer: 0
-  m_Name: Testing
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1654967976618218186
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5396089907498331327}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 30958419102271199}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7232390984532271784
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5396089907498331327}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 17d722f2f1fea2c4ea91a16ae34fdd4a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Test_ScreenEffects
---- !u!114 &4472122751725453688
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5396089907498331327}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a33d12d5d1398f44b81e62b96eba4381, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::StarDebugVisualizer
-  waterHeight: 0.5
-  circleSegments: 64
-  stars:
-  - label: 0
-    star: {fileID: 0}
-    targetAngle: 55
-    color: {r: 1, g: 0, b: 0, a: 0}
-  - label: 1
-    star: {fileID: 0}
-    targetAngle: 60
-    color: {r: 0, g: 0, b: 1, a: 0}
-  - label: 2
-    star: {fileID: 0}
-    targetAngle: 70
-    color: {r: 0.1960784, g: 0.8039216, b: 0.1960784, a: 1}
 --- !u!1 &5489492013889659339
 GameObject:
   m_ObjectHideFlags: 0
@@ -278,13 +206,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5489492013889659339}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8796580515757296188}
-  - {fileID: 1654967976618218186}
   - {fileID: 4021838635582416237}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -301,6 +228,7 @@ GameObject:
   - component: {fileID: 4368868404535763934}
   - component: {fileID: 3644593238881076435}
   - component: {fileID: 2048578412965205430}
+  - component: {fileID: 7907969954052869750}
   m_Layer: 0
   m_Name: ScreenEffectsCanvas
   m_TagString: Untagged
@@ -407,6 +335,18 @@ MonoBehaviour:
   defaultFlashDuration: 0.4
   defaultVignetteDuration: 0.5
   defaultVignetteAlpha: 0.8
+--- !u!114 &7907969954052869750
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6389959142334825891}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a26365f4155f0d4c91eae965a25f337, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DeathEffect
 --- !u!1 &6422851505451705430
 GameObject:
   m_ObjectHideFlags: 0
@@ -488,7 +428,7 @@ MonoBehaviour:
   endConditionDistance: 30
   entityPrefab: {fileID: 3854540384909684288, guid: ec3b58bcf087f28409a676a1e7f10836, type: 3}
   defaultTimerDuration: 60
-  defaultCooldownDuration: 20
+  defaultCooldownDuration: 30
   respawnPoint: {fileID: 5229133125834835892}
   audioBoost: 0.2
 --- !u!1 &7034525113455289781

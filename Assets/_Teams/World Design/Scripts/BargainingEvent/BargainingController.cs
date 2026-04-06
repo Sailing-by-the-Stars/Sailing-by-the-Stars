@@ -81,7 +81,7 @@ public class BargainingController : MonoBehaviour
     private Coroutine cooldownRoutine;
 
     // respawn visual
-    private ScreenEffects screenEffects;
+    private DeathEffect screenEffects;
 
     // audio
     private SetBargainingTimer timerAudio;
@@ -95,7 +95,7 @@ public class BargainingController : MonoBehaviour
     private void Start()
     {
         timerAudio = FindFirstObjectByType<SetBargainingTimer>();
-        screenEffects = FindFirstObjectByType<ScreenEffects>();
+        screenEffects = FindFirstObjectByType<DeathEffect>();
 
         if (eventMode == BargainingEventMode.StarEvents && endConditionTransform == null)
         {
@@ -110,7 +110,7 @@ public class BargainingController : MonoBehaviour
             TwinklingStar.OnStarFound += HandleStarFound;
         }
     }
-    private void OnDisable()
+    private void OnDestroy()
     {
         if (eventMode == BargainingEventMode.StarEvents)
         {
@@ -335,20 +335,13 @@ public class BargainingController : MonoBehaviour
         }
     }
 
-    // TODO: replace with final visuals or sequence from screen effects
     private IEnumerator TimerFailRoutine()
     {
-        Debug.Log("Event failed");
         if (screenEffects == null)
         {
             yield break;
         }
-        screenEffects.ScreenShake(magnitude: 0.5f, duration: 1.2f);
-        yield return new WaitForSeconds(0.7f);
-        screenEffects.Vignette(Color.black, alpha: 0.6f, duration: 1.5f);
-        yield return new WaitForSeconds(1.5f);
-        screenEffects.Flash(Color.darkRed, duration: 1f);
-        yield return new WaitForSeconds(0.5f);
+        screenEffects.PlayDeathSequence();
     }
 
 #if UNITY_EDITOR
