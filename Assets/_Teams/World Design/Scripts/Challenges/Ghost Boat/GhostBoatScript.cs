@@ -17,14 +17,6 @@ namespace _Teams.World_Design.Scripts.Challenges.Ghost_Boat
 
         [Header("Optional Rotation")]
         [SerializeField] private bool faceTarget;
-        
-        [Header("Death Detection")]
-        [SerializeField] private float deathZoneRange = 1f;
-
-        [Header("FMOD Audio")]
-        [SerializeField] private EventReference ghostBoatEvent;
-        [SerializeField, Tooltip("Optional FMOD parameter name that receives 1 when the boat is centered in view and 0 otherwise.")]
-        private string inViewParameterName = "InCenterView";
 
         private EventInstance audioInstance;
         private PARAMETER_ID inViewParameterId;
@@ -40,15 +32,9 @@ namespace _Teams.World_Design.Scripts.Challenges.Ghost_Boat
         {
             bool isCentered = IsInCenterView();
 
-            if (target == null)
+            if (!target)
             {
                 return;
-            }
-            
-            // Die if player is close enough to the boat
-            if(IsInGhostBoatRange())
-            {
-                Debug.Log("Player died");
             }
 
             if (!isCentered)
@@ -73,17 +59,10 @@ namespace _Teams.World_Design.Scripts.Challenges.Ghost_Boat
             transform.position = Vector3.Lerp(transform.position, desiredPosition, speed);
         }
 
-        private bool IsInGhostBoatRange()
-        {
-            return Mathf.Abs(target.position.y - transform.position.y) < deathZoneRange 
-                   && Mathf.Abs(target.position.x - transform.position.x) < deathZoneRange
-                   && Mathf.Abs(target.position.z - transform.position.z) < deathZoneRange;
-        }
-
         private bool IsInCenterView()
         {
-            Camera cam = playerCamera != null ? playerCamera : Camera.main;
-            if (cam == null)
+            Camera cam = playerCamera ? playerCamera : Camera.main;
+            if (!cam)
             {
                 return false;
             }

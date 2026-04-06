@@ -11,11 +11,15 @@ namespace _Teams.World_Design.Scripts.Challenges.Ghost_Boat
         [SerializeField] private GameObject ghostBoatPrefab;
         [SerializeField] private Transform spawnPoint;
         [SerializeField] private bool spawnOnlyOnce = true;
+        [SerializeField, Range(0, 1)] private float musicIntensity= 0.5f;
+        
 
         private GameObject spawnedGhost;
-
+        private SetDenialEventMusic soundController;
+        
         public void OnTriggerEnter(Collider other)
         {
+            soundController = FindFirstObjectByType<SetDenialEventMusic>();
             if (!other.CompareTag(instigatorTag))
             {
                 return;
@@ -31,6 +35,8 @@ namespace _Teams.World_Design.Scripts.Challenges.Ghost_Boat
             {
                 return;
             }
+
+            soundController.SetDenialMusic(musicIntensity);
 
             Transform point = spawnPoint != null ? spawnPoint : transform;
             spawnedGhost = Instantiate(ghostBoatPrefab, point.position, point.rotation);

@@ -80,17 +80,8 @@ MonoBehaviour:
   offset: {x: 0, y: 0, z: -5}
   followSpeed: 0.1
   playerCamera: {fileID: 0}
-  centerTolerance: 0.1
+  centerTolerance: 0.152
   faceTarget: 1
-  deathZoneRange: 1
-  ghostBoatEvent:
-    Guid:
-      Data1: -1717487581
-      Data2: 1329986160
-      Data3: 323660442
-      Data4: -675228333
-    Path: event:/ChallengeEvents/event_Denial_GhostBoat
-  inViewParameterName: InCenterView
 --- !u!114 &6771468533994905110
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -140,9 +131,9 @@ MonoBehaviour:
   Preload: 0
   NonRigidbodyVelocity: 0
   Params: []
-  OverrideAttenuation: 0
-  OverrideMinDistance: 0.90000004
-  OverrideMaxDistance: 12
+  OverrideAttenuation: 1
+  OverrideMinDistance: 50
+  OverrideMaxDistance: 100
 --- !u!1001 &7531028706257544305
 PrefabInstance:
   m_ObjectHideFlags: 0
