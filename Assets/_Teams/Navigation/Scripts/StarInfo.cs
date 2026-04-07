@@ -13,7 +13,7 @@ public class StarInfo : MonoBehaviour
         
         initpos = transform.position;
 
-
+        /*
         if(GetComponent<MeshRenderer>() == null)
         {
             return;
@@ -31,5 +31,6 @@ public class StarInfo : MonoBehaviour
 
         half intensityMul = (half)MathF.Pow(2.0f, emissionMult * starSize);
         material.color *= intensityMul;
+        */
     }
 }
