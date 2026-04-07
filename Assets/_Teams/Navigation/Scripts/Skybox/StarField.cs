@@ -6,7 +6,7 @@ using UnityEngine.Rendering.HighDefinition;
 using static StarDataLoader;
 
 [Serializable]
-public class manualStar
+public class ManualStar
 {
     public int starID = 0;
     public GameObject starPrefab;
@@ -24,7 +24,7 @@ public class StarField : MonoBehaviour
     public List<GameObject> starObjects;
     private Dictionary<int, GameObject> constellationVisible = new();
 
-    [SerializeField] List<manualStar> manualStars = new();
+    [SerializeField] List<ManualStar> manualStars = new();
 
     private readonly int starFieldScale = 400;
 
@@ -32,7 +32,7 @@ public class StarField : MonoBehaviour
     {
         // Read in the star data.
         StarDataLoader sdl = new();
-        stars = sdl.LoadData();
+        stars = sdl.LoadData(new SphereStarPosition());
         starObjects = new();
         foreach (StarDataLoader.Star star in stars)
         {
@@ -73,7 +73,7 @@ public class StarField : MonoBehaviour
 
 
 
-        foreach (manualStar manualStar in manualStars)
+        foreach (ManualStar manualStar in manualStars)
         {
             GameObject oldStar = starObjects[manualStar.starID - 1];
 
