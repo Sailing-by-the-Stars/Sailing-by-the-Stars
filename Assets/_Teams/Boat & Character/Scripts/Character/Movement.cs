@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem.LowLevel;
 
 //Creator: Joost
 //Edited by: Johan
@@ -115,6 +116,9 @@ public class Movement : MonoBehaviour
                     break;
                 case "BoatRudder":
                     MoveRudder();
+                    break;
+                case "BoatAnchor":
+                    MoveAnchor();
                     break;
                 default:
                     print("Wrong player state initialized.");
@@ -316,43 +320,85 @@ public class Movement : MonoBehaviour
         }
     }
 
+    void MoveAnchor()
+    {
+        Vector2 moveDirection = playerControls.BoatAnchor.Move.ReadValue<Vector2>();
+        if (moveDirection.y < 0)
+        {
+            // Moving down
+        }
+        else if (moveDirection.y > 0)
+        {
+            // Moving up
+        }
+
+        if (playerControls.BoatAnchor.Leave.IsPressed())
+        {
+            SwitchState("Land");
+        }
+    }
+
     void SwitchState(string newState)
     {
-        playerState = newState;
-
         switch (newState)
         {
             case "Land":
                 playerControls.BoatSail.Disable();
                 playerControls.BoatRudder.Disable();
                 playerControls.Land.Enable();
+                playerControls.BoatAnchor.Disable();
 
                 animator.SetBool("IsRudder", false);
                 animator.SetBool("IsRudder", false);
 
                 limitCamMovement = false;
+
+                SetPlayerState(newState);
                 break;
             case "BoatSail":
                 playerControls.BoatSail.Enable();
                 playerControls.BoatRudder.Disable();
                 playerControls.Land.Disable();
+                playerControls.BoatAnchor.Disable();
 
                 animator.SetBool("IsSail", true);
+
+                limitCamMovement = true;SetPlayerState(newState);
+
+                SetPlayerState(newState);
                 break;
             case "BoatRudder":
                 playerControls.BoatSail.Disable();
                 playerControls.BoatRudder.Enable();
                 playerControls.Land.Disable();
+                playerControls.BoatAnchor.Disable();
 
                 animator.SetBool("IsRudder", true);
 
                 limitCamMovement = true;
+
+                SetPlayerState(newState);
+                break;
+            case "BoatAnchor":
+                playerControls.BoatSail.Disable();
+                playerControls.BoatRudder.Disable();
+                playerControls.Land.Disable();
+                playerControls.BoatAnchor.Enable();
+
+                animator.SetBool("IsAnchor", true);
+
+                limitCamMovement = true;
+
+                SetPlayerState(newState);
                 break;
             default:
                 print("Wrong player state initialized.");
-
-                limitCamMovement = true;
                 break;
         }
+    }
+
+    void SetPlayerState(string state)
+    {
+        playerState = state;
     }
 }
