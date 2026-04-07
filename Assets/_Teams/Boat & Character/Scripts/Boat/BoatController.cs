@@ -17,10 +17,11 @@ public class BoatController : MonoBehaviour
     [SerializeField] private float underwaterFrontArea = .5f;
     [SerializeField] private float airDensity = 1.225f;
     [SerializeField] private float waterDensity = 1000f;
-    [SerializeField] private float keelDragStrength = 20f;
+    [SerializeField] private float keelDragStrength = 100f;
     [SerializeField] private float baseForwardForce = 900f;
     [SerializeField] private float maxRotationRate = 10f;
     [SerializeField] private float rudderTorqueStrength = 30f;
+    [SerializeField] private float sidedriftCorrectionStrength = 150f;
     [SerializeField] private bool useLocalWindSpeed = true;
     [SerializeField] private bool enableWindForces = true;
 
@@ -209,18 +210,28 @@ public class BoatController : MonoBehaviour
 
     void ApplyRudderTorque()
     {
-        float forwardVelocity = transform.InverseTransformVector(rigidBody.linearVelocity).z;
+        Vector3 localVelocity = transform.InverseTransformVector(rigidBody.linearVelocity);
+        float forwardVelocity = localVelocity.z;
         rigidBody.AddTorque(forwardVelocity * rudderAxis.value * rudderTorqueStrength * Vector3.up, ForceMode.Force);
         rudderTorque = rudderAxis.value * rudderTorqueStrength * forwardVelocity;
+
+        if (Mathf.Abs(localVelocity.x) > .2f)
+        {
+            Vector3 sideSlipForce = -localVelocity.x * sidedriftCorrectionStrength * Vector3.right;
+            rigidBody.AddRelativeForce(sideSlipForce, ForceMode.Force);
+        }
     }
 
     void ApplyKeelDrag()
     {
         Vector3 localVelocity = transform.InverseTransformVector(rigidBody.linearVelocity);
 
-        Vector3 keelDragVector = keelDragStrength * localVelocity.x * localVelocity.x * Mathf.Sign(localVelocity.x) * Vector3.right;
+        Vector3 localKeelDragVector = -keelDragStrength * localVelocity.x * Vector3.right;
+        Vector3 keelDragVector = transform.TransformVector(localKeelDragVector);
 
-        rigidBody.AddRelativeForce(-keelDragVector);
+
+        rigidBody.AddRelativeForce(keelDragVector);
+        rigidBody.AddForceAtPosition(keelDragVector, transform.position + .7f * -transform.up, ForceMode.Force);
     }
 
     void applyWaterDrag()
