@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Pedestal : MonoBehaviour
+public class PedestalOld : MonoBehaviour
 {
     private AltarItem placedItem;
     private int pedestalIndex;

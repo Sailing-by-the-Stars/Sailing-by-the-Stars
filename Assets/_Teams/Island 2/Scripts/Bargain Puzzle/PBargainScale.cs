@@ -43,7 +43,7 @@ public class PBargainScale : MonoBehaviour, IInteractable
 
     private void Awake()
     {
-        GameEvents.OnItemPlaced += OnPuzzleItemPlaced;
+        GameEvents.OnScaleItemPlaced += OnScalePuzzleItemPlaced;
         
         leftStartPos = leftArm.armRoot.localPosition;
         rightStartPos = rightArm.armRoot.localPosition;
@@ -154,13 +154,13 @@ public class PBargainScale : MonoBehaviour, IInteractable
         return item != null ? item.weight : 0;
     }
 
-    private void OnPuzzleItemPlaced(IPickup pickup)
+    private void OnScalePuzzleItemPlaced(IPickup pickup)
     {
         Debug.Log((pickup as BargainItem)?.name + " has a weight of: " + (pickup as BargainItem)?.weight);
     }
 
     private void OnDestroy()
     {
-        GameEvents.OnItemPlaced -= OnPuzzleItemPlaced;
+        GameEvents.OnScaleItemPlaced -= OnScalePuzzleItemPlaced;
     }
 }

@@ -2,158 +2,127 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
 
-public class Altar : MonoBehaviour
+public class Altar : MonoBehaviour, IInteractable
 {
-    private const int TOTAL_PEDESTALS = 5;
-    private const int TOTAL_ITEMS = 5;
+    [System.Serializable]
+    private class Pedestal
+    {
+        public int index;
+        public Transform pedestalRoot;
+        public Transform placePoint;
+        
+        [HideInInspector] public BargainItem storedPickup;
+    }
+    
+    public string InteractMessage => "Press E to Place / Swap Item";
 
-    [SerializeField] private Pedestal[] pedestals;
-    [SerializeField] private AltarCandle candleSlot;
+    [SerializeField] private List<Pedestal> pedestals = new();
+    [SerializeField] private Light candle;
     [SerializeField] private Transform rewardCompartment;
-
-    private List<AltarItem> availableItems = new List<AltarItem>();
+    
     private bool ritualCompleted;
 
-    // Correct order from heaviest to lightest: Career, Passion, Love, Wealth, Health
-    private readonly AltarItem.ItemType[] correctOrder = new AltarItem.ItemType[]
+    private void Awake()
     {
-        AltarItem.ItemType.Career,
-        AltarItem.ItemType.Passion,
-        AltarItem.ItemType.Love,
-        AltarItem.ItemType.Wealth,
-        AltarItem.ItemType.Health
-    };
-
-    private void Start()
-    {
-        if (pedestals == null || pedestals.Length == 0)
+        GameEvents.OnAltarItemPlaced += IsOrderCorrect;
+        
+        for (int i = 0; i < pedestals.Count; i++)
         {
-            InitializePedestals();
-        }
-        if (availableItems.Count == 0)
-        {
-            CollectAvailableItems();
+            pedestals[i].index = i + 1;
         }
     }
-
-    private void InitializePedestals()
+    
+    public void Interact(InteractionController interactionController)
     {
-        if (pedestals == null || pedestals.Length != TOTAL_PEDESTALS)
+        var pedestal = GetPedestalFromHit(interactionController);
+        if (pedestal == null) return;
+        
+        var pickupController = interactionController.GetComponent<PickupController>();
+        if (!pickupController) return;
+        
+        var playerPickup = pickupController.currentPickup as BargainItem;
+        
+        // Case 1: Player has nothing, slot has item = Take item
+        if (!playerPickup && pedestal.storedPickup)
         {
-            pedestals = GetComponentsInChildren<Pedestal>();
+            TakeFromPedestal(pedestal, pickupController);
+            return;
         }
-
-        for (int i = 0; i < pedestals.Length; i++)
+        
+        // Case 2: Player has item, slot empty = Place item
+        if (playerPickup && !pedestal.storedPickup)
         {
-            pedestals[i].Initialize(i);
+            PlaceIntoPedestal(pedestal, pickupController, playerPickup);
+            
+            return;
+        }
+        
+        // Case 3: Both have items = Swap items
+        if (playerPickup && pedestal.storedPickup)
+        {
+            SwapItems(pedestal, pickupController, playerPickup);
         }
     }
-
-    private void CollectAvailableItems()
+    
+    private Pedestal GetPedestalFromHit(InteractionController interactionController)
     {
-        availableItems.Clear();
-        AltarItem[] allItems = FindObjectsOfType<AltarItem>();
-        availableItems.AddRange(allItems.Where(item => item.transform.parent != transform));
+        var hitTransform = interactionController.CurrentHitTransform;
+        return !hitTransform ? null : pedestals.FirstOrDefault(pedestal => hitTransform == pedestal.pedestalRoot || hitTransform.IsChildOf(pedestal.pedestalRoot));
+    }
+    
+    private void TakeFromPedestal(Pedestal pedestal, PickupController pickupController)
+    {
+        var item = pedestal.storedPickup;
+        pedestal.storedPickup = null;
+
+        item.Grab(pickupController);
+    }
+    
+    private void PlaceIntoPedestal(Pedestal pedestal, PickupController pickupController, BargainItem pickup)
+    {
+        pickupController.TryPlacePickup(pickup, pedestal.placePoint);
+        pedestal.storedPickup = pickup;
+        
+        GameEvents.ExecOnAltarItemPlaced();
     }
 
-    public bool PlaceItemOnPedestal(AltarItem item, int pedestalIndex)
+    private void SwapItems(Pedestal pedestal, PickupController pickupController, BargainItem playerPickup)
     {
-        if (ritualCompleted || pedestalIndex < 0 || pedestalIndex >= pedestals.Length)
-        {
-            return false;
-        }
+        var oldPickup = pedestal.storedPickup;
 
-        if (!pedestals[pedestalIndex].PlaceItem(item))
-        {
-            return false;
-        }
-
-        if (AreAllPedestalsOccupied())
-        {
-            EnableCandleLighting();
-        }
-
-        return true;
-    }
-
-    public bool RemoveItemFromPedestal(int pedestalIndex)
-    {
-        if (ritualCompleted || pedestalIndex < 0 || pedestalIndex >= pedestals.Length)
-        {
-            return false;
-        }
-
-        AltarItem removedItem = pedestals[pedestalIndex].RemoveItem();
-        return removedItem != null;
-    }
-
-    public bool LightCandle()
-    {
-        if (ritualCompleted || !AreAllPedestalsOccupied() || candleSlot == null)
-        {
-            return false;
-        }
-
-        candleSlot.Light();
-
-        if (IsOrderCorrect())
-        {
-            CompleteRitual();
-            return true;
-        }
-        else
-        {
-            candleSlot.Extinguish();
-            return false;
-        }
+        pickupController.TryPlacePickup(playerPickup, pedestal.placePoint);
+        pedestal.storedPickup = playerPickup;
+        
+        oldPickup.Grab(pickupController);
     }
 
     private void CompleteRitual()
     {
+        if (ritualCompleted || !candle) return;
+
+        candle.enabled = true;
         ritualCompleted = true;
         OpenRewardCompartment();
     }
 
     private void OpenRewardCompartment()
     {
-        if (rewardCompartment != null)
+        Debug.Log("Bargain Completed.");
+        if (rewardCompartment)
         {
             rewardCompartment.gameObject.SetActive(true);
         }
     }
 
-    private bool AreAllPedestalsOccupied()
+    private void IsOrderCorrect()
     {
-        return System.Array.TrueForAll(pedestals, pedestal => pedestal.IsOccupied);
+        Debug.Log("Item placed on pedestal");
+        if (pedestals.All(pedestal => pedestal.storedPickup && pedestal.storedPickup.weight == pedestal.index))
+            CompleteRitual();
     }
 
-    private bool IsOrderCorrect()
+    private void OnDestroy()
     {
-        for (int i = 0; i < pedestals.Length; i++)
-        {
-            AltarItem item = pedestals[i].PlacedItem;
-            if (item == null || item.Type != correctOrder[i])
-            {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    private void EnableCandleLighting()
-    {
-        if (candleSlot != null)
-        {
-            candleSlot.gameObject.SetActive(true);
-        }
-    }
-
-    public bool IsRitualCompleted => ritualCompleted;
-
-    public void SetupReferences(Pedestal[] pedestalArray, AltarCandle candle, Transform reward)
-    {
-        pedestals = pedestalArray;
-        candleSlot = candle;
-        rewardCompartment = reward;
+        GameEvents.OnAltarItemPlaced -= IsOrderCorrect;
     }
 }

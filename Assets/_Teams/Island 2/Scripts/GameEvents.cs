@@ -25,11 +25,17 @@ public static class GameEvents
 
 #region BargainPuzzle
 
-    public static event Action<IPickup> OnItemPlaced;
+    public static event Action<IPickup> OnScaleItemPlaced;
+    public static event Action OnAltarItemPlaced;
 
     public static void ExecOnItemPlaced(IPickup item)
     {
-        OnItemPlaced?.Invoke(item);
+        OnScaleItemPlaced?.Invoke(item);
+    }
+
+    public static void ExecOnAltarItemPlaced()
+    {
+        OnAltarItemPlaced?.Invoke();
     }
 
 #endregion

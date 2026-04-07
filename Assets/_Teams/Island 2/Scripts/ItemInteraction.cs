@@ -1,12 +1,12 @@
 using UnityEngine;
-
+/*
 public class ItemInteraction : MonoBehaviour
 {
     [SerializeField] private Altar altar;
     [SerializeField] private Camera mainCamera;
 
     private AltarItem selectedItem;
-    private Pedestal selectedPedestal;
+    private PedestalOld selectedPedestal;
 
     private void Start()
     {
@@ -45,7 +45,7 @@ public class ItemInteraction : MonoBehaviour
             Debug.Log($"Hit object: {hit.collider.gameObject.name}");
 
             AltarItem item = hit.collider.GetComponent<AltarItem>();
-            Pedestal pedestal = hit.collider.GetComponent<Pedestal>();
+            PedestalOld pedestal = hit.collider.GetComponent<PedestalOld>();
 
             if (item != null)
             {
@@ -72,7 +72,7 @@ public class ItemInteraction : MonoBehaviour
         Debug.Log($"Selected item: {item.Type}");
     }
 
-    private void PlaceItemOnPedestal(Pedestal pedestal)
+    private void PlaceItemOnPedestal(PedestalOld pedestal)
     {
         if (selectedItem == null)
         {
@@ -91,3 +91,4 @@ public class ItemInteraction : MonoBehaviour
         }
     }
 }
+*/

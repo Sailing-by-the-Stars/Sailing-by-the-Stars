@@ -1,5 +1,5 @@
 using UnityEngine;
-
+/*
 public class AltarInteractionTest : MonoBehaviour
 {
     [SerializeField] private Altar altar;
@@ -39,3 +39,4 @@ public class AltarInteractionTest : MonoBehaviour
         Debug.Log("Altar reset!");
     }
 }
+*/
