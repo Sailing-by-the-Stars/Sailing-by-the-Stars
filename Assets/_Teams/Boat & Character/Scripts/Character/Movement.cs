@@ -14,9 +14,11 @@ public class Movement : MonoBehaviour
     [SerializeField] float mouseSensitivity = 10f;
     [SerializeField] float minXRotation = -90f;
     [SerializeField] float maxXRotation = 90f;
+    bool limitCamMovement = false;
 
     [Header("Collision Handling")]
     [SerializeField] Rigidbody rb;
+    [SerializeField] float InteractionRange = 1.0f;
 
     [SerializeField] Transform[] groundChecks;
     bool isGrounded = false;
@@ -36,6 +38,11 @@ public class Movement : MonoBehaviour
     private BoatController boatController;
     private BuoyancyController buoyancyController;
 
+    [Header("Animation")]
+    [SerializeField] Animator animator;
+
+    string playerState = "Land";
+
     private void Awake()
     {
         playerControls = new PlayerControls();
@@ -43,12 +50,16 @@ public class Movement : MonoBehaviour
 
     private void OnEnable()
     {
-        playerControls.Enable();
+        playerControls.Land.Enable();
+        playerControls.Looking.Enable();
     }
 
     private void OnDisable()
     {
-        playerControls.Disable();
+        playerControls.Land.Disable();
+        playerControls.BoatSail.Disable();
+        playerControls.BoatRudder.Disable();
+        playerControls.Looking.Disable();
     }
 
     void Start()
@@ -58,8 +69,11 @@ public class Movement : MonoBehaviour
         cam = GetComponentInChildren<Camera>();
         rb = GetComponent<Rigidbody>();
 
-        boatController = boat.GetComponent<BoatController>();
-        buoyancyController = boat.GetComponent<BuoyancyController>();
+        if (boat != null)
+        {
+            boatController = boat.GetComponent<BoatController>();
+            buoyancyController = boat.GetComponent<BuoyancyController>();
+        }
     }
 
     private void Update()
@@ -81,7 +95,7 @@ public class Movement : MonoBehaviour
                 }*/
                 rb.AddForce(-rb.linearVelocity);
             }
-            }
+        }
     }
 
     void FixedUpdate()
@@ -89,7 +103,48 @@ public class Movement : MonoBehaviour
         RotateCamera();
 
         if (!isOnBoat)
-            MovePlayer();
+        {
+            Interact();
+            switch (playerState)
+            {
+                case "Land":
+                    MovePlayer();
+                    break;
+                case "BoatSail":
+                    MoveSail();
+                    break;
+                case "BoatRudder":
+                    MoveRudder();
+                    break;
+                default:
+                    print("Wrong player state initialized.");
+                    break;
+            }
+        }
+    }
+
+    void Interact()
+    {
+        RaycastHit hit;
+        if (Physics.Raycast(cam.transform.position, cam.transform.forward, out hit, InteractionRange))
+        {
+            Debug.DrawLine(cam.transform.position, hit.point, Color.red);
+            if(hit.collider.gameObject.GetComponent<BoatInteractor>() != null)
+            {
+                if (playerControls.Land.Interact.IsPressed())
+                {
+                    SwitchState(hit.collider.gameObject.GetComponent<BoatInteractor>().type);
+                    if (hit.collider.gameObject.GetComponent<BoatInteractor>().playerSpot != null)
+                    {
+                        transform.position = hit.collider.gameObject.GetComponent<BoatInteractor>().playerSpot.position;
+                    }
+
+                    //transform.rotation = hit.collider.gameObject.GetComponent<BoatInteractor>().playerSpot.rotation;
+                    //xCamRotation = hit.collider.gameObject.GetComponent<BoatInteractor>().playerSpot.eulerAngles.x;
+                }
+            }
+            //print(hit.collider.gameObject.name);
+        }
     }
 
     void MovePlayer()
@@ -116,14 +171,16 @@ public class Movement : MonoBehaviour
 
     void RotateCamera()
     {
-        Vector2 lookDirection = playerControls.Land.Look.ReadValue<Vector2>();
+        Vector2 lookDirection = playerControls.Looking.Look.ReadValue<Vector2>();
         Vector2 cameraMoveDirection = lookDirection * mouseSensitivity * Time.deltaTime;
 
-        // Rotating the Y rotation
-        yCamRotation += cameraMoveDirection.x;
-        yCamRotation = FixRotationLimit(yCamRotation);
-        gameObject.transform.rotation = Quaternion.Euler(0, yCamRotation, 0);
-
+        if (limitCamMovement != true)
+        {
+            // Rotating the Y rotation
+            yCamRotation += cameraMoveDirection.x;
+            yCamRotation = FixRotationLimit(yCamRotation);
+            gameObject.transform.rotation = Quaternion.Euler(0, yCamRotation, 0);
+        }
 
         // Rotating the X rotation
         xCamRotation -= cameraMoveDirection.y;
@@ -217,5 +274,85 @@ public class Movement : MonoBehaviour
             }
         }
         isGrounded = false;
+    }
+
+    void MoveSail()
+    {
+        Vector2 moveDirection = playerControls.BoatSail.Move.ReadValue<Vector2>();
+        if (moveDirection.y < 0)
+        {
+            // Moving Down
+        } else if (moveDirection.y > 0)
+        {
+            // Moving Up
+        }
+
+
+        animator.SetFloat("Movement", moveDirection.y);
+
+        if (playerControls.BoatSail.Leave.IsPressed())
+        {
+            SwitchState("Land");
+        }
+    }
+
+    void MoveRudder()
+    {
+        Vector2 moveDirection = playerControls.BoatRudder.Move.ReadValue<Vector2>();
+        if (moveDirection.x < 0)
+        {
+            // Moving Left
+        }
+        else if (moveDirection.x > 0)
+        {
+            // Moving right
+        }
+
+        animator.SetFloat("Movement", moveDirection.x);
+
+        if (playerControls.BoatRudder.Leave.IsPressed())
+        {
+            SwitchState("Land");
+        }
+    }
+
+    void SwitchState(string newState)
+    {
+        playerState = newState;
+
+        switch (newState)
+        {
+            case "Land":
+                playerControls.BoatSail.Disable();
+                playerControls.BoatRudder.Disable();
+                playerControls.Land.Enable();
+
+                animator.SetBool("IsRudder", false);
+                animator.SetBool("IsRudder", false);
+
+                limitCamMovement = false;
+                break;
+            case "BoatSail":
+                playerControls.BoatSail.Enable();
+                playerControls.BoatRudder.Disable();
+                playerControls.Land.Disable();
+
+                animator.SetBool("IsSail", true);
+                break;
+            case "BoatRudder":
+                playerControls.BoatSail.Disable();
+                playerControls.BoatRudder.Enable();
+                playerControls.Land.Disable();
+
+                animator.SetBool("IsRudder", true);
+
+                limitCamMovement = true;
+                break;
+            default:
+                print("Wrong player state initialized.");
+
+                limitCamMovement = true;
+                break;
+        }
     }
 }
