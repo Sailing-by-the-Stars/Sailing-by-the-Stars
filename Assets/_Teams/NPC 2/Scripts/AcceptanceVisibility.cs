@@ -30,6 +30,12 @@ public class AcceptanceVisibility : MonoBehaviour
 
     private void Awake()
     {
+        if (modelRoot == null)
+        {
+            Debug.LogError($"Model Root not assigned on {name}", this);
+            return;
+        }
+
         npcRenderers = modelRoot.GetComponentsInChildren<Renderer>();
 
         if (startHidden)
