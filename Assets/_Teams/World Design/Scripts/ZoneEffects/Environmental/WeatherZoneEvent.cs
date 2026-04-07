@@ -38,7 +38,7 @@ public class WeatherZoneEffect : MonoBehaviour, IZoneEffect
     [Tooltip("Curve shapes defining how weather fades from this zone's state. " +
              "Leave null for a smooth default transition.")]
     [SerializeField] private WeatherTransitionCurves exitCurves;
-    
+
     [Header("Linked weather objects")]
     [Tooltip("Used to link thunder events to the gamme zone")]
     [SerializeField] private List<GameObject> thunderSpawnerObjects;
@@ -60,7 +60,7 @@ public class WeatherZoneEffect : MonoBehaviour, IZoneEffect
             StopCoroutine(delayRoutine);
             delayRoutine = null;
         }
-        if (enterState == null)
+        if (enterState == null || WeatherManager.Instance == null)
         {
             return;
         }

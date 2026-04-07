@@ -1,0 +1,269 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3201984235932103039
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1809561778805980236}
+  - component: {fileID: 7041716456246894415}
+  - component: {fileID: 1165194768615369954}
+  - component: {fileID: 6771468533994905110}
+  - component: {fileID: 1386108302455562955}
+  m_Layer: 0
+  m_Name: GhostBoat
+  m_TagString: GhostBoat
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1809561778805980236
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3201984235932103039}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 24.63, y: -0.01, z: 398.63}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 6224401418182078771}
+  - {fileID: 8561997704358522256}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!54 &7041716456246894415
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3201984235932103039}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!114 &1165194768615369954
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3201984235932103039}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de200468dd2d0a84dbcc2871cda1fb03, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::_Teams.World_Design.Scripts.Challenges.Ghost_Boat.GhostBoatScript
+  target: {fileID: 0}
+  offset: {x: 0, y: 0, z: -5}
+  followSpeed: 0.1
+  playerCamera: {fileID: 0}
+  centerTolerance: 0.1
+  faceTarget: 1
+  deathZoneRange: 1
+  ghostBoatEvent:
+    Guid:
+      Data1: -1717487581
+      Data2: 1329986160
+      Data3: 323660442
+      Data4: -675228333
+    Path: event:/ChallengeEvents/event_Denial_GhostBoat
+  inViewParameterName: InCenterView
+--- !u!114 &6771468533994905110
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3201984235932103039}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3023f52ccfd2fa841bc2b371ba9b16a6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FloatingObject
+  targetSurface: {fileID: 0}
+  includeDeformers: 1
+  verticalOffset: 0
+  followWaterCurrent: 0
+  currentSpeedMultiplier: 1
+  useRigidbodyForCollision: 0
+  obstacleLayers:
+    serializedVersion: 2
+    m_Bits: 0
+--- !u!114 &1386108302455562955
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3201984235932103039}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: FMODUnity::FMODUnity.StudioEventEmitter
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: -1717487581
+      Data2: 1329986160
+      Data3: 323660442
+      Data4: -675228333
+    Path: event:/ChallengeEvents/event_Denial_GhostBoat
+  Event: 
+  EventPlayTrigger: 1
+  EventStopTrigger: 0
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  NonRigidbodyVelocity: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 0.90000004
+  OverrideMaxDistance: 12
+--- !u!1001 &7531028706257544305
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1809561778805980236}
+    m_Modifications:
+    - target: {fileID: 4531204694360331586, guid: 7418104f4fe1b6546b3cf0e994313a3b, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 13.160002
+      objectReference: {fileID: 0}
+    - target: {fileID: 4531204694360331586, guid: 7418104f4fe1b6546b3cf0e994313a3b, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.71999997
+      objectReference: {fileID: 0}
+    - target: {fileID: 4531204694360331586, guid: 7418104f4fe1b6546b3cf0e994313a3b, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -30.410004
+      objectReference: {fileID: 0}
+    - target: {fileID: 4531204694360331586, guid: 7418104f4fe1b6546b3cf0e994313a3b, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4531204694360331586, guid: 7418104f4fe1b6546b3cf0e994313a3b, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4531204694360331586, guid: 7418104f4fe1b6546b3cf0e994313a3b, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4531204694360331586, guid: 7418104f4fe1b6546b3cf0e994313a3b, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4531204694360331586, guid: 7418104f4fe1b6546b3cf0e994313a3b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4531204694360331586, guid: 7418104f4fe1b6546b3cf0e994313a3b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4531204694360331586, guid: 7418104f4fe1b6546b3cf0e994313a3b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6590126810407896263, guid: 7418104f4fe1b6546b3cf0e994313a3b, type: 3}
+      propertyPath: m_Name
+      value: ComplexBoat
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 7418104f4fe1b6546b3cf0e994313a3b, type: 3}
+--- !u!4 &6224401418182078771 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4531204694360331586, guid: 7418104f4fe1b6546b3cf0e994313a3b, type: 3}
+  m_PrefabInstance: {fileID: 7531028706257544305}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &7697484366632347594
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1809561778805980236}
+    m_Modifications:
+    - target: {fileID: 2017795924797000282, guid: b0086c1b7652fe0448b664dc4e2483d4, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 1.31
+      objectReference: {fileID: 0}
+    - target: {fileID: 2017795924797000282, guid: b0086c1b7652fe0448b664dc4e2483d4, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.00000020676
+      objectReference: {fileID: 0}
+    - target: {fileID: 2017795924797000282, guid: b0086c1b7652fe0448b664dc4e2483d4, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2017795924797000282, guid: b0086c1b7652fe0448b664dc4e2483d4, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2017795924797000282, guid: b0086c1b7652fe0448b664dc4e2483d4, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2017795924797000282, guid: b0086c1b7652fe0448b664dc4e2483d4, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2017795924797000282, guid: b0086c1b7652fe0448b664dc4e2483d4, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2017795924797000282, guid: b0086c1b7652fe0448b664dc4e2483d4, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2017795924797000282, guid: b0086c1b7652fe0448b664dc4e2483d4, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2017795924797000282, guid: b0086c1b7652fe0448b664dc4e2483d4, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2160567979677379200, guid: b0086c1b7652fe0448b664dc4e2483d4, type: 3}
+      propertyPath: m_Name
+      value: DeathZone
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: b0086c1b7652fe0448b664dc4e2483d4, type: 3}
+--- !u!4 &8561997704358522256 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2017795924797000282, guid: b0086c1b7652fe0448b664dc4e2483d4, type: 3}
+  m_PrefabInstance: {fileID: 7697484366632347594}
+  m_PrefabAsset: {fileID: 0}

@@ -8,26 +8,28 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class BoatController : MonoBehaviour
 {
-    [Header("Physics")]
+    [Header("Physics settings")]
     [SerializeField] private float dragCoefficient = 1.1f;
     [SerializeField] private float liftCoefficient = 1.5f;
     [SerializeField] private float sailArea = 20;
     [SerializeField] private float underwaterFrontArea = .5f;
     [SerializeField] private float airDensity = 1.225f;
     [SerializeField] private float waterDensity = 1000f;
-    [SerializeField] private float rudderTorqueStrength = 10f;
-    [SerializeField] private float keelDragStrength = 10f;
-    [SerializeField] private float baseForwardForce = 5000f;
-    [SerializeField] private float baseForwardMaxSpeed = 10f;
+    [SerializeField] private float keelDragStrength = 20f;
+    [SerializeField] private float baseForwardForce = 900f;
+    [SerializeField] private float maxRotationRate = 10f;
+    [SerializeField] private float rudderTorqueStrength = 30f;
+    [SerializeField] private bool useLocalWindSpeed = true;
 
     [Header("Physics stats (Debugging!)")]
+    [SerializeField] private float forwardSpeed;
     [SerializeField] private float AoA;
     [SerializeField] private float drag;
     [SerializeField] private float lift;
     [SerializeField] private float rudderTorque;
+    [SerializeField] private float rotationRate;
     [SerializeField] private Vector3 wind = Vector3.zero;
     [SerializeField] private Vector3 apparentWind = Vector3.zero;
-    [SerializeField] private float appliedBaseForwardForce;
 
     [Header("Boat stats")]
     [SerializeField] private float maxRudderDeflection = 20f;
@@ -53,6 +55,12 @@ public class BoatController : MonoBehaviour
         rigidBody = GetComponent<Rigidbody>();
     }
 
+    void OnEnable()
+    {
+        rudderAxis.Reset();
+        mastAxis.Reset();
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -62,10 +70,11 @@ public class BoatController : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (WeatherManager.Instance != null)
+        if (!useLocalWindSpeed && WeatherManager.Instance != null)
         {
             wind = WeatherManager.Instance.WindVelocity;
         }
+
         apparentWind = wind - rigidBody.linearVelocity;
         Vector3 mastDirection = Vector3.ProjectOnPlane(-mastObject.transform.up, Vector3.up).normalized;
         Vector3 windDirection = Vector3.ProjectOnPlane(apparentWind, Vector3.up).normalized;
@@ -81,6 +90,8 @@ public class BoatController : MonoBehaviour
         ApplyRudderTorque();
         ApplyKeelDrag();
         applyWaterDrag();
+
+        forwardSpeed = transform.InverseTransformVector(rigidBody.linearVelocity).z;
     }
 
     //Calculates the force of drag experienced on the sail, used when running downwind and broadreach
@@ -174,7 +185,6 @@ public class BoatController : MonoBehaviour
     void ApplyRudderTorque()
     {
         float forwardVelocity = transform.InverseTransformVector(rigidBody.linearVelocity).z;
-
         rigidBody.AddTorque(Vector3.up * rudderAxis.value * rudderTorqueStrength * forwardVelocity, ForceMode.Force);
         rudderTorque = rudderAxis.value * rudderTorqueStrength * forwardVelocity;
     }
@@ -199,12 +209,7 @@ public class BoatController : MonoBehaviour
 
     void ApplyBaseForwardForce()
     {
-        float forwardVelocity = transform.InverseTransformVector(rigidBody.linearVelocity).z;
-
-        float speedScale = baseForwardMaxSpeed <= 0f ? 1f : Mathf.Clamp01(1f - (forwardVelocity / baseForwardMaxSpeed));
-        appliedBaseForwardForce = baseForwardForce * speedScale;
-
-        rigidBody.AddRelativeForce(Vector3.forward * appliedBaseForwardForce, ForceMode.Force);
+        rigidBody.AddRelativeForce(Vector3.forward * baseForwardForce, ForceMode.Force);
     }
 
     private float currentMastAngle = 0f;

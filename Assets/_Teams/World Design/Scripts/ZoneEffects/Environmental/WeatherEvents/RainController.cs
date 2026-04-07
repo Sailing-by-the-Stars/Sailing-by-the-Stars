@@ -67,7 +67,10 @@ public class RainController : MonoBehaviour, IWeatherEventController
             minStartSpeed = main.startSpeed.constant;
             minStartSize = main.startSize.constant;
 
-            WeatherManager.Instance.Register(this);
+            if (WeatherManager.Instance != null)
+            {
+                WeatherManager.Instance.Register(this);
+            }    
         }
     }
 
@@ -83,7 +86,10 @@ public class RainController : MonoBehaviour, IWeatherEventController
 
     private void LateUpdate()
     {
-        ChangeDirection(WeatherManager.Instance.WindVelocity);
+        if (WeatherManager.Instance != null)
+        {
+            ChangeDirection(WeatherManager.Instance.WindVelocity);
+        }
 
         FindFollowTarget();
         if (followTarget != null)

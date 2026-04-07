@@ -168,7 +168,7 @@ Rigidbody:
   serializedVersion: 5
   m_Mass: 200
   m_LinearDamping: 0
-  m_AngularDamping: 0.1
+  m_AngularDamping: 0.15
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -198,18 +198,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BoatController
   dragCoefficient: 1.1
-  liftCoefficient: 1.5
-  sailArea: 15
-  underwaterFrontArea: 0.5
+  liftCoefficient: 1.7
+  sailArea: 20
+  underwaterFrontArea: 0.4
   airDensity: 1.225
   waterDensity: 1000
-  rudderTorqueStrength: 20
   keelDragStrength: 8
+  baseForwardForce: 500
+  maxRotationRate: 10
+  rudderTorqueStrength: 30
+  useLocalWindSpeed: 1
+  forwardSpeed: 0
   AoA: 0
   drag: 0
   lift: 0
   rudderTorque: 0
-  wind: {x: 4, y: 0, z: 0}
+  rotationRate: 0
+  wind: {x: 7, y: 0, z: 0}
   apparentWind: {x: 0, y: 0, z: 0}
   maxRudderDeflection: 20
   maxMastAngle: 90
