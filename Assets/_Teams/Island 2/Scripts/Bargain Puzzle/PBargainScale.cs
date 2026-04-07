@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 // Author: Edward
 public class PBargainScale : MonoBehaviour, IInteractable
@@ -15,13 +16,12 @@ public class PBargainScale : MonoBehaviour, IInteractable
     [SerializeField] private Arm leftArm;
     [SerializeField] private Arm rightArm;
 
-    [SerializeField] private float maxOffset = 0.2f;
-    [SerializeField] private float moveSpeed = 5f;
-
-    private Vector3 leftStartPos;
-    private Vector3 rightStartPos;
-    private float currentOffset;
-    private float targetOffset;
+    [SerializeField] private Transform beam;
+    [FormerlySerializedAs("maxOffset")] [SerializeField] private float maxTiltAngle = 0.2f;
+    [SerializeField] private float tiltSpeed = 5f;
+    
+    private float targetTilt;
+    private float currentTilt;
 
     public string InteractMessage => "Press E to Place / Swap Item";
 
@@ -44,9 +44,6 @@ public class PBargainScale : MonoBehaviour, IInteractable
     private void Awake()
     {
         GameEvents.OnScaleItemPlaced += OnScalePuzzleItemPlaced;
-        
-        leftStartPos = leftArm.armRoot.localPosition;
-        rightStartPos = rightArm.armRoot.localPosition;
     }
 
     private void Update()
@@ -68,7 +65,7 @@ public class PBargainScale : MonoBehaviour, IInteractable
         if (!playerPickup && arm.storedPickup)
         {
             TakeFromArm(arm, pickupController);
-            UpdateTargetOffset();
+            UpdateTargetTilt();
             return;
         }
         
@@ -76,7 +73,7 @@ public class PBargainScale : MonoBehaviour, IInteractable
         if (playerPickup && !arm.storedPickup)
         {
             PlaceIntoArm(arm, pickupController, playerPickup);
-            UpdateTargetOffset();
+            UpdateTargetTilt();
             return;
         }
         
@@ -84,7 +81,7 @@ public class PBargainScale : MonoBehaviour, IInteractable
         if (playerPickup && arm.storedPickup)
         {
             SwapItems(arm, pickupController, playerPickup);
-            UpdateTargetOffset();
+            UpdateTargetTilt();
         }
     }
 
@@ -132,13 +129,12 @@ public class PBargainScale : MonoBehaviour, IInteractable
 
     private void AnimateScale()
     {
-        currentOffset = Mathf.Lerp(currentOffset, targetOffset, Time.deltaTime * moveSpeed);
+        currentTilt = Mathf.Lerp(currentTilt, targetTilt, Time.deltaTime * tiltSpeed);
 
-        leftArm.armRoot.localPosition = leftStartPos + Vector3.up * currentOffset;
-        rightArm.armRoot.localPosition = rightStartPos - Vector3.up * currentOffset;
+        beam.localRotation = Quaternion.Euler(currentTilt, 0f, 0f);
     }
 
-    private void UpdateTargetOffset()
+    private void UpdateTargetTilt()
     {
         int leftWeight = GetItemWeight(leftArm.storedPickup);
         int rightWeight = GetItemWeight(rightArm.storedPickup);
@@ -146,12 +142,12 @@ public class PBargainScale : MonoBehaviour, IInteractable
         int difference = rightWeight - leftWeight;
         float normalized = Mathf.Clamp(difference, -1f, 1f);
 
-        targetOffset = normalized * maxOffset;
+        targetTilt = -normalized * maxTiltAngle;
     }
 
     private int GetItemWeight(BargainItem item)
     {
-        return item != null ? item.weight : 0;
+        return item ? item.weight : 0;
     }
 
     private void OnScalePuzzleItemPlaced(IPickup pickup)
