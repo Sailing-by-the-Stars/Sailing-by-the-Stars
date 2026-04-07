@@ -4,6 +4,7 @@ using UnityEngine;
 public class DeathEffect : MonoBehaviour
 {
     private ScreenEffects effects;
+    private Coroutine coroutine;
 
     private void Start()
     {
@@ -16,6 +17,14 @@ public class DeathEffect : MonoBehaviour
         {
             StartCoroutine(DeathSequence());
         }
+    }
+    public void PlayDeathSequence()
+    {
+        if (coroutine != null)
+        {
+            StopCoroutine(coroutine);
+        }
+        coroutine = StartCoroutine(DeathSequence());
     }
 
     public IEnumerator DeathSequence()

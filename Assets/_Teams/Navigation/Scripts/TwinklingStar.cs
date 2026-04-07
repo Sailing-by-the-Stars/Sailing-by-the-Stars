@@ -58,6 +58,8 @@ public class TwinklingStar : MonoBehaviour
     [SerializeField] float targetAngle = 1;
     public static float currentTarget;
 
+    public static event Action OnStarFound;
+
 
     private Color initialEmissionColor;
     private bool twinkle;
@@ -99,6 +101,8 @@ public class TwinklingStar : MonoBehaviour
         {
             currentTarget = -1;
             starState = StarState.dimmed;
+
+            OnStarFound?.Invoke();
         }
         else
         {
@@ -347,6 +351,12 @@ public class TwinklingStar : MonoBehaviour
         {
             star.UpdateColor();
         }
+    }
+    // for testing world design event
+    [ContextMenu("Simulate Star Found")]
+    private void SimulateStarFound()
+    {
+        OnStarFound?.Invoke();
     }
 
 }
