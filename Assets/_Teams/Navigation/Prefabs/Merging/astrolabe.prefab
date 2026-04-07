@@ -615,6 +615,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8196926425484064064}
   - component: {fileID: 8097643048433206886}
+  - component: {fileID: 7558120476687763388}
   m_Layer: 3
   m_Name: astrolabe
   m_TagString: Untagged
@@ -630,8 +631,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9202524314098089220}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 1.5319282}
+  m_LocalRotation: {x: -0, y: -0, z: 0.6233586, w: 0.7819361}
+  m_LocalPosition: {x: 47.20566, y: 1.374, z: 809.25}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -639,7 +640,7 @@ Transform:
   - {fileID: 5552154629608056312}
   - {fileID: 5606341393585965466}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 77.124}
 --- !u!114 &8097643048433206886
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -652,5 +653,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd7397cb244d2c949a47ec08f67bd1f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Astrolabe
+  pickupPositionOffset: {x: 0.038, y: -0.005, z: 1.498}
   pointerAngle: 0
-  rotationSensitivity: 20
+--- !u!65 &7558120476687763388
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9202524314098089220}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
