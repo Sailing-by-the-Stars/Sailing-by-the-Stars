@@ -5,13 +5,13 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Debugging Star Position", menuName = "Star Position Type/Debugging Star Position")]
 public class DebuggingStarPosition : StarPositionType
 {
-    [SerializeField]
-    List<bool> hasColorBeenUsed = new();
+    //[SerializeField]
+    //List<bool> hasColorBeenUsed = new();
 
     private void Awake()
     {
-        hasColorBeenUsed.Clear();
-        hasColorBeenUsed.Capacity = 8;
+        /*hasColorBeenUsed.Clear();
+        hasColorBeenUsed.Capacity = 8;*/
     }
     
 
@@ -89,11 +89,11 @@ public class DebuggingStarPosition : StarPositionType
         }
         else
         {
-            if (hasColorBeenUsed[col_idx] == false)
+            /*if (hasColorBeenUsed[col_idx] == false)
             {
                 hasColorBeenUsed[col_idx] = true;
                 flag = true;
-            }
+            }*/
         }
 
             // Map second part 0 -> 0, 10 -> 100
@@ -104,9 +104,8 @@ public class DebuggingStarPosition : StarPositionType
     public override float SetSize(short magnitude, out bool flag)
     {
         flag = false;
-        // Linear isn't factually accurate, but the effect is sufficient.
-        float mag = 1 - Mathf.InverseLerp(-146, 796, magnitude);
 
+        // Linear isn't factually accurate, but the effect is sufficient.
         return 1 - Mathf.InverseLerp(-146, 1000, magnitude);
     }
 }
