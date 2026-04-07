@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class AltarItem : MonoBehaviour
+public class AltarItem : PhysicsPickup
 {
     public enum ItemType
     {
