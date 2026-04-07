@@ -11,7 +11,7 @@ namespace _Teams.World_Design.Scripts.Checkpoints
         {
             if (checkpointManager == null)
             {
-                checkpointManager = FindObjectOfType<CheckpointManager>();
+                checkpointManager = FindFirstObjectByType<CheckpointManager>();
                 if (checkpointManager == null)
                 {
                     Debug.LogWarning($"{nameof(DeathZone)} could not find a {nameof(CheckpointManager)} in the scene.", this);

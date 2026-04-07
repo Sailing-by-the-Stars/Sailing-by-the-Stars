@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace _Teams.World_Design.Scripts.Challenges.Ghost_Boat
 {
-    public class GhostBoatSpawnerTrigger : MonoBehaviour
+    public class GhostBoatZone : MonoBehaviour
     {
         [Header("Settings")]
         [SerializeField] private string instigatorTag = "Player";
