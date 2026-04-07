@@ -8,7 +8,7 @@ public class GlobeShape : MonoBehaviour
     [SerializeField] int resolution = 10;
     [SerializeField] float offsetY = 5000f;
     [Tooltip("this determines over how manny frames the moving of the stars will be divided")]
-    [SerializeField] int operationDivisions = 3; 
+    [SerializeField] int operationDivisions = 5; 
 
 
     List<Vector3> verticePositions = new();
@@ -260,7 +260,10 @@ public class GlobeShape : MonoBehaviour
 
         transform.position = targetpos;
 
-        InitializeMiniStars(operationDivisions);
+        if (operationDivisions < 1)
+        {
+            operationDivisions = 1;
+        }
 
         if (GetComponent<MeshRenderer>() == null || GetComponent<MeshRenderer>().enabled == false)
         {
