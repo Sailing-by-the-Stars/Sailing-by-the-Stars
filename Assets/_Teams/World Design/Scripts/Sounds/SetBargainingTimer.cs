@@ -25,7 +25,6 @@ public class SetBargainingTimer : MonoBehaviour
 
     public void SetIntensity(float value)
     {
-        Debug.Log("audio intensity " +  value);
         instance.setParameterByID(parameterId, value);
     }
 
