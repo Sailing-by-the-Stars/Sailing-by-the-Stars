@@ -509,7 +509,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &7441588650822074681
 Transform:
   m_ObjectHideFlags: 0
@@ -812,6 +812,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5744196203849471750}
   - component: {fileID: 128978037628978038}
+  - component: {fileID: 1515095524589861503}
   m_Layer: 0
   m_Name: ZoneEffects
   m_TagString: Untagged
@@ -847,6 +848,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BargainingZoneEffect
   audioIntensity: 1
+--- !u!114 &1515095524589861503
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6316179564808699807}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1dc7e2b658dc01d4ebf63cd0d35cf673, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ZoneEventMusic
+  fmodEvent:
+    Guid:
+      Data1: -1452029040
+      Data2: 1095831201
+      Data3: 304856205
+      Data4: 1497172693
+    Path: event:/Music/mus_BargainingEvent
+  parameterName: EventMusicEQ
+  targetIntensity: 1
+  lerpDuration: 6
 --- !u!1 &7964846407876344478
 GameObject:
   m_ObjectHideFlags: 0
@@ -895,7 +918,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7964846407876344478}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
