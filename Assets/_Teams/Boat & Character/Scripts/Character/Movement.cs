@@ -349,7 +349,8 @@ public class Movement : MonoBehaviour
                 playerControls.BoatAnchor.Disable();
 
                 animator.SetBool("IsRudder", false);
-                animator.SetBool("IsRudder", false);
+                animator.SetBool("IsSail", false);
+                animator.SetBool("IsAnchor", false);
 
                 limitCamMovement = false;
 
