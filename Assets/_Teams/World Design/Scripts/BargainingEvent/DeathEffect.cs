@@ -18,7 +18,7 @@ public class DeathEffect : MonoBehaviour
         }
     }
 
-    private IEnumerator DeathSequence()
+    public IEnumerator DeathSequence()
     {
         if (effects == null) yield break;
 

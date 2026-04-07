@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace _Teams.World_Design.Scripts.Checkpoints
@@ -11,6 +12,23 @@ namespace _Teams.World_Design.Scripts.Checkpoints
         [SerializeField] private Transform currentPlayerResetPoint;
         [SerializeField] private Transform currentBoatResetPoint;
         
+        private DeathEffect deathEffect;
+
+        private void Awake()
+        {
+            if (boatResetObject == null)
+            {
+                Debug.LogWarning($"{nameof(CheckpointManager)} is missing a reference to the boat reset object.", this);
+            }
+            
+            if (playerResetObject == null)
+            {
+                Debug.LogWarning($"{nameof(CheckpointManager)} is missing a reference to the player reset object.", this);
+            }
+
+            deathEffect = FindFirstObjectByType<DeathEffect>();
+        }
+
         public void GoToCheckpoint()
         {
             if (currentCheckpoint == null)
@@ -32,6 +50,8 @@ namespace _Teams.World_Design.Scripts.Checkpoints
                 boatResetObject.position = currentBoatResetPoint.position;
                 boatResetObject.rotation = currentBoatResetPoint.rotation;
             }
+            
+            StartCoroutine(deathEffect.DeathSequence());
         }
 
         private bool IsPlayerInsideBoatResetObject()
