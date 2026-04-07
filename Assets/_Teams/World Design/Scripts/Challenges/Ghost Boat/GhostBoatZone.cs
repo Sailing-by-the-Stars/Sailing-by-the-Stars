@@ -4,10 +4,11 @@ using UnityEngine;
 
 namespace _Teams.World_Design.Scripts.Challenges.Ghost_Boat
 {
-    public class GhostBoatSpawnerTrigger : MonoBehaviour
+    public class GhostBoatZone : MonoBehaviour
     {
         [Header("Settings")]
         [SerializeField] private string instigatorTag = "Player";
+        [SerializeField] private string ghostBoatTag = "GhostBoat";
         [SerializeField] private GameObject ghostBoatPrefab;
         [SerializeField] private Transform spawnPoint;
         [SerializeField] private bool spawnOnlyOnce = true;
@@ -50,6 +51,26 @@ namespace _Teams.World_Design.Scripts.Challenges.Ghost_Boat
                 Debug.LogWarning("Spawned ghost object has no GhostBoatScript component.", spawnedGhost);
             }
 
+        }
+
+        private void OnTriggerExit(Collider other)
+        {
+            if (other.CompareTag(instigatorTag))
+            {
+                soundController = FindFirstObjectByType<SetDenialEventMusic>();
+                soundController.SetDenialMusic(0f);
+
+                GhostBoatScript[] ghostBoats = FindObjectsOfType<GhostBoatScript>();
+
+                foreach (GhostBoatScript ghostBoat in ghostBoats)
+                {
+                    if (ghostBoat.gameObject.CompareTag(ghostBoatTag))
+                    {
+                        Destroy(ghostBoat.gameObject);
+                    }
+                }
+
+            }
         }
     }
 }

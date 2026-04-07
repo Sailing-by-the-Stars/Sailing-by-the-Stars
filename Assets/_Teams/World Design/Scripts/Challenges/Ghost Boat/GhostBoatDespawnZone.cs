@@ -13,22 +13,23 @@ namespace _Teams.World_Design.Scripts.Challenges.Ghost_Boat
 
         private void OnTriggerEnter(Collider other)
         {
-            if (other.CompareTag(playerTag))
-            {
-                soundController = FindFirstObjectByType<SetDenialEventMusic>();
-                soundController.SetDenialMusic(0f);
-                
-                GhostBoatScript[] ghostBoats = FindObjectsOfType<GhostBoatScript>();
-                
-                foreach (GhostBoatScript ghostBoat in ghostBoats)
-                {
-                    if (ghostBoat.gameObject.CompareTag(ghostBoatTag))
-                    {
-                        Destroy(ghostBoat.gameObject);
-                    }
-                }
-                
-            }
+            Debug.LogWarning("This class is not used anymore. If you see this message please instead of using GhostBoatDespawnZone use GhostBoatZone", this);
+            // if (other.CompareTag(playerTag))
+            // {
+            //     soundController = FindFirstObjectByType<SetDenialEventMusic>();
+            //     soundController.SetDenialMusic(0f);
+            //     
+            //     GhostBoatScript[] ghostBoats = FindObjectsOfType<GhostBoatScript>();
+            //     
+            //     foreach (GhostBoatScript ghostBoat in ghostBoats)
+            //     {
+            //         if (ghostBoat.gameObject.CompareTag(ghostBoatTag))
+            //         {
+            //             Destroy(ghostBoat.gameObject);
+            //         }
+            //     }
+            //     
+            // }
         }
     }
 }
