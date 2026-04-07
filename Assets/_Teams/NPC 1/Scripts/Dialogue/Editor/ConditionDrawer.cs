@@ -11,23 +11,30 @@ public class ConditionDrawer : PropertyDrawer
         var conditionType = property.FindPropertyRelative("conditionType");
         var questID = property.FindPropertyRelative("questID");
         var itemID = property.FindPropertyRelative("itemID");
+        var dialogue = property.FindPropertyRelative("dialogue"); // 👈 NEW
 
         Rect line = new Rect(position.x, position.y, position.width, EditorGUIUtility.singleLineHeight);
 
-        // Draw condition type
+        // Condition type dropdown
         EditorGUI.PropertyField(line, conditionType);
 
         line.y += EditorGUIUtility.singleLineHeight + 2;
 
         ConditionType type = (ConditionType)conditionType.enumValueIndex;
 
-        if (type == ConditionType.Quest)
+        switch (type)
         {
-            EditorGUI.PropertyField(line, questID);
-        }
-        else if (type == ConditionType.Item)
-        {
-            EditorGUI.PropertyField(line, itemID);
+            case ConditionType.Quest:
+                EditorGUI.PropertyField(line, questID, new GUIContent("Quest ID"));
+                break;
+
+            case ConditionType.Item:
+                EditorGUI.PropertyField(line, itemID, new GUIContent("Item ID"));
+                break;
+
+            case ConditionType.Dialogue:
+                EditorGUI.PropertyField(line, dialogue, new GUIContent("Dialogue")); // 👈 NEW
+                break;
         }
 
         EditorGUI.EndProperty();

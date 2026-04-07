@@ -22,7 +22,15 @@ public class PlayerState : MonoBehaviour
     }
     public bool HasQuest(string questID) => completedQuests.Contains(questID);
     public bool HasItem(string itemID) => inventory.Contains(itemID);
+    public List<Dialogue> completedDialogues = new List<Dialogue>();
 
+    public bool HasSeenDialogue(Dialogue dialogue) => completedDialogues.Contains(dialogue);
+
+    public void MarkDialogueComplete(Dialogue dialogue)
+    {
+        if (!completedDialogues.Contains(dialogue))
+            completedDialogues.Add(dialogue);
+    }
     public void GetItem(string itemID)
     {
         inventory.Add(itemID);

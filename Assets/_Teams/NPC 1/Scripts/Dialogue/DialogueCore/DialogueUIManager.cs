@@ -3,8 +3,13 @@ using UnityEngine.UI;
 using TMPro;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 // Created by Jantina
-
+public class ShakeData
+{
+    public int startIndex;
+    public int length;
+}
 public class DialogueUIManager : MonoBehaviour
 {
 
@@ -33,11 +38,22 @@ public class DialogueUIManager : MonoBehaviour
 
     [Tooltip("Image background for dialogue options.")]
     [SerializeField] private Image choiceButtonImage;
-
+    [SerializeField] private Image vignette;
     private Coroutine typewriterCoroutine;
     private Action onTypewriterComplete;
     private string currentFullText;
-
+    private Coroutine vignetteCoroutine;
+    private List<ShakeData> currentShakeData;
+    private Dictionary<string, string> colorMap = new Dictionary<string, string>()
+    {
+        { "red", "#ff4d4d" },
+        { "green", "#4dff4d" },
+        { "blue", "#4da6ff" },
+        { "yellow", "#ffff66" },
+        { "purple", "#b84dff" },
+        { "orange", "#ff944d" },
+        { "pink", "#ff66cc" }
+    };
     /// <summary>
     /// Returns true if the typewriter effect is currently running.
     /// </summary>
@@ -49,6 +65,11 @@ public class DialogueUIManager : MonoBehaviour
         choiceButton1.gameObject.SetActive(false);
         choiceButton2.gameObject.SetActive(false);
         dialogueBox.gameObject.SetActive(false);
+        if (vignette != null)
+        {
+            Color c = vignette.color;
+            vignette.color = new Color(c.r, c.g, c.b, 0f);
+        }
     }
     private void Update()
     {
@@ -61,6 +82,49 @@ public class DialogueUIManager : MonoBehaviour
         {
             choiceButton2.onClick.Invoke();
         }
+        if (dialogueBox.activeSelf)
+            ApplyShake();
+    }
+    private void LateUpdate()
+    {
+        if (currentShakeData == null || currentShakeData.Count == 0) return;
+
+        dialogueText.ForceMeshUpdate(true);
+        var textInfo = dialogueText.textInfo;
+
+        for (int i = 0; i < currentShakeData.Count; i++)
+        {
+            var shake = currentShakeData[i];
+
+            for (int c = 0; c < shake.length; c++)
+            {
+                int charIndex = shake.startIndex + c;
+
+                if (charIndex >= textInfo.characterCount) continue;
+                if (!textInfo.characterInfo[charIndex].isVisible) continue;
+
+                var charInfo = textInfo.characterInfo[charIndex];
+                int vertexIndex = charInfo.vertexIndex;
+                int matIndex = charInfo.materialReferenceIndex;
+
+                var vertices = textInfo.meshInfo[matIndex].vertices;
+
+                float offset = Mathf.Sin(Time.time * 20f + charIndex) * 2f;
+
+                Vector3 shakeOffset = new Vector3(0, offset, 0);
+
+                vertices[vertexIndex + 0] += shakeOffset;
+                vertices[vertexIndex + 1] += shakeOffset;
+                vertices[vertexIndex + 2] += shakeOffset;
+                vertices[vertexIndex + 3] += shakeOffset;
+            }
+        }
+
+        for (int i = 0; i < textInfo.meshInfo.Length; i++)
+        {
+            textInfo.meshInfo[i].mesh.vertices = textInfo.meshInfo[i].vertices;
+            dialogueText.UpdateGeometry(textInfo.meshInfo[i].mesh, i);
+        }
     }
 
     /// <summary>
@@ -68,6 +132,7 @@ public class DialogueUIManager : MonoBehaviour
     /// </summary>
     public void ShowDialogueNode(DialogueLineNode node, string npcName, float typingSpeed, Action typewriterCallback)
     {
+        currentShakeData = null;
         npcNameText.text = npcName;
 
         if (npcName == "" )
@@ -86,7 +151,17 @@ public class DialogueUIManager : MonoBehaviour
         choiceButton2.gameObject.SetActive(false);
         dialogueBox.SetActive(true);
         choiceButtonImage.enabled=false;
-        currentFullText = node.text;
+        
+        bool hasAngry;
+        List<ShakeData> shakes;
+
+        currentFullText = ProcessText(node.text, out shakes, out hasAngry);
+
+        currentShakeData = shakes;
+
+        dialogueText.text = currentFullText;
+        dialogueText.ForceMeshUpdate();
+        ApplyAngryEffect(hasAngry);
         onTypewriterComplete = () =>
         {
             nextButton.gameObject.SetActive(true);
@@ -120,8 +195,13 @@ public class DialogueUIManager : MonoBehaviour
         choiceButton1.gameObject.SetActive(false);
         choiceButton2.gameObject.SetActive(false);
         dialogueBox.SetActive(true);
-    
-        currentFullText = choiceNode.text;
+        currentShakeData = null;
+        bool hasAngry;
+        List<ShakeData> shakes;
+        currentFullText = ProcessText(choiceNode.text, out shakes, out hasAngry);
+        currentShakeData = shakes;
+
+        ApplyAngryEffect(hasAngry);
         onTypewriterComplete = () =>
         {
             SetupChoiceButtons(choiceNode, onChoiceSelected);
@@ -162,6 +242,115 @@ public class DialogueUIManager : MonoBehaviour
             choiceButton2.onClick.AddListener(() => onChoiceSelected(nextID2));
         }
     }
+    private string ProcessText(string input, out List<ShakeData> shakeData, out bool hasAngry)
+    {
+        shakeData = new List<ShakeData>();
+        hasAngry = false;
+        var result = new System.Text.StringBuilder();
+        int visibleCharCount = 0; // track only visible (non-tag) characters
+
+        int i = 0;
+
+        while (i < input.Length)
+        {
+            bool StartsWith(string val) => i + val.Length <= input.Length && input.Substring(i, val.Length) == val;
+
+            if (StartsWith("<angry>")) { hasAngry = true; i += 7; continue; }
+            if (StartsWith("</angry>")) { i += 8; continue; }
+            if (StartsWith("<pause="))
+            {
+                int end = input.IndexOf('>', i);
+                if (end != -1)
+                {
+                    result.Append(input.Substring(i, end - i + 1)); // pass through as-is for typewriter
+                    i = end + 1;
+                    continue; // no visible chars added
+                }
+            }
+            if (StartsWith("<shake>"))
+            {
+                int startIndex = visibleCharCount;
+                i += 7;
+                int end = input.IndexOf("</shake>", i);
+                if (end == -1) { Debug.LogWarning("Missing </shake> tag"); break; }
+
+                string rawContent = input.Substring(i, end - i);
+
+                // Process the inner content so <red> etc. get converted too
+                bool innerAngry;
+                List<ShakeData> innerShakes; // discard — nested shake not supported
+                string processedContent = ProcessText(rawContent, out innerShakes, out innerAngry);
+                if (innerAngry) hasAngry = true;
+
+                // Count only visible characters in the processed content
+                int visibleInContent = CountVisibleChars(processedContent);
+
+                result.Append(processedContent);
+                visibleCharCount += visibleInContent;
+
+                shakeData.Add(new ShakeData { startIndex = startIndex, length = visibleInContent });
+                i = end + 8;
+                continue;
+            }
+
+            bool matchedColor = false;
+            foreach (var kvp in colorMap)
+            {
+                string openTag = $"<{kvp.Key}>", closeTag = $"</{kvp.Key}>";
+                if (StartsWith(openTag))  { result.Append($"<color={kvp.Value}>"); i += openTag.Length; matchedColor = true; break; }
+                if (StartsWith(closeTag)) { result.Append("</color>"); i += closeTag.Length; matchedColor = true; break; }
+            }
+            if (matchedColor) continue; // color tags add no visible chars, don't increment
+
+            result.Append(input[i]);
+            visibleCharCount++; // normal visible character
+            i++;
+        }
+
+        return result.ToString();
+    }
+    private int CountVisibleChars(string processedText)
+    {
+        int count = 0;
+        int i = 0;
+        while (i < processedText.Length)
+        {
+            if (processedText[i] == '<')
+            {
+                int end = processedText.IndexOf('>', i);
+                if (end != -1) { i = end + 1; continue; } // skip tag
+            }
+            count++;
+            i++;
+        }
+        return count;
+    }
+    private void ApplyAngryEffect(bool active)
+    {
+        if (vignetteCoroutine != null)
+            StopCoroutine(vignetteCoroutine);
+
+        vignetteCoroutine = StartCoroutine(FadeVignette(active ? 1f : 0f));
+    }
+
+    private IEnumerator FadeVignette(float targetAlpha)
+    {
+        Color color = vignette.color;
+        float startAlpha = color.a;
+        float t = 0f;
+
+        while (t < 1f)
+        {
+            t += Time.deltaTime * 2f;
+
+            float newAlpha = Mathf.Lerp(startAlpha, targetAlpha, t);
+            vignette.color = new Color(color.r, color.g, color.b, newAlpha);
+
+            yield return null;
+        }
+
+        vignetteCoroutine = null;
+    }
 
     /// <summary>
     /// Coroutine for typing out dialogue character by character.
@@ -169,10 +358,11 @@ public class DialogueUIManager : MonoBehaviour
     private IEnumerator TypewriterEffect(string fullText, float speed)
     {
         dialogueText.text = "";
+        dialogueText.ForceMeshUpdate();
 
         for (int i = 0; i < fullText.Length; i++)
         {
-            // Detect tags like <pause=1>
+            // Handle tags (including pause)
             if (fullText[i] == '<')
             {
                 int endIndex = fullText.IndexOf('>', i);
@@ -180,6 +370,7 @@ public class DialogueUIManager : MonoBehaviour
                 {
                     string tag = fullText.Substring(i + 1, endIndex - i - 1);
 
+                    // Handle pause tag
                     if (tag.StartsWith("pause="))
                     {
                         string value = tag.Replace("pause=", "");
@@ -187,14 +378,22 @@ public class DialogueUIManager : MonoBehaviour
                         {
                             yield return new WaitForSeconds(pauseTime);
                         }
+
+                        i = endIndex;
+                        continue;
                     }
 
+                    // Append rich text tags (color etc.)
+                    dialogueText.text += fullText.Substring(i, endIndex - i + 1);
                     i = endIndex;
                     continue;
                 }
             }
 
             dialogueText.text += fullText[i];
+            dialogueText.ForceMeshUpdate();
+            ApplyShake();
+
             float multiplier = Input.GetMouseButton(0) ? 5f : 1f;
             yield return new WaitForSeconds(speed / multiplier);
         }
@@ -202,26 +401,68 @@ public class DialogueUIManager : MonoBehaviour
         typewriterCoroutine = null;
         onTypewriterComplete?.Invoke();
     }
-    private string StripTags(string input)
+    private void ApplyShake()
     {
-        string result = "";
+        if (currentShakeData == null || currentShakeData.Count == 0) return;
 
-        for (int i = 0; i < input.Length; i++)
+        dialogueText.ForceMeshUpdate();
+        var textInfo = dialogueText.textInfo;
+
+        for (int i = 0; i < currentShakeData.Count; i++)
+        {
+            var shake = currentShakeData[i];
+
+            for (int c = 0; c < shake.length; c++)
+            {
+                int charIndex = shake.startIndex + c;
+
+                if (charIndex >= textInfo.characterCount) continue;
+                if (!textInfo.characterInfo[charIndex].isVisible) continue;
+
+                var charInfo = textInfo.characterInfo[charIndex];
+                int vertexIndex = charInfo.vertexIndex;
+                int matIndex = charInfo.materialReferenceIndex;
+
+                var vertices = textInfo.meshInfo[matIndex].vertices;
+
+                float offset = Mathf.Sin(Time.time * 20f + charIndex) * 2f;
+                Vector3 shakeOffset = new Vector3(0, offset, 0);
+
+                vertices[vertexIndex + 0] += shakeOffset;
+                vertices[vertexIndex + 1] += shakeOffset;
+                vertices[vertexIndex + 2] += shakeOffset;
+                vertices[vertexIndex + 3] += shakeOffset;
+            }
+        }
+
+        for (int i = 0; i < textInfo.meshInfo.Length; i++)
+        {
+            textInfo.meshInfo[i].mesh.vertices = textInfo.meshInfo[i].vertices;
+            dialogueText.UpdateGeometry(textInfo.meshInfo[i].mesh, i);
+        }
+    }
+    private string StripPauseTags(string input)
+    {
+        var result = new System.Text.StringBuilder();
+        int i = 0;
+        while (i < input.Length)
         {
             if (input[i] == '<')
             {
-                int endIndex = input.IndexOf('>', i);
-                if (endIndex != -1)
+                int end = input.IndexOf('>', i);
+                if (end != -1)
                 {
-                    i = endIndex;
+                    string tag = input.Substring(i + 1, end - i - 1);
+                    if (tag.StartsWith("pause=")) { i = end + 1; continue; }
+                    result.Append(input, i, end - i + 1);
+                    i = end + 1;
                     continue;
                 }
             }
-
-            result += input[i];
+            result.Append(input[i]);
+            i++;
         }
-
-        return result;
+        return result.ToString();
     }
 
     /// <summary>
@@ -233,8 +474,7 @@ public class DialogueUIManager : MonoBehaviour
         {
             StopCoroutine(typewriterCoroutine);
             typewriterCoroutine = null;
-            
-            dialogueText.text = StripTags(currentFullText);
+            dialogueText.text = StripPauseTags(currentFullText);
             onTypewriterComplete?.Invoke();
         }
     }
@@ -250,6 +490,7 @@ public class DialogueUIManager : MonoBehaviour
         choiceButton1.gameObject.SetActive(false);
         choiceButton2.gameObject.SetActive(false);
         dialogueBox.SetActive(false);
+        ApplyAngryEffect(false);
         DialogueSystem.Instance.isDialogueActive = false;
     }
 }
