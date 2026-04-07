@@ -1641,6 +1641,16 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dbaded5365e6dab429ab086d5eee9fde, type: 3}
+--- !u!224 &770808811 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 3641807949813229904, guid: dbaded5365e6dab429ab086d5eee9fde, type: 3}
+  m_PrefabInstance: {fileID: 770808810}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &770808812 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5201775444091848333, guid: dbaded5365e6dab429ab086d5eee9fde, type: 3}
+  m_PrefabInstance: {fileID: 770808810}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &792399893
 GameObject:
   m_ObjectHideFlags: 0
@@ -3712,6 +3722,14 @@ PrefabInstance:
       propertyPath: endScreenPanel
       value: 
       objectReference: {fileID: 643381523}
+    - target: {fileID: 8128948935455585475, guid: 23869e15b668ac9438a9e583daad0191, type: 3}
+      propertyPath: staticEndingText
+      value: 
+      objectReference: {fileID: 770808812}
+    - target: {fileID: 8128948935455585475, guid: 23869e15b668ac9438a9e583daad0191, type: 3}
+      propertyPath: creditsTextTransform
+      value: 
+      objectReference: {fileID: 770808811}
     - target: {fileID: 8552283680912669380, guid: 23869e15b668ac9438a9e583daad0191, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
