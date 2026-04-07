@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 // Author: Edward
@@ -16,7 +15,13 @@ public class PBargainScale : MonoBehaviour, IInteractable
     [SerializeField] private Arm leftArm;
     [SerializeField] private Arm rightArm;
 
-    private Dictionary<Transform, BargainItem> storedPickups;
+    [SerializeField] private float maxOffset = 0.2f;
+    [SerializeField] private float moveSpeed = 5f;
+
+    private Vector3 leftStartPos;
+    private Vector3 rightStartPos;
+    private float currentOffset;
+    private float targetOffset;
 
     public string InteractMessage => "Press E to Place / Swap Item";
 
@@ -39,6 +44,14 @@ public class PBargainScale : MonoBehaviour, IInteractable
     private void Awake()
     {
         GameEvents.OnItemPlaced += OnPuzzleItemPlaced;
+        
+        leftStartPos = leftArm.armRoot.localPosition;
+        rightStartPos = rightArm.armRoot.localPosition;
+    }
+
+    private void Update()
+    {
+        AnimateScale();
     }
 
     public void Interact(InteractionController interactionController)
@@ -55,6 +68,7 @@ public class PBargainScale : MonoBehaviour, IInteractable
         if (!playerPickup && arm.storedPickup)
         {
             TakeFromArm(arm, pickupController);
+            UpdateTargetOffset();
             return;
         }
         
@@ -62,6 +76,7 @@ public class PBargainScale : MonoBehaviour, IInteractable
         if (playerPickup && !arm.storedPickup)
         {
             PlaceIntoArm(arm, pickupController, playerPickup);
+            UpdateTargetOffset();
             return;
         }
         
@@ -69,6 +84,7 @@ public class PBargainScale : MonoBehaviour, IInteractable
         if (playerPickup && arm.storedPickup)
         {
             SwapItems(arm, pickupController, playerPickup);
+            UpdateTargetOffset();
         }
     }
 
@@ -114,9 +130,33 @@ public class PBargainScale : MonoBehaviour, IInteractable
         oldPickup.Grab(pickupController);
     }
 
+    private void AnimateScale()
+    {
+        currentOffset = Mathf.Lerp(currentOffset, targetOffset, Time.deltaTime * moveSpeed);
+
+        leftArm.armRoot.localPosition = leftStartPos + Vector3.up * currentOffset;
+        rightArm.armRoot.localPosition = rightStartPos - Vector3.up * currentOffset;
+    }
+
+    private void UpdateTargetOffset()
+    {
+        int leftWeight = GetItemWeight(leftArm.storedPickup);
+        int rightWeight = GetItemWeight(rightArm.storedPickup);
+        
+        int difference = rightWeight - leftWeight;
+        float normalized = Mathf.Clamp(difference, -1f, 1f);
+
+        targetOffset = normalized * maxOffset;
+    }
+
+    private int GetItemWeight(BargainItem item)
+    {
+        return item != null ? item.weight : 0;
+    }
+
     private void OnPuzzleItemPlaced(IPickup pickup)
     {
-        Debug.Log("Item has a weight of: " + (pickup as BargainItem)?.weight);
+        Debug.Log((pickup as BargainItem)?.name + " has a weight of: " + (pickup as BargainItem)?.weight);
     }
 
     private void OnDestroy()
