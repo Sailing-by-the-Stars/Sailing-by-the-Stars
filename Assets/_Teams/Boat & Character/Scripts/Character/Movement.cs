@@ -42,7 +42,7 @@ public class Movement : MonoBehaviour
     [Header("Animation")]
     [SerializeField] Animator animator;
 
-    string playerState = "Land";
+    [SerializeField] string playerState = "Land";
 
     private void Awake()
     {
@@ -103,27 +103,25 @@ public class Movement : MonoBehaviour
     {
         RotateCamera();
 
-        if (!isOnBoat)
+        Interact();
+        switch (playerState)
         {
-            Interact();
-            switch (playerState)
-            {
-                case "Land":
+            case "Land":
+                if (!isOnBoat)
                     MovePlayer();
-                    break;
-                case "BoatSail":
-                    MoveSail();
-                    break;
-                case "BoatRudder":
-                    MoveRudder();
-                    break;
-                case "BoatAnchor":
-                    MoveAnchor();
-                    break;
-                default:
-                    print("Wrong player state initialized.");
-                    break;
-            }
+                break;
+            case "BoatSail":
+                MoveSail();
+                break;
+            case "BoatRudder":
+                MoveRudder();
+                break;
+            case "BoatAnchor":
+                MoveAnchor();
+                break;
+            default:
+                print("Wrong player state initialized.");
+                break;        
         }
     }
 
@@ -285,11 +283,15 @@ public class Movement : MonoBehaviour
         Vector2 moveDirection = playerControls.BoatSail.Move.ReadValue<Vector2>();
         if (moveDirection.y < 0)
         {
+            boatController.mastAxis.OnNegative();
             // Moving Down
         } else if (moveDirection.y > 0)
         {
             // Moving Up
+            boatController.mastAxis.OnPositive();
         }
+        else
+            boatController.mastAxis.ResetKeys();
 
 
         animator.SetFloat("Movement", moveDirection.y);
@@ -302,15 +304,20 @@ public class Movement : MonoBehaviour
 
     void MoveRudder()
     {
+        Debug.Log("TEST!!!");
         Vector2 moveDirection = playerControls.BoatRudder.Move.ReadValue<Vector2>();
         if (moveDirection.x < 0)
         {
             // Moving Left
+            boatController.rudderAxis.OnNegative();
         }
         else if (moveDirection.x > 0)
         {
             // Moving right
+            boatController.rudderAxis.OnPositive();
         }
+        else
+            boatController.rudderAxis.ResetKeys();
 
         animator.SetFloat("Movement", moveDirection.x);
 

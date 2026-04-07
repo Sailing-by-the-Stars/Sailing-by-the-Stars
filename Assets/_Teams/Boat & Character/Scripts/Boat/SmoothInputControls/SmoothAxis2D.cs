@@ -3,6 +3,7 @@
 *   Contributed to by: 
 */
 
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -19,14 +20,14 @@ public class SmoothAxis2D : MonoBehaviour
 
     [Header("Current State")]
     [SerializeField] private float currentValue = 0f;
-    private float targetValue = 0f;
+    public float targetValue = 0f;
     private bool PositivePressed = false;
     private bool NegativePressed = false;
 
-    void OnEnable()
+    /*void OnEnable()
     {
-        positiveButton.action.Enable();
-        negativeButton.action.Enable();
+        //positiveButton.action.Enable();
+        //negativeButton.action.Enable();
 
         positiveButton.action.performed += OnPositivePressed;
         positiveButton.action.canceled += OnPositiveReleased;
@@ -41,9 +42,9 @@ public class SmoothAxis2D : MonoBehaviour
         negativeButton.action.performed -= OnNegativePressed;
         negativeButton.action.canceled -= OnNegativeReleased;
 
-        positiveButton.action.Disable();
-        negativeButton.action.Disable();
-    }
+        //positiveButton.action.Disable();
+        //negativeButton.action.Disable();
+    }*/
 
     public void Reset()
     {
@@ -51,27 +52,46 @@ public class SmoothAxis2D : MonoBehaviour
         targetValue = 0f;
     }
 
-    private void OnPositivePressed(InputAction.CallbackContext ctx)
+    /*public void OnPositivePressed(InputAction.CallbackContext ctx)
     {
         PositivePressed = true;
         UpdateTargetValue();
     }
 
-    private void OnPositiveReleased(InputAction.CallbackContext ctx)
+    public void OnPositiveReleased(InputAction.CallbackContext ctx)
     {
         PositivePressed = false;
         UpdateTargetValue();
     }
 
-    private void OnNegativePressed(InputAction.CallbackContext ctx)
+    public void OnNegativePressed(InputAction.CallbackContext ctx)
     {
         NegativePressed = true;
         UpdateTargetValue();
     }
 
-    private void OnNegativeReleased(InputAction.CallbackContext ctx)
+    public void OnNegativeReleased(InputAction.CallbackContext ctx)
     {
         NegativePressed = false;
+        UpdateTargetValue();
+    }*/
+
+    public void OnPositive()
+    {
+        PositivePressed = true;
+        UpdateTargetValue();
+    }
+
+    public void OnNegative()
+    {
+        NegativePressed = true;
+        UpdateTargetValue();
+    }
+
+    public void ResetKeys()
+    {
+        NegativePressed = false;
+        PositivePressed = false;
         UpdateTargetValue();
     }
 

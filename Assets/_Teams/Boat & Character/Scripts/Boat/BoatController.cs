@@ -41,8 +41,8 @@ public class BoatController : MonoBehaviour
     [SerializeField] private float maxMastAngle = 90f;
 
     [Header("Controls")]
-    [SerializeField] private SmoothAxis2D rudderAxis;
-    [SerializeField] private SmoothAxis2D mastAxis;
+    [SerializeField] public SmoothAxis2D rudderAxis;
+    [SerializeField] public SmoothAxis2D mastAxis;
 
     [Header("")]
     [SerializeField] private GameObject hullObject;
