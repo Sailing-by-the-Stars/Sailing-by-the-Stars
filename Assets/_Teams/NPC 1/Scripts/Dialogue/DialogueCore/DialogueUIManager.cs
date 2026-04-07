@@ -257,7 +257,16 @@ public class DialogueUIManager : MonoBehaviour
 
             if (StartsWith("<angry>")) { hasAngry = true; i += 7; continue; }
             if (StartsWith("</angry>")) { i += 8; continue; }
-
+            if (StartsWith("<pause="))
+            {
+                int end = input.IndexOf('>', i);
+                if (end != -1)
+                {
+                    result.Append(input.Substring(i, end - i + 1)); // pass through as-is for typewriter
+                    i = end + 1;
+                    continue; // no visible chars added
+                }
+            }
             if (StartsWith("<shake>"))
             {
                 int startIndex = visibleCharCount;
@@ -432,26 +441,28 @@ public class DialogueUIManager : MonoBehaviour
             dialogueText.UpdateGeometry(textInfo.meshInfo[i].mesh, i);
         }
     }
-    private string StripTags(string input)
+    private string StripPauseTags(string input)
     {
-        string result = "";
-
-        for (int i = 0; i < input.Length; i++)
+        var result = new System.Text.StringBuilder();
+        int i = 0;
+        while (i < input.Length)
         {
             if (input[i] == '<')
             {
-                int endIndex = input.IndexOf('>', i);
-                if (endIndex != -1)
+                int end = input.IndexOf('>', i);
+                if (end != -1)
                 {
-                    i = endIndex;
+                    string tag = input.Substring(i + 1, end - i - 1);
+                    if (tag.StartsWith("pause=")) { i = end + 1; continue; }
+                    result.Append(input, i, end - i + 1);
+                    i = end + 1;
                     continue;
                 }
             }
-
-            result += input[i];
+            result.Append(input[i]);
+            i++;
         }
-
-        return result;
+        return result.ToString();
     }
 
     /// <summary>
@@ -463,8 +474,7 @@ public class DialogueUIManager : MonoBehaviour
         {
             StopCoroutine(typewriterCoroutine);
             typewriterCoroutine = null;
-            
-            dialogueText.text = StripTags(currentFullText);
+            dialogueText.text = StripPauseTags(currentFullText);
             onTypewriterComplete?.Invoke();
         }
     }
