@@ -5,6 +5,7 @@ namespace _Teams.World_Design.Scripts.Checkpoints
     public class DeathZone : MonoBehaviour
     {
         [SerializeField] private string instigatorTag = "Player";
+        
         [SerializeField] private CheckpointManager checkpointManager;
         
         private void Awake()

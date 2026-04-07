@@ -5,10 +5,14 @@ namespace _Teams.World_Design.Scripts.Checkpoints
 {
     public class CheckpointManager : MonoBehaviour
     {
+        [Header("Checkpoint")]
         [SerializeField] private Checkpoint currentCheckpoint;
+        
+        [Header("Reset Objects")]
         [SerializeField] private Transform boatResetObject;
         [SerializeField] private Transform playerResetObject;
 
+        [Header("Reset Points")]
         [SerializeField] private Transform currentPlayerResetPoint;
         [SerializeField] private Transform currentBoatResetPoint;
         
