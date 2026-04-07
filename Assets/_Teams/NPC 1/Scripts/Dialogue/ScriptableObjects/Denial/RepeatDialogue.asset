@@ -1,0 +1,46 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a27b1591cf442e34da26ab4a98de3513, type: 3}
+  m_Name: RepeatDialogue
+  m_EditorClassIdentifier: Assembly-CSharp::Dialogue
+  hasName: 0
+  npcName: 
+  talkingSpeed: 0.9
+  nodes:
+  - rid: 2756910129984045067
+  - rid: 2756910129984045068
+  - rid: 2756910129984045069
+  hasItemID: 0
+  itemID: 0
+  references:
+    version: 2
+    RefIds:
+    - rid: 2756910129984045067
+      type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: Start Repeat
+        text: I implore you <pause=0.2>to visit all the different Islands. This world
+          is different <pause=0.2>then anything you have ever seen.
+        nextNodeID: Repeat 2
+    - rid: 2756910129984045068
+      type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: Repeat 2
+        text: Now then, <pause=0.2>be on your way. Then these Islands <pause=0.2>are
+          for you to see, <pause=0.2>to learn and to understand.
+        nextNodeID: Repeat 3
+    - rid: 2756910129984045069
+      type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: Repeat 3
+        text: You will understand with time, <pause=0.2>Mortal one.
+        nextNodeID: 
