@@ -17,7 +17,7 @@ public class Altar : MonoBehaviour, IInteractable
     public string InteractMessage => "Press E to Place / Swap Item";
 
     [SerializeField] private List<Pedestal> pedestals = new();
-    [SerializeField] private Light candle;
+    [SerializeField] private Light[] candles;
     [SerializeField] private Transform rewardCompartment;
     
     private bool ritualCompleted;
@@ -53,7 +53,6 @@ public class Altar : MonoBehaviour, IInteractable
         if (playerPickup && !pedestal.storedPickup)
         {
             PlaceIntoPedestal(pedestal, pickupController, playerPickup);
-            
             return;
         }
         
@@ -98,9 +97,10 @@ public class Altar : MonoBehaviour, IInteractable
 
     private void CompleteRitual()
     {
-        if (ritualCompleted || !candle) return;
+        if (ritualCompleted || candles.Length == 0) return;
 
-        candle.enabled = true;
+        foreach (var candle in candles)
+            candle.enabled = true;
         ritualCompleted = true;
         OpenRewardCompartment();
     }
