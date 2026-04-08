@@ -5439,7 +5439,7 @@ GameObject:
   - component: {fileID: 6215116408701103788}
   - component: {fileID: 622978199903812129}
   - component: {fileID: 6565601430535826630}
-  - component: {fileID: 5015406900209435837}
+  - component: {fileID: 1955294140806296299}
   m_Layer: 0
   m_Name: PickupCube (1)
   m_TagString: Untagged
@@ -5511,7 +5511,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &5015406900209435837
+--- !u!114 &1955294140806296299
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -5520,10 +5520,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 8988884532818600439}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d301d860d89b48ad921b5e2ebeeed7b0, type: 3}
+  m_Script: {fileID: 11500000, guid: f45e4c9f7c720f04da524eb0956b0ad7, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PhysicsPickup
+  m_EditorClassIdentifier: Assembly-CSharp::RewardItem
   pickupPositionOffset: {x: 0.043, y: -0.11, z: 0.176}
+  itemID: 1
 --- !u!1 &9048525388956599540
 GameObject:
   m_ObjectHideFlags: 0
