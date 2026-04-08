@@ -139,9 +139,9 @@ public class Movement : MonoBehaviour
                     if (hit.collider.gameObject.GetComponent<BoatInteractor>().playerSpot != null)
                     {
                         transform.position = hit.collider.gameObject.GetComponent<BoatInteractor>().playerSpot.position;
+                        transform.rotation = hit.collider.gameObject.GetComponent<BoatInteractor>().playerSpot.rotation;
                     }
 
-                    //transform.rotation = hit.collider.gameObject.GetComponent<BoatInteractor>().playerSpot.rotation;
                     //xCamRotation = hit.collider.gameObject.GetComponent<BoatInteractor>().playerSpot.eulerAngles.x;
                 }
             }

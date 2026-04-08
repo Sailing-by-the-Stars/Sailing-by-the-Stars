@@ -383,6 +383,37 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &4580546823577216411
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7874535437545889938}
+  m_Layer: 0
+  m_Name: Character spot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7874535437545889938
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4580546823577216411}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0.13052616, z: 0, w: 0.9914449}
+  m_LocalPosition: {x: 2.5717058, y: -3.2321157, z: -0.05654241}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7973291497924292880}
+  m_LocalEulerAnglesHint: {x: 0, y: 15, z: 0}
 --- !u!1 &5882092239808511682
 GameObject:
   m_ObjectHideFlags: 0
@@ -607,6 +638,37 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &6321907862059474511
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7083051670950322200}
+  m_Layer: 0
+  m_Name: Player spot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7083051670950322200
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6321907862059474511}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0.5, y: -0.5, z: -0.5, w: 0.5}
+  m_LocalPosition: {x: 2.27, y: -0.01, z: -3.96}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1724215401620072782}
+  m_LocalEulerAnglesHint: {x: 0, y: -90, z: -90}
 --- !u!1 &7051391685873645361
 GameObject:
   m_ObjectHideFlags: 0
@@ -1453,6 +1515,10 @@ PrefabInstance:
       propertyPath: type
       value: BoatSail
       objectReference: {fileID: 0}
+    - target: {fileID: 2348486506529030948, guid: 42396bbe4bb915f4f8fb470b3ca312c1, type: 3}
+      propertyPath: playerSpot
+      value: 
+      objectReference: {fileID: 7874535437545889938}
     - target: {fileID: 4752656705437392728, guid: 42396bbe4bb915f4f8fb470b3ca312c1, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.691
@@ -1499,7 +1565,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 4752656705437392728, guid: 42396bbe4bb915f4f8fb470b3ca312c1, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7874535437545889938}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 42396bbe4bb915f4f8fb470b3ca312c1, type: 3}
 --- !u!4 &7973291497924292880 stripped
@@ -1585,6 +1654,10 @@ PrefabInstance:
       propertyPath: type
       value: BoatRudder
       objectReference: {fileID: 0}
+    - target: {fileID: 2348486506529030948, guid: 42396bbe4bb915f4f8fb470b3ca312c1, type: 3}
+      propertyPath: playerSpot
+      value: 
+      objectReference: {fileID: 7083051670950322200}
     - target: {fileID: 4752656705437392728, guid: 42396bbe4bb915f4f8fb470b3ca312c1, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.0039291196
@@ -1643,7 +1716,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 4752656705437392728, guid: 42396bbe4bb915f4f8fb470b3ca312c1, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7083051670950322200}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 42396bbe4bb915f4f8fb470b3ca312c1, type: 3}
 --- !u!4 &1724215401620072782 stripped
