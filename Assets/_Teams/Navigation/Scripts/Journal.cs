@@ -38,6 +38,7 @@ public class Journal : ToolPickup
         //Disable collider to hide interact text
         GetComponent<BoxCollider>().enabled = false;
         bookVisible = true;
+        bookangle = 100;
         bookOpened = true;
         
         initalRot = Quaternion.Euler(90, 90, 90);
@@ -72,7 +73,25 @@ public class Journal : ToolPickup
             if (pages[pageNr].leftPage)
             {
                 leftPage.enabled = true;
-                leftPage.texture = pages[pageNr].leftPage;
+
+                Texture tex = pages[pageNr].leftPage;
+                RectTransform rt = leftPage.rectTransform;
+
+                float width = tex.width;
+                float height = tex.height;
+
+                if (width > height)
+                {
+                    float ratio = height / width;
+                    rt.sizeDelta = new Vector2(1f, ratio);
+                }
+                else
+                {
+                    float ratio = width / height;
+                    rt.sizeDelta = new Vector2(ratio, 1f);
+                }
+
+                leftPage.texture = tex;
             }
             else
             {
@@ -83,7 +102,25 @@ public class Journal : ToolPickup
             if (pages[pageNr].rightPage)
             {
                 rightPage.enabled = true;
-                rightPage.texture = pages[pageNr].rightPage;
+
+                Texture tex = pages[pageNr].rightPage;
+                RectTransform rt = rightPage.rectTransform;
+
+                float width = tex.width;
+                float height = tex.height;
+
+                if (width > height)
+                {
+                    float ratio = height / width;
+                    rt.sizeDelta = new Vector2(1f, ratio);
+                }
+                else
+                {
+                    float ratio = width / height;
+                    rt.sizeDelta = new Vector2(ratio, 1f);
+                }
+
+                rightPage.texture = tex;
             }
             else
             {
@@ -94,28 +131,16 @@ public class Journal : ToolPickup
             if (Input.GetKeyDown(KeyCode.J))
             {
                 if (bookVisible)
-                {
-                    GetComponent<Renderer>().enabled = false;
+                { 
                     bookVisible = false;
-                }
-                else
-                {
-                    GetComponent<Renderer>().enabled = true;
-                    bookVisible = true;
-                }
-            }
-
-            if (Input.GetMouseButtonDown(0))
-            {
-                if (bookOpened)
-                {
-                    //transform.localRotation = initalRot;
                     bookOpened = false;
                 }
                 else
                 {
-                    //transform.localRotation = Quaternion.Euler(90, 0, 90);
+                    transform.GetChild(0).gameObject.SetActive(true);
+                    bookVisible = true;
                     bookOpened = true;
+                    bookangle = 100;
                 }
             }
 
@@ -142,6 +167,7 @@ public class Journal : ToolPickup
                 if (bookangle > 100)
                 {
                     bookangle = 100;
+                    transform.GetChild(0).gameObject.SetActive(false);
                 }
             }
 
@@ -149,6 +175,9 @@ public class Journal : ToolPickup
         }
         else
         {
+            leftPage.enabled = false;
+            rightPage.enabled = false;
+            bookangle = 100;
             bookRenderer.SetBlendShapeWeight(0, bookangle);
         }
     }
