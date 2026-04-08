@@ -20,7 +20,7 @@ public class DistanceTest : MonoBehaviour
     private List<StarDataLoader.Star> stars;
     public List<GameObject> starObjects;
 
-    [SerializeField] List<ManualStar> manualStars = new();
+    [SerializeField] List<Constelation> manualStars = new();
     [SerializeField] List<int> getDeclinationStars = new();
 
 
@@ -110,21 +110,49 @@ public class DistanceTest : MonoBehaviour
             starObjects.Add(stargo);
         }
 
-        foreach (ManualStar manualStar in manualStars)
+        foreach (Constelation manualStar in manualStars)
         {
-            GameObject oldStar = starObjects[manualStar.starID - 1];
+            foreach (int id in manualStar.starIDs)
+            {
+                GameObject oldStar = starObjects[id - 1];
 
-            GameObject newStar = Instantiate(manualStar.starPrefab);
-            newStar.transform.parent = transform;
-            newStar.name = oldStar.name;
-            newStar.transform.position = oldStar.transform.position;
-            //stargo.transform.localScale = Vector3.one * Mathf.Lerp(starSizeMin, starSizeMax, star.size);
-            newStar.transform.LookAt(transform.position);
-            newStar.transform.Rotate(0, 180, 0);
 
-            starObjects[manualStar.starID - 1] = newStar;
+                GameObject newStar;
+                if (manualStar.starPrefab)
+                {
+                    newStar = Instantiate(manualStar.starPrefab);
+                }
+                else
+                {
+                    newStar = GameObject.CreatePrimitive(PrimitiveType.Sphere);
 
-            Destroy(oldStar);
+                    StarInfo oldInfo = oldStar.GetComponent<StarInfo>();
+
+                    StarInfo starInfo = newStar.AddComponent<StarInfo>();
+                    starInfo.matColor = oldInfo.matColor;
+                    starInfo.emissionColor = oldInfo.emissionColor;
+                    starInfo.emissionMult = oldInfo.emissionMult;
+                }
+
+
+                newStar.transform.parent = transform;
+                newStar.name = oldStar.name;
+                newStar.transform.position = oldStar.transform.position;
+
+                Vector3 newsize = oldStar.transform.localScale;
+
+
+                Material oldMaterial = oldStar.GetComponent<MeshRenderer>().sharedMaterial;
+                newStar.GetComponent<MeshRenderer>().sharedMaterial = oldMaterial;
+
+                starObjects[id - 1] = newStar;
+
+#if UNITY_EDITOR
+                DestroyImmediate(oldStar);
+#else
+                Destroy(oldStar);
+#endif
+            }
         }
     }
 

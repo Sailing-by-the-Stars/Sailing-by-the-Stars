@@ -32,6 +32,6 @@ public class AstrolabePointer : MonoBehaviour
         Ray ray = new Ray(transform.position, transform.forward);
 
         Gizmos.color = Color.yellow;
-        Gizmos.DrawRay(ray.origin, ray.direction * 1000);
+        Gizmos.DrawRay(ray.origin, ray.direction * 5000);
     }
 }
