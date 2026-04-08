@@ -10,6 +10,12 @@ public class QuestUI : MonoBehaviour
     [Header("Quest prefab")]
     [SerializeField] private GameObject questEntryPrefab;
 
+    private void Start()
+    {
+        // start hidden
+        transform.localScale = Vector3.zero;
+    }
+
     // edited by Arch
     private void Update()
     {
