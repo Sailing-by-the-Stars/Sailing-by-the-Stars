@@ -18,9 +18,13 @@ public class Altar : MonoBehaviour, IInteractable
 
     [SerializeField] private List<Pedestal> pedestals = new();
     [SerializeField] private Light[] candles;
-    [SerializeField] private Transform rewardCompartment;
-    
+    [SerializeField] private Transform rewardDoor;
     private bool ritualCompleted;
+    
+    [SerializeField] private float rewardDoorTargetOffset = -.03f;
+    [SerializeField] private float rewardDoorMoveSpeed = 5f;
+    private Vector3 rewardDoorStartPos;
+    private float rewardDoorCurrentOffset;
 
     private void Awake()
     {
@@ -30,8 +34,15 @@ public class Altar : MonoBehaviour, IInteractable
         {
             pedestals[i].index = i + 1;
         }
+        
+        rewardDoorStartPos = rewardDoor.localPosition;
     }
-    
+
+    private void Update()
+    {
+        OpenRewardCompartment();
+    }
+
     public void Interact(InteractionController interactionController)
     {
         var pedestal = GetPedestalFromHit(interactionController);
@@ -102,16 +113,15 @@ public class Altar : MonoBehaviour, IInteractable
         foreach (var candle in candles)
             candle.enabled = true;
         ritualCompleted = true;
-        OpenRewardCompartment();
     }
 
     private void OpenRewardCompartment()
     {
+        if (!rewardDoor || !ritualCompleted) return;
         Debug.Log("Bargain Completed.");
-        if (rewardCompartment)
-        {
-            rewardCompartment.gameObject.SetActive(true);
-        }
+        
+        rewardDoorCurrentOffset = Mathf.Lerp(rewardDoorCurrentOffset, rewardDoorTargetOffset, rewardDoorMoveSpeed * Time.deltaTime);
+        rewardDoor.localPosition = rewardDoorStartPos + Vector3.forward * rewardDoorCurrentOffset;
     }
 
     private void IsOrderCorrect()

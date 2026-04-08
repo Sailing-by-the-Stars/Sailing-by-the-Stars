@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.Serialization;
 
 // Author: Edward
 public class PBargainScale : MonoBehaviour, IInteractable
@@ -17,7 +16,7 @@ public class PBargainScale : MonoBehaviour, IInteractable
     [SerializeField] private Arm rightArm;
 
     [SerializeField] private Transform beam;
-    [FormerlySerializedAs("maxOffset")] [SerializeField] private float maxTiltAngle = 0.2f;
+    [SerializeField] private float maxTiltAngle = 0.2f;
     [SerializeField] private float tiltSpeed = 5f;
     
     private float targetTilt;
