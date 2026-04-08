@@ -523,8 +523,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_Teams.World_Design.Scripts.Challenges.Ghost_Boat.GhostBoatScript
   target: {fileID: 0}
-  offset: {x: 0, y: 0, z: -5}
-  followSpeed: 0.02
+  offset: {x: 0, y: 0, z: -8}
+  followSpeed: 0.05
   playerCamera: {fileID: 0}
   centerTolerance: 0.152
   faceTarget: 1
@@ -564,22 +564,22 @@ MonoBehaviour:
   CollisionTag: 
   EventReference:
     Guid:
-      Data1: -1717487581
-      Data2: 1329986160
-      Data3: 323660442
-      Data4: -675228333
-    Path: event:/ChallengeEvents/event_Denial_GhostBoat
+      Data1: 687277345
+      Data2: 1207688506
+      Data3: -2132639604
+      Data4: -948113825
+    Path: event:/ChallengeEvents/event_BargainingEvent
   Event: 
   EventPlayTrigger: 1
-  EventStopTrigger: 0
+  EventStopTrigger: 2
   AllowFadeout: 1
   TriggerOnce: 0
   Preload: 0
   NonRigidbodyVelocity: 0
   Params: []
   OverrideAttenuation: 1
-  OverrideMinDistance: 50
-  OverrideMaxDistance: 100
+  OverrideMinDistance: 300
+  OverrideMaxDistance: 400
 --- !u!1 &3744536236126380214
 GameObject:
   m_ObjectHideFlags: 0
