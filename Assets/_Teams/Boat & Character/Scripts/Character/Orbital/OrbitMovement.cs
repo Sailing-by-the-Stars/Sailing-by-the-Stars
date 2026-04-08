@@ -71,7 +71,7 @@ public class OrbitMovement : MonoBehaviour
     }
     void RotateCamera()
     {
-        Vector2 lookDirection = playerControls.Looking.Look.ReadValue<Vector2>();
+        Vector2 lookDirection = playerControls.Land.Look.ReadValue<Vector2>();
         Vector2 cameraMoveDirection = lookDirection * mouseSensitivity * Time.deltaTime;
 
         // Rotating the Y rotation
