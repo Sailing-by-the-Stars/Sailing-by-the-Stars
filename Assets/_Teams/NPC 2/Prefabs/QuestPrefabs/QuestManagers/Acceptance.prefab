@@ -128,9 +128,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 727ffce1f89102743b4b943882b1a791, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NPCDialogueHolder
-  firstDialogue: {fileID: 11400000, guid: 3115598d130c2064f9e2e395ee8e0a4d, type: 2}
-  hasRepeatDialogue: 1
-  repeatDialogue: {fileID: 11400000, guid: 57b6d16ab4c4f954d96e3be906e5141e, type: 2}
+  dialogues:
+  - dialogue: {fileID: 11400000, guid: 57b6d16ab4c4f954d96e3be906e5141e, type: 2}
+    conditions: []
   hasInteractedBefore: 0
   interactMessage: Press E to Talk
 --- !u!1001 &5197880010131342150
