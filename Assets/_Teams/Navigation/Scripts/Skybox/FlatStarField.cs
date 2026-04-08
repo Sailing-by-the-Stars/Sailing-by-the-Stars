@@ -44,6 +44,8 @@ public class FlatStarField : MonoBehaviour
     [ContextMenu("Regenerate The Stars")]
     void RegenerateStars()
     {
+        Debug.Log("regenerating the stars!");
+
         foreach(GameObject o in starObjects)
         {
             DestroyImmediate(o);
@@ -52,7 +54,7 @@ public class FlatStarField : MonoBehaviour
         // Read in the star data.
         StarDataLoader sdl = new();
 
-        if (!starPositionType)
+        if (starPositionType == null)
         {
             starPositionType = new FlatStarPosition();
         }
@@ -66,20 +68,30 @@ public class FlatStarField : MonoBehaviour
             GameObject stargo = GameObject.CreatePrimitive(PrimitiveType.Quad);
             stargo.transform.parent = transform;
             stargo.name = $"HR {star.catalog_number}";
+
+            Collider collider = stargo.GetComponent<Collider>();
+            if(collider != null)
+            {
+#if UNITY_EDITOR
+                DestroyImmediate(collider);
+#else
+                Destroy(collider);
+#endif
+            }
             //<
 
             //deterimine position
             //>
-            star.position.y = 0;
+            //star.position.y = 0;
             stargo.transform.localPosition = star.position * starFieldScale;
+
             stargo.transform.Rotate(90, 0, 0);
             //<
 
             //get necisairy values
             //>
-            stargo.AddComponent<StarInfo>();
             stargo.GetComponent<MeshRenderer>().material = starMat;
-            Material material = stargo.GetComponent<MeshRenderer>().material;
+            Material material = stargo.GetComponent<MeshRenderer>().sharedMaterial;
 
             float sizeM = Mathf.Lerp(0, 1, star.size);
             sizeM = brightnessCurve.Evaluate(sizeM);
@@ -94,10 +106,38 @@ public class FlatStarField : MonoBehaviour
 
             //set material properties
             //>
-            material.color = star.colour;
-            material.EnableKeyword("_EMISSION");
-            half intensityMul = (half)MathF.Pow(2.0f, emissionMult);
-            material.SetColor("_EmissiveColor", material.color * intensityMul * starSize);
+            half intensityMul;
+            intensityMul = (half)MathF.Pow(2.0f, emissionMult);
+            /*
+            if (material.shader == Shader.Find("Shader Graphs/Stars"))
+            {
+                material.SetColor("_Color", star.colour);
+
+                intensityMul = (half)MathF.Pow(2.0f, emissionMult);
+                material.SetColor("_EmissiveColor", material.color * intensityMul * starSize);
+                //material.SetFloat("Brightness", intensityMul);
+            }
+            else
+            {
+                material.color = star.colour;
+                material.EnableKeyword("_EMISSION");
+                intensityMul = (half)MathF.Pow(2.0f, emissionMult);
+                material.SetColor("_EmissiveColor", material.color * intensityMul * starSize);
+
+            }
+            */
+            //<
+
+            //set the references on the star
+            //>
+            StarInfo starInfo = stargo.AddComponent<StarInfo>();
+            starInfo.matColor = star.colour;
+            Color tempColor = star.colour * intensityMul * starSize;
+
+            tempColor = BoostChroma(tempColor, emissionMult);
+
+            starInfo.emissionColor = tempColor;
+            starInfo.emissionMult = intensityMul * starSize;
             //<
 
 
@@ -117,6 +157,13 @@ public class FlatStarField : MonoBehaviour
             else
             {
                 newStar = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+
+                StarInfo oldInfo = oldStar.GetComponent<StarInfo>();
+
+                StarInfo starInfo = newStar.AddComponent<StarInfo>();
+                starInfo.matColor = oldInfo.matColor;
+                starInfo.emissionColor = oldInfo.emissionColor;
+                starInfo.emissionMult = oldInfo.emissionMult;
             }
 
 
@@ -133,8 +180,8 @@ public class FlatStarField : MonoBehaviour
 
             newStar.transform.localScale = newsize * manualSizeMult;
 
-            Material oldMaterial = oldStar.GetComponent<MeshRenderer>().material;
-            newStar.GetComponent<MeshRenderer>().material = oldMaterial;
+            Material oldMaterial = oldStar.GetComponent<MeshRenderer>().sharedMaterial;
+            newStar.GetComponent<MeshRenderer>().sharedMaterial = oldMaterial;
 
             starObjects[manualStar.starID - 1] = newStar;
 
@@ -144,6 +191,14 @@ public class FlatStarField : MonoBehaviour
             Destroy(oldStar);
 #endif
         }
+    }
+
+    Color BoostChroma(Color color, float amount)
+    {
+        float gray = color.grayscale;
+        Color grayColor = new Color(gray, gray, gray);
+
+        return grayColor + (color - grayColor) * amount;
     }
 
     private void OnValidate()

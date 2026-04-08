@@ -1,11 +1,16 @@
 using System;
 using Unity.Mathematics;
 using UnityEngine;
+using static StarDataLoader;
 
 
 public class StarInfo : MonoBehaviour
 {
     public float emissionMult;
+    public Color matColor;
+
+    [ColorUsage(true, true)]
+    public Color emissionColor;
     public Vector3 initpos;
 
     private void Start()
@@ -13,24 +18,28 @@ public class StarInfo : MonoBehaviour
         
         initpos = transform.position;
 
-        /*
+        
         if(GetComponent<MeshRenderer>() == null)
         {
             return;
         }
         Material material = GetComponent<MeshRenderer>().material;
-        material.shader = Shader.Find("HDRP/Unlit");
 
-        float starSize = transform.localScale.x;
 
-        material.color = Color.white * 2;
-        material.EnableKeyword("_EMISSION");
+        if (material.shader == Shader.Find("Shader Graphs/Stars"))
+        {
+            material.SetColor("_Color", matColor);
 
-        // base color (no intensity baked in)
-        material.SetColor("_EmissiveColor", Color.white);
+            material.SetFloat("Brightness", emissionMult);
 
-        half intensityMul = (half)MathF.Pow(2.0f, emissionMult * starSize);
-        material.color *= intensityMul;
-        */
+            material.SetColor("_EmissiveColor", emissionColor);
+        }
+        else
+        {
+            material.color = matColor;
+            material.EnableKeyword("_EMISSION");
+            material.SetColor("_EmissiveColor", emissionColor);
+
+        }
     }
 }

@@ -8,8 +8,8 @@ public class GlobeShape : MonoBehaviour
     [SerializeField] int resolution = 10;
     [SerializeField] float offsetY = 5000f;
     [Tooltip("this determines over how manny frames the moving of the stars will be divided")]
-    [SerializeField] int operationDivisions = 5; 
-
+    [SerializeField] int operationDivisions = 5;
+    [SerializeField] GlobePositionType positionType;
 
     List<Vector3> verticePositions = new();
     List<Vector3> vertices = new();
@@ -39,6 +39,11 @@ public class GlobeShape : MonoBehaviour
 
     void Start()
     {
+        if (positionType == null)
+        {
+            positionType = new XZPosition();
+        }
+
         if (GetComponent<MeshRenderer>() == null && GetComponent<MeshRenderer>().enabled == false)
         {
             return;
@@ -110,28 +115,36 @@ public class GlobeShape : MonoBehaviour
 
     void MoveStars(List<TwinklingStar> tStars, List<StarInfo> iStars)
     {
-        float starTargetY = 0;
+        positionType.radiusSqr = globeRadius * globeRadius; // squared radius for early exit
+        positionType.invRadius = 1f / globeRadius;          // used for t calculation
+        positionType.center = transform.position + new Vector3(globeRadius, -500, globeRadius);
+
+        Vector3 starTarget;
         foreach (TwinklingStar star in tStars)
         {
-            starTargetY = GetY(star.initpos.x, star.initpos.z);
+            starTarget = positionType.GetY(globeRadius, star.initpos.x, star.initpos.z, transform.position);
 
-            star.transform.position = new Vector3(star.initpos.x, starTargetY, star.initpos.z);
-
-
-            if (starTargetY > 0)
+            if (starTarget.y > 0)
             {
                 star.transform.LookAt(Camera.main.transform.position);
             }
+            else
+            {
+                continue;
+            }
+
+            star.transform.position = starTarget;
+
         }
 
         foreach (StarInfo star in iStars)
         {
-            starTargetY = GetY(star.initpos.x, star.initpos.z);
+            starTarget = positionType.GetY(globeRadius, star.initpos.x, star.initpos.z, transform.position);
 
-            star.transform.position = new Vector3(star.initpos.x, starTargetY, star.initpos.z);
+            star.transform.position = starTarget;
 
 
-            if (starTargetY > 0)
+            if (starTarget.y > 0)
             {
                 star.transform.LookAt(Camera.main.transform.position);
             }
@@ -155,45 +168,13 @@ public class GlobeShape : MonoBehaviour
         for (int i = 0; i < vertices.Count; i++)
         {
             Vector3 vertex = vertices[i];
-            vertex.y = GetY(globeRadius, vertex.x - globeRadius, vertex.z - globeRadius);
+
+            vertex.y = positionType.GetY(globeRadius, vertex.x - globeRadius, vertex.z - globeRadius);
             vertices[i] = vertex;
         }
     }
 
-    float GetY(float radius, float x, float z)
-    {
-        float y = 0;
-        y = Mathf.Sqrt(Mathf.Pow(radius, 2) - (Mathf.Pow(x, 2) + Mathf.Pow(z, 2)));
 
-        if(y.ToString() == "NaN")
-        {
-            y = 0;
-        }
-
-        //Debug.Log($"radius '{radius}', x '{x}', and y '{z}' give z '{y}'");
-        return y;
-    }
-
-    float GetY(float x, float z)
-    {
-        x -= globeRadius + transform.position.x;
-        z -= globeRadius + transform.position.z;
-
-        float y = 0;
-        y = Mathf.Sqrt(Mathf.Pow(globeRadius, 2) - (Mathf.Pow(x, 2) + Mathf.Pow(z, 2)));
-
-        if (float.IsNaN(y))
-        {
-            y = 0;
-        }
-
-        y += transform.position.y;
-
-
-        //Debug.Log($"global position x '{x}', and y '{z}' give z '{y}'");
-        
-        return y;
-    }
 
 
     void GeneratePlane(float size, int resolution)
@@ -265,11 +246,22 @@ public class GlobeShape : MonoBehaviour
             operationDivisions = 1;
         }
 
+        if (Application.isPlaying)
+        {
+            InitializeMiniStars(operationDivisions);
+        }
+
         if (GetComponent<MeshRenderer>() == null || GetComponent<MeshRenderer>().enabled == false)
         {
             return;
         }
-        
+
+
+        if (positionType == null)
+        {
+            positionType = new XZPosition();
+        }
+
         myMesh = new Mesh();
         meshFilter = GetComponent<MeshFilter>();
         meshFilter.mesh = myMesh;
