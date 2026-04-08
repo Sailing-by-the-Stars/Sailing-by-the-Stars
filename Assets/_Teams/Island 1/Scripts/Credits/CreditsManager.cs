@@ -25,17 +25,8 @@ public class CreditsManager : MonoBehaviour
     [Tooltip("How long the end label is shown before the game quits.")]
     [SerializeField] private float endHoldDuration = 5f;
 
-    public static CreditsManager Instance { get; private set; }
-
     private void Awake()
     {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        Instance = this;
-
         if (fadePanel != null)
         {
             fadePanel.alpha = 0f;
