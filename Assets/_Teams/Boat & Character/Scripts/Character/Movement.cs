@@ -224,6 +224,19 @@ public class Movement : MonoBehaviour
         }
     }
 
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("boat"))
+        {
+            isOnBoat = true;
+            Debug.LogWarning("IT HITS");
+            transform.SetParent(boat.transform);
+            transform.position = seatPosition.position;
+
+            EntersBoat();
+        }
+    }
+
     void EntersBoat()
     {
         Destroy(rb);
