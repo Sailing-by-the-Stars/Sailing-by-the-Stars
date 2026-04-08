@@ -2,9 +2,6 @@ using UnityEngine;
 
 public class DoorEndTrigger : MonoBehaviour
 {
-    [Tooltip("Drag the CreditsManager GameObject here.")]
-    [SerializeField] private CreditsManager creditsManager;
-
     private bool triggered = false;
 
     private void OnTriggerEnter(Collider other)
@@ -14,7 +11,7 @@ public class DoorEndTrigger : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             triggered = true;
-            creditsManager.StartCredits();
+            CreditsManager.Instance.StartCredits();
         }
     }
 }
