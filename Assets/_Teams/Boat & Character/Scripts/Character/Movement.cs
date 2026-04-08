@@ -237,6 +237,8 @@ public class Movement : MonoBehaviour
     {
         gameObject.AddComponent(typeof(Rigidbody));
         rb = GetComponent<Rigidbody>();
+        rb.freezeRotation = true;
+
         isOnBoat = false;
 
         buoyancyController.enabled = false;
