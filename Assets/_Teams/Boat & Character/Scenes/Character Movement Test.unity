@@ -150,10 +150,84 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1907405927}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &99511015
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 442482156103244409, guid: b6d81394640966a4d9eddec62111776c, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 442482156103244409, guid: b6d81394640966a4d9eddec62111776c, type: 3}
+      propertyPath: baseForwardForce
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 442482156103244409, guid: b6d81394640966a4d9eddec62111776c, type: 3}
+      propertyPath: enableWindForces
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6736058736273579916, guid: b6d81394640966a4d9eddec62111776c, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -6.08
+      objectReference: {fileID: 0}
+    - target: {fileID: 6736058736273579916, guid: b6d81394640966a4d9eddec62111776c, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.01
+      objectReference: {fileID: 0}
+    - target: {fileID: 6736058736273579916, guid: b6d81394640966a4d9eddec62111776c, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.017030125
+      objectReference: {fileID: 0}
+    - target: {fileID: 6736058736273579916, guid: b6d81394640966a4d9eddec62111776c, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6736058736273579916, guid: b6d81394640966a4d9eddec62111776c, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6736058736273579916, guid: b6d81394640966a4d9eddec62111776c, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6736058736273579916, guid: b6d81394640966a4d9eddec62111776c, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6736058736273579916, guid: b6d81394640966a4d9eddec62111776c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6736058736273579916, guid: b6d81394640966a4d9eddec62111776c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6736058736273579916, guid: b6d81394640966a4d9eddec62111776c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8793327576181382360, guid: b6d81394640966a4d9eddec62111776c, type: 3}
+      propertyPath: m_Name
+      value: ScriptableComplexBoat
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: b6d81394640966a4d9eddec62111776c, type: 3}
 --- !u!95 &767508874 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 4182459621082244727, guid: 2bca4eabfcdde6949b5e11e926281700, type: 3}
   m_PrefabInstance: {fileID: 6367798672303911157}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1109313933 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8793327576181382360, guid: b6d81394640966a4d9eddec62111776c, type: 3}
+  m_PrefabInstance: {fileID: 99511015}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1195576312
 GameObject:
@@ -395,6 +469,11 @@ MonoBehaviour:
   m_ObsoleteUseShadowQualitySettings: 0
   m_ObsoleteCustomShadowResolution: 512
   m_ObsoleteContactShadows: 0
+--- !u!4 &1397786806 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3418608445507275310, guid: b6d81394640966a4d9eddec62111776c, type: 3}
+  m_PrefabInstance: {fileID: 99511015}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1725554669
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1054,9 +1133,17 @@ PrefabInstance:
       value: -89.99999
       objectReference: {fileID: 0}
     - target: {fileID: 7396955086683503908, guid: 2bca4eabfcdde6949b5e11e926281700, type: 3}
+      propertyPath: boat
+      value: 
+      objectReference: {fileID: 1109313933}
+    - target: {fileID: 7396955086683503908, guid: 2bca4eabfcdde6949b5e11e926281700, type: 3}
       propertyPath: animator
       value: 
       objectReference: {fileID: 767508874}
+    - target: {fileID: 7396955086683503908, guid: 2bca4eabfcdde6949b5e11e926281700, type: 3}
+      propertyPath: seatPosition
+      value: 
+      objectReference: {fileID: 1397786806}
     - target: {fileID: 7396955086683503908, guid: 2bca4eabfcdde6949b5e11e926281700, type: 3}
       propertyPath: InteractionRange
       value: 10
@@ -1301,3 +1388,4 @@ SceneRoots:
   - {fileID: 5550571896055494794}
   - {fileID: 8735290819487930749}
   - {fileID: 1725554669}
+  - {fileID: 99511015}
