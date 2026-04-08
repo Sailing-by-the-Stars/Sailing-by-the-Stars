@@ -54,6 +54,8 @@ public class BoatController : MonoBehaviour
     private GameObject[] rudderObjects;
     private GameObject[] mastObjects;
 
+    private bool anchorDropped = true;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -103,18 +105,21 @@ public class BoatController : MonoBehaviour
         Vector3 windDirection = Vector3.ProjectOnPlane(apparentWind, Vector3.up).normalized;
 
         float mastDirectionIntoWind = Vector3.SignedAngle(mastDirection, -windDirection, Vector3.up);
-
-        if (enableWindForces)
+        if (!anchorDropped)
         {
-            CalculateDrag(apparentWind.magnitude, mastDirectionIntoWind);
-            CalculateLift(apparentWind.magnitude, mastDirectionIntoWind);
+            if (enableWindForces)
+            {
+                CalculateDrag(apparentWind.magnitude, mastDirectionIntoWind);
+                CalculateLift(apparentWind.magnitude, mastDirectionIntoWind);
+            }
+
+            AoA = mastDirectionIntoWind;
+
+            ApplyBaseForwardForce();
+            ApplyRudderTorque();
+            ApplyKeelDrag();
         }
 
-        AoA = mastDirectionIntoWind;
-
-        ApplyBaseForwardForce();
-        ApplyRudderTorque();
-        ApplyKeelDrag();
         applyWaterDrag();
 
         forwardSpeed = transform.InverseTransformVector(rigidBody.linearVelocity).z;
@@ -276,5 +281,17 @@ public class BoatController : MonoBehaviour
         }
 
         currentRudderAngle = targetRudderAngle;
+    }
+
+    public void DropAnchor()
+    {
+        anchorDropped = true;
+        rigidBody.linearDamping = .5f;
+    }
+
+    public void HaulAnchor()
+    {
+        anchorDropped = false;
+        rigidBody.linearDamping = 0f;
     }
 }

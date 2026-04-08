@@ -348,10 +348,12 @@ public class Movement : MonoBehaviour
         if (moveDirection.y < 0)
         {
             // Moving down
+            boatController.DropAnchor();
         }
         else if (moveDirection.y > 0)
         {
             // Moving up
+            boatController.HaulAnchor();
         }
 
         if (playerControls.BoatAnchor.Leave.IsPressed())
