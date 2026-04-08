@@ -49,12 +49,15 @@ public class BargainingCheckpointVisual : MonoBehaviour
     [Tooltip("How much emission varies during pulse. 0 = no pulse.")]
     [SerializeField] private float pulseIntensity = 0.6f;
 
+    private MaterialPropertyBlock propertyBlock;
+    private static readonly int UnlitColor = Shader.PropertyToID("_UnlitColor");
     private LineRenderer[] rings;
     private Color baseColor;
     private bool isVisible = false;
 
     private void Awake()
     {
+        propertyBlock = new MaterialPropertyBlock();
         float colliderRadius = GetComponent<SphereCollider>().radius * transform.lossyScale.x;
         CreateRings(colliderRadius + radiusOffset);
         SetVisible(false);
@@ -67,7 +70,18 @@ public class BargainingCheckpointVisual : MonoBehaviour
         }
 
         float pulse = emissionIntensity + Mathf.Sin(Time.time * pulseSpeed) * pulseIntensity;
+        Color pulseColor = baseColor * pulse;
 
+        foreach (LineRenderer ring in rings)
+        {
+            if (ring == null)
+            {
+                continue;
+            }
+            ring.GetPropertyBlock(propertyBlock);
+            propertyBlock.SetColor(UnlitColor, pulseColor);
+            ring.SetPropertyBlock(propertyBlock);
+        }
         ringMaterialTemplate.SetColor("_UnlitColor", baseColor * pulse);
     }
     /// <summary>
@@ -120,20 +134,6 @@ public class BargainingCheckpointVisual : MonoBehaviour
             }
 
             rings[i] = lr;
-        }
-    }
-    private void OnDestroy()
-    {
-        if (ringMaterialTemplate != null)
-        {
-            ringMaterialTemplate.SetColor("_UnlitColor", baseColor);
-        }
-    }
-    private void OnDisable()
-    {
-        if (ringMaterialTemplate != null)
-        {
-            ringMaterialTemplate.SetColor("_UnlitColor", baseColor);
         }
     }
 }
