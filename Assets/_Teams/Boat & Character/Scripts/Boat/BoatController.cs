@@ -28,6 +28,7 @@ public class BoatController : MonoBehaviour
     [Header("Physics stats (Debugging!)")]
     [SerializeField] private float forwardSpeed;
     [SerializeField] private float apparentWindSpeed;
+    [SerializeField] private float sideSlipSpeed;
     [SerializeField] private float AoA;
     [SerializeField] private float drag;
     [SerializeField] private float lift;
@@ -225,6 +226,8 @@ public class BoatController : MonoBehaviour
             Vector3 sideSlipForce = -localVelocity.x * sidedriftCorrectionStrength * Vector3.right;
             rigidBody.AddRelativeForce(sideSlipForce, ForceMode.Force);
         }
+
+        rotationRate = rigidBody.angularVelocity.y * Mathf.Rad2Deg;
     }
 
     void ApplyKeelDrag()
@@ -236,7 +239,9 @@ public class BoatController : MonoBehaviour
 
 
         rigidBody.AddRelativeForce(keelDragVector);
-        rigidBody.AddForceAtPosition(keelDragVector, transform.position + .7f * -transform.up, ForceMode.Force);
+        rigidBody.AddForceAtPosition(keelDragVector, transform.position + .65f * -transform.up, ForceMode.Force);
+
+        sideSlipSpeed = localVelocity.x;
     }
 
     void applyWaterDrag()

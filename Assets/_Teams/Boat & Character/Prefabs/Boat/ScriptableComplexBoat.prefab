@@ -808,7 +808,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7142789716802241813}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -1032,7 +1032,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8500170650368291241}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -1181,15 +1181,16 @@ MonoBehaviour:
   underwaterFrontArea: 0.4
   airDensity: 1.225
   waterDensity: 1000
-  keelDragStrength: 50
+  keelDragStrength: 300
   baseForwardForce: 500
   maxRotationRate: 10
-  rudderTorqueStrength: 20
-  sidedriftCorrectionStrength: 50
+  rudderTorqueStrength: 35
+  sidedriftCorrectionStrength: 250
   useLocalWindSpeed: 1
   enableWindForces: 1
   forwardSpeed: 0
   apparentWindSpeed: 0
+  sideSlipSpeed: 0
   AoA: 0
   drag: 0
   lift: 0
