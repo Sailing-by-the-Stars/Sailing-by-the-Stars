@@ -23,7 +23,6 @@ public class Astrolabe : ToolPickup
 
     private List<Renderer> renderers = new();
     private List<TMP_Text> textBoxes = new();
-    private TMP_Text targetText;
 
     private Quaternion initialRot = new();
 
@@ -46,10 +45,6 @@ public class Astrolabe : ToolPickup
         //Prevent numbers showing on the astrolabe as it lies on the floor
         foreach (TMP_Text text in textBoxes)
         {
-            if(text.name == "target")
-            {
-                targetText = text;
-            }
             text.enabled = false;
         }
     }
@@ -86,10 +81,6 @@ public class Astrolabe : ToolPickup
         
         foreach (TMP_Text text in textBoxes)
         {
-            if(text.name == "target")
-            {
-                targetText = text;
-            }
             text.enabled = true;
         }
         
@@ -234,15 +225,6 @@ public class Astrolabe : ToolPickup
             foreach (TMP_Text text in textBoxes)
             {
                 text.text = Mathf.Round(pointerAngle).ToString();
-            }
-
-            if (TwinklingStar.currentTarget > 0)
-            {
-                targetText.text = $"Target: {TwinklingStar.currentTarget.ToString()}";
-            }
-            else
-            {
-                targetText.text = "";
             }
 
             if (zoomedIn)

@@ -95,8 +95,8 @@ public class TwinklingStar : MonoBehaviour
             return;
         }
 
-        const float tolerance = 0.5f;
-        if (Mathf.Abs(targetAngle - hitAngle) < tolerance)
+        const float tolerance = 1;
+        if (hitAngle - tolerance >= targetAngle)
         {
             currentTarget = -1;
             starState = StarState.dimmed;
