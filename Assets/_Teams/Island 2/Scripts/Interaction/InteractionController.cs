@@ -18,7 +18,9 @@ public class InteractionController : MonoBehaviour
     [SerializeField] private TextMeshProUGUI interactionText;
     [SerializeField] private float interactionDistance = 5f;
 
+    private RaycastHit currentHit;
     private IInteractable currentTargetedInteractable;
+    public Transform CurrentHitTransform => currentHit.collider ? currentHit.collider.transform : null;
 
     private void Update()
     {
@@ -31,11 +33,13 @@ public class InteractionController : MonoBehaviour
     {
         var ray = playerCamera.ViewportPointToRay(new Vector2(0.5f, 0.5f));
         
-        Physics.Raycast(ray, out RaycastHit hit, interactionDistance, ~0, QueryTriggerInteraction.Ignore);
+        Physics.Raycast(ray, out currentHit, interactionDistance, ~0, QueryTriggerInteraction.Ignore);
         Debug.DrawRay(ray.origin, ray.direction * interactionDistance, Color.green);
         
-        currentTargetedInteractable = hit.collider?.GetComponent<IInteractable>();
-
+        var interactableTargeted = currentHit.collider?.GetComponentInParent<IInteractable>();
+        currentTargetedInteractable = interactableTargeted != null &&
+                                      interactableTargeted.ShouldShowMessage(this)
+                                      ? interactableTargeted : null;
     }
 
     private void UpdateInteractionText()

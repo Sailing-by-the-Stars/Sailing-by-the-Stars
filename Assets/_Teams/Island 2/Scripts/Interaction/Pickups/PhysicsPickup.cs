@@ -18,7 +18,7 @@ public class PhysicsPickup : MonoBehaviour, IPickup
         pickupRigidbody = GetComponent<Rigidbody>();
         pickupCollider = GetComponent<Collider>();
     }
-    
+
     public void Interact(InteractionController interactionController)
     {
         var pickupController = interactionController.GetComponent<PickupController>();
@@ -45,9 +45,19 @@ public class PhysicsPickup : MonoBehaviour, IPickup
 
     public void SetPositionInParent(Transform newParent)
     {
+        Vector3 worldScale = transform.lossyScale;
+        
         transform.parent = newParent;
         transform.localPosition = pickupPositionOffset;
         transform.localRotation = Quaternion.identity;
+        
+        // All this fancy stuff just because Unity by default changes the scale of an object to match it to its new parent...
+        Vector3 parentScale = newParent.lossyScale;
+        transform.localScale = new Vector3(
+            worldScale.x / parentScale.x,
+            worldScale.y / parentScale.y,
+            worldScale.z / parentScale.z
+        );
     }
 
     public virtual void Use()
