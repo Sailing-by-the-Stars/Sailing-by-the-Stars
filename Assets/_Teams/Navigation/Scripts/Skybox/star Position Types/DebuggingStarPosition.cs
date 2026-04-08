@@ -5,6 +5,9 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Debugging Star Position", menuName = "Star Position Type/Debugging Star Position")]
 public class DebuggingStarPosition : StarPositionType
 {
+    [SerializeField]
+    float colorBoost = 1.2f;
+
     //[SerializeField]
     //List<bool> hasColorBeenUsed = new();
 
@@ -23,6 +26,7 @@ public class DebuggingStarPosition : StarPositionType
         double z = System.Math.Sin(ra);
 
         double distance = 1 - ((dec + (Mathf.PI / 2)) / Mathf.PI);
+        //d = 
 
         // Map stars onto a plane
         // Work out the distance from the north pole and use this to scale
@@ -36,69 +40,76 @@ public class DebuggingStarPosition : StarPositionType
 
     public override Color SetColour(byte spectral_type, byte spectral_index, out bool flag)
     {
-        Color IntColour(int r, int g, int b)
-        {
-            return new Color(r / 255f, g / 255f, b / 255f);
-        }
-        // OBAFGKM colours from: https://arxiv.org/pdf/2101.06254.pdf
-        Color[] col = new Color[8];
-        col[0] = IntColour(0x5c, 0x7c, 0xff); // O1
-        col[1] = IntColour(0x5d, 0x7e, 0xff); // B0.5
-        col[2] = IntColour(0x79, 0x96, 0xff); // A0
-        col[3] = IntColour(0xb8, 0xc5, 0xff); // F0
-        col[4] = IntColour(0xff, 0xef, 0xed); // G1
-        col[5] = IntColour(0xff, 0xde, 0xc0); // K0
-        col[6] = IntColour(0xff, 0xa2, 0x5a); // M0
-        col[7] = IntColour(0xff, 0x7d, 0x24); // M9.5
-
-        int col_idx = -1;
-        if (spectral_type == 'O')
-        {
-            col_idx = 0;
-        }
-        else if (spectral_type == 'B')
-        {
-            col_idx = 1;
-        }
-        else if (spectral_type == 'A')
-        {
-            col_idx = 2;
-        }
-        else if (spectral_type == 'F')
-        {
-            col_idx = 3;
-        }
-        else if (spectral_type == 'G')
-        {
-            col_idx = 4;
-        }
-        else if (spectral_type == 'K')
-        {
-            col_idx = 5;
-        }
-        else if (spectral_type == 'M')
-        {
-            col_idx = 6;
-        }
-
         flag = false;
-        // If unknown, make white.
-        if (col_idx == -1)
+
+        float temperature = GetTemperature(spectral_type, spectral_index);
+
+        Color color = BlackbodyToRGB(temperature);
+
+        //color = Color.Lerp(new Color(color.grayscale, color.grayscale, color.grayscale), color, colorBoost);
+        //color *= colorBoost;
+        color = BoostChroma(color, colorBoost);
+
+        return color;
+    }
+
+    Color BoostChroma(Color color, float amount)
+    {
+        float gray = color.grayscale;
+        Color grayColor = new Color(gray, gray, gray);
+
+        return grayColor + (color - grayColor) * amount;
+    }
+
+
+    float GetTemperature(byte spectral_type, byte spectral_index)
+    {
+        // Base temperatures (in Kelvin)
+        float t0 = 0f, t1 = 0f;
+
+        switch (spectral_type)
         {
-            return Color.white;
-        }
-        else
-        {
-            /*if (hasColorBeenUsed[col_idx] == false)
-            {
-                hasColorBeenUsed[col_idx] = true;
-                flag = true;
-            }*/
+            case (byte)'O': t0 = 40000f; t1 = 30000f; break;
+            case (byte)'B': t0 = 30000f; t1 = 10000f; break;
+            case (byte)'A': t0 = 10000f; t1 = 7500f; break;
+            case (byte)'F': t0 = 7500f; t1 = 6000f; break;
+            case (byte)'G': t0 = 6000f; t1 = 5200f; break;
+            case (byte)'K': t0 = 5200f; t1 = 3700f; break;
+            case (byte)'M': t0 = 3700f; t1 = 2400f; break;
+            default: return 6500f; // fallback = white-ish
         }
 
-            // Map second part 0 -> 0, 10 -> 100
-            float percent = (spectral_index - 0x30) / 10.0f;
-        return Color.Lerp(col[col_idx], col[col_idx + 1], percent);
+        float percent = (spectral_index - 0x30) / 10.0f;
+        return Mathf.Lerp(t0, t1, percent);
+    }
+
+    Color BlackbodyToRGB(float temperature)
+    {
+        float t = temperature / 100f;
+
+        float r, g, b;
+
+        // Red
+        if (t <= 66f)
+            r = 1f;
+        else
+            r = Mathf.Clamp01(1.292936186062745f * Mathf.Pow(t - 60f, -0.1332047592f));
+
+        // Green
+        if (t <= 66f)
+            g = Mathf.Clamp01(0.3900815787690196f * Mathf.Log(t) - 0.6318414437886275f);
+        else
+            g = Mathf.Clamp01(1.129890860895294f * Mathf.Pow(t - 60f, -0.0755148492f));
+
+        // Blue
+        if (t >= 66f)
+            b = 1f;
+        else if (t <= 19f)
+            b = 0f;
+        else
+            b = Mathf.Clamp01(0.5432067891101961f * Mathf.Log(t - 10f) - 1.19625408914f);
+
+        return new Color(r, g, b);
     }
 
     public override float SetSize(short magnitude, out bool flag)

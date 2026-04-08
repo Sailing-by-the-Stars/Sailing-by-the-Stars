@@ -78,7 +78,7 @@ public class Astrolabe : ToolPickup
         
         //Astrolabe should be visible when picked up
         visible = true;
-        
+
         foreach (Renderer renderer in renderers)
         {
             renderer.enabled = true;
@@ -98,7 +98,12 @@ public class Astrolabe : ToolPickup
         initialFOV = cam.fieldOfView;
         
         animationCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
-        zoomedIn = false;
+
+        zoomedIn = true;
+        if (zoomCoroutine == null)
+        {
+            zoomCoroutine = StartCoroutine(ZoomIn());
+        }
         sideView = false;
     }
 
@@ -156,7 +161,7 @@ public class Astrolabe : ToolPickup
                 transform.rotation = Quaternion.LookRotation(forward, Vector3.up);
             }
 
-            if (Input.GetMouseButtonDown(1) && visible)
+            /*if (Input.GetMouseButtonDown(1) && visible)
             {
                 if (zoomedIn)
                 {
@@ -174,7 +179,7 @@ public class Astrolabe : ToolPickup
                         zoomCoroutine = StartCoroutine(ZoomIn());
                     }
                 }
-            }
+            }*/
 
             if (Input.GetKeyDown(KeyCode.Tab))
             {
@@ -198,6 +203,14 @@ public class Astrolabe : ToolPickup
                         {
                             zoomCoroutine = StartCoroutine(ZoomOut());
                         }
+                    }
+                }
+                else
+                {
+                    zoomedIn = true;
+                    if (zoomCoroutine == null)
+                    {
+                        zoomCoroutine = StartCoroutine(ZoomIn());
                     }
                 }
             }

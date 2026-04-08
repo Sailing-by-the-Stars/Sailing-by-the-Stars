@@ -50,12 +50,12 @@ public class TwinklingStar : MonoBehaviour
         { StarState.selected, new SelectedState() },
         { StarState.dimmed, new DimmedState() },
     };
-    
-    [SerializeField] AnimationCurve twinkleCurve;
-    [SerializeField] AnimationCurve dimCurve;
-    [SerializeField] float intensity = 1;
-    [SerializeField] float twinkleTime = 1;
-    [SerializeField] float targetAngle = 1;
+
+    public AnimationCurve twinkleCurve;
+    public AnimationCurve dimCurve;
+    public float intensity = 1;
+    public float twinkleTime = 1;
+    public float targetAngle = 1;
     public static float currentTarget;
 
     public static event Action OnStarFound;
@@ -75,9 +75,8 @@ public class TwinklingStar : MonoBehaviour
         if (GetComponent<Renderer>())
         {
             initialEmissionColor = GetComponent<Renderer>().material.GetColor("_EmissiveColor");
+            //UpdateColor(intensity);
         }
-
-        UpdateColor(intensity);
     }
 
     // Update is called once per frame

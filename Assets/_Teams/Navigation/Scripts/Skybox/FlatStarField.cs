@@ -18,12 +18,14 @@ public class FlatStarField : MonoBehaviour
     [Range(0, 100)]
     [SerializeField] private float starSizeMax = 5f;
     [SerializeField] private float emissionMult = 2;
+    [SerializeField] private float chromaBoost = 3;
 
 
     private List<StarDataLoader.Star> stars;
     public List<GameObject> starObjects;
 
-    [SerializeField] List<ManualStar> manualStars = new();
+    [SerializeField] List<Constelation> manualStars = new();
+    [SerializeField] List<ManualTwinkler> twinklingStars = new();
     [SerializeField] float minManualSize = 8;
     [SerializeField] float manualSizeMult = 1.5f;
 
@@ -31,19 +33,135 @@ public class FlatStarField : MonoBehaviour
     void fixiiiiiiit()
     {
         manualStars.Clear();
-        int[] ints = new int[] {15, 21, 39, 74, 99, 168, 188, 219, 321, 334, 337, 343, 390, 403, 424, 472, 510, 539, 542, 544, 546, 553, 591, 596, 603, 617, 681, 804, 834, 850, 874, 879, 896, 897, 911, 921, 936, 947, 951, 963, 984, 1017, 1131, 1136, 1140, 1142, 1145, 1149, 1151, 1152, 1156, 1165, 1178, 1180, 1228, 1231, 1298, 1325, 1346, 1373, 1409, 1457, 1464, 1481, 1543, 1544, 1552, 1570, 1577, 1605, 1612, 1641, 1666, 1708, 1713, 1790, 1791, 1829, 1852, 1855, 1865, 1879, 1899, 1903, 1948, 1956, 2004, 2040, 2061, 2088, 2134, 2216, 2282, 2286, 2294, 2326, 2421, 2473, 2484, 2491, 2618, 2650, 2657, 2693, 2777, 2821, 2827, 2845, 2891, 2943, 2990, 3045, 3165, 3207, 3208, 3249, 3275, 3307, 3323, 3391, 3403, 3418, 3449, 3461, 3569, 3572, 3634, 3685, 3699, 3731, 3748, 3773, 3852, 3873, 3905, 3982, 4031, 4033, 4057, 4069, 4247, 4287, 4295, 4301, 4357, 4359, 4375, 4377, 4434, 4534, 4540, 4554, 4623, 4630, 4660, 4662, 4689, 4730, 4757, 4763, 4785, 4786, 4825, 4853, 4905, 4910, 4915, 4932, 4968, 5054, 5056, 5062, 5107, 5191, 5235, 5267, 5288, 5291, 5329, 5338, 5340, 5350, 5404, 5435, 5459, 5487, 5506, 5531, 5533, 5563, 5586, 5602, 5603, 5685, 5714, 5733, 5735, 5744, 5747, 5787, 5793, 5854, 5953, 5978, 5984, 6008, 6027, 6056, 6075, 6084, 6117, 6134, 6148, 6149, 6165, 6370, 6378, 6396, 6406, 6410, 6508, 6526, 6527, 6536, 6553, 6555, 6556, 6603, 6636, 6688, 6705, 6746, 6789, 6859, 6879, 6903, 6913, 7001, 7051, 7052, 7053, 7054, 7106, 7116, 7121, 7141, 7176, 7178, 7194, 7228, 7235, 7254, 7264, 7298, 7310, 7337, 7343, 7348, 7405, 7417, 7462, 7479, 7525, 7557, 7582, 7597, 7602, 7604, 7618, 7650, 7747, 7754, 7773, 7776, 7790, 7796, 7851, 7852, 7882, 7906, 7924, 7949, 7950, 8131, 8162, 8232, 8238, 8278, 8301, 8308, 8316, 8322, 8414, 8417, 8425, 8450, 8499, 8518, 8591, 8610, 8634, 8650, 8709, 8728, 8773, 8775, 8781, 8880, 8974};
-        foreach (int i in ints)
+        
+        
+        foreach ((string, int[]) ints in constellations)
         {
-            ManualStar New = new();
-            New.starID = i;
+            Constelation New = new();
+            New.name = ints.Item1;
+            foreach (int i in ints.Item2)
+            {
+                New.starIDs.Add(i);
+            }
+
             manualStars.Add(New);
         }
     }
 
+    private readonly List<(string, int[])> constellations = new() {
+
+    ("Ursa Major",
+     new int[] { 4295, 4301, 4554, 4660, 4905, 5054, 5191 }),
+
+    ("Orion",
+     new int[] { 1948, 1903, 1852, 2004, 1713, 2061, 1790, 1907, 2124,
+                 2199, 2135, 2047, 2159, 1543, 1544, 1570, 1552, 1567 }),
+
+    ("Ursa Minor",
+     new int[] { 424, 6789, 6322, 5903, 6116, 5735, 5563 }),
+
+    ("Cepheus",
+     new int[] { 8162, 8238, 8974, 8465, 8694 }),
+
+    ("Lazerta",
+     new int[] { 8585, 8498, 8572, 8538, 8579, 8541 }),
+
+    ("Cassiopeia",
+     new int[] { 21, 168, 264, 403, 542 }),
+
+    ("Pegasus",// im here
+     new int[] { 8781, 8775, 39, 15, 8634, 8450, 8308, 337, 603, 165, 226, 269, 8430, 8454, 8650, 8665, 8667, 8684 }),
+
+    ("Monoceros",
+     new int[] { 2970, 3188, 2714, 2356, 2227, 2506, 2298, 2385, 2456, 2479 }),
+
+    ("Gemini",
+     new int[] { 2890, 2891, 2990, 2421, 2777, 2473, 2650, 2216,
+                 2343, 2484, 2286, 2134, 2763, 2697, 2540, 2821, 2905, 2985 }),
+
+    ("Cancer",
+     new int[] { 3475, 3449, 3461, 3572, 3249 }),
+
+    ("Leo",
+     new int[] { 3982, 4534, 4057, 4357, 3873, 4031, 4359, 3975, 4399, 4386, 3905, 3773, 3731 }),
+
+    ("Leo Minor",
+     new int[] { 3800, 3974, 4100, 4247, 4090 }),
+
+    ("Lynx",
+     new int[] { 3705, 3690, 3612, 3579, 3275, 2818, 2560, 2238 }),
+
+    ("Canis Major",
+     new int[] { 2491, 2361, 2538, 2291, 2282, 2618, 2693, 2451 }),
+
+    ("Canis Minor",
+     new int[] { 2943, 2845 }),
+    
+    ("Taurus",
+     new int[] { 1457, 1409, 1412, 1373, 1346, 1140, 1910, 1030, 1239, 1389, 1497, 1030, 1239, 1389, 1497}),
+
+    //("Aries",
+    // new int[] { 617, 548, 553 }),
+
+    ("Andromeda",
+     new int[] { 15, 337, 402, 603, 915, 681, 472 }),
+
+    ("Cygnus",
+     new int[] { 7924, 7796, 7528, 7417, 7531, 7141, 7106, 7615 }),
+
+    ("Lyra",
+     new int[] { 7001, 7178, 7298, 7144, 7102 }),
+
+    ("Aquila",
+     new int[] { 7525, 7557, 7602, 7377, 7235, 7236, 7264, 7405 }),
+
+    ("Scorpius",
+     new int[] { 6134, 6084, 5953, 5984, 6165, 6241, 6508, 6527, 6553, 6630 }),
+
+    ("Sagittarius",
+     new int[] { 7121, 7116, 7194, 6913, 7234, 7337, 7348, 6859 }),
+
+    ("Bootes",
+     new int[] { 5340, 5435, 5506, 5602, 5681, 5533, 5350 }),
+
+    ("Virgo",
+     new int[] { 5107, 4910, 4825, 4689, 4540, 5056, 5196, 5315, 5338 }),
+
+    ("Libra",
+     new int[] { 5531, 5685, 5787, 5820 }),
+
+    ("Capricornus",
+     new int[] { 7776, 7754, 7822, 8278, 8322, 7950, 8080 }),
+
+    ("Aquarius",
+     new int[] { 8414, 8232, 8518, 8610, 8709, 8834, 8932, 8968, 8728, 8264 }),
+    /*
+    ("Pisces",//really bad, redo pls
+     new int[] { 9062, 8916, 8773, 434, 510, 618, 21, 38, 9089, 8852 }),
+    */
+    ("Hercules",
+     new int[] { 6148, 6212, 6092, 6168, 6241, 6095, 6220, 6324, 6410, 6418, 6436, 6485, 6526, 6588, 6695, 6703, 6779 }),
+
+    ("Crux",
+     new int[] { 4853, 4730, 4700, 4656 }),
+
+     ("Auriga",
+     new int[] { 1708, 2088, 2095, 1791, 1577, 1612 }),
+
+
+};
+
+
+    private void Awake()
+    {
+        RegenerateStars();
+    }
 
     [ContextMenu("Regenerate The Stars")]
     void RegenerateStars()
     {
+        Debug.Log("regenerating the stars!");
+
         foreach(GameObject o in starObjects)
         {
             DestroyImmediate(o);
@@ -52,7 +170,7 @@ public class FlatStarField : MonoBehaviour
         // Read in the star data.
         StarDataLoader sdl = new();
 
-        if (!starPositionType)
+        if (starPositionType == null)
         {
             starPositionType = new FlatStarPosition();
         }
@@ -66,20 +184,32 @@ public class FlatStarField : MonoBehaviour
             GameObject stargo = GameObject.CreatePrimitive(PrimitiveType.Quad);
             stargo.transform.parent = transform;
             stargo.name = $"HR {star.catalog_number}";
+
+            Collider collider = stargo.GetComponent<Collider>();
+            if(collider != null)
+            {
+#if UNITY_EDITOR
+                DestroyImmediate(collider);
+#else
+                Destroy(collider);
+#endif
+            }
             //<
 
             //deterimine position
             //>
-            star.position.y = 0;
+            //star.position.y = 0;
             stargo.transform.localPosition = star.position * starFieldScale;
+
             stargo.transform.Rotate(90, 0, 0);
             //<
 
             //get necisairy values
             //>
-            stargo.AddComponent<StarInfo>();
-            stargo.GetComponent<MeshRenderer>().material = starMat;
-            Material material = stargo.GetComponent<MeshRenderer>().material;
+            MeshRenderer meshRenderer = stargo.GetComponent<MeshRenderer>();
+
+            meshRenderer.material = starMat;
+            Material material = meshRenderer.sharedMaterial;
 
             float sizeM = Mathf.Lerp(0, 1, star.size);
             sizeM = brightnessCurve.Evaluate(sizeM);
@@ -92,58 +222,108 @@ public class FlatStarField : MonoBehaviour
             stargo.transform.localScale = size;
             //<
 
-            //set material properties
+            //set the references on the star
             //>
-            material.color = star.colour;
-            material.EnableKeyword("_EMISSION");
-            half intensityMul = (half)MathF.Pow(2.0f, emissionMult);
-            material.SetColor("_EmissiveColor", material.color * intensityMul * starSize);
+            half intensityMul;
+            intensityMul = (half)MathF.Pow(2.0f, emissionMult);
+            StarInfo starInfo = stargo.AddComponent<StarInfo>();
+            starInfo.matColor = star.colour;
+            Color tempColor = star.colour * intensityMul * starSize;
+
+            tempColor = BoostChroma(tempColor, chromaBoost);
+
+            starInfo.emissionColor = tempColor;
+            starInfo.emissionMult = intensityMul * starSize;
+
+            meshRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+            meshRenderer.receiveShadows = false;
+            meshRenderer.motionVectorGenerationMode = MotionVectorGenerationMode.Camera;
             //<
 
 
             starObjects.Add(stargo);
         }
 
-        foreach (ManualStar manualStar in manualStars)
+        foreach (Constelation manualStar in manualStars)
         {
-            GameObject oldStar = starObjects[manualStar.starID - 1];
-
-
-            GameObject newStar;
-            if (manualStar.starPrefab)
+            foreach (int id in manualStar.starIDs)
             {
-                newStar = Instantiate(manualStar.starPrefab);
-            }
-            else
-            {
-                newStar = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-            }
+                GameObject oldStar = starObjects[id - 1];
 
 
-            newStar.transform.parent = transform;
-            newStar.name = oldStar.name;
-            newStar.transform.position = oldStar.transform.position;
+                GameObject newStar;
+                if (manualStar.starPrefab)
+                {
+                    newStar = Instantiate(manualStar.starPrefab);
+                }
+                else
+                {
+                    newStar = GameObject.CreatePrimitive(PrimitiveType.Sphere);
 
-            Vector3 newsize = oldStar.transform.localScale;
+                    StarInfo oldInfo = oldStar.GetComponent<StarInfo>();
 
-            if(newsize.x < minManualSize)
-            {
-                newsize = new Vector3(minManualSize, minManualSize, minManualSize);
-            }
+                    StarInfo starInfo = newStar.AddComponent<StarInfo>();
 
-            newStar.transform.localScale = newsize * manualSizeMult;
+                    TwinklingStar template = transform.parent.GetComponent<TwinklingStar>();
 
-            Material oldMaterial = oldStar.GetComponent<MeshRenderer>().material;
-            newStar.GetComponent<MeshRenderer>().material = oldMaterial;
+                    foreach (var obj in twinklingStars)
+                    {
+                        if (id == obj.starID)
+                        {
+                            TwinklingStar twinkler = newStar.AddComponent<TwinklingStar>();
 
-            starObjects[manualStar.starID - 1] = newStar;
+                            twinkler.targetAngle = obj.targetAngle;
+
+                            twinkler.twinkleCurve = template.twinkleCurve;
+                            twinkler.dimCurve = template.dimCurve;
+                            twinkler.intensity = template.intensity;
+                            twinkler.twinkleTime = template.twinkleTime;
+                            newStar.layer = LayerMask.NameToLayer("Constelation");
+                            newStar.GetComponent<SphereCollider>().radius = 1.5f;
+                        }
+                    }
+
+                    starInfo.matColor = oldInfo.matColor;
+                    starInfo.emissionColor = oldInfo.emissionColor;
+                    starInfo.emissionMult = oldInfo.emissionMult;
+                }
+
+
+                newStar.transform.parent = transform;
+                newStar.name = $"{oldStar.name} {manualStar.name}";
+                newStar.transform.position = oldStar.transform.position;
+
+                Vector3 newsize = oldStar.transform.localScale;
+
+                if (newsize.x < minManualSize)
+                {
+                    newsize = new Vector3(minManualSize, minManualSize, minManualSize);
+                }
+
+                newStar.transform.localScale = newsize * manualSizeMult;
+
+                Material oldMaterial = oldStar.GetComponent<MeshRenderer>().sharedMaterial;
+                newStar.GetComponent<MeshRenderer>().sharedMaterial = oldMaterial;
+
+                starObjects[id - 1] = newStar;
+
+                
 
 #if UNITY_EDITOR
-            DestroyImmediate(oldStar);
+                DestroyImmediate(oldStar);
 #else
-            Destroy(oldStar);
+                Destroy(oldStar);
 #endif
+            }
         }
+    }
+
+    Color BoostChroma(Color color, float amount)
+    {
+        float gray = color.grayscale;
+        Color grayColor = new Color(gray, gray, gray);
+
+        return grayColor + (color - grayColor) * amount;
     }
 
     private void OnValidate()
