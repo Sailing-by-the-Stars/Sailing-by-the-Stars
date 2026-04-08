@@ -49,11 +49,13 @@ public class BoatController : MonoBehaviour
     [SerializeField] private GameObject hullObject;
     [SerializeField] private GameObject mastPivot;
     [SerializeField] private GameObject rudderPivot;
+    [SerializeField] private GameObject flagPivot;
 
 
     private Rigidbody rigidBody;
     private GameObject[] rudderObjects;
     private GameObject[] mastObjects;
+    private GameObject flagObject;
 
     private bool anchorDropped = true;
 
@@ -77,6 +79,14 @@ public class BoatController : MonoBehaviour
             enabled = false;
             return;
         }
+
+        flagObject = GameObject.Find("flag");
+        if (flagObject == null)
+        {
+            Debug.LogError("The flag object couldn't be found!");
+            enabled = false;
+            return;
+        }
     }
 
     void OnEnable()
@@ -90,6 +100,7 @@ public class BoatController : MonoBehaviour
     {
         RotateRudder();
         RotateMastAndSail();
+        RotateFlagIntoWind();
     }
 
     void FixedUpdate()
@@ -267,7 +278,7 @@ public class BoatController : MonoBehaviour
 
         foreach(GameObject mastObject in mastObjects)
         {
-            mastObject.transform.RotateAround(mastPivot.transform.position, Vector3.up, deltaMastAngle);
+            mastObject.transform.RotateAround(mastPivot.transform.position, mastPivot.transform.up, deltaMastAngle);
         }
 
         currentMastAngle = targetMastAngle;
@@ -298,5 +309,14 @@ public class BoatController : MonoBehaviour
     {
         anchorDropped = false;
         rigidBody.linearDamping = 0f;
+    }
+
+    private void RotateFlagIntoWind()
+    {
+        Vector3 flagDirection = Vector3.ProjectOnPlane(-flagObject.transform.right, Vector3.up).normalized;
+        Vector3 windDirection = Vector3.ProjectOnPlane(apparentWind, Vector3.up).normalized;
+
+        float flagAOA = Vector3.SignedAngle(flagDirection, windDirection, Vector3.up);
+        flagObject.transform.RotateAround(flagPivot.transform.position, flagPivot.transform.up, flagAOA);
     }
 }
