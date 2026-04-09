@@ -295,12 +295,10 @@ public class GlobeShape : MonoBehaviour
     {
         if (cam == null)
         {
-            cam = MainCamera.transform;
-            //cam = Camera.main?.transform;
+            cam = Camera.main?.transform;
 
             if (cam == null)
             {
-                Debug.LogError("Main camera not found!");
                 return;
             }
         }
