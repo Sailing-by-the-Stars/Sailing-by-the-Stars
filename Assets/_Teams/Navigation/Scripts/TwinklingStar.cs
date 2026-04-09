@@ -96,7 +96,7 @@ public class TwinklingStar : MonoBehaviour
         }
 
         const float tolerance = 1;
-        if (hitAngle - tolerance >= targetAngle)
+        if (hitAngle >= targetAngle)
         {
             currentTarget = -1;
             starState = StarState.dimmed;
@@ -120,13 +120,30 @@ public class TwinklingStar : MonoBehaviour
     }
 
 
+
+    private MaterialPropertyBlock _mpb;
     public void UpdateColor(Material material, Color color, float intensity)
     {
-        material.color = color;
-        material.EnableKeyword("_EMISSION");
+        if (_mpb == null)
+            _mpb = new MaterialPropertyBlock();
 
-        half intensityMul = (half)MathF.Pow(2.0f, intensity);
-        material.SetColor("_EmissiveColor", color * initialEmissionColor * intensityMul);
+        GetComponent<Renderer>().GetPropertyBlock(_mpb);
+
+        if (material.shader.name == "Shader Graphs/Stars")
+        {
+            half intensityMul = (half)MathF.Pow(2.0f, intensity);
+            
+            
+            _mpb.SetColor(Shader.PropertyToID("_Color"), color);
+            _mpb.SetColor(Shader.PropertyToID("_EmissiveColor"), color * intensityMul);
+        }
+        else
+        {
+            Debug.LogError($"wrong shader: '{material.shader.name}'");
+
+        }
+
+        GetComponent<Renderer>().SetPropertyBlock(_mpb);
     }
     public void UpdateColor(Color color, float intensity)
     {

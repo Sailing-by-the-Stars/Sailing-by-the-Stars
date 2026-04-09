@@ -4,7 +4,6 @@ using Unity.Burst;
 using Unity.Collections;
 using Unity.Jobs;
 using UnityEngine;
-using static StarDataLoader;
 
 public class GlobeShape : MonoBehaviour
 {
@@ -20,9 +19,6 @@ public class GlobeShape : MonoBehaviour
     List<int> triangles = new();
     Mesh myMesh;
     MeshFilter meshFilter;
-
-
-    List<TwinklingStar> relatedStars = new();
     List<StarInfo> relatedMiniStars = new();
     List<List<StarInfo>> dividedMiniStars = new();
     int Iterator;
@@ -33,11 +29,16 @@ public class GlobeShape : MonoBehaviour
     }
 
 
-    private void Awake()
-    {
-        relatedStars = GetComponentsInChildren<TwinklingStar>().ToList();
+    Transform cam;
 
-        InitializeMiniStars(operationDivisions);
+    void Awake()
+    {
+        cam = Camera.main?.transform;
+
+        if (cam == null)
+        {
+            Debug.LogError("Main camera not found!");
+        }
     }
 
 
@@ -52,6 +53,8 @@ public class GlobeShape : MonoBehaviour
         {
             return;
         }
+        InitializeMiniStars(operationDivisions);
+
         DrawSphere();
     }
 
@@ -100,14 +103,14 @@ public class GlobeShape : MonoBehaviour
     {
         MoveSphere();
 
-        MoveStars(relatedStars, dividedMiniStars[iterator], Camera.main.transform);
+        MoveStars(dividedMiniStars[iterator], cam);
         iterator++;
     }
 
 
     void MoveSphere()
     {
-        Vector3 targetpos = Camera.main.transform.position;
+        Vector3 targetpos = cam.position;
 
         targetpos.x -= globeRadius;
         targetpos.z -= globeRadius;
@@ -118,12 +121,17 @@ public class GlobeShape : MonoBehaviour
     }
 
     // Move stars with multi-core Jobs
-    public void MoveStars(List<TwinklingStar> tStars, List<StarInfo> iStars, Transform playerCamera)
+    public void MoveStars(List<StarInfo> iStars, Transform playerCamera)
     {
-        NativeArray<Vector3> starPositions = new NativeArray<Vector3>(iStars.Count, Allocator.TempJob);
-        NativeArray<byte> unchanged = new NativeArray<byte>(iStars.Count, Allocator.TempJob);
+        int count = iStars.Count;
 
-        for (int i = 0; i < iStars.Count; i++)
+        NativeArray<Vector3> starPositions = new NativeArray<Vector3>(count, Allocator.TempJob);
+        NativeArray<byte> changed = new NativeArray<byte>(count, Allocator.TempJob, NativeArrayOptions.ClearMemory);
+
+        for (int i = 0; i < count; i++)
+            changed[i] = 1;
+
+        for (int i = 0; i < count; i++)
         {
             starPositions[i] = iStars[i].initpos;
         }
@@ -134,37 +142,38 @@ public class GlobeShape : MonoBehaviour
             center = transform.position + new Vector3(globeRadius, -500, globeRadius),
             radiusSqr = globeRadius * globeRadius,
             starPositions = starPositions,
-            unchanged = unchanged
+            changed = changed
         };
 
         // Schedule across all stars
-        JobHandle handle = job.Schedule(starPositions.Length, 64);
+        JobHandle handle = job.Schedule(count, 64);
         // 64 = batch size per job thread, tweak for performance
         handle.Complete();
 
 
 
-        for (int i = 0; i < iStars.Count; i++)
+        for (int i = 0; i < count; i++)
         {
-            if (unchanged[i] == 0)
+            if (changed[i] == 1)
             {
-                Vector3 newPos = starPositions[i];
                 Transform t = iStars[i].transform;
+                Vector3 newPos = starPositions[i];
 
                 if ((t.position - newPos).sqrMagnitude > 0.01f)
                 {
                     t.position = newPos;
-                    if (starPositions[i].y > 0) 
-                        iStars[i].transform.LookAt(playerCamera);
+                    if (newPos.y > 0) 
+                        t.LookAt(playerCamera.position);
                 }
             }
         }
 
         starPositions.Dispose();
+        changed.Dispose();
     }
 
     // Burst-compiled job
-    [BurstCompile]
+    [BurstCompile(FloatMode = FloatMode.Default, FloatPrecision = FloatPrecision.Standard)]
     struct StarSphereJob : IJobParallelFor
     {
         public float globeRadius;
@@ -172,22 +181,24 @@ public class GlobeShape : MonoBehaviour
         public float radiusSqr;
 
         public NativeArray<Vector3> starPositions;
-        public NativeArray<byte> unchanged;
+        public NativeArray<byte> changed;
 
         public void Execute(int index)
         {
             Vector3 starPos = starPositions[index];
 
-            float dx = starPositions[index].x - center.x;
-            float dy = starPositions[index].y - center.y;
-            float dz = starPositions[index].z - center.z;
+            float dx = starPos.x - center.x;
+            float dy = starPos.y - center.y;
+            float dz = starPos.z - center.z;
 
             float distSqr = dx * dx + dy * dy + dz * dz;
             if (distSqr > radiusSqr)
             {
-                unchanged[index] = 1;
+                changed[index] = 0;
                 return;
             }
+
+            changed[index] = 1;
 
             float dist = Mathf.Sqrt(distSqr);
             if (dist < 0.0001f) dist = 0.0001f;
@@ -280,13 +291,19 @@ public class GlobeShape : MonoBehaviour
 
     private void OnValidate()
     {
-        if (Camera.main == null)
+        if (cam == null)
         {
-            return;
+            cam = Camera.main?.transform;
+
+            if (cam == null)
+            {
+                Debug.LogError("Main camera not found!");
+                return;
+            }
         }
 
 
-        Vector3 targetpos = Camera.main.transform.position;
+        Vector3 targetpos = cam.position;
 
         targetpos.x -= globeRadius;
         targetpos.z -= globeRadius;

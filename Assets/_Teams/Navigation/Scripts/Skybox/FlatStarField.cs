@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
-using static StarDataLoader;
 
 public class FlatStarField : MonoBehaviour
 {
@@ -154,17 +153,25 @@ public class FlatStarField : MonoBehaviour
 
     private void Awake()
     {
+        if (starObjects == null)
+        {
+            starObjects = new();
+        }
+
         RegenerateStars();
     }
 
     [ContextMenu("Regenerate The Stars")]
     void RegenerateStars()
     {
-        Debug.Log("regenerating the stars!");
 
         foreach(GameObject o in starObjects)
         {
-            DestroyImmediate(o);
+            #if UNITY_EDITOR
+                DestroyImmediate(o);
+#else
+                Destroy(o);
+#endif
         }
 
         // Read in the star data.
@@ -181,19 +188,94 @@ public class FlatStarField : MonoBehaviour
         {
             // Create star game objects
             //>
-            GameObject stargo = GameObject.CreatePrimitive(PrimitiveType.Quad);
-            stargo.transform.parent = transform;
-            stargo.name = $"HR {star.catalog_number}";
 
-            Collider collider = stargo.GetComponent<Collider>();
-            if(collider != null)
+            GameObject stargo = null;
+
+            bool isManualStar = false;
+
+            foreach (Constelation manualStar in manualStars)
             {
+                foreach (int id in manualStar.starIDs)
+                {
+                    if (id != star.catalog_number)
+                    {
+                        continue;
+                    }
+                    
+
+                    isManualStar = true;
+
+                    if (manualStar.starPrefab)
+                    {
+                        stargo = Instantiate(manualStar.starPrefab);
+                    }
+                    else
+                    {
+
+                        stargo = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+
+
+                        TwinklingStar template = transform.parent.GetComponent<TwinklingStar>();
+
+
+                        foreach (var obj in twinklingStars)
+                        {
+                            if (id == obj.starID)
+                            {
+                                TwinklingStar twinkler = stargo.AddComponent<TwinklingStar>();
+
+                                twinkler.targetAngle = obj.targetAngle;
+
+                                twinkler.twinkleCurve = template.twinkleCurve;
+                                twinkler.dimCurve = template.dimCurve;
+                                twinkler.intensity = template.intensity;
+                                twinkler.twinkleTime = template.twinkleTime;
+                                stargo.layer = LayerMask.NameToLayer("Constelation");
+                                stargo.GetComponent<SphereCollider>().radius = 1.5f;
+                            }
+                        }
+
+                    }
+                    
+                    stargo.name = $"HR {star.catalog_number} {manualStar.name}";
+
+                    if (isManualStar)
+                    {
+                        break;
+                    }
+                }
+
+                if (isManualStar)
+                {
+                    break;
+                }
+                //Debug.Log("this doesn't");
+            }
+
+
+            
+
+
+            if (isManualStar == false)
+            {
+                stargo = GameObject.CreatePrimitive(PrimitiveType.Quad);
+                
+                stargo.name = $"HR {star.catalog_number}";
+
+                Collider collider = stargo.GetComponent<Collider>();
+                if (collider != null)
+                {
 #if UNITY_EDITOR
-                DestroyImmediate(collider);
+                    DestroyImmediate(collider);
 #else
                 Destroy(collider);
 #endif
+                }
             }
+            
+            stargo.transform.parent = transform;
+
+            
             //<
 
             //deterimine position
@@ -220,6 +302,21 @@ public class FlatStarField : MonoBehaviour
             //>
             Vector3 size = new Vector3(starSize, starSize, starSize);
             stargo.transform.localScale = size;
+
+            if (isManualStar)
+            {
+                if (starSize < minManualSize)
+                {
+                    Vector3 newsize = new Vector3(minManualSize, minManualSize, minManualSize);
+                    stargo.transform.localScale = newsize * manualSizeMult;
+                }
+                else
+                {
+
+                    stargo.transform.localScale *= manualSizeMult;
+                }
+
+            }
             //<
 
             //set the references on the star
@@ -238,84 +335,17 @@ public class FlatStarField : MonoBehaviour
             meshRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
             meshRenderer.receiveShadows = false;
             meshRenderer.motionVectorGenerationMode = MotionVectorGenerationMode.Camera;
+
+            starInfo.initpos = starInfo.transform.position;
+
+            starInfo.Initialize();
             //<
 
 
             starObjects.Add(stargo);
         }
 
-        foreach (Constelation manualStar in manualStars)
-        {
-            foreach (int id in manualStar.starIDs)
-            {
-                GameObject oldStar = starObjects[id - 1];
-
-
-                GameObject newStar;
-                if (manualStar.starPrefab)
-                {
-                    newStar = Instantiate(manualStar.starPrefab);
-                }
-                else
-                {
-                    newStar = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-
-                    StarInfo oldInfo = oldStar.GetComponent<StarInfo>();
-
-                    StarInfo starInfo = newStar.AddComponent<StarInfo>();
-
-                    TwinklingStar template = transform.parent.GetComponent<TwinklingStar>();
-
-                    foreach (var obj in twinklingStars)
-                    {
-                        if (id == obj.starID)
-                        {
-                            TwinklingStar twinkler = newStar.AddComponent<TwinklingStar>();
-
-                            twinkler.targetAngle = obj.targetAngle;
-
-                            twinkler.twinkleCurve = template.twinkleCurve;
-                            twinkler.dimCurve = template.dimCurve;
-                            twinkler.intensity = template.intensity;
-                            twinkler.twinkleTime = template.twinkleTime;
-                            newStar.layer = LayerMask.NameToLayer("Constelation");
-                            newStar.GetComponent<SphereCollider>().radius = 1.5f;
-                        }
-                    }
-
-                    starInfo.matColor = oldInfo.matColor;
-                    starInfo.emissionColor = oldInfo.emissionColor;
-                    starInfo.emissionMult = oldInfo.emissionMult;
-                }
-
-
-                newStar.transform.parent = transform;
-                newStar.name = $"{oldStar.name} {manualStar.name}";
-                newStar.transform.position = oldStar.transform.position;
-
-                Vector3 newsize = oldStar.transform.localScale;
-
-                if (newsize.x < minManualSize)
-                {
-                    newsize = new Vector3(minManualSize, minManualSize, minManualSize);
-                }
-
-                newStar.transform.localScale = newsize * manualSizeMult;
-
-                Material oldMaterial = oldStar.GetComponent<MeshRenderer>().sharedMaterial;
-                newStar.GetComponent<MeshRenderer>().sharedMaterial = oldMaterial;
-
-                starObjects[id - 1] = newStar;
-
-                
-
-#if UNITY_EDITOR
-                DestroyImmediate(oldStar);
-#else
-                Destroy(oldStar);
-#endif
-            }
-        }
+        GetComponentInParent<GlobeShape>().enabled = true;
     }
 
     Color BoostChroma(Color color, float amount)
@@ -326,51 +356,4 @@ public class FlatStarField : MonoBehaviour
         return grayColor + (color - grayColor) * amount;
     }
 
-    private void OnValidate()
-    {
-        /*if (regenerateStars)
-        {
-            regenerateStars = false;
-            foreach (GameObject o in starObjects)
-            {
-                DestroyImmediate(o);
-            }
-            RegenerateStars();
-        }*/
-
-        /*
-        if (starObjects != null)
-        {
-            for (int i = 0; i < starObjects.Count; i++)
-            {
-                if (starObjects[i].GetComponent<MeshRenderer>() == null)
-                {
-                    continue;
-                }
-
-                // Update the size set in the shader.
-                Material material = starObjects[i].GetComponent<MeshRenderer>().material;
-
-                float sizeM = Mathf.Lerp(0, 1, stars[i].size);
-                sizeM = brightnessCurve.Evaluate(sizeM);
-
-                float starSize = sizeM * starSizeMax;
-
-
-                Vector3 size = new Vector3(starSize, starSize, starSize);
-
-                starObjects[i].transform.localScale = size;
-
-                material.color = stars[i].colour * 2;
-                material.EnableKeyword("_EMISSION");
-
-                // base color (no intensity baked in)
-                material.SetColor("_EmissiveColor", stars[i].colour);
-
-                half intensityMul = (half)MathF.Pow(2.0f, emissionMult * starSize);
-                material.color *= intensityMul;
-            }
-        }
-        */
-    }
 }

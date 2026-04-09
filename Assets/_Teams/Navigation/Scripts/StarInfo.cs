@@ -1,4 +1,5 @@
 using System;
+using System.Drawing;
 using Unity.Mathematics;
 using UnityEngine;
 using static StarDataLoader;
@@ -7,39 +8,60 @@ using static StarDataLoader;
 public class StarInfo : MonoBehaviour
 {
     public float emissionMult;
-    public Color matColor;
+    public UnityEngine.Color matColor;
 
     [ColorUsage(true, true)]
-    public Color emissionColor;
+    public UnityEngine.Color emissionColor;
     public Vector3 initpos;
 
-    private void Start()
+/*#if UNITY_EDITOR
+    private void OnEnable()
     {
-        
+        Initialize();
+    }
+#endif*/
+
+    public void Initialize()
+    {
         initpos = transform.position;
 
-        
-        if(GetComponent<MeshRenderer>() == null)
+
+        if (GetComponent<MeshRenderer>() == null)
         {
             return;
         }
-        Material material = GetComponent<MeshRenderer>().material;
+        Initialize(GetComponent<MeshRenderer>());
+    }
 
 
-        if (material.shader == Shader.Find("Shader Graphs/Stars"))
+
+    private static readonly int ColorID = Shader.PropertyToID("_Color");
+    private static readonly int EmissiveColorID = Shader.PropertyToID("_EmissiveColor");
+    private MaterialPropertyBlock _mpb;
+
+    public void Initialize(MeshRenderer renderer)
+    {
+        //Debug.Log(Shader.Find("Shader Graphs/Stars"));
+        initpos = transform.position;
+
+        if (_mpb == null)
+            _mpb = new MaterialPropertyBlock();
+
+        renderer.GetPropertyBlock(_mpb);
+
+        var material = renderer.sharedMaterial;
+
+        if (material.shader.name == "Shader Graphs/Stars")
         {
-            material.SetColor("_Color", matColor);
-
-            material.SetFloat("Brightness", emissionMult);
-
-            material.SetColor("_EmissiveColor", emissionColor);
+            _mpb.SetColor(Shader.PropertyToID("_Color"), matColor);
+            _mpb.SetColor(Shader.PropertyToID("_EmissiveColor"), emissionColor);
         }
         else
         {
-            material.color = matColor;
-            material.EnableKeyword("_EMISSION");
-            material.SetColor("_EmissiveColor", emissionColor);
+            Debug.LogError($"wrong shader: '{material.shader.name}'");
 
         }
+
+        renderer.SetPropertyBlock(_mpb);
     }
 }
