@@ -389,6 +389,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Sky
       objectReference: {fileID: 0}
+    - target: {fileID: 4038939641866681078, guid: 55153bb6d8e70a34eabf3f0ab395fdeb, type: 3}
+      propertyPath: MainCamera
+      value: 
+      objectReference: {fileID: 1574258059}
     - target: {fileID: 4978647240634046230, guid: 55153bb6d8e70a34eabf3f0ab395fdeb, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -3361,6 +3365,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: FMODUnity::FMODUnity.StudioListener
   nonRigidbodyVelocity: 0
   attenuationObject: {fileID: 7292254324522100366}
+--- !u!20 &1574258059 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 1656572733483448602, guid: 2bca4eabfcdde6949b5e11e926281700, type: 3}
+  m_PrefabInstance: {fileID: 1557364858}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1638005275 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2399905773776380872, guid: 700214b8f0ced37439bdaa8e63bdb5eb, type: 3}
