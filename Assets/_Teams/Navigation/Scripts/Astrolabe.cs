@@ -1,26 +1,28 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Astrolabe : MonoBehaviour
+public class Astrolabe : ToolPickup
 {
     private Camera cam;
     
     private float initialFOV;
     private float zoomFOV = 30;
-    private float zoomTime = 0.75f;
+    private float animationTime = 0.75f;
 
-    private AnimationCurve zoomCurve;
+    private AnimationCurve animationCurve;
     
     public static bool zoomedIn;
-    private bool visible = false;
+    private bool isEquipped;
+    private bool sideView;
+    private bool visible;
 
     private List<Renderer> renderers = new();
     private List<TMP_Text> textBoxes = new();
-    private TMP_Text targetText;
 
     private Quaternion initialRot = new();
 
@@ -30,14 +32,34 @@ public class Astrolabe : MonoBehaviour
 
     public static float pointerAngleHax;
 
-    private Coroutine coroutine;
+    private Coroutine zoomCoroutine;
+    private Coroutine turnCoroutine;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
     void Start()
     {
-        initialRot = transform.localRotation;
+        renderers = GetComponentsInChildren<Renderer>().ToList();
+        textBoxes = GetComponentsInChildren<TMP_Text>().ToList();
+        
+        //Prevent numbers showing on the astrolabe as it lies on the floor
+        foreach (TMP_Text text in textBoxes)
+        {
+            text.enabled = false;
+        }
+    }
 
+    public override void Grab(PickupController pickupController)
+    {
+        base.Grab(pickupController);
+
+        isEquipped = true;
+        
+        //Hide pickup prompt after grabbing
+        GetComponent<BoxCollider>().enabled = false;
+        
+        initialRot = transform.localRotation;
+        
         if(pointer == null)
         {
             foreach (Transform child in transform)
@@ -48,31 +70,32 @@ public class Astrolabe : MonoBehaviour
                 }
             }
         }
-
-        renderers = GetComponentsInChildren<Renderer>().ToList();
-        textBoxes = GetComponentsInChildren<TMP_Text>().ToList();
+        
+        //Astrolabe should be visible when picked up
+        visible = true;
 
         foreach (Renderer renderer in renderers)
         {
-            renderer.enabled = false;
+            renderer.enabled = true;
         }
-
+        
         foreach (TMP_Text text in textBoxes)
         {
-            if(text.name == "target")
-            {
-                targetText = text;
-            }
-            text.enabled = false;
+            text.enabled = true;
         }
-
+        
         cam = GetComponentInParent<Camera>();
         
         initialFOV = cam.fieldOfView;
         
-        zoomCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
-        zoomedIn = false;
-        
+        animationCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
+
+        zoomedIn = true;
+        if (zoomCoroutine == null)
+        {
+            zoomCoroutine = StartCoroutine(ZoomIn());
+        }
+        sideView = false;
     }
 
     // Update is called once per frame
@@ -83,102 +106,142 @@ public class Astrolabe : MonoBehaviour
 
         //transform.rotation = transform.parent.rotation * initialRot;
 
-
-        Vector3 forward = transform.parent.forward;
-        forward.y = 0f; // remove vertical tilt
-        forward.Normalize();
-
-        transform.rotation = Quaternion.LookRotation(forward, Vector3.up);
-
-
-
-        if (Input.GetMouseButtonDown(1) && visible)
+        if (isEquipped)
         {
-            if (zoomedIn)
+            Vector3 forward;
+
+            //Flip the astrolabe to the right
+            if (sideView)
             {
-                zoomedIn = false;
-                if (coroutine == null)
-                {
-                    coroutine = StartCoroutine(ZoomOut());
-                }
+                forward = transform.parent.right;
             }
             else
             {
-                zoomedIn = true;
-                if (coroutine == null)
+                forward = transform.parent.forward;
+            }
+
+            forward.y = 0f; // remove vertical tilt
+            forward.Normalize();
+
+            //
+            if (Input.GetMouseButtonDown(0) && visible)
+            {
+                if (zoomedIn)
                 {
-                    coroutine = StartCoroutine(ZoomIn());
+                    if (sideView)
+                    {
+                        sideView = false;
+                        if (turnCoroutine == null)
+                        {
+                            turnCoroutine = StartCoroutine(TurnAstrolabeRight());
+                        }
+                    }
+                    else
+                    {
+                        sideView = true;
+                        if (turnCoroutine == null)
+                        {
+                            turnCoroutine = StartCoroutine(TurnAstrolabeLeft());
+                        }
+                    }
                 }
             }
-        }
 
-        if (Input.GetKeyDown(KeyCode.Tab))
-        {
-            visible = !visible;
-            foreach (Renderer rend in renderers)
+            if (turnCoroutine == null)
             {
-                rend.enabled = visible;
+                transform.rotation = Quaternion.LookRotation(forward, Vector3.up);
             }
-            foreach (TMP_Text text in textBoxes)
-            {
-                text.enabled = visible;
-            }
-            if (visible == false)
+
+            /*if (Input.GetMouseButtonDown(1) && visible)
             {
                 if (zoomedIn)
                 {
                     zoomedIn = false;
-                    if (coroutine == null)
+                    if (zoomCoroutine == null)
                     {
-                        coroutine = StartCoroutine(ZoomOut());
+                        zoomCoroutine = StartCoroutine(ZoomOut());
+                    }
+                }
+                else
+                {
+                    zoomedIn = true;
+                    if (zoomCoroutine == null)
+                    {
+                        zoomCoroutine = StartCoroutine(ZoomIn());
+                    }
+                }
+            }*/
+
+            if (Input.GetKeyDown(KeyCode.Tab))
+            {
+                visible = !visible;
+                foreach (Renderer rend in renderers)
+                {
+                    rend.enabled = visible;
+                }
+
+                foreach (TMP_Text text in textBoxes)
+                {
+                    text.enabled = visible;
+                }
+
+                if (visible == false)
+                {
+                    if (zoomedIn)
+                    {
+                        zoomedIn = false;
+                        if (zoomCoroutine == null)
+                        {
+                            zoomCoroutine = StartCoroutine(ZoomOut());
+                        }
+                    }
+                }
+                else
+                {
+                    zoomedIn = true;
+                    if (zoomCoroutine == null)
+                    {
+                        zoomCoroutine = StartCoroutine(ZoomIn());
                     }
                 }
             }
-        }
 
 
-        pointerAngle = pointer.transform.localRotation.eulerAngles.x;
-        pointerAngle = 360 - pointerAngle;
+            pointerAngle = pointer.transform.localRotation.eulerAngles.x;
+            pointerAngle = 360 - pointerAngle;
 
-        if (pointerAngle < 0)
-        {
-            pointerAngle = 0;
-        }
-        if (pointerAngle >= 360)
-        {
-            pointerAngle = 0;
-        }
-
-        pointerAngleHax = Mathf.Round(pointerAngle);
-
-        foreach (TMP_Text text in textBoxes)
-        {
-            text.text = Mathf.Round(pointerAngle).ToString();
-        }
-
-        if (TwinklingStar.currentTarget > 0)
-        {
-            targetText.text = $"Target: {TwinklingStar.currentTarget.ToString()}";
-        }
-        else
-        {
-            targetText.text = "";
-        }
-
-        if (zoomedIn)
-        {
-
-            float scroll = Input.mouseScrollDelta.y;
-
-            if (scroll != 0f)
+            if (pointerAngle < 0)
             {
-                pointer.Rotate(new Vector3(scroll * 10f, 0, 0) * Time.deltaTime);
+                pointerAngle = 0;
             }
 
-            //Reset astrolabe rotation
-            if (Input.GetKey(KeyCode.Space))
+            if (pointerAngle >= 360)
             {
-                pointer.transform.localRotation = Quaternion.Euler(0, 0, 0);
+                pointerAngle = 0;
+            }
+
+            pointerAngleHax = Mathf.Round(pointerAngle);
+
+            foreach (TMP_Text text in textBoxes)
+            {
+                text.text = Mathf.Round(pointerAngle).ToString();
+            }
+
+            if (zoomedIn)
+            {
+
+                float scroll = Input.mouseScrollDelta.y;
+
+                if (scroll != 0f && !sideView)
+                {
+                    pointer.Rotate(new Vector3(scroll * 1f, 0, 0));
+                }
+
+                //Reset astrolabe rotation
+                if (Input.GetKey(KeyCode.Space))
+                {
+                    pointer.transform.localRotation = Quaternion.Euler(0, 0, 0);
+                }
             }
         }
     }
@@ -187,7 +250,7 @@ public class Astrolabe : MonoBehaviour
     {
         if (timer == 0)
         {
-            timer = zoomTime;
+            timer = animationTime;
         }
 
         while (timer > 0)
@@ -196,19 +259,19 @@ public class Astrolabe : MonoBehaviour
 
             if (zoomedIn == false)
             {
-                coroutine = StartCoroutine(ZoomOut(timer));
+                zoomCoroutine = StartCoroutine(ZoomOut(timer));
                 yield break;
             }
 
-            float T =  timer / zoomTime;
-            float curveOutput = zoomCurve.Evaluate(T);
+            float T =  timer / animationTime;
+            float curveOutput = animationCurve.Evaluate(T);
             
             cam.fieldOfView = zoomFOV + curveOutput * (initialFOV - zoomFOV);
             
             yield return new WaitForEndOfFrame();
         }
 
-        coroutine = null;
+        zoomCoroutine = null;
     }
     
     private IEnumerator ZoomOut(float timer = 0)
@@ -218,24 +281,98 @@ public class Astrolabe : MonoBehaviour
             timer = 0;
         }
 
-        while (timer < zoomTime)
+        while (timer < animationTime)
         {
             timer += Time.deltaTime;
 
             if(zoomedIn == true)
             {
-                coroutine = StartCoroutine(ZoomIn(timer));
+                zoomCoroutine = StartCoroutine(ZoomIn(timer));
                 yield break;
             }
             
-            float T =  timer / zoomTime;
-            float curveOutput = zoomCurve.Evaluate(T);
+            float T =  timer / animationTime;
+            float curveOutput = animationCurve.Evaluate(T);
             
             cam.fieldOfView = zoomFOV + curveOutput * (initialFOV - zoomFOV);
             
             yield return new WaitForEndOfFrame();
         }
 
-        coroutine = null;
+        zoomCoroutine = null;
+    }
+    
+    private IEnumerator TurnAstrolabeLeft(float timer = 0)
+    {
+        if (timer == 0)
+        {
+            timer = 0;
+        }
+        
+        while (timer < animationTime)
+        {
+            timer += Time.deltaTime;
+
+            if(sideView == false)
+            {
+                turnCoroutine = StartCoroutine(TurnAstrolabeRight(timer));
+                yield break;
+            }
+            
+            float T =  timer / animationTime;
+            float curveOutput = animationCurve.Evaluate(T);
+
+            Vector3 forward = transform.parent.forward;
+            forward.y = 0f; // remove vertical tilt
+
+            Vector3 right = transform.parent.right;
+            right.y = 0f;
+
+            Quaternion forwardLookRotation = Quaternion.LookRotation(forward, Vector3.up);
+            Quaternion rightLookRotation = Quaternion.LookRotation(right, Vector3.up);
+            
+            transform.rotation = Quaternion.Slerp(forwardLookRotation, rightLookRotation, curveOutput);
+            
+            yield return new WaitForEndOfFrame();
+        }
+
+        turnCoroutine = null;
+    }
+    
+    private IEnumerator TurnAstrolabeRight(float timer = 0)
+    {
+        if (timer == 0)
+        {
+            timer = animationTime;
+        }
+        
+        while (timer > 0)
+        {
+            timer -= Time.deltaTime;
+
+            if(sideView == true)
+            {
+                turnCoroutine = StartCoroutine(TurnAstrolabeLeft(timer));
+                yield break;
+            }
+            
+            float T =  timer / animationTime;
+            float curveOutput = animationCurve.Evaluate(T);
+
+            Vector3 forward = transform.parent.forward;
+            forward.y = 0f; // remove vertical tilt
+
+            Vector3 right = transform.parent.right;
+            right.y = 0f;
+            
+            Quaternion forwardLookRotation = Quaternion.LookRotation(forward, Vector3.up);
+            Quaternion rightLookRotation = Quaternion.LookRotation(right, Vector3.up);
+            
+            transform.rotation = Quaternion.Slerp(forwardLookRotation, rightLookRotation, curveOutput);
+            
+            yield return new WaitForEndOfFrame();
+        }
+
+        turnCoroutine = null;
     }
 }

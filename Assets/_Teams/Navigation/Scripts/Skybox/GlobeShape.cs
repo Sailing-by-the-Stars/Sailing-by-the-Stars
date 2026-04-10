@@ -1,102 +1,118 @@
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Burst;
+using Unity.Collections;
+using Unity.Jobs;
 using UnityEngine;
 
 public class GlobeShape : MonoBehaviour
 {
+    [SerializeField] Camera MainCamera;
+
     [SerializeField] float globeRadius = 5;
     [SerializeField] int resolution = 10;
     [SerializeField] float offsetY = 5000f;
+    [Tooltip("this determines over how manny frames the moving of the stars will be divided")]
+    [SerializeField] int operationDivisions = 5;
+    [SerializeField] GlobePositionType positionType;
 
     List<Vector3> verticePositions = new();
     List<Vector3> vertices = new();
     List<int> triangles = new();
     Mesh myMesh;
     MeshFilter meshFilter;
-
-
-    List<TwinklingStar> relatedStars = new();
     List<StarInfo> relatedMiniStars = new();
-
-    private void OnEnable()
+    List<List<StarInfo>> dividedMiniStars = new();
+    int Iterator;
+    public int iterator
     {
-        StarFieldRotator.globeTypeChanged += ToggleStars;
-    }
-
-    private void OnDisable()
-    {
-        StarFieldRotator.globeTypeChanged -= ToggleStars;
+        get => Iterator;
+        set => Iterator = (value >= dividedMiniStars.Count) ? 0 : value;
     }
 
 
+    Transform cam;
 
-    void ToggleStars(globeType globeType)
+    void Awake()
     {
-        switch (globeType)
+        cam = Camera.main?.transform;
+
+        if (cam == null)
         {
-            case globeType.relative:
-                foreach (TwinklingStar star in relatedStars)
-                {
-                    star.gameObject.SetActive(false);
-                }
-                foreach (StarInfo star in relatedMiniStars)
-                {
-                    star.gameObject.SetActive(false);
-                }
-                break;
-            case globeType.positional:
-                foreach (TwinklingStar star in relatedStars)
-                {
-                    star.gameObject.SetActive(false);
-                }
-                foreach (StarInfo star in relatedMiniStars)
-                {
-                    star.gameObject.SetActive(false);
-                }
-                break;
-            case globeType.manual:
-                foreach (TwinklingStar star in relatedStars)
-                {
-                    star.gameObject.SetActive(true);
-                }
-                foreach (StarInfo star in relatedMiniStars)
-                {
-                    star.gameObject.SetActive(true);
-                }
-                break;
-            default:
-                Debug.LogError("it should never switch to this state!");
-                break;
+            Debug.LogError("Main camera not found!");
         }
     }
 
 
-    private void Awake()
-    {
-        relatedStars = GetComponentsInChildren<TwinklingStar>().ToList();
-        relatedMiniStars = GetComponentsInChildren<StarInfo>().ToList();
-    }
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        if (positionType == null)
+        {
+            positionType = new XZPosition();
+        }
+
         if (GetComponent<MeshRenderer>() == null && GetComponent<MeshRenderer>().enabled == false)
         {
             return;
         }
+        InitializeMiniStars(operationDivisions);
+
         DrawSphere();
     }
 
-    // Update is called once per frame
+
+    void InitializeMiniStars(int divisions)
+    {
+        if (divisions < 1)
+        {
+            divisions = 1;
+        }
+
+        operationDivisions = divisions;
+
+        relatedMiniStars = GetComponentsInChildren<StarInfo>().ToList();
+        dividedMiniStars.Clear();
+
+        if (relatedMiniStars.Count <= operationDivisions)
+        {
+            dividedMiniStars.Add(relatedMiniStars);
+            operationDivisions = 1;
+            return;
+        }
+
+        int starsPerDiv = Mathf.CeilToInt((float)relatedMiniStars.Count / operationDivisions);
+        List<StarInfo> starsToDiv = new(relatedMiniStars);
+
+        for (int i = 0; i < operationDivisions && starsToDiv.Count > 0; i++)
+        {
+            List<StarInfo> remainderStars = starsToDiv.Take(starsPerDiv).ToList();
+
+            dividedMiniStars.Add(remainderStars);
+
+            if (remainderStars.Count < starsPerDiv)
+            {
+                break;
+            }
+
+            starsToDiv = starsToDiv.Skip(starsPerDiv).ToList();
+        }
+
+        iterator = 0;
+    }
+
+
     void Update()
     {
         MoveSphere();
+
+        MoveStars(dividedMiniStars[iterator], cam);
+        iterator++;
     }
 
 
     void MoveSphere()
     {
-        Vector3 targetpos = Camera.main.transform.position;
+        Vector3 targetpos = cam.position;
 
         targetpos.x -= globeRadius;
         targetpos.z -= globeRadius;
@@ -104,34 +120,101 @@ public class GlobeShape : MonoBehaviour
         targetpos.y -= offsetY;
 
         transform.position = targetpos;
+    }
 
+    // Move stars with multi-core Jobs
+    public void MoveStars(List<StarInfo> iStars, Transform playerCamera)
+    {
+        int count = iStars.Count;
 
-        foreach (TwinklingStar star in relatedStars)
+        NativeArray<Vector3> starPositions = new NativeArray<Vector3>(count, Allocator.TempJob);
+        NativeArray<byte> changed = new NativeArray<byte>(count, Allocator.TempJob, NativeArrayOptions.ClearMemory);
+
+        for (int i = 0; i < count; i++)
+            changed[i] = 1;
+
+        for (int i = 0; i < count; i++)
         {
-            Vector3 starTargetpos = star.initpos;
-
-            star.transform.position = starTargetpos;
-
-            starTargetpos.y = GetY(star.transform.localPosition.x, star.transform.localPosition.z);
-
-            star.transform.position = starTargetpos;
-
-            star.transform.LookAt(Camera.main.transform.position);
-            star.transform.Rotate(0, 180, 0);
+            starPositions[i] = iStars[i].initpos;
         }
 
-        foreach (StarInfo star in relatedMiniStars)
+        var job = new StarSphereJob()
         {
-            Vector3 starTargetpos = star.initpos;
+            globeRadius = globeRadius,
+            center = transform.position + new Vector3(globeRadius, -500, globeRadius),
+            radiusSqr = globeRadius * globeRadius,
+            starPositions = starPositions,
+            changed = changed
+        };
 
-            star.transform.position = starTargetpos;
+        // Schedule across all stars
+        JobHandle handle = job.Schedule(count, 64);
+        // 64 = batch size per job thread, tweak for performance
+        handle.Complete();
 
-            starTargetpos.y = GetY(star.transform.localPosition.x, star.transform.localPosition.z);
 
-            star.transform.position = starTargetpos;
 
-            star.transform.LookAt(Camera.main.transform.position);
-            star.transform.Rotate(0, 180, 0);
+        for (int i = 0; i < count; i++)
+        {
+            if (changed[i] == 1)
+            {
+                Transform t = iStars[i].transform;
+                Vector3 newPos = starPositions[i];
+
+                if ((t.position - newPos).sqrMagnitude > 0.01f)
+                {
+                    t.position = newPos;
+                    if (newPos.y > 0) 
+                        t.LookAt(playerCamera.position);
+                }
+            }
+        }
+
+        starPositions.Dispose();
+        changed.Dispose();
+    }
+
+    // Burst-compiled job
+    [BurstCompile(FloatMode = FloatMode.Default, FloatPrecision = FloatPrecision.Standard)]
+    struct StarSphereJob : IJobParallelFor
+    {
+        public float globeRadius;
+        public Vector3 center;
+        public float radiusSqr;
+
+        public NativeArray<Vector3> starPositions;
+        public NativeArray<byte> changed;
+
+        public void Execute(int index)
+        {
+            Vector3 starPos = starPositions[index];
+
+            float dx = starPos.x - center.x;
+            float dy = starPos.y - center.y;
+            float dz = starPos.z - center.z;
+
+            float distSqr = dx * dx + dy * dy + dz * dz;
+            if (distSqr > radiusSqr)
+            {
+                changed[index] = 0;
+                return;
+            }
+
+            changed[index] = 1;
+
+            float dist = Mathf.Sqrt(distSqr);
+            if (dist < 0.0001f) dist = 0.0001f;
+
+            float invDist = 1f / dist;
+            float nx = dx * invDist;
+            float ny = dy * invDist;
+            float nz = dz * invDist;
+
+            starPositions[index] = new Vector3(
+                center.x + nx * globeRadius,
+                center.y + ny * globeRadius,
+                center.z + nz * globeRadius
+            );
         }
     }
 
@@ -152,42 +235,13 @@ public class GlobeShape : MonoBehaviour
         for (int i = 0; i < vertices.Count; i++)
         {
             Vector3 vertex = vertices[i];
-            vertex.y = GetY(globeRadius, vertex.x - globeRadius, vertex.z - globeRadius);
+
+            vertex.y = positionType.GetY(globeRadius, vertex.x - globeRadius, vertex.z - globeRadius);
             vertices[i] = vertex;
         }
     }
 
-    float GetY(float radius, float x, float z)
-    {
-        float y = 0;
-        y = Mathf.Sqrt(Mathf.Pow(radius, 2) - (Mathf.Pow(x, 2) + Mathf.Pow(z, 2)));
 
-        if(y.ToString() == "NaN")
-        {
-            y = 0;
-        }
-
-        //Debug.Log($"radius '{radius}', x '{x}', and y '{z}' give z '{y}'");
-        return y;
-    }
-
-    float GetY(float x, float z)
-    {
-        x -= globeRadius;
-        z -= globeRadius;
-
-        float y = 0;
-        y = Mathf.Sqrt(Mathf.Pow(globeRadius, 2) - (Mathf.Pow(x, 2) + Mathf.Pow(z, 2)));
-
-        y += transform.position.y;
-
-        if (y.ToString() == "NaN")
-        {
-            y = 0;
-        }
-
-        return y;
-    }
 
 
     void GeneratePlane(float size, int resolution)
@@ -239,14 +293,18 @@ public class GlobeShape : MonoBehaviour
 
     private void OnValidate()
     {
-        if (Camera.main == null)
+        if (cam == null)
         {
-            return;
+            cam = Camera.main?.transform;
+
+            if (cam == null)
+            {
+                return;
+            }
         }
 
 
-
-        Vector3 targetpos = Camera.main.transform.position;
+        Vector3 targetpos = cam.position;
 
         targetpos.x -= globeRadius;
         targetpos.z -= globeRadius;
@@ -254,15 +312,32 @@ public class GlobeShape : MonoBehaviour
         targetpos.y -= offsetY;
 
         transform.position = targetpos;
-        if(GetComponent<MeshRenderer>() == null || GetComponent<MeshRenderer>().enabled == false)
+
+        if (operationDivisions < 1)
+        {
+            operationDivisions = 1;
+        }
+
+        if (Application.isPlaying)
+        {
+            InitializeMiniStars(operationDivisions);
+        }
+
+        if (GetComponent<MeshRenderer>() == null || GetComponent<MeshRenderer>().enabled == false)
         {
             return;
         }
-        
+
+
+        if (positionType == null)
+        {
+            positionType = new XZPosition();
+        }
+
         myMesh = new Mesh();
         meshFilter = GetComponent<MeshFilter>();
         meshFilter.mesh = myMesh;
-        
+
         DrawSphere();
     }
 }

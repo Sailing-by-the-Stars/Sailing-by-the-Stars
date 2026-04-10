@@ -19,7 +19,7 @@ public class PickupController : MonoBehaviour
     [Header("Pickup Settings")]
     [SerializeField] private Transform pickupHolder;
     
-    private IPickup currentPickup;
+    [HideInInspector] public IPickup currentPickup;
     
     public bool HasPickup => currentPickup != null;
 
@@ -28,6 +28,15 @@ public class PickupController : MonoBehaviour
         currentPickup = newPickup;
         
         currentPickup.SetPositionInParent(pickupHolder);
+    }
+
+    public bool TryPlacePickup(IPickup pickup, Transform newPosition)
+    {
+        if (currentPickup == null) return false;
+        
+        currentPickup.SetPositionInParent(newPosition);
+        currentPickup = null;
+        return true;
     }
 
     private void Update()

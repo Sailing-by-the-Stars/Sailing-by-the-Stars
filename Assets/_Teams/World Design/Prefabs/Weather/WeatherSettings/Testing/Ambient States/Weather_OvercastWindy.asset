@@ -13,11 +13,12 @@ MonoBehaviour:
   m_Name: Weather_OvercastWindy
   m_EditorClassIdentifier: Assembly-CSharp::WeatherState
   values:
-    windSpeed: 5
+    windSpeed: 3
     windDirectionDegrees: 90
     windRandomEventsActive: 1
-    windAutoRerollIntensity: 10
+    windAutoRerollIntensity: 5
     rainIntensity: 0
-    thunderIntensity: 0
+    thunderActive: 0
+    chanceOfThunderStrikePerInterval: 0
     waveIntensity: 0.197
   fogSettings: {fileID: 11400000, guid: 86daa54c9896237479a55be768fd58e3, type: 2}

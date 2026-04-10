@@ -10,6 +10,24 @@ public class QuestUI : MonoBehaviour
     [Header("Quest prefab")]
     [SerializeField] private GameObject questEntryPrefab;
 
+    private void Start()
+    {
+        // start hidden
+        transform.localScale = Vector3.zero;
+    }
+
+    // edited by Arch
+    private void Update()
+    {
+        // check if q key is pressed to hide or show the panel
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            // use scale to hide so the script stays active to listen for keys
+            bool isHidden = transform.localScale == Vector3.zero;
+            transform.localScale = isHidden ? Vector3.one : Vector3.zero;
+        }
+    }
+
     /// <summary>
     ///  Updates quest UI so it shows all current quests.
     /// </summary>

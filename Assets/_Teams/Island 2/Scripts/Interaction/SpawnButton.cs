@@ -9,6 +9,7 @@ public class SpawnButton : MonoBehaviour, IInteractable
     [SerializeField] private string objectInteractMessage;
     
     public string InteractMessage => objectInteractMessage;
+    public bool ShouldShowMessage => true;
     
     private void Spawn()
     {

@@ -50,13 +50,15 @@ public class TwinklingStar : MonoBehaviour
         { StarState.selected, new SelectedState() },
         { StarState.dimmed, new DimmedState() },
     };
-    
-    [SerializeField] AnimationCurve twinkleCurve;
-    [SerializeField] AnimationCurve dimCurve;
-    [SerializeField] float intensity = 1;
-    [SerializeField] float twinkleTime = 1;
-    [SerializeField] float targetAngle = 1;
+
+    public AnimationCurve twinkleCurve;
+    public AnimationCurve dimCurve;
+    public float intensity = 1;
+    public float twinkleTime = 1;
+    public float targetAngle = 1;
     public static float currentTarget;
+
+    public static event Action OnStarFound;
 
 
     private Color initialEmissionColor;
@@ -73,6 +75,7 @@ public class TwinklingStar : MonoBehaviour
         if (GetComponent<Renderer>())
         {
             initialEmissionColor = GetComponent<Renderer>().material.GetColor("_EmissiveColor");
+            //UpdateColor(intensity);
         }
     }
 
@@ -92,16 +95,18 @@ public class TwinklingStar : MonoBehaviour
             return;
         }
 
-        const float tolerance = 0.5f;
-        if (Mathf.Abs(targetAngle - hitAngle) < tolerance)
+        const float tolerance = 1;
+        if (hitAngle >= targetAngle)
         {
             currentTarget = -1;
             starState = StarState.dimmed;
+
+            OnStarFound?.Invoke();
         }
         else
         {
             currentTarget = targetAngle;
-            starState = StarState.minigame;
+            starState = StarState.highlighted;
         }
     }
 
@@ -115,13 +120,30 @@ public class TwinklingStar : MonoBehaviour
     }
 
 
+
+    private MaterialPropertyBlock _mpb;
     public void UpdateColor(Material material, Color color, float intensity)
     {
-        material.color = color;
-        material.EnableKeyword("_EMISSION");
+        if (_mpb == null)
+            _mpb = new MaterialPropertyBlock();
 
-        half intensityMul = (half)MathF.Pow(2.0f, intensity);
-        material.SetColor("_EmissiveColor", color * initialEmissionColor * intensityMul);
+        GetComponent<Renderer>().GetPropertyBlock(_mpb);
+
+        if (material.shader.name == "Shader Graphs/Stars")
+        {
+            half intensityMul = (half)MathF.Pow(2.0f, intensity);
+            
+            
+            _mpb.SetColor(Shader.PropertyToID("_Color"), color);
+            _mpb.SetColor(Shader.PropertyToID("_EmissiveColor"), color * intensityMul);
+        }
+        else
+        {
+            Debug.LogError($"wrong shader: '{material.shader.name}'");
+
+        }
+
+        GetComponent<Renderer>().SetPropertyBlock(_mpb);
     }
     public void UpdateColor(Color color, float intensity)
     {
@@ -227,7 +249,7 @@ public class TwinklingStar : MonoBehaviour
                 float T = timer / animationLength;
                 float curveOutput = star.twinkleCurve.Evaluate(T);
 
-                star.UpdateColor(star.intensity * (curveOutput + 1));
+                star.UpdateColor(Color.cyan, star.intensity * (curveOutput + 1));
             }
         }
 
@@ -335,12 +357,22 @@ public class TwinklingStar : MonoBehaviour
 
                 star.UpdateColor(star.intensity * curveOutput);
             }
+            else
+            {
+                star.UpdateColor(0);
+            }
         }
 
         public void Exit(TwinklingStar star)
         {
             star.UpdateColor();
         }
+    }
+    // for testing world design event
+    [ContextMenu("Simulate Star Found")]
+    private void SimulateStarFound()
+    {
+        OnStarFound?.Invoke();
     }
 
 }

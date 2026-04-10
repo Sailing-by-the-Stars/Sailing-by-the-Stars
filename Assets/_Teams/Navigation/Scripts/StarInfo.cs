@@ -1,32 +1,67 @@
 using System;
+using System.Drawing;
 using Unity.Mathematics;
 using UnityEngine;
+using static StarDataLoader;
 
 
 public class StarInfo : MonoBehaviour
 {
     public float emissionMult;
+    public UnityEngine.Color matColor;
+
+    [ColorUsage(true, true)]
+    public UnityEngine.Color emissionColor;
     public Vector3 initpos;
 
-    private void Start()
+/*#if UNITY_EDITOR
+    private void OnEnable()
     {
-        
+        Initialize();
+    }
+#endif*/
+
+    public void Initialize()
+    {
         initpos = transform.position;
 
 
+        if (GetComponent<MeshRenderer>() == null)
+        {
+            return;
+        }
+        Initialize(GetComponent<MeshRenderer>());
+    }
 
-        Material material = GetComponent<MeshRenderer>().material;
-        material.shader = Shader.Find("HDRP/Unlit");
 
-        float starSize = transform.localScale.x;
 
-        material.color = Color.white * 2;
-        material.EnableKeyword("_EMISSION");
+    private static readonly int ColorID = Shader.PropertyToID("_Color");
+    private static readonly int EmissiveColorID = Shader.PropertyToID("_EmissiveColor");
+    private MaterialPropertyBlock _mpb;
 
-        // base color (no intensity baked in)
-        material.SetColor("_EmissiveColor", Color.white);
+    public void Initialize(MeshRenderer renderer)
+    {
+        //Debug.Log(Shader.Find("Shader Graphs/Stars"));
+        initpos = transform.position;
 
-        half intensityMul = (half)MathF.Pow(2.0f, emissionMult * starSize);
-        material.color *= intensityMul;
+        if (_mpb == null)
+            _mpb = new MaterialPropertyBlock();
+
+        renderer.GetPropertyBlock(_mpb);
+
+        var material = renderer.sharedMaterial;
+
+        if (material.shader.name == "Shader Graphs/Stars")
+        {
+            _mpb.SetColor(Shader.PropertyToID("_Color"), matColor);
+            _mpb.SetColor(Shader.PropertyToID("_EmissiveColor"), emissionColor);
+        }
+        else
+        {
+            Debug.LogError($"wrong shader: '{material.shader.name}'");
+
+        }
+
+        renderer.SetPropertyBlock(_mpb);
     }
 }
