@@ -182,9 +182,10 @@ public class Journal : ToolPickup
         }
     }
 
-
-
-
+    public void AddPage(Page page)
+    {
+        pages.Add(page);
+    }
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
