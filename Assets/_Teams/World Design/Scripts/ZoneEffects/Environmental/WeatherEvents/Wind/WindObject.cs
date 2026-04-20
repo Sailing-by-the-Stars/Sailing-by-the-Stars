@@ -1,4 +1,4 @@
-using System;
+
 using UnityEngine;
 
 public class WindObject : MonoBehaviour
@@ -10,18 +10,18 @@ public class WindObject : MonoBehaviour
     [Header("Wind Trails")]
     [SerializeField] private ParticleSystem windTrailA;
     [SerializeField] private ParticleSystem windTrailB;
-    [SerializeField, Tooltip("Runtime status only: true when Wind Trail A is currently playing.")]
+    [SerializeField, Tooltip("True when Wind Trail A is currently playing.")]
     private bool enableWindTrailA;
-    [SerializeField, Tooltip("Runtime status only: true when Wind Trail B is currently playing.")] 
+    [SerializeField, Tooltip("True when Wind Trail B is currently playing.")] 
     private bool enableWindTrailB;
+    [SerializeField]private bool isTrailAActive = true;
+    
     [SerializeField, Min(0f)] private float restartAngleThreshold = 1f;
     [SerializeField, Min(0f)] private float windTrailIntensity = 1f;
 
     private Vector3 worldWindDirection = Vector3.forward;
     private Vector3 trailAAssignedDirection = Vector3.forward;
     private Vector3 trailBAssignedDirection = Vector3.forward;
-
-    private bool isTrailAActive = true;
     private float windTrailABaseSpeedMultiplier = 1f;
     private float windTrailBBaseSpeedMultiplier = 1f;
     private bool hasCachedWindTrailBaseSpeed;
@@ -259,6 +259,7 @@ public class WindObject : MonoBehaviour
 
     private void SwapActiveWindTrail()
     {
+        Debug.Log("SwapActiveWindTrail");
         ParticleSystem activeTrail = isTrailAActive ? windTrailA : windTrailB;
         ParticleSystem nextTrail = isTrailAActive ? windTrailB : windTrailA;
 
