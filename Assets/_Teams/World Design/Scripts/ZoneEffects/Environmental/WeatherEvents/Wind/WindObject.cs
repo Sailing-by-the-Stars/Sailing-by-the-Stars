@@ -1,27 +1,34 @@
+
 using UnityEngine;
 
 public class WindObject : MonoBehaviour
 {
-    [SerializeField] private Transform windArrowPrimary;
-    [SerializeField] private Transform windArrowSecondary;
+    [SerializeField] private Transform windArrowA;
+    [SerializeField] private Transform windArrowB;
     [SerializeField] private Vector3 currentWindDirection = Vector3.forward;
 
     [Header("Wind Trails")]
-    [SerializeField] private ParticleSystem windTrailsPrimary;
-    [SerializeField] private ParticleSystem windTrailsSecondary;
+    [SerializeField] private ParticleSystem windTrailA;
+    [SerializeField] private ParticleSystem windTrailB;
+    [SerializeField, Tooltip("True when Wind Trail A is currently playing.")]
+    private bool enableWindTrailA;
+    [SerializeField, Tooltip("True when Wind Trail B is currently playing.")] 
+    private bool enableWindTrailB;
+    [SerializeField]private bool isTrailAActive = true;
+    
     [SerializeField, Min(0f)] private float restartAngleThreshold = 1f;
     [SerializeField, Min(0f)] private float windTrailIntensity = 1f;
 
     private Vector3 worldWindDirection = Vector3.forward;
-    private Vector3 primaryAssignedDirection = Vector3.forward;
-    private Vector3 secondaryAssignedDirection = Vector3.forward;
-
-    private bool isPrimaryTrailActive = true;
-    private float windTrailsPrimaryBaseSpeedMultiplier = 1f;
-    private float windTrailsSecondaryBaseSpeedMultiplier = 1f;
+    private Vector3 trailAAssignedDirection = Vector3.forward;
+    private Vector3 trailBAssignedDirection = Vector3.forward;
+    private float windTrailABaseSpeedMultiplier = 1f;
+    private float windTrailBBaseSpeedMultiplier = 1f;
     private bool hasCachedWindTrailBaseSpeed;
 
     public Vector3 CurrentWindDirection => currentWindDirection;
+    public bool EnableWindTrailA => enableWindTrailA;
+    public bool EnableWindTrailB => enableWindTrailB;
 
     private void OnEnable()
     {
@@ -31,12 +38,30 @@ public class WindObject : MonoBehaviour
 
         worldWindDirection = currentWindDirection;
 
-        primaryAssignedDirection = worldWindDirection;
-        secondaryAssignedDirection = worldWindDirection;
+        trailAAssignedDirection = worldWindDirection;
+        trailBAssignedDirection = worldWindDirection;
 
         ApplyWindTrailIntensityToSpeed();
         InitializeWindTrailEmission();
         RotateWindArrowsByAssignedDirections();
+    }
+
+    private void Update()
+    {
+        if (enableWindTrailA && enableWindTrailB)
+        {
+            Debug.LogWarning("Wind Trail A and Wind Trail B is currently playing.");
+            if (isTrailAActive)
+            {
+                windTrailB.Stop(true, ParticleSystemStopBehavior.StopEmitting);
+                enableWindTrailB = false;
+            }
+            else
+            {
+                windTrailA.Stop(true, ParticleSystemStopBehavior.StopEmitting);
+                enableWindTrailA = false;
+            }
+        }
     }
 
     private void OnDisable()
@@ -48,6 +73,7 @@ public class WindObject : MonoBehaviour
     {
         // Re-apply world rotations after parent transforms update for this frame.
         RotateWindArrowsByAssignedDirections();
+        SyncWindTrailPlaybackFlags();
     }
 
     public void SetWindDirection(Vector3 newDirection)
@@ -73,16 +99,16 @@ public class WindObject : MonoBehaviour
 
     private void CacheWindArrow()
     {
-        if (windArrowPrimary == null)
+        if (windArrowA == null)
         {
             Transform primaryArrowChild = transform.Find("Wind Arrow");
             if (primaryArrowChild != null)
             {
-                windArrowPrimary = primaryArrowChild;
+                windArrowA = primaryArrowChild;
             }
         }
 
-        if (windArrowSecondary == null)
+        if (windArrowB == null)
         {
             Transform secondaryArrowChild = transform.Find("Wind Arrow 2");
             if (secondaryArrowChild == null)
@@ -92,41 +118,61 @@ public class WindObject : MonoBehaviour
 
             if (secondaryArrowChild != null)
             {
-                windArrowSecondary = secondaryArrowChild;
+                windArrowB = secondaryArrowChild;
             }
         }
     }
 
     private void CacheWindTrails()
     {
-        if (windTrailsPrimary != null && windTrailsSecondary != null)
+        if (windTrailA != null && windTrailB != null)
         {
             return;
         }
 
-        Transform primaryChild = transform.Find("wind trails");
-        if (windTrailsPrimary == null && primaryChild != null)
+        Transform trailAChild = transform.Find("windTrailA");
+        if (trailAChild == null)
         {
-            windTrailsPrimary = primaryChild.GetComponent<ParticleSystem>();
+            trailAChild = transform.Find("wind trail a");
         }
 
-        Transform secondaryChild = transform.Find("wind trails 2");
-        if (windTrailsSecondary == null && secondaryChild != null)
+        if (trailAChild == null)
         {
-            windTrailsSecondary = secondaryChild.GetComponent<ParticleSystem>();
+            trailAChild = transform.Find("wind trails");
         }
 
-        if (windArrowPrimary == null && windTrailsPrimary != null)
+        if (windTrailA == null && trailAChild != null)
         {
-            windArrowPrimary = windTrailsPrimary.transform.parent;
+            windTrailA = trailAChild.GetComponent<ParticleSystem>();
         }
 
-        if (windArrowSecondary == null && windTrailsSecondary != null)
+        Transform trailBChild = transform.Find("windTrailB");
+        if (trailBChild == null)
         {
-            windArrowSecondary = windTrailsSecondary.transform.parent;
+            trailBChild = transform.Find("wind trail b");
         }
 
-        if (windTrailsPrimary != null && windTrailsSecondary != null)
+        if (trailBChild == null)
+        {
+            trailBChild = transform.Find("wind trails 2");
+        }
+
+        if (windTrailB == null && trailBChild != null)
+        {
+            windTrailB = trailBChild.GetComponent<ParticleSystem>();
+        }
+
+        if (windArrowA == null && windTrailA != null)
+        {
+            windArrowA = windTrailA.transform.parent;
+        }
+
+        if (windArrowB == null && windTrailB != null)
+        {
+            windArrowB = windTrailB.transform.parent;
+        }
+
+        if (windTrailA != null && windTrailB != null)
         {
             return;
         }
@@ -134,15 +180,15 @@ public class WindObject : MonoBehaviour
         ParticleSystem[] childTrails = GetComponentsInChildren<ParticleSystem>(true);
         foreach (ParticleSystem childTrail in childTrails)
         {
-            if (windTrailsPrimary == null)
+            if (windTrailA == null)
             {
-                windTrailsPrimary = childTrail;
+                windTrailA = childTrail;
                 continue;
             }
 
-            if (windTrailsSecondary == null && childTrail != windTrailsPrimary)
+            if (windTrailB == null && childTrail != windTrailA)
             {
-                windTrailsSecondary = childTrail;
+                windTrailB = childTrail;
                 break;
             }
         }
@@ -155,14 +201,14 @@ public class WindObject : MonoBehaviour
             return;
         }
 
-        if (windTrailsPrimary != null)
+        if (windTrailA != null)
         {
-            windTrailsPrimaryBaseSpeedMultiplier = windTrailsPrimary.main.startSpeedMultiplier;
+            windTrailABaseSpeedMultiplier = windTrailA.main.startSpeedMultiplier;
         }
 
-        if (windTrailsSecondary != null)
+        if (windTrailB != null)
         {
-            windTrailsSecondaryBaseSpeedMultiplier = windTrailsSecondary.main.startSpeedMultiplier;
+            windTrailBBaseSpeedMultiplier = windTrailB.main.startSpeedMultiplier;
         }
 
         hasCachedWindTrailBaseSpeed = true;
@@ -171,8 +217,8 @@ public class WindObject : MonoBehaviour
     private void ApplyWindTrailIntensityToSpeed()
     {
         CacheWindTrailBaseSpeed();
-        ApplyWindTrailSpeed(windTrailsPrimary, windTrailsPrimaryBaseSpeedMultiplier);
-        ApplyWindTrailSpeed(windTrailsSecondary, windTrailsSecondaryBaseSpeedMultiplier);
+        ApplyWindTrailSpeed(windTrailA, windTrailABaseSpeedMultiplier);
+        ApplyWindTrailSpeed(windTrailB, windTrailBBaseSpeedMultiplier);
     }
 
     private void ApplyWindTrailSpeed(ParticleSystem trail, float baseSpeedMultiplier)
@@ -188,30 +234,34 @@ public class WindObject : MonoBehaviour
 
     private void InitializeWindTrailEmission()
     {
-        isPrimaryTrailActive = true;
+        isTrailAActive = true;
 
-        if (windTrailsPrimary != null)
+        if (windTrailA != null)
         {
-            windTrailsPrimary.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
-            windTrailsPrimary.Play(true);
+            windTrailA.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+            windTrailA.Play(true);
         }
 
-        if (windTrailsSecondary != null)
+        if (windTrailB != null)
         {
-            windTrailsSecondary.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+            windTrailB.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+
+            // If Trail A is not assigned, use Trail B as the active fallback.
+            if (windTrailA == null)
+            {
+                isTrailAActive = false;
+                windTrailB.Play(true);
+            }
         }
 
-        if (windTrailsPrimary == null && windTrailsSecondary != null)
-        {
-            isPrimaryTrailActive = false;
-            windTrailsSecondary.Play(true);
-        }
+        SyncWindTrailPlaybackFlags();
     }
 
     private void SwapActiveWindTrail()
     {
-        ParticleSystem activeTrail = isPrimaryTrailActive ? windTrailsPrimary : windTrailsSecondary;
-        ParticleSystem nextTrail = isPrimaryTrailActive ? windTrailsSecondary : windTrailsPrimary;
+        Debug.Log("SwapActiveWindTrail");
+        ParticleSystem activeTrail = isTrailAActive ? windTrailA : windTrailB;
+        ParticleSystem nextTrail = isTrailAActive ? windTrailB : windTrailA;
 
         if (nextTrail == null)
         {
@@ -220,6 +270,7 @@ public class WindObject : MonoBehaviour
                 activeTrail.Play(true);
             }
 
+            SyncWindTrailPlaybackFlags();
             return;
         }
 
@@ -230,26 +281,29 @@ public class WindObject : MonoBehaviour
 
         nextTrail.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
         nextTrail.Play(true);
-        isPrimaryTrailActive = !isPrimaryTrailActive;
+        isTrailAActive = !isTrailAActive;
+        SyncWindTrailPlaybackFlags();
     }
 
     private void StopAllWindTrailEmission()
     {
-        if (windTrailsPrimary != null)
+        if (windTrailA != null)
         {
-            windTrailsPrimary.Stop(true, ParticleSystemStopBehavior.StopEmitting);
+            windTrailA.Stop(true, ParticleSystemStopBehavior.StopEmitting);
         }
 
-        if (windTrailsSecondary != null)
+        if (windTrailB != null)
         {
-            windTrailsSecondary.Stop(true, ParticleSystemStopBehavior.StopEmitting);
+            windTrailB.Stop(true, ParticleSystemStopBehavior.StopEmitting);
         }
+
+        SyncWindTrailPlaybackFlags();
     }
 
     private void RotateWindArrowsByAssignedDirections()
     {
-        RotateSingleWindArrow(windArrowPrimary, primaryAssignedDirection);
-        RotateSingleWindArrow(windArrowSecondary, secondaryAssignedDirection);
+        RotateSingleWindArrow(windArrowA, trailAAssignedDirection);
+        RotateSingleWindArrow(windArrowB, trailBAssignedDirection);
     }
 
     private static void RotateSingleWindArrow(Transform arrow, Vector3 direction)
@@ -264,21 +318,27 @@ public class WindObject : MonoBehaviour
 
     private Vector3 GetActiveAssignedDirection()
     {
-        return isPrimaryTrailActive ? primaryAssignedDirection : secondaryAssignedDirection;
+        return isTrailAActive ? trailAAssignedDirection : trailBAssignedDirection;
     }
 
     private void SetActiveAssignedDirection(Vector3 direction)
     {
-        if (isPrimaryTrailActive)
+        if (isTrailAActive)
         {
-            primaryAssignedDirection = direction;
+            trailAAssignedDirection = direction;
         }
         else
         {
-            secondaryAssignedDirection = direction;
+            trailBAssignedDirection = direction;
         }
     }
-    
+
+    private void SyncWindTrailPlaybackFlags()
+    {
+        enableWindTrailA = windTrailA != null && windTrailA.isEmitting;
+        enableWindTrailB = windTrailB != null && windTrailB.isEmitting;
+    }
+
     public void SetWindIntensity(float newIntensity)
     {
         windTrailIntensity = Mathf.Max(0f, newIntensity);
