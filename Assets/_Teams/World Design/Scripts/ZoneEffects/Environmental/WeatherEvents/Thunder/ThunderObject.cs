@@ -1,4 +1,5 @@
 using UnityEngine;
+using FMODUnity;
 
 namespace _Teams.World_Design.Scripts.ZoneEffects.Environmental.WeatherEvents.Thunder
 {

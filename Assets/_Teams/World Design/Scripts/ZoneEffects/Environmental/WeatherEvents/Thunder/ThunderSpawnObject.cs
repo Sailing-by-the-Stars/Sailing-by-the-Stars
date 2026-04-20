@@ -27,10 +27,11 @@ namespace _Teams.World_Design.Scripts.ZoneEffects.Environmental.WeatherEvents.Th
                 return null;
             }
 
-            Vector3 spawnPosition = GetBottomRandomPosition() + worldOffset; 
+            Vector3 spawnPosition = GetBottomRandomPosition() ; 
             Quaternion spawnRotation = Quaternion.identity;
 
             lastSpawnedInstance = Instantiate(spawnPrefab, spawnPosition, spawnRotation);
+            Debug.Log($"Spawned {lastSpawnedInstance.transform.name} at {spawnPosition} with intensity {spawnRotation}");
             return lastSpawnedInstance;
         }
 
@@ -57,6 +58,13 @@ namespace _Teams.World_Design.Scripts.ZoneEffects.Environmental.WeatherEvents.Th
             }
 
             return new Bounds(transform.position, Vector3.zero);
+        }
+
+        private void OnDrawGizmos()
+        {
+            Bounds bounds = ResolveBounds();
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawWireCube(bounds.center, bounds.size);
         }
     }
 }
