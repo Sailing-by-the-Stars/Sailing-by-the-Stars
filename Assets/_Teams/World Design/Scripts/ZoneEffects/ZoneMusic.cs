@@ -22,6 +22,17 @@ public class ZoneEventMusic : MonoBehaviour, IZoneEffect
     private EventInstance instance;
     private PARAMETER_ID parameterId;
     private Coroutine routine;
+    private float debugTimer = 0f;
+    /*private void Update()
+    {
+        debugTimer += Time.deltaTime;
+        if (debugTimer < 1f) return;
+        debugTimer = 0f;
+
+        instance.getTimelinePosition(out int posMs);
+        int seconds = posMs / 1000;
+        Debug.Log($"[ZoneEventMusic] {seconds / 60:00}:{seconds % 60:00}");
+    }*/
 
     private void Start()
     {
@@ -63,10 +74,23 @@ public class ZoneEventMusic : MonoBehaviour, IZoneEffect
         currentValue = target;
         instance.setParameterByID(parameterId, currentValue);
     }
+    private void OnDisable()
+    {
+        if (routine != null)
+        {
+            StopCoroutine(routine);
+        }
+        instance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+        instance.release();
+    }
 
     private void OnDestroy()
     {
-        instance.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
+        if (routine != null)
+        {
+            StopCoroutine(routine);
+        }
+        instance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
         instance.release();
     }
 }

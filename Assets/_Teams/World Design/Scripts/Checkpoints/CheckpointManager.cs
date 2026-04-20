@@ -9,9 +9,12 @@ namespace _Teams.World_Design.Scripts.Checkpoints
         [SerializeField] private Checkpoint currentCheckpoint;
         
         [Header("Reset Objects")]
-        [SerializeField] private Transform boatResetObject;
+        [SerializeField] private String playerResetObjectTag = "Player";
+        
         [SerializeField] private Transform playerResetObject;
+        [SerializeField] private Transform boatResetObject;
 
+        
         [Header("Reset Points")]
         [SerializeField] private Transform currentPlayerResetPoint;
         [SerializeField] private Transform currentBoatResetPoint;
@@ -20,17 +23,21 @@ namespace _Teams.World_Design.Scripts.Checkpoints
 
         private void Awake()
         {
-            if (boatResetObject == null)
-            {
-                Debug.LogWarning($"{nameof(CheckpointManager)} is missing a reference to the boat reset object.", this);
-            }
-            
             if (playerResetObject == null)
             {
-                Debug.LogWarning($"{nameof(CheckpointManager)} is missing a reference to the player reset object.", this);
+                playerResetObject = GameObject.FindWithTag(playerResetObjectTag).transform;
             }
-
+            
+            if (boatResetObject == null)
+            {
+                boatResetObject = FindFirstObjectByType<BoatController>().transform;
+            }
+            
             deathEffect = FindFirstObjectByType<DeathEffect>();
+            if (deathEffect == null)
+            {
+                Debug.LogWarning("DeathEffect reference is missing in CheckpointManager. Attempting to find one in the scene.");
+            }
         }
 
         public void GoToCheckpoint()
@@ -54,6 +61,7 @@ namespace _Teams.World_Design.Scripts.Checkpoints
                 boatResetObject.position = currentBoatResetPoint.position;
                 boatResetObject.rotation = currentBoatResetPoint.rotation;
             }
+
             
             StartCoroutine(deathEffect.DeathSequence());
         }
