@@ -20,6 +20,7 @@ GameObject:
   - component: {fileID: 5225317971443871738}
   - component: {fileID: 6341093503621184907}
   - component: {fileID: 976671272355510536}
+  - component: {fileID: 2717237393730950434}
   m_Layer: 0
   m_Name: AudioManager
   m_TagString: Untagged
@@ -275,3 +276,30 @@ MonoBehaviour:
       Data3: -2132639604
       Data4: -948113825
     Path: event:/ChallengeEvents/event_BargainingEvent
+--- !u!114 &2717237393730950434
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5406605107057671251}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf6edb37eddade24d999e35d95fabee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GhostBoatAudio
+  parameterName: Clockon
+  ghostBoatEventAudio:
+    Guid:
+      Data1: -1717487581
+      Data2: 1329986160
+      Data3: 323660442
+      Data4: -675228333
+    Path: event:/ChallengeEvents/event_Denial_GhostBoat
+  boatStopSound:
+    Guid:
+      Data1: 254614236
+      Data2: 1210134590
+      Data3: -856305484
+      Data4: -90045178
+    Path: event:/ChallengeEvents/event_BoatStop
