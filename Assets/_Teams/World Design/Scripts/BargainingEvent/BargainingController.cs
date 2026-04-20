@@ -50,7 +50,7 @@ public class BargainingController : MonoBehaviour
          "Tick isFinalCheckpoint on the last one.")]
     [SerializeField] private BargainingCheckpoint[] checkpoints;
     [Tooltip("Transform to measure distance from for end condition in StarEvents mode")]
-    [SerializeField] private Transform endConditionTransform;
+    [SerializeField] private Transform[] endConditionTransforms;
     [Tooltip("Distance threshold to end the event from transform when using distance end condition")]
     [SerializeField] private float endConditionDistance = 30f;
     [Tooltip("Position to teleport player to on timer fail. Place outside event zone.")]
@@ -99,9 +99,9 @@ public class BargainingController : MonoBehaviour
         timerAudio = FindFirstObjectByType<SetBargainingTimer>();
         screenEffects = FindFirstObjectByType<DeathEffect>();
 
-        if (eventMode == BargainingEventMode.StarEvents && endConditionTransform == null)
+        if (eventMode == BargainingEventMode.StarEvents && endConditionTransforms == null)
         {
-            Debug.LogWarning($"{gameObject.name}: StarEvents mode requires endConditionTransform to be assigned.");
+            Debug.LogWarning($"{gameObject.name}: StarEvents mode requires at least 1 endConditionTransforms to be assigned.");
         }
 
     }
@@ -219,14 +219,16 @@ public class BargainingController : MonoBehaviour
     }
     private void CheckEndConditionDistance()
     {
-        if (endConditionTransform == null || eventTarget == null)
+        if (endConditionTransforms == null || eventTarget == null) return;
+
+        foreach (Transform target in endConditionTransforms)
         {
-            return;
-        }
-        float distance = Vector3.Distance(eventTarget.transform.position, endConditionTransform.position);
-        if (distance <= endConditionDistance)
-        {
-            CompleteEvent();
+            if (target == null) continue;
+            if (Vector3.Distance(eventTarget.transform.position, target.position) <= endConditionDistance)
+            {
+                CompleteEvent();
+                return;
+            }
         }
     }
     private void SpawnEntity(float timerDuration)
@@ -359,18 +361,16 @@ public class BargainingController : MonoBehaviour
 #if UNITY_EDITOR
     private void OnDrawGizmos()
     {
-        if (eventMode != BargainingEventMode.StarEvents)
+        if (eventMode != BargainingEventMode.StarEvents || endConditionTransforms == null) return;
+
+        foreach (Transform t in endConditionTransforms)
         {
-            return;
+            if (t == null) continue;
+            Gizmos.color = new Color(0f, 1f, 0f, 0.3f);
+            Gizmos.DrawSphere(t.position, endConditionDistance);
+            Gizmos.color = Color.green;
+            Gizmos.DrawWireSphere(t.position, endConditionDistance);
         }
-        if (endConditionTransform == null)
-        {
-            return;
-        }
-        Gizmos.color = new Color(0f, 1f, 0f, 0.3f);
-        Gizmos.DrawSphere(endConditionTransform.position, endConditionDistance);
-        Gizmos.color = Color.green;
-        Gizmos.DrawWireSphere(endConditionTransform.position, endConditionDistance);
     }
 #endif
 }
