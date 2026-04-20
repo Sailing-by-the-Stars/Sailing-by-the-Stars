@@ -4,6 +4,7 @@
  */
 using System.Collections;
 using UnityEngine;
+using FMODUnity;
 
 /// <summary>
 /// Controls the Bargaining grief event.
@@ -63,6 +64,8 @@ public class BargainingController : MonoBehaviour
     [SerializeField] private GameObject entityPrefab;
     [Tooltip("How much to increase the audio intensity when audio is active")]
     [SerializeField] private float audioBoost = 0.2f;
+    [Tooltip("One-shot 2D sound played when the entity despawns.")]
+    [SerializeField] private EventReference despawnSound;
 
     [Header("Timing")]
     [Tooltip("How long the player has to reach a checkpoint." +
@@ -255,6 +258,10 @@ public class BargainingController : MonoBehaviour
         if (activeEntity == null)
         {
             return;
+        }
+        if (!despawnSound.IsNull)
+        {
+            RuntimeManager.PlayOneShot(despawnSound);
         }
         activeEntity.Despawn();
         activeEntity = null;
