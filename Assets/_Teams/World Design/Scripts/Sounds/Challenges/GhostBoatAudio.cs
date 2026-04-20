@@ -30,7 +30,6 @@ public class GhostBoatAudio : MonoBehaviour
         inViewParameterId = pdesc.id;
         RuntimeManager.AttachInstanceToGameObject(audioInstance, gameObject);
         audioInstance.start();
-        audioInstance.setParameterByID(inViewParameterId, 1f);
     }
 
     public void SetInView(bool inView)
