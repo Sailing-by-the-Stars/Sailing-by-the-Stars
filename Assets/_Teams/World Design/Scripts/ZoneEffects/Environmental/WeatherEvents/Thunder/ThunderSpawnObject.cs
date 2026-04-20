@@ -6,14 +6,20 @@ namespace _Teams.World_Design.Scripts.ZoneEffects.Environmental.WeatherEvents.Th
     {
         [Header("Spawn Setup")]
         [SerializeField] private GameObject spawnPrefab;
-        [SerializeField] private bool spawnOnStart;
+        [SerializeField] private bool spawnOnStart = false;
         [SerializeField] private Vector3 worldOffset;
         [SerializeField] private float intensity;
+        [SerializeField] private GameObject boundsObject;
 
         private GameObject lastSpawnedInstance;
 
         private void Start()
         {
+            if (boundsObject == null && transform.childCount > 0)
+            {
+                boundsObject = transform.GetChild(0).gameObject;
+            }
+
             if (spawnOnStart)
             {
                 TriggerSpawn();
@@ -27,12 +33,18 @@ namespace _Teams.World_Design.Scripts.ZoneEffects.Environmental.WeatherEvents.Th
                 return null;
             }
 
-            Vector3 spawnPosition = GetBottomRandomPosition() ; 
+            Vector3 spawnPosition = GetBottomRandomPosition() + worldOffset; 
             Quaternion spawnRotation = Quaternion.identity;
 
-            lastSpawnedInstance = Instantiate(spawnPrefab, spawnPosition, spawnRotation);
-            Debug.Log($"Spawned {lastSpawnedInstance.transform.name} at {spawnPosition} with intensity {spawnRotation}");
+            lastSpawnedInstance = Instantiate(spawnPrefab, spawnPosition, spawnRotation, transform);
+            
             return lastSpawnedInstance;
+        }
+
+        private Vector3 GetCenterPosition()
+        {
+            Bounds bounds = ResolveBounds();
+            return bounds.center;
         }
 
         private Vector3 GetBottomRandomPosition()
@@ -47,24 +59,19 @@ namespace _Teams.World_Design.Scripts.ZoneEffects.Environmental.WeatherEvents.Th
 
         private Bounds ResolveBounds()
         {
-            if (TryGetComponent(out Renderer objectRenderer))
+            GameObject targetObject = boundsObject != null ? boundsObject : gameObject;
+
+            if (targetObject.TryGetComponent(out Renderer objectRenderer))
             {
                 return objectRenderer.bounds;
             }
 
-            if (TryGetComponent(out Collider objectCollider))
+            if (targetObject.TryGetComponent(out Collider objectCollider))
             {
                 return objectCollider.bounds;
             }
 
-            return new Bounds(transform.position, Vector3.zero);
-        }
-
-        private void OnDrawGizmos()
-        {
-            Bounds bounds = ResolveBounds();
-            Gizmos.color = Color.yellow;
-            Gizmos.DrawWireCube(bounds.center, bounds.size);
+            return new Bounds(targetObject.transform.position, Vector3.zero);
         }
     }
 }

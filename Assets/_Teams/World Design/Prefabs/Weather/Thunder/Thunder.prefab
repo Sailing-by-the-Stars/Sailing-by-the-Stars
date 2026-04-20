@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 4283750050299311208}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 39.4, y: 0.0062, z: 164.9}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.57783, y: 1, z: 0.29507}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -107,7 +107,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -159,7 +159,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a717a6eba8740e5a8fc51adf966d9b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_Teams.World_Design.Scripts.ZoneEffects.Environmental.WeatherEvents.Thunder.ThunderObject
-  despawnDelaySeconds: 3
+  despawnDelaySeconds: 2
 --- !u!114 &5611763442911897935
 MonoBehaviour:
   m_ObjectHideFlags: 0
