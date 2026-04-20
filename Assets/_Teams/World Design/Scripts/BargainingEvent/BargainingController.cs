@@ -53,10 +53,16 @@ public class BargainingController : MonoBehaviour
     [SerializeField] private Transform endConditionTransform;
     [Tooltip("Distance threshold to end the event from transform when using distance end condition")]
     [SerializeField] private float endConditionDistance = 30f;
+    [Tooltip("Position to teleport player to on timer fail. Place outside event zone.")]
+    [SerializeField] private Transform respawnPoint;
+    [Tooltip("The parent zone; deactivated on event complete")]
+    [SerializeField] private WorldEventZone zone;
 
     [Header("Entity")]
     [Tooltip("Prefab with BargainingEntity component. Disable all renderers on the prefab.")]
     [SerializeField] private GameObject entityPrefab;
+    [Tooltip("How much to increase the audio intensity when audio is active")]
+    [SerializeField] private float audioBoost = 0.2f;
 
     [Header("Timing")]
     [Tooltip("How long the player has to reach a checkpoint." +
@@ -67,8 +73,6 @@ public class BargainingController : MonoBehaviour
              "Can be overridden per checkpoint (OrderedCheckpoint mode only)")]
     [SerializeField] private float defaultCooldownDuration = 30f;
 
-    [Tooltip("Position to teleport player to on timer fail. Place outside event zone.")]
-    [SerializeField] private Transform respawnPoint;
 
     // State
     private bool eventCompleted = false;
@@ -85,8 +89,6 @@ public class BargainingController : MonoBehaviour
 
     // audio
     private SetBargainingTimer timerAudio;
-    [Tooltip("How much to increase the audio intensity when audio is active")]
-    [SerializeField] private float audioBoost = 0.2f;
     private float TimerIntensity => eventActive ? 1f - Mathf.Clamp01(timerRemaining / currentTimerDuration) : 0f;
 
     public bool IsCompleted => eventCompleted;
@@ -301,6 +303,12 @@ public class BargainingController : MonoBehaviour
 
         if (respawnPoint != null && eventTarget != null)
         {
+            Rigidbody rb = eventTarget.GetComponent<Rigidbody>();
+            if (rb != null)
+            {
+                rb.linearVelocity = Vector3.zero;
+                rb.angularVelocity = Vector3.zero;
+            }
             eventTarget.transform.position = respawnPoint.position;
             eventTarget.transform.rotation = respawnPoint.rotation;
         }
@@ -332,6 +340,10 @@ public class BargainingController : MonoBehaviour
                     checkpoint.SetActive(false);
                 }
             }
+        }
+        if (zone != null)
+        {
+            zone.gameObject.SetActive(false);
         }
     }
 
