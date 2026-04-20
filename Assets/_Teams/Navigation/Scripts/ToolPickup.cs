@@ -22,7 +22,6 @@ public class ToolPickup : MonoBehaviour, IPickup
 
     public void Drop(PickupController pickupController)
     {
-        
     }
 
     public void SetPositionInParent(Transform newParent)
