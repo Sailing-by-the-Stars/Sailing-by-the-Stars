@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System;
 
 /// <summary>
 /// Code by Alonso
@@ -10,8 +11,11 @@ public class BordersOfTheWorld : MonoBehaviour
     [SerializeField] private float duration = 1.5f;
     private bool rotating = false;
 
+    [SerializeField] private GameObject AudioManager;
+
     private void OnCollisionEnter(Collision collision)
     {
+
         if (rotating) return;
 
         if (collision.gameObject.CompareTag("boat"))
@@ -22,7 +26,11 @@ public class BordersOfTheWorld : MonoBehaviour
 
     private IEnumerator Rote180(Transform objetivo)
     {
+        PlayOutBounds playOB = AudioManager.GetComponent<PlayOutBounds>();
+
         rotating = true;
+
+        playOB.PlaySound();
 
         Quaternion rotacionInicial = objetivo.rotation;
         Quaternion rotacionFinal = rotacionInicial * Quaternion.Euler(0f, 180f, 0f);
@@ -35,6 +43,7 @@ public class BordersOfTheWorld : MonoBehaviour
             yield return null;
         }
 
+        playOB.StopSound();
         objetivo.rotation = rotacionFinal;
         rotating = false;
     }

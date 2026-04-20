@@ -107,7 +107,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -123,6 +123,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6011874016877157016}
   - component: {fileID: 5115276962868593771}
+  - component: {fileID: 5611763442911897935}
   m_Layer: 0
   m_Name: Thunder
   m_TagString: Untagged
@@ -158,7 +159,44 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a717a6eba8740e5a8fc51adf966d9b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_Teams.World_Design.Scripts.ZoneEffects.Environmental.WeatherEvents.Thunder.ThunderObject
-  despawnDelaySeconds: 1
+  despawnDelaySeconds: 2
+--- !u!114 &5611763442911897935
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8876905558650906641}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: FMODUnity::FMODUnity.StudioEventEmitter
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: -2023030739
+      Data2: 1211429254
+      Data3: 52692110
+      Data4: -1398106780
+    Path: event:/event_Weather_ThunderStrikeSingle
+  Event: 
+  EventPlayTrigger: 1
+  EventStopTrigger: 2
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  NonRigidbodyVelocity: 0
+  Params:
+  - Name: ThunderStrike_EQ
+    Value: 1
+  - Name: ThunderStrike_ReverbDryness
+    Value: 1
+  - Name: ThunderStrike_Volume
+    Value: 1
+  OverrideAttenuation: 1
+  OverrideMinDistance: 1000
+  OverrideMaxDistance: 3000
 --- !u!1 &9147032168529835981
 GameObject:
   m_ObjectHideFlags: 0

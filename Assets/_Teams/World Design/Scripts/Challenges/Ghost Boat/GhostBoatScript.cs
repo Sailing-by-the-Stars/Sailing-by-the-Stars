@@ -1,5 +1,3 @@
-using FMOD.Studio;
-using FMODUnity;
 using UnityEngine;
 
 namespace _Teams.World_Design.Scripts.Challenges.Ghost_Boat
@@ -18,10 +16,17 @@ namespace _Teams.World_Design.Scripts.Challenges.Ghost_Boat
         [Header("Optional Rotation")]
         [SerializeField] private bool faceTarget;
 
-        private EventInstance audioInstance;
-        private PARAMETER_ID inViewParameterId;
-        private bool hasInViewParameter;
-        
+        private GhostBoatAudio ghostBoatAudio;
+        private bool wasInView = false;
+
+        private void Start()
+        {
+            ghostBoatAudio = FindFirstObjectByType<GhostBoatAudio>();
+            if (ghostBoatAudio == null)
+            {
+                Debug.LogWarning(gameObject.name + ": GhostBoatAudio not found in scene (check audio manager)");
+            }
+        }
 
         public void SetTarget(Transform newTarget)
         {
@@ -31,6 +36,16 @@ namespace _Teams.World_Design.Scripts.Challenges.Ghost_Boat
         private void LateUpdate()
         {
             bool isCentered = IsInCenterView();
+
+            // only update audio if in view has changed since last frame
+            if (isCentered != wasInView)
+            {
+                if (ghostBoatAudio != null)
+                {
+                    ghostBoatAudio.SetInView(isCentered);
+                }
+            }
+            wasInView = isCentered;
 
             if (!target)
             {
@@ -78,6 +93,14 @@ namespace _Teams.World_Design.Scripts.Challenges.Ghost_Boat
             float dy = Mathf.Abs(viewportPoint.y - 0.5f);
 
             return dx <= centerTolerance && dy <= centerTolerance;
+        }
+
+        private void OnDestroy()
+        {
+            if (ghostBoatAudio != null)
+            {
+                ghostBoatAudio.ResetAudio();
+            }
         }
     }
 }

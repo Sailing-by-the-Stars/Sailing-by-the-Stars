@@ -17,9 +17,8 @@ GameObject:
   - component: {fileID: 2237365108461603770}
   - component: {fileID: 6857875092842816198}
   - component: {fileID: 6665984415962931736}
-  - component: {fileID: 5225317971443871738}
-  - component: {fileID: 6341093503621184907}
   - component: {fileID: 976671272355510536}
+  - component: {fileID: 2717237393730950434}
   m_Layer: 0
   m_Name: AudioManager
   m_TagString: Untagged
@@ -218,44 +217,6 @@ MonoBehaviour:
       Data3: 1523838115
       Data4: -615451135
     Path: event:/Music/mus_DenialEvent
---- !u!114 &5225317971443871738
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5406605107057671251}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0ad85828984b39d42b3f7033bea182e2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SetBargainingEventMusic
-  fmodEvent:
-    Guid:
-      Data1: -1452029040
-      Data2: 1095831201
-      Data3: 304856205
-      Data4: 1497172693
-    Path: event:/Music/mus_BargainingEvent
---- !u!114 &6341093503621184907
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5406605107057671251}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e62e0b434d62e4c48807b6a58cb09781, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SetAngerEventMusic
-  fmodEvent:
-    Guid:
-      Data1: -1931530165
-      Data2: 1261801039
-      Data3: -304735315
-      Data4: 1849102358
-    Path: event:/Music/mus_AngerEvent
 --- !u!114 &976671272355510536
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -275,3 +236,30 @@ MonoBehaviour:
       Data3: -2132639604
       Data4: -948113825
     Path: event:/ChallengeEvents/event_BargainingEvent
+--- !u!114 &2717237393730950434
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5406605107057671251}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf6edb37eddade24d999e35d95fabee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GhostBoatAudio
+  parameterName: Clockon
+  ghostBoatEventAudio:
+    Guid:
+      Data1: -1717487581
+      Data2: 1329986160
+      Data3: 323660442
+      Data4: -675228333
+    Path: event:/ChallengeEvents/event_Denial_GhostBoat
+  boatStopSound:
+    Guid:
+      Data1: 254614236
+      Data2: 1210134590
+      Data3: -856305484
+      Data4: -90045178
+    Path: event:/ChallengeEvents/event_BoatStop
