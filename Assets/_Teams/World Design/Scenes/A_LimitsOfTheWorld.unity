@@ -676,6 +676,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 2008432602510907173, guid: 2bca4eabfcdde6949b5e11e926281700, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1574258055}
+    - targetCorrespondingSourceObject: {fileID: 2994113135730546463, guid: 2bca4eabfcdde6949b5e11e926281700, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1849117971}
   m_SourcePrefab: {fileID: 100100000, guid: 2bca4eabfcdde6949b5e11e926281700, type: 3}
 --- !u!1 &1574258050 stripped
 GameObject:
@@ -837,6 +840,30 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 700214b8f0ced37439bdaa8e63bdb5eb, type: 3}
+--- !u!1 &1849117970 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2994113135730546463, guid: 2bca4eabfcdde6949b5e11e926281700, type: 3}
+  m_PrefabInstance: {fileID: 1557364858}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1849117971
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1849117970}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d06165537d91244a97cebd63d0fb1b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  fmodEvent:
+    Guid:
+      Data1: -1543462654
+      Data2: 1149323407
+      Data3: 883642755
+      Data4: -391209367
+    Path: event:/event_OutOfBounds
 --- !u!1 &194470746114903700
 GameObject:
   m_ObjectHideFlags: 0
@@ -1502,6 +1529,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3988267102324068932, guid: 4bcc338aec043e04f9387c2d8e958bcc, type: 3}
+      propertyPath: duration
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3988267102324068932, guid: 4bcc338aec043e04f9387c2d8e958bcc, type: 3}
+      propertyPath: AudioManager
+      value: 
+      objectReference: {fileID: 1849117970}
     - target: {fileID: 7044775790105099040, guid: 4bcc338aec043e04f9387c2d8e958bcc, type: 3}
       propertyPath: m_Name
       value: Borders
