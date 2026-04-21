@@ -3,7 +3,7 @@ using UnityEngine;
 /// <summary>
 /// TESTING ONLY — remove before shipping.
 ///
-/// Marks all three island puzzles as complete so the Acceptance Island
+/// Marks all five island puzzles as complete so the Acceptance Island
 /// pedestals become immediately interactable without running the full game.
 ///
 /// SETUP:
@@ -34,10 +34,12 @@ public class DebugPedestalUnlocker : MonoBehaviour
 
     private void UnlockAll()
     {
+        PuzzleProgress.MarkComplete("denial");
         PuzzleProgress.MarkComplete("anger");
         PuzzleProgress.MarkComplete("bargaining");
         PuzzleProgress.MarkComplete("depression");
-        Debug.Log("[DebugPedestalUnlocker] All three puzzles marked complete — " +
+        PuzzleProgress.MarkComplete("acceptance");
+        Debug.Log("[DebugPedestalUnlocker] All five puzzles marked complete — " +
                   "walk up to each pedestal and press E.");
     }
 }
