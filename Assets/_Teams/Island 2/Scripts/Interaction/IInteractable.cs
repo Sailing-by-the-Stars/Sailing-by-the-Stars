@@ -5,5 +5,11 @@ public interface IInteractable
     public string InteractMessage { get; }
 
     public bool ShouldShowMessage(InteractionController interactionController) { return true; }
-    public void Interact(InteractionController interactionController);
+    
+    // Choose: if your Interactable needs to have a "hold button down" functionality, override HoldInteract and optionally ReleaseInteract
+    // Otherwise, override just Interact
+    // DON'T USE BOTH OPTIONS, IT WILL CAUSE BUGS.
+    public void Interact(InteractionController interactionController) {}
+    public void HoldInteract(InteractionController interactionController) {}
+    public void ReleaseInteract(InteractionController interactionController) {}
 }

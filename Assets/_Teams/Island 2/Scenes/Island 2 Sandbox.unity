@@ -453,6 +453,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2060606723860670392, guid: 374fb8681a8a65a40874ed8846663536, type: 3}
+      propertyPath: holdThreshold
+      value: 0.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 2060606723860670392, guid: 374fb8681a8a65a40874ed8846663536, type: 3}
       propertyPath: interactionText
       value: 
       objectReference: {fileID: 130792984}
@@ -1155,17 +1159,6 @@ Transform:
   - {fileID: 805274136}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1049978550 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 9167718397368323428, guid: 42d135ae6e9fd5d48bc2a7e5b112331d, type: 3}
-  m_PrefabInstance: {fileID: 8349430423565701977}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 655fde7394a1473b8de156e62d1531a7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::MorseBuffer
 --- !u!1001 &1183554887
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2094,6 +2087,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b30d005f72aa7d6439261a13e13f2c23, type: 3}
+--- !u!114 &2094266721 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8415787348624029342, guid: 42d135ae6e9fd5d48bc2a7e5b112331d, type: 3}
+  m_PrefabInstance: {fileID: 8349430423565701977}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e5deecb17894194874d7bcc018ac9b8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MorseDecoder
 --- !u!1001 &211424884671795571
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2676,67 +2680,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 768802515b8f70c448cac763be726933, type: 3}
---- !u!1001 &5468010032922625217
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 985095441391109485, guid: 37d4c189e65258047989e514989f97a1, type: 3}
-      propertyPath: m_Name
-      value: Morse Long
-      objectReference: {fileID: 0}
-    - target: {fileID: 6029310273230768427, guid: 37d4c189e65258047989e514989f97a1, type: 3}
-      propertyPath: buffer
-      value: 
-      objectReference: {fileID: 1049978550}
-    - target: {fileID: 8391329306521725384, guid: 37d4c189e65258047989e514989f97a1, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -379.445
-      objectReference: {fileID: 0}
-    - target: {fileID: 8391329306521725384, guid: 37d4c189e65258047989e514989f97a1, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.96844876
-      objectReference: {fileID: 0}
-    - target: {fileID: 8391329306521725384, guid: 37d4c189e65258047989e514989f97a1, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 67.006
-      objectReference: {fileID: 0}
-    - target: {fileID: 8391329306521725384, guid: 37d4c189e65258047989e514989f97a1, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: -0.006223744
-      objectReference: {fileID: 0}
-    - target: {fileID: 8391329306521725384, guid: 37d4c189e65258047989e514989f97a1, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8391329306521725384, guid: 37d4c189e65258047989e514989f97a1, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0.9999806
-      objectReference: {fileID: 0}
-    - target: {fileID: 8391329306521725384, guid: 37d4c189e65258047989e514989f97a1, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8391329306521725384, guid: 37d4c189e65258047989e514989f97a1, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8391329306521725384, guid: 37d4c189e65258047989e514989f97a1, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 180.713
-      objectReference: {fileID: 0}
-    - target: {fileID: 8391329306521725384, guid: 37d4c189e65258047989e514989f97a1, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 37d4c189e65258047989e514989f97a1, type: 3}
 --- !u!1001 &5569935455435651931
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2811,9 +2754,9 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1116524932047193316, guid: 6905fcaffa5c3b343bb74177abab8804, type: 3}
-      propertyPath: buffer
+      propertyPath: morseDecoder
       value: 
-      objectReference: {fileID: 1049978550}
+      objectReference: {fileID: 2094266721}
     - target: {fileID: 2679888265736025630, guid: 6905fcaffa5c3b343bb74177abab8804, type: 3}
       propertyPath: m_Name
       value: Morse Short
@@ -3337,4 +3280,3 @@ SceneRoots:
   - {fileID: 2019175169}
   - {fileID: 8349430423565701977}
   - {fileID: 5759926352725816052}
-  - {fileID: 5468010032922625217}

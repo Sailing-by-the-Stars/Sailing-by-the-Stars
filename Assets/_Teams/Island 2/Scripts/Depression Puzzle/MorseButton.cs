@@ -2,27 +2,19 @@ using UnityEngine;
 
 public class MorseButton : MonoBehaviour, IInteractable
 {
-    [SerializeField] private MorseBuffer buffer;
-    [SerializeField] private bool isShort;
+    [SerializeField] private MorseDecoder morseDecoder;
     [SerializeField] private string objectInteractMessage;
     
     public string InteractMessage => objectInteractMessage;
     public bool ShouldShowMessage => true;
     
-    public void Interact(InteractionController interactionController)
+    public void HoldInteract(InteractionController interactionController)
     {
-        InputMorse();
+        morseDecoder.BeginSignal();
     }
 
-    private void InputMorse()
+    public void ReleaseInteract(InteractionController interactionController)
     {
-        if (isShort)
-        {
-            buffer.AddShortSignal();
-        }
-        else
-        {
-            buffer.AddLongSignal();
-        }
+        morseDecoder.EndSignal();
     }
 }
