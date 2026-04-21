@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class DebugPage : PagePickup
+public class JournalEntryPickup : PagePickup
 {
     Page page = new();
 
