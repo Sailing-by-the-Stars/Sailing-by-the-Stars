@@ -51,6 +51,11 @@ public class BoatController : MonoBehaviour
     [SerializeField] private GameObject rudderPivot;
     [SerializeField] private GameObject flagPivot;
 
+    [Header("Particle System")]
+    [SerializeField] private ParticleSystem boatFoam;
+    [SerializeField] private ParticleSystem sideFoamRight;
+    [SerializeField] private ParticleSystem sideFoamLeft;
+
 
     private Rigidbody rigidBody;
     private GameObject[] rudderObjects;
@@ -101,6 +106,9 @@ public class BoatController : MonoBehaviour
         RotateRudder();
         RotateMastAndSail();
         RotateFlagIntoWind();
+        boatFoam.Play();
+        sideFoamRight.Play();
+        sideFoamLeft.Play();
     }
 
     void FixedUpdate()
