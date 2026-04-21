@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 10ec28e6a44a875469519532c16b9e31, type: 3}
-  m_Name: Weather_Calm
+  m_Name: W_OutOfBoundsFog
   m_EditorClassIdentifier: Assembly-CSharp::WeatherState
   values:
     windSpeed: 2
     windDirectionDegrees: 0
-    windRandomEventsActive: 1
-    windAutoRerollIntensity: 2
+    windRandomEventsActive: 0
+    windAutoRerollIntensity: 10
     rainIntensity: 0
     thunderActive: 0
     chanceOfThunderStrikePerInterval: 0
     waveIntensity: 0
-  fogSettings: {fileID: 11400000, guid: 86daa54c9896237479a55be768fd58e3, type: 2}
+  fogSettings: {fileID: 11400000, guid: 05e71646f5f690d4c969ca0752fa5018, type: 2}
