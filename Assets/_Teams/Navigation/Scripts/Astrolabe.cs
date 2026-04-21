@@ -53,6 +53,8 @@ public class Astrolabe : ToolPickup
     {
         base.Grab(pickupController);
 
+        GameEvents.ExecOnPickup(this); // Needed for the tutorial popup ui, just make sure to call this when the Astrolable is picked up
+
         isEquipped = true;
         
         //Hide pickup prompt after grabbing
@@ -126,6 +128,7 @@ public class Astrolabe : ToolPickup
             //
             if (Input.GetMouseButtonDown(0) && visible)
             {
+                GameEvents.ExecOnUse(this); // Needed for the tutorial popup ui, just make sure to call this when the Astrolable is interacted with
                 if (zoomedIn)
                 {
                     if (sideView)
