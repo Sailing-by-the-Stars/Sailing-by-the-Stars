@@ -29,7 +29,6 @@ MonoBehaviour:
   - rid: 2756910129984045062
   - rid: 2756910129984045063
   - rid: 2756910129984045064
-  - rid: 2756910129984045065
   - rid: 2756910129984045066
   hasItemID: 0
   itemID: 0
@@ -57,8 +56,8 @@ MonoBehaviour:
         nodeID: But beware
         text: But <shake><red>beware!</red></shake> Every being, <pause=0.2>every
           living, <pause=0.2>every breathing, living thing, <pause=0.2>all living
-          have their path written.<pause=0.2> The <shake>other one</shake> will guide
-          you further.
+          have their path written.<pause=0.2> It has gotten you here,<pause=0.2>
+          now you need to find your way in this place.
         choices:
         - choiceText: what are those items?
           nextNodeID: What are those items
@@ -91,15 +90,9 @@ MonoBehaviour:
       type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
       data:
         nodeID: I implore you
-        text: I implore you <pause=0.2>to visit all the different Islands. The <shake>other
-          one</shake> will want to speak to you <pause=0.2>Mortal.
-        nextNodeID: You will
-    - rid: 2756910129984045065
-      type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
-      data:
-        nodeID: You will
-        text: You will understand their meaning, <pause=0.2>and what the <shake>other
-          one</shake> wants from you with time.
+        text: I implore you <pause=0.2>to visit all the different Islands. Then at
+          the <shake>end</shake> of your journey,<pause=0.2> across the island,<pause=0.2>
+          <shake>something</shake> is awaiting you.
         nextNodeID: The Astrolabe
     - rid: 2756910129984045066
       type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
