@@ -22,6 +22,7 @@ namespace _Teams.World_Design.Scripts.Checkpoints
                     Debug.LogWarning($"{nameof(DeathZone)} could not find a {nameof(CheckpointManager)} in the scene.", this);
                 }
             }
+            
         }
         
         private void OnTriggerEnter(Collider other)
@@ -34,7 +35,6 @@ namespace _Teams.World_Design.Scripts.Checkpoints
             checkpointManager.SetCheckpoint(this);
             checkpointManager.SetBoatResetPoint(boatResetPoint);
             checkpointManager.SetPlayerResetPoint(playerResetPoint);
-            Debug.Log("Checkpoint reached: " + gameObject.name);
         }
         
     }

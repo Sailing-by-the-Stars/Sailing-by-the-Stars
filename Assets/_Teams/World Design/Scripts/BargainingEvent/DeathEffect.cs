@@ -10,14 +10,6 @@ public class DeathEffect : MonoBehaviour
     {
         effects = FindFirstObjectByType<ScreenEffects>();
     }
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.H))
-        {
-            StartCoroutine(DeathSequence());
-        }
-    }
     public void PlayDeathSequence()
     {
         if (coroutine != null)
