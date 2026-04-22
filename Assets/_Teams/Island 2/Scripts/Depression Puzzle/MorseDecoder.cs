@@ -14,6 +14,7 @@ public class MorseDecoder : MonoBehaviour
     [SerializeField, Min(0.05f)] private float letterGapThreshold = 0.45f;
 
     public event Action OnMorseSolved;
+    public event Action<string> OnMorseProgressUpdated;
     public event Action OnMorseReset;
 
     private readonly Dictionary<string, char> morseMap = new()
@@ -127,6 +128,7 @@ public class MorseDecoder : MonoBehaviour
 
         progressIndex++;
         currentLetterMorse = "";
+        OnMorseProgressUpdated?.Invoke(GetCurrentProgress());
 
         if (progressIndex < normalizedTarget.Length) return;
         
@@ -138,6 +140,7 @@ public class MorseDecoder : MonoBehaviour
     public void ResetProgress()
     {
         ResetProgressInternal();
+        OnMorseProgressUpdated?.Invoke("");
         OnMorseReset?.Invoke();
     }
 
