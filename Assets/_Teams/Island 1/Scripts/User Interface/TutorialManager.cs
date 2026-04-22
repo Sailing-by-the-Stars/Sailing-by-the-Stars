@@ -154,9 +154,10 @@ namespace Assets._Teams.Island_1.Scripts.User_Interface
 
         private void OnTutorialItemGrab(IPickup pickup)
         {
-            if (currentStep == TutorialStep.PickUpItem)
-                pickupPopup.Complete();
-            if (currentStep == TutorialStep.NavigateJournal) // This is a bit hacky, but it allows us to trigger the journal tutorial when picking up the astrolabe
+            if (currentStep == TutorialStep.PickUpItem && currentPopup)
+                currentPopup.Complete();
+
+            if (currentStep == TutorialStep.NavigateJournal && currentPopup) // This is a bit hacky, but it allows us to trigger the journal tutorial when picking up the astrolabe
                 StartCoroutine(DelayNavigationPopup());
         }
 
