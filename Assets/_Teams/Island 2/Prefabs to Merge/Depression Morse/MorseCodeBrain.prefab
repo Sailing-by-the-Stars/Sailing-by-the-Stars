@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 3728688920397662244}
   - component: {fileID: 8415787348624029342}
   - component: {fileID: 4731678981858326676}
+  - component: {fileID: 8031280099325970364}
   m_Layer: 0
   m_Name: MorseCodeBrain
   m_TagString: Untagged
@@ -64,3 +65,23 @@ MonoBehaviour:
   resetLight: {fileID: 0}
   flashCount: 3
   flashInterval: 0.15
+--- !u!114 &8031280099325970364
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 420066848554275247}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f81eebbc873c4b6684520fb75ad1e0cc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MorseAudio
+  morseBeepEvent:
+    Guid:
+      Data1: -1632793322
+      Data2: 1154131728
+      Data3: 325278348
+      Data4: 49423116
+    Path: event:/UI/evnt_morsecode_button_loop
+  volume: 0.5
