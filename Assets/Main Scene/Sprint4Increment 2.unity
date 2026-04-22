@@ -215,7 +215,7 @@ GameObject:
   - component: {fileID: 69070738}
   m_Layer: 0
   m_Name: TP_5 Acceptance Island
-  m_TagString: Untagged
+  m_TagString: TeleportPoint
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -505,7 +505,7 @@ GameObject:
   - component: {fileID: 237361989}
   m_Layer: 0
   m_Name: TP_1 Denial Island
-  m_TagString: Untagged
+  m_TagString: TeleportPoint
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1084,7 +1084,7 @@ GameObject:
   - component: {fileID: 492654248}
   m_Layer: 0
   m_Name: 'TP_4 Bargaining Island '
-  m_TagString: Untagged
+  m_TagString: TeleportPoint
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1177,7 +1177,7 @@ GameObject:
   - component: {fileID: 620939363}
   m_Layer: 0
   m_Name: TP_6 Border
-  m_TagString: Untagged
+  m_TagString: TeleportPoint
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1671,6 +1671,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c2c0de4dacd93fa448db7c1e006b1d91, type: 3}
+--- !u!198 &758155326 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 6903262536331469093, guid: bc1877a99024820448e258949ebaac0a, type: 3}
+  m_PrefabInstance: {fileID: 217773227}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &769459841
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2173,11 +2178,43 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1264087599}
     - target: {fileID: 442482156103244409, guid: b6d81394640966a4d9eddec62111776c, type: 3}
+      propertyPath: boatFoam
+      value: 
+      objectReference: {fileID: 1531220077}
+    - target: {fileID: 442482156103244409, guid: b6d81394640966a4d9eddec62111776c, type: 3}
+      propertyPath: sideFoamLeft
+      value: 
+      objectReference: {fileID: 2132640169}
+    - target: {fileID: 442482156103244409, guid: b6d81394640966a4d9eddec62111776c, type: 3}
+      propertyPath: sideFoamRight
+      value: 
+      objectReference: {fileID: 758155326}
+    - target: {fileID: 442482156103244409, guid: b6d81394640966a4d9eddec62111776c, type: 3}
       propertyPath: useLocalWindSpeed
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1724215401620072782, guid: b6d81394640966a4d9eddec62111776c, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.005213942
+      objectReference: {fileID: 0}
+    - target: {fileID: 1724215401620072782, guid: b6d81394640966a4d9eddec62111776c, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.0018679424
+      objectReference: {fileID: 0}
+    - target: {fileID: 1724215401620072782, guid: b6d81394640966a4d9eddec62111776c, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.0018679425
+      objectReference: {fileID: 0}
     - target: {fileID: 3504693389630025193, guid: b6d81394640966a4d9eddec62111776c, type: 3}
       propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4264595172339164435, guid: b6d81394640966a4d9eddec62111776c, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4784393098663181645, guid: b6d81394640966a4d9eddec62111776c, type: 3}
+      propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5823210049457476915, guid: b6d81394640966a4d9eddec62111776c, type: 3}
@@ -2187,6 +2224,10 @@ PrefabInstance:
     - target: {fileID: 6099197165009078058, guid: b6d81394640966a4d9eddec62111776c, type: 3}
       propertyPath: m_TagString
       value: boat
+      objectReference: {fileID: 0}
+    - target: {fileID: 6432128836254272208, guid: b6d81394640966a4d9eddec62111776c, type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6736058736273579916, guid: b6d81394640966a4d9eddec62111776c, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2228,9 +2269,25 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7973291497924292880, guid: b6d81394640966a4d9eddec62111776c, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.21534903
+      objectReference: {fileID: 0}
+    - target: {fileID: 7973291497924292880, guid: b6d81394640966a4d9eddec62111776c, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.21534903
+      objectReference: {fileID: 0}
+    - target: {fileID: 7973291497924292880, guid: b6d81394640966a4d9eddec62111776c, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.8765782
+      objectReference: {fileID: 0}
+    - target: {fileID: 8466984359146473101, guid: b6d81394640966a4d9eddec62111776c, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.76006144
+      objectReference: {fileID: 0}
     - target: {fileID: 8637761892201532281, guid: b6d81394640966a4d9eddec62111776c, type: 3}
       propertyPath: m_TagString
-      value: boat
+      value: Untagged
       objectReference: {fileID: 0}
     - target: {fileID: 8793327576181382360, guid: b6d81394640966a4d9eddec62111776c, type: 3}
       propertyPath: m_Name
@@ -2681,7 +2738,7 @@ GameObject:
   - component: {fileID: 1004502220}
   m_Layer: 0
   m_Name: TP_3 Depression Island
-  m_TagString: Untagged
+  m_TagString: TeleportPoint
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3099,7 +3156,7 @@ GameObject:
   - component: {fileID: 1344104787}
   m_Layer: 0
   m_Name: TP_2 Anger Island
-  m_TagString: Untagged
+  m_TagString: TeleportPoint
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3549,6 +3606,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 96c85c1a168ab394690e952e74aa49ca, type: 3}
+--- !u!198 &1531220077 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 238365294816435835, guid: bc1877a99024820448e258949ebaac0a, type: 3}
+  m_PrefabInstance: {fileID: 217773227}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1532235835
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4742,6 +4804,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f958aac2a7d0dde45bcf8f12e99e4fb3, type: 3}
+--- !u!198 &2132640169 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 4099714631464675958, guid: bc1877a99024820448e258949ebaac0a, type: 3}
+  m_PrefabInstance: {fileID: 217773227}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1360589984466940535
 MonoBehaviour:
   m_ObjectHideFlags: 0
