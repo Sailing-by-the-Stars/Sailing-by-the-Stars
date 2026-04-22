@@ -39,6 +39,7 @@ public class PhysicsPickup : MonoBehaviour, IPickup
     {
         transform.parent = null;
         SetPhysicsValue(false);
+        pickupRigidbody.useGravity = true;
         
         GameEvents.ExecOnDrop(this);
     }
