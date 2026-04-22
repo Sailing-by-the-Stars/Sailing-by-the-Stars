@@ -129,11 +129,9 @@ public class GlobeShape : MonoBehaviour
         NativeArray<byte> changed = new NativeArray<byte>(count, Allocator.TempJob, NativeArrayOptions.ClearMemory);
 
         for (int i = 0; i < count; i++)
-            changed[i] = 1;
-
-        for (int i = 0; i < count; i++)
         {
             starPositions[i] = iStars[i].initpos;
+            changed[i] = 1;
         }
 
         var job = new StarSphereJob()
@@ -151,7 +149,6 @@ public class GlobeShape : MonoBehaviour
         handle.Complete();
 
 
-
         for (int i = 0; i < count; i++)
         {
             if (changed[i] == 1)
@@ -159,7 +156,7 @@ public class GlobeShape : MonoBehaviour
                 Transform t = iStars[i].transform;
                 Vector3 newPos = starPositions[i];
 
-                if ((t.position - newPos).sqrMagnitude > 0.01f)
+                if ((t.position - newPos).sqrMagnitude > 0.001f)
                 {
                     t.position = newPos;
                     if (newPos.y > 0) 

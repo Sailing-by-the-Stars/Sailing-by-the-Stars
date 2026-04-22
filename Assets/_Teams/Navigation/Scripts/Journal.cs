@@ -20,9 +20,8 @@ public class Journal : ToolPickup
     private bool bookOpened;
     private Quaternion initalRot;
 
-
-    RawImage leftPage;
-    RawImage rightPage;
+    MeshRenderer leftPageQ;
+    MeshRenderer rightPageQ;
 
     [SerializeField]
     List<Page> pages = new();
@@ -79,10 +78,10 @@ public class Journal : ToolPickup
 
             if (pages[pageNr].leftPage)
             {
-                leftPage.enabled = true;
+                leftPageQ.enabled = true;
 
                 Texture tex = pages[pageNr].leftPage;
-                RectTransform rt = leftPage.rectTransform;
+                Transform rt = leftPageQ.transform;
 
                 float width = tex.width;
                 float height = tex.height;
@@ -90,28 +89,28 @@ public class Journal : ToolPickup
                 if (width > height)
                 {
                     float ratio = height / width;
-                    rt.sizeDelta = new Vector2(1f, ratio);
+                    rt.localScale = new Vector2(1f, ratio);
                 }
                 else
                 {
                     float ratio = width / height;
-                    rt.sizeDelta = new Vector2(ratio, 1f);
+                    rt.localScale = new Vector2(ratio, 1f);
                 }
 
-                leftPage.texture = tex;
+                leftPageQ.sharedMaterial.mainTexture = tex;
             }
             else
             {
-                leftPage.enabled = false;
+                leftPageQ.enabled = false;
             }
 
 
             if (pages[pageNr].rightPage)
             {
-                rightPage.enabled = true;
+                rightPageQ.enabled = true;
 
                 Texture tex = pages[pageNr].rightPage;
-                RectTransform rt = rightPage.rectTransform;
+                Transform rt = rightPageQ.transform;
 
                 float width = tex.width;
                 float height = tex.height;
@@ -119,19 +118,19 @@ public class Journal : ToolPickup
                 if (width > height)
                 {
                     float ratio = height / width;
-                    rt.sizeDelta = new Vector2(1f, ratio);
+                    rt.localScale = new Vector2(1f, ratio);
                 }
                 else
                 {
                     float ratio = width / height;
-                    rt.sizeDelta = new Vector2(ratio, 1f);
+                    rt.localScale = new Vector2(ratio, 1f);
                 }
 
-                rightPage.texture = tex;
+                rightPageQ.sharedMaterial.mainTexture = tex;
             }
             else
             {
-                rightPage.enabled = false;
+                rightPageQ.enabled = false;
             }
 
 
@@ -160,15 +159,15 @@ public class Journal : ToolPickup
                 }
                 else
                 {
-                    leftPage.enabled = false;
-                    rightPage.enabled = false;
+                    leftPageQ.enabled = false;
+                    rightPageQ.enabled = false;
                 }
 
             }
             else
             {
-                leftPage.enabled = false;
-                rightPage.enabled = false;
+                leftPageQ.enabled = false;
+                rightPageQ.enabled = false;
 
                 bookangle += angelPerSecond * Time.deltaTime;
                 if (bookangle > 100)
@@ -182,8 +181,8 @@ public class Journal : ToolPickup
         }
         else
         {
-            leftPage.enabled = false;
-            rightPage.enabled = false;
+            leftPageQ.enabled = false;
+            rightPageQ.enabled = false;
             bookangle = 100;
             bookRenderer.SetBlendShapeWeight(0, bookangle);
         }
@@ -196,24 +195,24 @@ public class Journal : ToolPickup
     
     void Start()
     {
-        List<RawImage> images = GetComponentsInChildren<RawImage>().ToList();
+        List<MeshRenderer> images = GetComponentsInChildren<MeshRenderer>().ToList();
 
-        foreach (RawImage image in images)
+        foreach (MeshRenderer image in images)
         {
             if (image.name == "leftPage")
             {
-                leftPage = image;
+                leftPageQ = image;
             }
 
             if (image.name == "rightPage")
             {
-                rightPage = image;
+                rightPageQ = image;
             }
         }
 
         bookRenderer = GetComponentInChildren<SkinnedMeshRenderer>();
 
-        leftPage.enabled = false;
-        leftPage.enabled = false;
+        leftPageQ.enabled = false;
+        rightPageQ.enabled = false;
     }
 }
