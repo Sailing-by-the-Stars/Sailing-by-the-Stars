@@ -27,6 +27,7 @@ public class FlatStarField : MonoBehaviour
     [SerializeField] List<ManualTwinkler> twinklingStars = new();
     [SerializeField] float minManualSize = 8;
     [SerializeField] float manualSizeMult = 1.5f;
+    [SerializeField] float flatManualSizeAdd = 20;
 
     [ContextMenu("fix my shit plz")]
     void fixiiiiiiit()
@@ -121,7 +122,7 @@ public class FlatStarField : MonoBehaviour
      new int[] { 7121, 7116, 7194, 6913, 7234, 7337, 7348, 6859 }),
 
     ("Bootes",
-     new int[] { 5340, 5435, 5506, 5602, 5681, 5533, 5350 }),
+     new int[] { 5200, 5235, 5340, 5429, 5435, 5477, 5506, 5602, 5681 }),
 
     ("Virgo",
      new int[] { 5107, 4910, 4825, 4689, 4540, 5056, 5196, 5315, 5338 }),
@@ -282,6 +283,7 @@ public class FlatStarField : MonoBehaviour
             //>
             //star.position.y = 0;
             stargo.transform.localPosition = star.position * starFieldScale;
+            stargo.transform.rotation = transform.rotation;
 
             stargo.transform.Rotate(90, 0, 0);
             //<
@@ -314,6 +316,9 @@ public class FlatStarField : MonoBehaviour
                 {
 
                     stargo.transform.localScale *= manualSizeMult;
+
+                    Vector3 addedScale = new Vector3(stargo.transform.localScale.x + flatManualSizeAdd, stargo.transform.localScale.y + flatManualSizeAdd, stargo.transform.localScale.z + flatManualSizeAdd);
+                    stargo.transform.localScale = addedScale;
                 }
 
             }

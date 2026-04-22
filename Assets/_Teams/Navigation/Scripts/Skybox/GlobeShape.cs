@@ -7,8 +7,6 @@ using UnityEngine;
 
 public class GlobeShape : MonoBehaviour
 {
-    [SerializeField] Camera MainCamera;
-
     [SerializeField] float globeRadius = 5;
     [SerializeField] int resolution = 10;
     [SerializeField] float offsetY = 5000f;

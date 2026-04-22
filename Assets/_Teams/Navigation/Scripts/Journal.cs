@@ -5,6 +5,13 @@ using UnityEngine;
 using UnityEngine.UI;
 using static UnityEngine.Rendering.DebugUI;
 
+[Serializable]
+public class Page
+{
+    public Texture leftPage;
+    public Texture rightPage;
+}
+
 public class Journal : ToolPickup
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -187,7 +194,6 @@ public class Journal : ToolPickup
         pages.Add(page);
     }
     
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         List<RawImage> images = GetComponentsInChildren<RawImage>().ToList();
