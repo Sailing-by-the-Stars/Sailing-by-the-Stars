@@ -20,14 +20,18 @@ public class TeleportManager : MonoBehaviour
     {
         teleportPoints.Clear();
 
-        foreach (var t in FindObjectsByType<Transform>(FindObjectsSortMode.None))
+        foreach (var go in GameObject.FindGameObjectsWithTag("TeleportPoint"))
         {
-            if (t.name.StartsWith("TP_"))
+            if (go.name.StartsWith("TP_"))
             {
-                string cleanName = t.name.Replace("TP_", "");
-                teleportPoints[cleanName] = t;
+                string cleanName = go.name.Replace("TP_", "");
+                teleportPoints[cleanName] = go.transform;
             }
         }
+    }
+    public void TeleportObjectNextToPlayer(GameObject go)
+    {
+        go.transform.position = player.position + Vector3.right * 1.5f;
     }
 
     public Dictionary<string, Transform> GetTeleportPoints() => teleportPoints;

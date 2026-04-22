@@ -4,13 +4,12 @@ using TMPro;
 using UnityEngine.InputSystem;
 using System.Linq;
 
-public class TeleportMenu : MonoBehaviour
+public class DebugMenu : MonoBehaviour
 {
     [Header("UI")]
     public GameObject menuPanel;
     public Button buttonPrefab;
     public Transform container;
-
     private InputSystem_Actions input;
     private bool isOpen;
 
@@ -81,5 +80,16 @@ public class TeleportMenu : MonoBehaviour
                 ToggleMenu();
             });
         }
+
+        var spawnBtn = Instantiate(buttonPrefab, container);
+        spawnBtn.GetComponentInChildren<TextMeshProUGUI>().text = "Spawn Boat";
+        spawnBtn.onClick.AddListener(() =>
+        {
+            var boat = GameObject.FindGameObjectWithTag("boat");
+            if (boat != null)
+                TeleportManager.Instance.TeleportObjectNextToPlayer(boat);
+            else
+                Debug.LogWarning("No object with tag 'Boat' found in scene.");
+        });
     }
 }
