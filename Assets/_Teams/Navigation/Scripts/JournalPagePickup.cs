@@ -21,6 +21,11 @@ public class JournalPagePickup : MonoBehaviour, IPickup
 {
     private Journal journal;
 
+    [SerializeField]
+    protected int pageIDHack = -1;
+    [SerializeField]
+    protected bool leftOnly = false;
+
     public virtual string InteractMessage => "Press E to pickup";
 
     public void Interact(InteractionController interactionController)
@@ -63,7 +68,7 @@ public class JournalPagePickup : MonoBehaviour, IPickup
             return false;
         }
         
-        journal.GetComponent<Journal>().AddPage(page);
+        journal.GetComponent<Journal>().AddPage(page, pageIDHack);
         
         return true;
     }

@@ -231,7 +231,21 @@ public class Journal : ToolPickup, AstroTutorialStep
     {
         pages.Add(page);
     }
-    
+
+    public void AddPage(Page page, int pageID)
+    {
+        if(pageID >= 0 && pages.Count - 1 >= pageID)
+        {
+            pages[pageID] = page;
+        }
+        else
+        {
+            Debug.LogWarning($"had to fall back! {pageID}");
+            pages.Add(page);
+        }
+
+    }
+
     void Start()
     {
         List<MeshRenderer> images = GetComponentsInChildren<MeshRenderer>().ToList();
