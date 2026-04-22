@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,8 +7,13 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Astrolabe : ToolPickup
+public class Astrolabe : ToolPickup, AstroTutorialStep
 {
+    [NonSerialized]
+    public TutorialSequence currentSequence;
+    [NonSerialized]
+    public int currentTutorialStep = -1;
+
     private Camera cam;
     
     private float initialFOV;
@@ -49,6 +55,31 @@ public class Astrolabe : ToolPickup
         }
     }
 
+    public void EnterStep(TutorialSequence sequence)
+    {
+        if (currentSequence != null && currentSequence != sequence)
+        {
+            Debug.LogError("this tutorialDialogue object is already in a different sequence!!");
+            return;
+        }
+        currentSequence = sequence;
+        currentTutorialStep = sequence.index;
+
+
+    }
+
+    public void ExitStep()
+    {
+        if (!currentSequence)
+        {
+            Debug.LogError("tried continueing a tutorial while none was assigned!");
+            return;
+        }
+
+        currentSequence.FinishStep(currentTutorialStep);
+        currentSequence = null;
+    }
+
     public override void Grab(PickupController pickupController)
     {
         base.Grab(pickupController);
@@ -74,16 +105,16 @@ public class Astrolabe : ToolPickup
         }
         
         //Astrolabe should be visible when picked up
-        visible = true;
+        visible = false;
 
         foreach (Renderer renderer in renderers)
         {
-            renderer.enabled = true;
+            renderer.enabled = false;
         }
         
         foreach (TMP_Text text in textBoxes)
         {
-            text.enabled = true;
+            text.enabled = false;
         }
         
         cam = GetComponentInParent<Camera>();
@@ -92,10 +123,10 @@ public class Astrolabe : ToolPickup
         
         animationCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
 
-        zoomedIn = true;
+        zoomedIn = false;
         if (zoomCoroutine == null)
         {
-            zoomCoroutine = StartCoroutine(ZoomIn());
+            zoomCoroutine = StartCoroutine(ZoomOut(animationTime - Time.deltaTime));
         }
         sideView = false;
     }
@@ -176,6 +207,11 @@ public class Astrolabe : ToolPickup
 
             if (Input.GetKeyDown(KeyCode.Tab))
             {
+                if (currentSequence != null)
+                {
+                    ExitStep();
+                }
+
                 visible = !visible;
                 foreach (Renderer rend in renderers)
                 {

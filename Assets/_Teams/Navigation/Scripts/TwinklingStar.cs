@@ -95,8 +95,20 @@ public class TwinklingStar : MonoBehaviour
             return;
         }
 
-        const float tolerance = 1;
-        if ((hitAngle + 1) >= targetAngle)
+        if (hitAngle < 5)
+        {
+            return;
+        }
+
+
+        if (!TutorialSequence.finishedTutorial && TutorialSequence.startedTutorial && TutorialSequence.Instance.index == 1)
+        {
+            TutorialSequence.Instance.NextStep(2);
+        }
+
+        Debug.Log($"star hit at angle: {hitAngle}");
+
+        if ((hitAngle) >= targetAngle)
         {
             currentTarget = -1;
             starState = StarState.dimmed;

@@ -12,8 +12,14 @@ public class Page
     public Texture rightPage;
 }
 
-public class Journal : ToolPickup
+public class Journal : ToolPickup, AstroTutorialStep
 {
+    [NonSerialized]
+    public TutorialSequence currentSequence;
+    [NonSerialized]
+    public int currentTutorialStep = -1;
+
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     private bool isEquipped;
     private bool bookVisible;
@@ -43,14 +49,39 @@ public class Journal : ToolPickup
         
         //Disable collider to hide interact text
         GetComponent<BoxCollider>().enabled = false;
-        bookVisible = true;
-        bookangle = 100;
-        bookOpened = true;
-        
+        bookVisible = false;
+        bookangle = 101;
+        bookOpened = false;
+
+        transform.GetChild(0).gameObject.SetActive(false);
+
         initalRot = Quaternion.Euler(90, 90, 90);
         transform.localRotation = initalRot;
     }
-    
+
+    public void EnterStep(TutorialSequence sequence)
+    {
+        if (currentSequence != null && currentSequence != sequence)
+        {
+            Debug.LogError("this tutorialDialogue object is already in a different sequence!!");
+            return;
+        }
+        currentSequence = sequence;
+        currentTutorialStep = sequence.index;
+    }
+
+    public void ExitStep()
+    {
+        if (!currentSequence)
+        {
+            Debug.LogError("tried continueing a tutorial while none was assigned!");
+            return;
+        }
+
+        currentSequence.FinishStep(currentTutorialStep);
+        currentSequence = null;
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -147,6 +178,11 @@ public class Journal : ToolPickup
                     bookVisible = true;
                     bookOpened = true;
                     bookangle = 100;
+
+                    if(TutorialSequence.startedTutorial && TutorialSequence.Instance.index == 0)
+                    {
+                        TutorialSequence.Instance.NextStep(1);
+                    }
                 }
             }
 
@@ -187,6 +223,9 @@ public class Journal : ToolPickup
             bookRenderer.SetBlendShapeWeight(0, bookangle);
         }
     }
+
+
+
 
     public void AddPage(Page page)
     {
