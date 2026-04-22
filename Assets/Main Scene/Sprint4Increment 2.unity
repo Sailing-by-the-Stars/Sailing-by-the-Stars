@@ -2983,6 +2983,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2878314677265258634, guid: f41368a9eab38fa4b9e4770f5e06511f, type: 3}
+      propertyPath: wakeUp
+      value: 
+      objectReference: {fileID: 1929426168}
     - target: {fileID: 4623731682099826885, guid: f41368a9eab38fa4b9e4770f5e06511f, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -4509,6 +4513,17 @@ Transform:
   - {fileID: 510331343}
   m_Father: {fileID: 190591031}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1929426168 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1295535171583159672, guid: 700214b8f0ced37439bdaa8e63bdb5eb, type: 3}
+  m_PrefabInstance: {fileID: 1845947117}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b6e7a6a33368654895de351e2f2592e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WakeUp
 --- !u!1 &1945920241
 GameObject:
   m_ObjectHideFlags: 0
