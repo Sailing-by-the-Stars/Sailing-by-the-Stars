@@ -6,10 +6,18 @@ using UnityEngine.Rendering.HighDefinition;
 using static StarDataLoader;
 
 [Serializable]
-public class manualStar
+public class Constelation
 {
-    public int starID = 0;
+    public string name = "";
+    public List<int> starIDs = new();
     public GameObject starPrefab;
+}
+
+[Serializable]
+public class ManualTwinkler
+{
+    public int starID;
+    public int targetAngle; 
 }
 
 
@@ -24,7 +32,7 @@ public class StarField : MonoBehaviour
     public List<GameObject> starObjects;
     private Dictionary<int, GameObject> constellationVisible = new();
 
-    [SerializeField] List<manualStar> manualStars = new();
+    [SerializeField] List<Constelation> manualStars = new();
 
     private readonly int starFieldScale = 400;
 
@@ -32,7 +40,7 @@ public class StarField : MonoBehaviour
     {
         // Read in the star data.
         StarDataLoader sdl = new();
-        stars = sdl.LoadData();
+        stars = sdl.LoadData(new SphereStarPosition());
         starObjects = new();
         foreach (StarDataLoader.Star star in stars)
         {
@@ -72,8 +80,8 @@ public class StarField : MonoBehaviour
 
 
 
-
-        foreach (manualStar manualStar in manualStars)
+        /*
+        foreach (Constelation manualStar in manualStars)
         {
             GameObject oldStar = starObjects[manualStar.starID - 1];
 
@@ -89,6 +97,7 @@ public class StarField : MonoBehaviour
 
             Destroy(oldStar);
         }
+        */
     }
 
     // Could also do in Update with Time.deltatime scaling.

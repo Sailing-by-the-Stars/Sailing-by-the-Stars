@@ -45,7 +45,7 @@ public class BuoyancyController : MonoBehaviour
         CreateExtraVertices();
 
         Vector3 buoyancyObjectPosition = new Vector3(0f, -draft, 0f);
-        buoyancyQuadObject.transform.position = buoyancyObjectPosition;
+        buoyancyQuadObject.transform.localPosition = buoyancyObjectPosition;
 
         searchResult = new WaterSearchResult[buoyancyVertices.Count];
 

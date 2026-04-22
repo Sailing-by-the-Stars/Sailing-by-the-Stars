@@ -13,11 +13,12 @@ MonoBehaviour:
   m_Name: Weather_Storm_Fog
   m_EditorClassIdentifier: Assembly-CSharp::WeatherState
   values:
-    windSpeed: 15
+    windSpeed: 10
     windDirectionDegrees: 180
     windRandomEventsActive: 1
     windAutoRerollIntensity: 15
     rainIntensity: 0.6
-    thunderIntensity: 0.2
+    thunderActive: 0
+    chanceOfThunderStrikePerInterval: 0.2
     waveIntensity: 0.6
   fogSettings: {fileID: 11400000, guid: a43822b53d520f04c9f81f668286810e, type: 2}

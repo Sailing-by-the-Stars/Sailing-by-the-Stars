@@ -1,98 +1,65 @@
+using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
+public class ConditionalDialogue
+{
+    public Dialogue dialogue;
+    public List<DialogueCondition> conditions;
+}
 /// <summary>
 /// Handles dialogue interaction with this NPC.
 /// Ensures only the closest NPC can be interacted with.
 /// </summary>
 public class NPCDialogueHolder : MonoBehaviour, IInteractable
 {
-    [Tooltip("Dialogue shown the first time the player talks to this NPC.")]
-    public Dialogue firstDialogue;
-
-    [Tooltip("Enable if the NPC should say something different after the first interaction.")]
-    public bool hasRepeatDialogue;
-
-    [Tooltip("Optional dialogue shown after the first interaction.")]
-    public Dialogue repeatDialogue;
+    public List<ConditionalDialogue> dialogues;
 
     [HideInInspector]
     public bool hasInteractedBefore = false;
-
-    // [Tooltip("Distance the player must be within to talk to this NPC.")]
-    // public float interactionDistance = 3f;
-
-    // private Transform player;
-    // private bool isInteracting;
-    // private static NPCDialogueHolder currentClosestNPC;
-    // private static float closestDistance = Mathf.Infinity;
     [SerializeField] private string interactMessage = "Press E to Talk";
     public string InteractMessage => interactMessage;
-
-    // void Update()
-    // {
-        // if (player == null) return;
-
-        // float distance = Vector3.Distance(transform.position, player.position);
-
-        // // Player left range
-        // if (distance > interactionDistance)
-        // {
-        //     if (currentClosestNPC == this)
-        //     {
-        //         currentClosestNPC = null;
-        //         InteractionPromptUI.Instance.HidePrompt();
-        //     }
-
-        //     return;
-        // }
-
-        // // Determine closest NPC
-        // if (currentClosestNPC == null || distance < closestDistance)
-        // {
-        //     currentClosestNPC = this;
-        //     closestDistance = distance;
-        // }
-
-        // // Only closest NPC can interact
-        // if (currentClosestNPC != this) return;
-
-        // Hide prompt if dialogue active
-        // if (DialogueSystem.Instance.isDialogueActive)
-        // {
-        //     InteractionPromptUI.Instance.HidePrompt();
-        //     return;
-        // }
-
-        // // Show prompt when in range
-        // InteractionPromptUI.Instance.ShowPrompt("Press Enter to Talk");
-
-        // if (Input.GetKeyDown(KeyCode.Return) && !DialogueSystem.Instance.isDialogueActive)
-        // {
-        //     StartConversation();
-        // }
-    // }
     public void Interact(InteractionController interactionController)
     {
         StartConversation();
     }
 
     void StartConversation()
-    {  
-        Debug.Log("Raarg");
-        //InteractionPromptUI.Instance.HidePrompt();
+    {
         if (GetComponent<Animator>() != null)
-        {
             GetComponent<Animator>().SetBool("IsTalking", true);
-        }
-        if (!hasInteractedBefore || !hasRepeatDialogue)
+
+        // 👇 LOOP BACKWARDS (highest priority = last added)
+        for (int i = dialogues.Count - 1; i >= 0; i--)
         {
-            DialogueSystem.Instance.StartDialogue(firstDialogue, this.gameObject);
-            hasInteractedBefore = true;
+            var entry = dialogues[i];
+
+            bool valid = true;
+
+            // If no conditions → treat as fallback
+            if (entry.conditions != null && entry.conditions.Count > 0)
+            {
+                foreach (var cond in entry.conditions)
+                {
+                    if (!cond.Evaluate(PlayerState.Instance))
+                    {
+                        valid = false;
+                        break;
+                    }
+                }
+            }
+
+            if (valid)
+            {
+                Debug.Log(DialogueSystem.Instance.name);
+                Debug.Log(entry.dialogue.npcName);
+                Debug.Log(gameObject.name);
+                DialogueSystem.Instance.StartDialogue(entry.dialogue, gameObject);
+                return;
+            }
         }
-        else
-        {
-            DialogueSystem.Instance.StartDialogue(repeatDialogue, this.gameObject);
-        }
+
+        Debug.LogWarning("No valid dialogue found for NPC.");
     }
 
     public void EndConversation()

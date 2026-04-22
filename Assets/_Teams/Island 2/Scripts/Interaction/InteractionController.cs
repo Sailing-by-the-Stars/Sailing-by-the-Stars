@@ -19,6 +19,7 @@ public class InteractionController : MonoBehaviour
     [SerializeField] private float interactionDistance = 5f;
 
     private RaycastHit currentHit;
+    private IInteractable activeInteractable;
     private IInteractable currentTargetedInteractable;
     public Transform CurrentHitTransform => currentHit.collider ? currentHit.collider.transform : null;
 
@@ -55,10 +56,23 @@ public class InteractionController : MonoBehaviour
 
     private void CheckForInteractionInput()
     {
+        if (currentTargetedInteractable == null || DialogueSystem.Instance.isDialogueActive) return;
+
         // TODO: replace hardcoded key press with Input Actions
-        if (Keyboard.current.eKey.wasPressedThisFrame && currentTargetedInteractable != null && !DialogueSystem.Instance.isDialogueActive)
+        var key = Keyboard.current.eKey;
+
+        if (key.wasPressedThisFrame)
         {
-            currentTargetedInteractable.Interact(this);
+            activeInteractable = currentTargetedInteractable;
+
+            activeInteractable.Interact(this);
+            activeInteractable.HoldInteract(this);
+        }
+
+        if (key.wasReleasedThisFrame && activeInteractable != null)
+        {
+            activeInteractable.ReleaseInteract(this);
+            activeInteractable = null;
         }
     }
 }
