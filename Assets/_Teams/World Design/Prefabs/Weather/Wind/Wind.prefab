@@ -411,11 +411,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b0c0345354e40bf974cf4384985d050, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WindObject
-  windArrowPrimary: {fileID: 578223750586730049}
-  windArrowSecondary: {fileID: 8821442012375214310}
+  windArrowA: {fileID: 578223750586730049}
+  windArrowB: {fileID: 8821442012375214310}
   currentWindDirection: {x: 0, y: 0, z: 1}
-  windTrailsPrimary: {fileID: 4326481702907995673}
-  windTrailsSecondary: {fileID: 6458556739478959172}
+  windTrailA: {fileID: 4326481702907995673}
+  windTrailB: {fileID: 6458556739478959172}
+  enableWindTrailA: 1
+  enableWindTrailB: 1
   restartAngleThreshold: 1
   windTrailIntensity: 100
 --- !u!1 &5487320197730511769
@@ -474,7 +476,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8821442012375214310}
   m_Layer: 0
-  m_Name: WindArrowSecondary
+  m_Name: WindArrowB
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -600,7 +602,7 @@ GameObject:
   m_Component:
   - component: {fileID: 578223750586730049}
   m_Layer: 0
-  m_Name: WindArrowPrimary
+  m_Name: WindArrowA
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -702,12 +704,24 @@ PrefabInstance:
       value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 2527857577195567333, guid: 4403c7a3401dcd94596a164f74684081, type: 3}
+      propertyPath: InitialModule.startColor.maxColor.b
+      value: 0.28068638
+      objectReference: {fileID: 0}
+    - target: {fileID: 2527857577195567333, guid: 4403c7a3401dcd94596a164f74684081, type: 3}
+      propertyPath: InitialModule.startColor.maxColor.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2527857577195567333, guid: 4403c7a3401dcd94596a164f74684081, type: 3}
+      propertyPath: InitialModule.startColor.maxColor.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2527857577195567333, guid: 4403c7a3401dcd94596a164f74684081, type: 3}
       propertyPath: InitialModule.startLifetime.minScalar
       value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 5387749198984058057, guid: 4403c7a3401dcd94596a164f74684081, type: 3}
       propertyPath: m_Name
-      value: WindTrailPrimary
+      value: WindTrailA
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -802,7 +816,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5387749198984058057, guid: 4403c7a3401dcd94596a164f74684081, type: 3}
       propertyPath: m_Name
-      value: WindTrailsSecondary
+      value: WindTrailsB
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

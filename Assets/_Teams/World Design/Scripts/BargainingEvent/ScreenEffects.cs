@@ -21,6 +21,8 @@ public class ScreenEffects : MonoBehaviour
     [SerializeField] private float defaultVignetteAlpha = 0.6f;
 
     private Image overlayImage;
+    private Vector3? originalCameraPosition = null;
+    private int activeShakes = 0;
 
     private void Awake()
     {
@@ -75,7 +77,13 @@ public class ScreenEffects : MonoBehaviour
             yield break;
         }
 
-        Vector3 originalPos = Camera.main.transform.localPosition;
+        if (activeShakes == 0)
+        {
+            originalCameraPosition = Camera.main.transform.localPosition;
+        }
+        activeShakes++;
+
+        Vector3 originalPos = originalCameraPosition.Value;
         float elapsed = 0f;
 
         while (elapsed < duration)
@@ -86,7 +94,11 @@ public class ScreenEffects : MonoBehaviour
             yield return null;
         }
 
-        Camera.main.transform.localPosition = originalPos;
+        activeShakes--;
+        if (activeShakes == 0)
+        {
+            Camera.main.transform.localPosition = originalCameraPosition.Value;
+        }
     }
 
     private IEnumerator FlashRoutine(Color color, float duration)
