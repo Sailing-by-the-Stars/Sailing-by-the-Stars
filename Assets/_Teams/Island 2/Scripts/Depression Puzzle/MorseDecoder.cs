@@ -167,6 +167,7 @@ public class MorseDecoder : MonoBehaviour
         if (rewardItem)
         {
             rewardItem.SetActive(true);
+            PuzzleProgress.MarkComplete("depression");
         }
     }
 

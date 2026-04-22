@@ -247,8 +247,8 @@ public class PShadowGridManager : MonoBehaviour
         List<PShadowPillar> pillarsToCheck = grid.Cast<PShadowPillar>().Where(pillar => pillar).ToList();
         if (pillarsToCheck.Any(pillar => !pillar.IsInCorrectPosition())) return;
         
-        // TODO: Do things here when puzzle is solved
         Debug.Log("PUZZLE SOLVED!");
+        PuzzleProgress.MarkComplete("anger");
     }
 
     private struct MoveRequest
