@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &7892241541563176773
+--- !u!1 &7481902045640187767
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,53 +8,52 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 6696782086901863641}
-  - component: {fileID: 7520814892430782845}
-  - component: {fileID: 1584634919558333866}
-  - component: {fileID: 6076293873339863291}
-  - component: {fileID: 8376894608700700532}
+  - component: {fileID: 8165048445367438813}
+  - component: {fileID: 3464344816860725075}
+  - component: {fileID: 9039121261355161395}
+  - component: {fileID: 8531522699316817737}
   m_Layer: 0
-  m_Name: ThunderSpawner
+  m_Name: ThunderSpawnBounds
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &6696782086901863641
+--- !u!4 &8165048445367438813
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7892241541563176773}
+  m_GameObject: {fileID: 7481902045640187767}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5.4, y: 26, z: 17.4}
-  m_LocalScale: {x: 0.3877678, y: 0.012652638, z: 0.7085841}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 100, y: 0.1, z: 50}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 6696782086901863641}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &7520814892430782845
+--- !u!33 &3464344816860725075
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7892241541563176773}
+  m_GameObject: {fileID: 7481902045640187767}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!23 &1584634919558333866
+--- !u!23 &9039121261355161395
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7892241541563176773}
-  m_Enabled: 0
-  m_CastShadows: 0
+  m_GameObject: {fileID: 7481902045640187767}
+  m_Enabled: 1
+  m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
-  m_StaticShadowCaster: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -92,6 +91,61 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &8531522699316817737
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7481902045640187767}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &7892241541563176773
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6696782086901863641}
+  - component: {fileID: 6076293873339863291}
+  - component: {fileID: 8376894608700700532}
+  m_Layer: 0
+  m_Name: ThunderSpawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6696782086901863641
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7892241541563176773}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 5.4, y: 26, z: 17.4}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 8165048445367438813}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &6076293873339863291
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -125,7 +179,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5488ec523dc2499a8775d07b01fc6e66, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_Teams.World_Design.Scripts.ZoneEffects.Environmental.WeatherEvents.Thunder.ThunderSpawnObject
-  spawnPrefab: {fileID: 0}
+  spawnPrefab: {fileID: 8876905558650906641, guid: 0e5da7fc82db93241b3c15553b6c678a, type: 3}
   spawnOnStart: 1
   worldOffset: {x: 0, y: 0, z: 0}
   intensity: 0
+  boundsObject: {fileID: 0}

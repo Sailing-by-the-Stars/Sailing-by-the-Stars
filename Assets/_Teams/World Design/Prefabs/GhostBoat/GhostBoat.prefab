@@ -528,6 +528,21 @@ MonoBehaviour:
   playerCamera: {fileID: 0}
   centerTolerance: 0.152
   faceTarget: 1
+  parameterName: Clockon
+  ghostBoatEventAudio:
+    Guid:
+      Data1: -1717487581
+      Data2: 1329986160
+      Data3: 323660442
+      Data4: -675228333
+    Path: event:/ChallengeEvents/event_Denial_GhostBoat
+  boatStopSound:
+    Guid:
+      Data1: 254614236
+      Data2: 1210134590
+      Data3: -856305484
+      Data4: -90045178
+    Path: event:/ChallengeEvents/event_BoatStop
 --- !u!114 &6771468533994905110
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -564,11 +579,11 @@ MonoBehaviour:
   CollisionTag: 
   EventReference:
     Guid:
-      Data1: 687277345
-      Data2: 1207688506
-      Data3: -2132639604
-      Data4: -948113825
-    Path: event:/ChallengeEvents/event_BargainingEvent
+      Data1: -1717487581
+      Data2: 1329986160
+      Data3: 323660442
+      Data4: -675228333
+    Path: event:/ChallengeEvents/event_Denial_GhostBoat
   Event: 
   EventPlayTrigger: 1
   EventStopTrigger: 2
@@ -578,8 +593,8 @@ MonoBehaviour:
   NonRigidbodyVelocity: 0
   Params: []
   OverrideAttenuation: 1
-  OverrideMinDistance: 300
-  OverrideMaxDistance: 400
+  OverrideMinDistance: 0.90000004
+  OverrideMaxDistance: 500
 --- !u!1 &3744536236126380214
 GameObject:
   m_ObjectHideFlags: 0
