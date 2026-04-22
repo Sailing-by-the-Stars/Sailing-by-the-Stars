@@ -2477,10 +2477,34 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 295215951647830848, guid: 346d7afdd9d00024d9d08d1cc403060b, type: 3}
+      propertyPath: boundsAudio
+      value: 
+      objectReference: {fileID: 1557364859}
+    - target: {fileID: 897577092575822212, guid: 346d7afdd9d00024d9d08d1cc403060b, type: 3}
+      propertyPath: boundsAudio
+      value: 
+      objectReference: {fileID: 1557364859}
     - target: {fileID: 2002367723657281230, guid: 346d7afdd9d00024d9d08d1cc403060b, type: 3}
       propertyPath: m_Name
       value: BordersPrefab
       objectReference: {fileID: 0}
+    - target: {fileID: 2241598427191340511, guid: 346d7afdd9d00024d9d08d1cc403060b, type: 3}
+      propertyPath: boundsAudio
+      value: 
+      objectReference: {fileID: 1557364859}
+    - target: {fileID: 3807981826049151483, guid: 346d7afdd9d00024d9d08d1cc403060b, type: 3}
+      propertyPath: boundsAudio
+      value: 
+      objectReference: {fileID: 1557364859}
+    - target: {fileID: 6281958956566394705, guid: 346d7afdd9d00024d9d08d1cc403060b, type: 3}
+      propertyPath: boundsAudio
+      value: 
+      objectReference: {fileID: 1557364859}
+    - target: {fileID: 6842208193587703269, guid: 346d7afdd9d00024d9d08d1cc403060b, type: 3}
+      propertyPath: boundsAudio
+      value: 
+      objectReference: {fileID: 1557364859}
     - target: {fileID: 7364234265989672528, guid: 346d7afdd9d00024d9d08d1cc403060b, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -2521,6 +2545,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8208420118578907001, guid: 346d7afdd9d00024d9d08d1cc403060b, type: 3}
+      propertyPath: boundsAudio
+      value: 
+      objectReference: {fileID: 1557364859}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3519,6 +3547,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 2994113135730546463, guid: 2bca4eabfcdde6949b5e11e926281700, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3538369616814704073, guid: 2bca4eabfcdde6949b5e11e926281700, type: 3}
       propertyPath: m_Layer
       value: 3
@@ -3694,6 +3726,17 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 1574258055}
   m_SourcePrefab: {fileID: 100100000, guid: 2bca4eabfcdde6949b5e11e926281700, type: 3}
+--- !u!114 &1557364859 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6202985916800116901, guid: 2bca4eabfcdde6949b5e11e926281700, type: 3}
+  m_PrefabInstance: {fileID: 1557364858}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d06165537d91244a97cebd63d0fb1b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayOutBounds
 --- !u!1 &1574258050 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2008432602510907173, guid: 2bca4eabfcdde6949b5e11e926281700, type: 3}
