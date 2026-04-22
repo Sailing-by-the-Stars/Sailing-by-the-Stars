@@ -7,6 +7,7 @@ namespace Assets._Teams.Island_1.Scripts.User_Interface
 {
     public class TutorialManager : MonoBehaviour
     {
+        private static WaitForSecondsRealtime _waitForSecondsRealtime0_1 = new WaitForSecondsRealtime(0.1f);
         public static TutorialManager Instance;
 
 
@@ -75,7 +76,10 @@ namespace Assets._Teams.Island_1.Scripts.User_Interface
 
             currentStep = step;
             currentPopup = popup;
-            currentPopup.gameObject.SetActive(true);
+            if (step != TutorialStep.NavigateJournal) // This is a bit hacky, but it allows us to trigger the journal tutorial when picking up the astrolabe
+            {
+                currentPopup.gameObject.SetActive(true);
+            }
         }
 
         public void EnqueueStep(TutorialStep step)
@@ -152,8 +156,19 @@ namespace Assets._Teams.Island_1.Scripts.User_Interface
 
         private void OnTutorialItemGrab(IPickup pickup)
         {
-            pickupPopup.Complete();
+            if (currentStep == TutorialStep.PickUpItem)
+                pickupPopup.Complete();
+            if (currentStep == TutorialStep.NavigateJournal) // This is a bit hacky, but it allows us to trigger the journal tutorial when picking up the astrolabe
+                StartCoroutine(DelayNavigationPopup());
         }
+
+        private IEnumerator DelayNavigationPopup()
+        {
+            yield return _waitForSecondsRealtime0_1; // Just need to make sure the player released the E button so it does not immediately register in the journal tutorial popup
+
+            currentPopup.gameObject.SetActive(true);
+        }
+
 
         private void OnTutorialItemUse(IPickup pickup)
         {

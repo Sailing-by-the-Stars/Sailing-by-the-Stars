@@ -18,6 +18,7 @@ public class ToolPickup : MonoBehaviour, IPickup
         transform.parent = pickupController.transform.Find("Main Camera").transform;
         transform.localPosition = pickupPositionOffset;
         transform.localRotation = Quaternion.identity;
+        GameEvents.ExecOnPickup(this);
     }
 
     public void Drop(PickupController pickupController)

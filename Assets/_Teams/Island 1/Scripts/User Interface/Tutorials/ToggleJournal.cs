@@ -6,7 +6,7 @@ namespace Assets._Teams.Island_1.Scripts.User_Interface.Tutorials
     {
         void Update()
         {
-            if (Input.GetKey(KeyCode.Tab)) // TODO: Change to the actual key for toggling the journal
+            if (Input.GetKey(KeyCode.J))
             {
                 Complete();
             }
