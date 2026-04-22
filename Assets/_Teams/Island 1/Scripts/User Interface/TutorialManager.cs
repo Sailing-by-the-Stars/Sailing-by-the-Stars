@@ -16,8 +16,6 @@ namespace Assets._Teams.Island_1.Scripts.User_Interface
 
         [Header("References")]
         [SerializeField] private TutorialPopup pickupPopup;
-        [SerializeField] private TutorialPopup usePopup;
-        [SerializeField] private TutorialPopup dropPopup;
 
         private Dictionary<TutorialStep, TutorialPopup> popups;
         private TutorialPopup currentPopup;
@@ -172,12 +170,10 @@ namespace Assets._Teams.Island_1.Scripts.User_Interface
 
         private void OnTutorialItemUse(IPickup pickup)
         {
-            usePopup.Complete();
         }
 
         private void OnTutorialItemDrop(IPickup pickup)
         {
-            dropPopup.Complete();
         }
     }
 }
