@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class MorseDecoder : MonoBehaviour
 {
+    [SerializeField] private GameObject rewardItem;
+    
     [Header("Target")]
     [SerializeField] private string targetSequence = "OPENTHEDOOR";
 
@@ -162,6 +164,10 @@ public class MorseDecoder : MonoBehaviour
     private void TestSuccess()
     {
         Debug.Log("Success!");
+        if (rewardItem)
+        {
+            rewardItem.SetActive(true);
+        }
     }
 
     public string GetCurrentProgress()
