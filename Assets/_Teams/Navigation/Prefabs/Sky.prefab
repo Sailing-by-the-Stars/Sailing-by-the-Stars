@@ -1,0 +1,438 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3747287548421310435
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4978647240634046230}
+  m_Layer: 0
+  m_Name: Sky
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4978647240634046230
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3747287548421310435}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 6229719560940771257}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &3797419422745476293
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6229719560940771257}
+  - component: {fileID: 402266774981884003}
+  - component: {fileID: 6267497663443802642}
+  - component: {fileID: 4038939641866681078}
+  - component: {fileID: 6633731894672362831}
+  m_Layer: 0
+  m_Name: GlobeDrawer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6229719560940771257
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3797419422745476293}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -2340.31, y: -496.566, z: -1621.5901}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 2806073165607446416}
+  m_Father: {fileID: 4978647240634046230}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!23 &402266774981884003
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3797419422745476293}
+  m_Enabled: 0
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: eac7daca3d4534e4382f03f53968cafe, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_MaskInteraction: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &6267497663443802642
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3797419422745476293}
+  m_Mesh: {fileID: 0}
+--- !u!114 &4038939641866681078
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3797419422745476293}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97c3c2011de0df84ebdd1cd5f43e8548, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GlobeShape
+  globeRadius: 2400
+  resolution: 10
+  offsetY: 500
+  operationDivisions: 3
+  positionType: {fileID: 11400000, guid: 8d53d9dc11465c241a808bfb557c7186, type: 2}
+--- !u!114 &6633731894672362831
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3797419422745476293}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d40e59aea1f787244b027d8b57e3fe08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TwinklingStar
+  debugState: 0
+  twinkleCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: -0.03655891
+      outSlope: -0.03655891
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.07939914
+    - serializedVersion: 3
+      time: 0.49771118
+      value: 0.6123657
+      inSlope: -0.00354895
+      outSlope: -0.00354895
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: -0
+      outSlope: -0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.10515022
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  dimCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  intensity: 2.5
+  twinkleTime: 1.5
+  targetAngle: 0
+  initpos: {x: 0, y: 0, z: 0}
+--- !u!1 &8696826859174166867
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2806073165607446416}
+  - component: {fileID: 6030010832298711223}
+  m_Layer: 0
+  m_Name: background stars
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2806073165607446416
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8696826859174166867}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.9384639, z: -0, w: -0.3453775}
+  m_LocalPosition: {x: 2926, y: 565, z: 1071}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6229719560940771257}
+  m_LocalEulerAnglesHint: {x: 0, y: 220.41, z: 0}
+--- !u!114 &6030010832298711223
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8696826859174166867}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b0377eb168fe2144aa8c6b699898350, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FlatStarField
+  starPositionType: {fileID: 11400000, guid: ee76574175deddf4fbaf8a3699bd9f96, type: 2}
+  starMat: {fileID: 2100000, guid: a91d9c5efdb9cc04f9fb428ad73b0755, type: 2}
+  starFieldScale: 4500
+  brightnessCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  starSizeMax: 15
+  emissionMult: 0.6
+  chromaBoost: 0.6
+  starObjects: []
+  manualStars:
+  - name: Ursa Major
+    starIDs: c7100000cd100000ca1100003412000029130000be13000047140000ad0e0000fb0c0000300f0000360f0000bf0e0000f10d00000a0e0000a6110000ef100000c10f0000e50f0000
+    starPrefab: {fileID: 0}
+  - name: Draco
+    starIDs: 52110000b3120000ab1400007016000062170000f4170000fc1800000f1b0000b81c00009e1d00008e1c0000201a00009b19000088190000311a0000
+    starPrefab: {fileID: 0}
+  - name: Eridanus
+    starIDs: c90500008f0600008206000018060000f0050000b7050000700400003c040000d80300006a0300003203000097030000eb0300004004000095040000b8050000
+    starPrefab: {fileID: 0}
+  - name: Orion
+    starIDs: 9c0700006f0700003c070000d4070000b10600000d080000fe060000730700004c0800009708000057080000ff0700006f080000070600000806000022060000100600001f060000
+    starPrefab: {fileID: 0}
+  - name: Ursa Minor
+    starIDs: a8010000851a0000b21800000f170000e417000067160000bb150000
+    starPrefab: {fileID: 0}
+  - name: Cepheus
+    starIDs: e21f00002e2000000e23000011210000f6210000
+    starPrefab: {fileID: 0}
+  - name: Camelopardus
+    starIDs: 960600007c040000060600000b040000
+    starPrefab: {fileID: 0}
+  - name: Lacerta
+    starIDs: 89210000322100007c2100005a210000832100005d210000
+    starPrefab: {fileID: 0}
+  - name: Cassiopeia
+    starIDs: 15000000a800000008010000930100001e020000
+    starPrefab: {fileID: 0}
+  - name: Pegasus
+    starIDs: 4d22000047220000270000000f000000ba2100000221000074200000510100005b020000a5000000e20000000d010000ee20000006210000ca210000d9210000db2100007b200000
+    starPrefab: {fileID: 0}
+  - name: Monoceros
+    starIDs: 9a0b0000740c00009a0a000034090000b3080000ca090000fa0800007e080000
+    starPrefab: {fileID: 0}
+  - name: Gemini
+    starIDs: 4a0b00004b0b0000ae0b000075090000d90a0000a90900005a0a0000a808000027090000b4090000ee08000056080000cb0a0000890a0000ec090000050b0000590b0000a90b0000
+    starPrefab: {fileID: 0}
+  - name: Cancer
+    starIDs: 930d0000790d0000850d0000f40d0000b10c0000be0c0000
+    starPrefab: {fileID: 0}
+  - name: Leo
+    starIDs: 8e0f0000b6110000d90f000005110000210f0000bf0f000007110000870f0000410f0000
+    starPrefab: {fileID: 0}
+  - name: Leo Minor
+    starIDs: d80e0000860f00000410000097100000
+    starPrefab: {fileID: 0}
+  - name: Lynx
+    starIDs: 790e00006a0e00001c0e0000fb0d0000cb0c0000020b0000000a0000be080000
+    starPrefab: {fileID: 0}
+  - name: Canes Venatici
+    starIDs: b112000033130000
+    starPrefab: {fileID: 0}
+  - name: Taurus
+    starIDs: b105000081050000840500005d05000042050000740400007607000006040000d70400006d050000d905000006040000d70400006d050000d9050000
+    starPrefab: {fileID: 0}
+  - name: Aires
+    starIDs: 69020000210200002902000046030000
+    starPrefab: {fileID: 0}
+  - name: Triangulum
+    starIDs: 980200006e02000020020000
+    starPrefab: {fileID: 0}
+  - name: Perseus
+    starIDs: 4203000093030000f903000062040000a8030000c40400009903000048030000cc040000b30400006b040000
+    starPrefab: {fileID: 0}
+  - name: Cygnus
+    starIDs: f41e0000741e0000681d0000f91c0000bf1d0000fc1c00000d1f0000b31f000075200000a01c0000
+    starPrefab: {fileID: 0}
+  - name: Lyra
+    starIDs: 591b00000a1c0000c21b0000e31b0000901b0000
+    starPrefab: {fileID: 0}
+  - name: Vulpecula
+    starIDs: e51d0000ee1c0000
+    starPrefab: {fileID: 0}
+  - name: Delphinus
+    starIDs: 0c1f0000e21e0000f81e0000ca1e0000ac1e0000
+    starPrefab: {fileID: 0}
+  - name: Equuleus
+    starIDs: a11f0000bb1f0000f21f0000c31f0000
+    starPrefab: {fileID: 0}
+  - name: Sagitta
+    starIDs: ff1d0000d31d0000701d0000371d0000401d0000
+    starPrefab: {fileID: 0}
+  - name: Aquila
+    starIDs: 651d0000851d0000b21d0000d11c0000431c0000441c0000081c0000921d00001e1e0000
+    starPrefab: {fileID: 0}
+  - name: Serpens
+    starIDs: f71600002d170000eb1600009d160000de1600000417000000170000f9160000a8170000
+    starPrefab: {fileID: 0}
+  - name: Ophiuchus
+    starIDs: 9c1900009b180000cb190000bb1700001f180000ea18000077190000
+    starPrefab: {fileID: 0}
+  - name: Serpens Cauda
+    starIDs: e51b0000061b0000d51a0000631a0000d51a0000801b0000e51b0000
+    starPrefab: {fileID: 0}
+  - name: Scutum
+    starIDs: 971b00009a1b00003d1b0000121b0000cf1b0000
+    starPrefab: {fileID: 0}
+  - name: Sagittarius
+    starIDs: d11b0000cc1b00001a1c0000011b0000421c0000a91c0000b41c0000cb1a0000
+    starPrefab: {fileID: 0}
+  - name: Bootes
+    starIDs: 5014000073140000dc140000351500003b1500006515000082150000e215000031160000
+    starPrefab: {fileID: 0}
+  - name: Corona Borealis
+    starIDs: 9216000073160000a1160000d9160000011700003b17000053170000
+    starPrefab: {fileID: 0}
+  - name: Virgo
+    starIDs: f31300002e130000d912000051120000bc110000c01300004c140000c3140000da140000
+    starPrefab: {fileID: 0}
+  - name: Libra
+    starIDs: 9b150000351600009b160000bc160000
+    starPrefab: {fileID: 0}
+  - name: Aquarius
+    starIDs: de2000002820000046210000a22100000522000082220000e4220000082300001822000048200000
+    starPrefab: {fileID: 0}
+  - name: Picies
+    starIDs: 230100007f01000068010000b5010000fe0100005302000025020000e9010000b201000026010000e0000000500000007023000009230000d4220000ae22000094220000cf220000182300002c230000
+    starPrefab: {fileID: 0}
+  - name: Cetus
+    starIDs: 2d03000080030000ce02000089020000f20200008f030000240300000b030000a90200000d030000c40200001b020000920100004e010000bc0000004a0000002b030000e4020000c6020000fd010000
+    starPrefab: {fileID: 0}
+  - name: Hercules
+    starIDs: 0418000044180000cc1700001818000061180000cf1700004c180000b41800000a1900001219000024190000551900007e190000bc190000271a00002f1a00007b1a0000
+    starPrefab: {fileID: 0}
+  - name: Crux
+    starIDs: f51200007a1200005c12000030120000
+    starPrefab: {fileID: 0}
+  - name: Auriga
+    starIDs: ac060000280800002f080000ff060000290600004c060000
+    starPrefab: {fileID: 0}
+  twinklingStars:
+  - starID: 542
+    targetAngle: 60
+  - starID: 5735
+    targetAngle: 55
+  - starID: 2088
+    targetAngle: 45
+  - starID: 4069
+    targetAngle: 60
+  - starID: 2890
+    targetAngle: 50
+  minManualSize: 10
+  manualSizeMult: 1.1
+  flatManualSizeAdd: 4
+  manualStarMesh: {fileID: -2124705421725058983, guid: ecc0bf23f64172540a5a1d4664ffbdc8, type: 3}

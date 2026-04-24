@@ -1,0 +1,153 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a27b1591cf442e34da26ab4a98de3513, type: 3}
+  m_Name: DenialDialog2
+  m_EditorClassIdentifier: Assembly-CSharp::Dialogue
+  hasName: 1
+  npcName: Ishtar
+  talkingSpeed: 0.9
+  nodes:
+  - rid: 6341597701268308045
+  - rid: 6341597701268308047
+  - rid: 6341597701268308048
+  - rid: 6341597701268308049
+  - rid: 6341597701268308050
+  - rid: 6341597701268308051
+  - rid: 2756910129984045057
+  - rid: 2756910129984045058
+  - rid: 2756910129984045059
+  - rid: 2756910129984045060
+  - rid: 2756910129984045062
+  - rid: 2756910129984045063
+  - rid: 2756910129984045064
+  - rid: 2756910129984045066
+  hasItemID: 0
+  itemID: 0
+  references:
+    version: 2
+    RefIds:
+    - rid: 2756910129984045057
+      type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: Now, Mortal one
+        text: Now, <pause=0.2>Mortal one,<pause=0.2> there is something you should
+          know. Here in this space,  <pause=0.2>in this place<pause=0.2> are <blue>5
+          items</blue>. They are connected to your wish.
+        nextNodeID: You currently hold
+    - rid: 2756910129984045058
+      type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: You currently hold
+        text: You currently hold already one of those, <blue>your Research Papers</blue>,
+          that you lost on sea.
+        nextNodeID: But beware
+    - rid: 2756910129984045059
+      type: {class: ChoiceNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: But beware
+        text: But <shake><red>beware!</red></shake> Every being, <pause=0.2>every
+          living, <pause=0.2>every breathing, living thing, <pause=0.2>all living
+          have their path written.<pause=0.2> It has gotten you here,<pause=0.2>
+          now you need to find your way in this place.
+        choices:
+        - choiceText: what are those items?
+          nextNodeID: What are those items
+        - choiceText: where should I go?
+          nextNodeID: Where should I go
+    - rid: 2756910129984045060
+      type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: What are those items
+        text: I cannot tell you, <pause=0.2>this is for you to find out on your own.
+        nextNodeID: You need to go
+    - rid: 2756910129984045062
+      type: {class: ChoiceNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: You need to go
+        text: You need to go on a journey to be able to find those items. Some may
+          require different things from you, but they will be worthwhile to you,
+          <pause=0.2>I am sure of that.
+        choices:
+        - choiceText: where should I go?
+          nextNodeID: Where should I go
+    - rid: 2756910129984045063
+      type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: Where should I go
+        text: In this world, there are different Islands. <pause=0.2>Island which
+          you should visit and understand their meaning.
+        nextNodeID: I implore you
+    - rid: 2756910129984045064
+      type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: I implore you
+        text: I implore you <pause=0.2>to visit all the different Islands. Then at
+          the <shake>end</shake> of your journey,<pause=0.2> across the island,<pause=0.2>
+          <shake>something</shake> is awaiting you.
+        nextNodeID: The Astrolabe
+    - rid: 2756910129984045066
+      type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: The Astrolabe
+        text: The <green>Astrolabe</green> will help you on your journey. It will
+          help you find your path on the starry sky.
+        nextNodeID: 
+    - rid: 6341597701268308045
+      type: {class: ChoiceNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: Start second dialog
+        text: This place <pause=0.2>between time and space ,<pause=0.2> is here to
+          guide you to the place, <pause=0.2>where you need to go next. <pause=0.5>But
+          only<pause=0.2> and only when you are ready for it.
+        choices:
+        - choiceText: about the path of Mortal
+          nextNodeID: Path of Mortal
+    - rid: 6341597701268308047
+      type: {class: ChoiceNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: Path of Mortal
+        text: Well, <pause=0.2>you see young one. The path of all Mortals is<pause=0.2>
+          to walk towards their end<pause=0.2> and their new beginning.
+        choices:
+        - choiceText: but you are here to help me
+          nextNodeID: But you are here to help me
+    - rid: 6341597701268308048
+      type: {class: ChoiceNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: But you are here to help me
+        text: No, <pause=0.2>I am not here to help. I am to guide, <pause=0.2>on
+          what lies before you.
+        choices:
+        - choiceText: then help me cheat death!
+          nextNodeID: then help me cheat death!
+        - choiceText: where should I go?
+          nextNodeID: Where should I go
+    - rid: 6341597701268308049
+      type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: then help me cheat death!
+        text: <shake>Oh?!</shake>
+        nextNodeID: you dare
+    - rid: 6341597701268308050
+      type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: you dare
+        text: You <shake>dare</shake> to <red>cheat</red> the order of all that has
+          existed before time itself?
+        nextNodeID: well, this is interesting
+    - rid: 6341597701268308051
+      type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: well, this is interesting
+        text: Well, <pause=0.2>is this interesting. The <shake>other one</shake>
+          figured, you would want to do that.
+        nextNodeID: Now, Mortal one

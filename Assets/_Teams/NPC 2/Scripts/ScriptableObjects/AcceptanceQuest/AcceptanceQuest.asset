@@ -1,0 +1,172 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a27b1591cf442e34da26ab4a98de3513, type: 3}
+  m_Name: AcceptanceQuest
+  m_EditorClassIdentifier: Assembly-CSharp::Dialogue
+  hasName: 0
+  npcName: 
+  talkingSpeed: 0.95
+  nodes:
+  - rid: 2042809626776305752
+  - rid: 2042809626776305756
+  - rid: 2042809626776305757
+  - rid: 2042809626776305758
+  - rid: 2042809626776305759
+  - rid: 2042809626776305760
+  - rid: 2042809626776305761
+  - rid: 2042809626776305762
+  - rid: 2042809626776305763
+  - rid: 2042809626776305764
+  - rid: 2042809626776305765
+  - rid: 2042809626776305766
+  - rid: 2042809626776305775
+  - rid: 2042809626776305776
+  - rid: 2042809626776305777
+  - rid: 2042809626776305778
+  - rid: 2042809626776305779
+  hasItemID: 1
+  itemID: 3
+  references:
+    version: 2
+    RefIds:
+    - rid: 2042809626776305752
+      type: {class: ConditionalNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: 0
+        text: Let me see if you are ready.
+        conditions:
+        - conditionType: 0
+          questID: 0637777c-5273-4b34-aaaf-383c110b49a6
+          itemID: 
+          dialogue: {fileID: 0}
+        trueNodeID: 2
+        falseNodeID: 1
+    - rid: 2042809626776305756
+      type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: 1
+        text: No you are not, seek out Anger, Bargaining and Depression.
+        nextNodeID: 
+    - rid: 2042809626776305757
+      type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: 2
+        text: Have you finally figured it out?
+        nextNodeID: 3
+    - rid: 2042809626776305758
+      type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: 3
+        text: Have you accepted the truth?
+        nextNodeID: 4
+    - rid: 2042809626776305759
+      type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: 4
+        text: Are you ready to move on from this plane and move forwards in your
+          journey?
+        nextNodeID: 5
+    - rid: 2042809626776305760
+      type: {class: ChoiceNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: 5
+        text: Or will you be forsaken and doomed to become a wallflower of this realm?
+        choices:
+        - choiceText: Who are you? What happened to the little kid?
+          nextNodeID: 6
+        - choiceText: Whats going on? Who are you?
+          nextNodeID: 6
+    - rid: 2042809626776305761
+      type: {class: ChoiceNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: 6
+        text: Who i am is not important, the child you saw before you, was just one
+          of my many forms. Necessary for your journey forwards
+        choices:
+        - choiceText: Journey forwards? I don't understand what are you talking about?
+          nextNodeID: 7
+        - choiceText: One of your many forms? What are you talking about!
+          nextNodeID: 7
+    - rid: 2042809626776305762
+      type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: 7
+        text: 'I have been watching you, guiding you, from the moment you first arrived
+          here. '
+        nextNodeID: 8
+    - rid: 2042809626776305763
+      type: {class: ChoiceNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: 8
+        text: So you may move on peacefully to the afterlife. As to accept which
+          is true, is to move on.
+        choices:
+        - choiceText: You have been guiding me? What even is this place?
+          nextNodeID: 9
+        - choiceText: What does this place have to do with the  afterlife?
+          nextNodeID: 9
+    - rid: 2042809626776305764
+      type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: 9
+        text: This place, is a plane between life and death.
+        nextNodeID: 10
+    - rid: 2042809626776305765
+      type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: 10
+        text: A bridge standing between those who are troubled and the afterlife.
+        nextNodeID: 11
+    - rid: 2042809626776305766
+      type: {class: ChoiceNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: 11
+        text: That will determine if you are worthy and ready to move on.
+        choices:
+        - choiceText: So what awaits me in the afterlife?
+          nextNodeID: 12
+        - choiceText: So what comes next? After this place?
+          nextNodeID: 12
+    - rid: 2042809626776305775
+      type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: 12
+        text: Even I do not know what awaits you in the afterlife.
+        nextNodeID: 13
+    - rid: 2042809626776305776
+      type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: 13
+        text: That will be for you and only you to figure out.
+        nextNodeID: 14
+    - rid: 2042809626776305777
+      type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: 14
+        text: So i once again ask you, Are you ready?
+        nextNodeID: 15
+    - rid: 2042809626776305778
+      type: {class: ChoiceNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: 15
+        text: Ready to take the next step in your journey and move on to the after
+          life?
+        choices:
+        - choiceText: Yes, I am ready to move on.
+          nextNodeID: 16
+    - rid: 2042809626776305779
+      type: {class: StartQuestNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: 16
+        text: Then place your hand on the pedestal next to me.
+        questToStart: {fileID: 11400000, guid: 8cdbfff822a78f84f9dce3087ca98e9d, type: 2}
+        nextNodeID: 

@@ -1,0 +1,95 @@
+{
+    "version": 1,
+    "name": "SailingActions",
+    "maps": [
+        {
+            "name": "Sailing",
+            "id": "242c5cf7-c5db-4b51-85d2-63e67e01b233",
+            "actions": [
+                {
+                    "name": "RudderRight",
+                    "type": "Button",
+                    "id": "239ef0ca-3e07-48c9-bcda-26a1e564f7c7",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "RudderLeft",
+                    "type": "Button",
+                    "id": "25fa6dec-cb58-432c-b663-8dfa0faad434",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "EaseMainsheet",
+                    "type": "Button",
+                    "id": "cbe7438f-300a-4af4-8b01-0022442ec5bc",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "SheetInMainsheet",
+                    "type": "Button",
+                    "id": "dc42f1da-8310-451e-8624-19471dc4723d",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "09cc917e-88f3-48fd-8e3a-effa3ad3ad5d",
+                    "path": "<Keyboard>/d",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "RudderRight",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "9f454890-b81f-4e2a-90a1-c1d391fbce0f",
+                    "path": "<Keyboard>/a",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "RudderLeft",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "334f1459-2f91-445a-bfcc-65ea1e380faa",
+                    "path": "<Keyboard>/q",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "EaseMainsheet",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "31758447-f9a6-48eb-8f63-e39dce87cc46",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SheetInMainsheet",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}

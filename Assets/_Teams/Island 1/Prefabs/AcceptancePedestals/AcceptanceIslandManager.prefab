@@ -1,0 +1,71 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &4623214576047665584
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7036393367857340257}
+  - component: {fileID: 5767766510010643860}
+  - component: {fileID: 3148708078442746192}
+  m_Layer: 0
+  m_Name: AcceptanceIslandManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7036393367857340257
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4623214576047665584}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 43.55341, y: 2.33925, z: 110.67529}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5767766510010643860
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4623214576047665584}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e1c83a4e849749baa9f9a3933a0f048, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AcceptanceIslandManager
+  pedestals:
+  - {fileID: 11911294840244789, guid: e76cad86bd81a431eb6d50c3a2812907, type: 3}
+  - {fileID: 3849681193205404278, guid: 41c8d809bfaef4952927b5d303084bdc, type: 3}
+  - {fileID: 9115244981983703581, guid: a25b8b9ed66204b4484b604319cf34c3, type: 3}
+  - {fileID: 7054794199119553737, guid: 7e88ae69f42c34fda880c51d36267fd8, type: 3}
+  - {fileID: 8609415188710728364, guid: c93c9fa35e5c54bd4a7e17f91226d106, type: 3}
+  doorObject: {fileID: 0}
+  creditsChildName: Credits
+  doorGlowChildName: DoorGlow
+  doorSound: {fileID: 0}
+--- !u!114 &3148708078442746192
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4623214576047665584}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0ab105adb57c420289ccd78cfb61a14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DebugPedestalUnlocker
+  unlockKey: 107
+  unlockOnStart: 0
