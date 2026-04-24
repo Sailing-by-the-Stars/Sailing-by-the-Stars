@@ -5,6 +5,9 @@ public class AstrolabePointer : MonoBehaviour
     [SerializeField]
     LayerMask layerMask;
 
+    [SerializeField]
+    int tolerance = 0;
+
     void Update()
     {
         if (Astrolabe.zoomedIn)
@@ -18,7 +21,7 @@ public class AstrolabePointer : MonoBehaviour
                 {
                     Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * hit.distance, Color.red);
 
-                    twinklingStar.Hit(Astrolabe.pointerAngleHax);
+                    twinklingStar.Hit(Astrolabe.pointerAngleHax + tolerance);
                 }
             }
         }

@@ -20,7 +20,7 @@ public class QuestUI : MonoBehaviour
     private void Update()
     {
         // check if q key is pressed to hide or show the panel
-        if (Input.GetKeyDown(KeyCode.Q))
+        if (Input.GetKeyDown(KeyCode.G))
         {
             // use scale to hide so the script stays active to listen for keys
             bool isHidden = transform.localScale == Vector3.zero;

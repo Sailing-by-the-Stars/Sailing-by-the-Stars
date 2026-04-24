@@ -19,11 +19,8 @@ public class TempStateMachine : MonoBehaviour
         movement = FindFirstObjectByType<Movement>().GetComponent<Movement>();
     }
 
-    // Use Update instead of FixedUpdate so cursor lock
-    // is applied before Movement.FixedUpdate runs
     public void Update()
     {
-        // Detect state change
         if (gameState != previousState)
         {
             if (gameState == GameState.Dialogue)
@@ -50,11 +47,9 @@ public class TempStateMachine : MonoBehaviour
         }
     }
 
-    // Waits one frame so the Input System can flush
-    // its delta before movement is disabled
     private IEnumerator DisableMovementNextFrame()
     {
-        yield return null; // wait 1 frame
+        yield return null;
         movement.enabled = false;
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;

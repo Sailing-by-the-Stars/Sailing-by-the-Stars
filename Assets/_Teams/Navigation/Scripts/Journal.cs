@@ -5,17 +5,29 @@ using UnityEngine;
 using UnityEngine.UI;
 using static UnityEngine.Rendering.DebugUI;
 
-public class Journal : ToolPickup
+[Serializable]
+public class Page
 {
+    public Texture leftPage;
+    public Texture rightPage;
+}
+
+public class Journal : ToolPickup, AstroTutorialStep
+{
+    [NonSerialized]
+    public TutorialSequence currentSequence;
+    [NonSerialized]
+    public int currentTutorialStep = -1;
+
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     private bool isEquipped;
     private bool bookVisible;
     private bool bookOpened;
     private Quaternion initalRot;
 
-
-    RawImage leftPage;
-    RawImage rightPage;
+    MeshRenderer leftPageQ;
+    MeshRenderer rightPageQ;
 
     [SerializeField]
     List<Page> pages = new();
@@ -37,14 +49,39 @@ public class Journal : ToolPickup
         
         //Disable collider to hide interact text
         GetComponent<BoxCollider>().enabled = false;
-        bookVisible = true;
-        bookangle = 100;
-        bookOpened = true;
-        
+        bookVisible = false;
+        bookangle = 101;
+        bookOpened = false;
+
+        transform.GetChild(0).gameObject.SetActive(false);
+
         initalRot = Quaternion.Euler(90, 90, 90);
         transform.localRotation = initalRot;
     }
-    
+
+    public void EnterStep(TutorialSequence sequence)
+    {
+        if (currentSequence != null && currentSequence != sequence)
+        {
+            Debug.LogError("this tutorialDialogue object is already in a different sequence!!");
+            return;
+        }
+        currentSequence = sequence;
+        currentTutorialStep = sequence.index;
+    }
+
+    public void ExitStep()
+    {
+        if (!currentSequence)
+        {
+            Debug.LogError("tried continueing a tutorial while none was assigned!");
+            return;
+        }
+
+        currentSequence.FinishStep(currentTutorialStep);
+        currentSequence = null;
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -72,10 +109,10 @@ public class Journal : ToolPickup
 
             if (pages[pageNr].leftPage)
             {
-                leftPage.enabled = true;
+                leftPageQ.enabled = true;
 
                 Texture tex = pages[pageNr].leftPage;
-                RectTransform rt = leftPage.rectTransform;
+                Transform rt = leftPageQ.transform;
 
                 float width = tex.width;
                 float height = tex.height;
@@ -83,28 +120,28 @@ public class Journal : ToolPickup
                 if (width > height)
                 {
                     float ratio = height / width;
-                    rt.sizeDelta = new Vector2(1f, ratio);
+                    rt.localScale = new Vector2(1f, ratio);
                 }
                 else
                 {
                     float ratio = width / height;
-                    rt.sizeDelta = new Vector2(ratio, 1f);
+                    rt.localScale = new Vector2(ratio, 1f);
                 }
 
-                leftPage.texture = tex;
+                leftPageQ.sharedMaterial.mainTexture = tex;
             }
             else
             {
-                leftPage.enabled = false;
+                leftPageQ.enabled = false;
             }
 
 
             if (pages[pageNr].rightPage)
             {
-                rightPage.enabled = true;
+                rightPageQ.enabled = true;
 
                 Texture tex = pages[pageNr].rightPage;
-                RectTransform rt = rightPage.rectTransform;
+                Transform rt = rightPageQ.transform;
 
                 float width = tex.width;
                 float height = tex.height;
@@ -112,19 +149,19 @@ public class Journal : ToolPickup
                 if (width > height)
                 {
                     float ratio = height / width;
-                    rt.sizeDelta = new Vector2(1f, ratio);
+                    rt.localScale = new Vector2(1f, ratio);
                 }
                 else
                 {
                     float ratio = width / height;
-                    rt.sizeDelta = new Vector2(ratio, 1f);
+                    rt.localScale = new Vector2(ratio, 1f);
                 }
 
-                rightPage.texture = tex;
+                rightPageQ.sharedMaterial.mainTexture = tex;
             }
             else
             {
-                rightPage.enabled = false;
+                rightPageQ.enabled = false;
             }
 
 
@@ -141,6 +178,11 @@ public class Journal : ToolPickup
                     bookVisible = true;
                     bookOpened = true;
                     bookangle = 100;
+
+                    if(TutorialSequence.startedTutorial && TutorialSequence.Instance.index == 0)
+                    {
+                        TutorialSequence.Instance.NextStep(1);
+                    }
                 }
             }
 
@@ -153,15 +195,15 @@ public class Journal : ToolPickup
                 }
                 else
                 {
-                    leftPage.enabled = false;
-                    rightPage.enabled = false;
+                    leftPageQ.enabled = false;
+                    rightPageQ.enabled = false;
                 }
 
             }
             else
             {
-                leftPage.enabled = false;
-                rightPage.enabled = false;
+                leftPageQ.enabled = false;
+                rightPageQ.enabled = false;
 
                 bookangle += angelPerSecond * Time.deltaTime;
                 if (bookangle > 100)
@@ -175,8 +217,8 @@ public class Journal : ToolPickup
         }
         else
         {
-            leftPage.enabled = false;
-            rightPage.enabled = false;
+            leftPageQ.enabled = false;
+            rightPageQ.enabled = false;
             bookangle = 100;
             bookRenderer.SetBlendShapeWeight(0, bookangle);
         }
@@ -185,28 +227,45 @@ public class Journal : ToolPickup
 
 
 
-    
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    public void AddPage(Page page)
+    {
+        pages.Add(page);
+    }
+
+    public void AddPage(Page page, int pageID)
+    {
+        if(pageID >= 0 && pages.Count - 1 >= pageID)
+        {
+            pages[pageID] = page;
+        }
+        else
+        {
+            Debug.LogWarning($"had to fall back! {pageID}");
+            pages.Add(page);
+        }
+
+    }
+
     void Start()
     {
-        List<RawImage> images = GetComponentsInChildren<RawImage>().ToList();
+        List<MeshRenderer> images = GetComponentsInChildren<MeshRenderer>().ToList();
 
-        foreach (RawImage image in images)
+        foreach (MeshRenderer image in images)
         {
             if (image.name == "leftPage")
             {
-                leftPage = image;
+                leftPageQ = image;
             }
 
             if (image.name == "rightPage")
             {
-                rightPage = image;
+                rightPageQ = image;
             }
         }
 
         bookRenderer = GetComponentInChildren<SkinnedMeshRenderer>();
 
-        leftPage.enabled = false;
-        leftPage.enabled = false;
+        leftPageQ.enabled = false;
+        rightPageQ.enabled = false;
     }
 }

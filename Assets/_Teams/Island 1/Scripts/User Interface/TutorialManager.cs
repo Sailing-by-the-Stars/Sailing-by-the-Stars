@@ -16,8 +16,6 @@ namespace Assets._Teams.Island_1.Scripts.User_Interface
 
         [Header("References")]
         [SerializeField] private TutorialPopup pickupPopup;
-        [SerializeField] private TutorialPopup usePopup;
-        [SerializeField] private TutorialPopup dropPopup;
 
         private Dictionary<TutorialStep, TutorialPopup> popups;
         private TutorialPopup currentPopup;
@@ -156,9 +154,10 @@ namespace Assets._Teams.Island_1.Scripts.User_Interface
 
         private void OnTutorialItemGrab(IPickup pickup)
         {
-            if (currentStep == TutorialStep.PickUpItem)
-                pickupPopup.Complete();
-            if (currentStep == TutorialStep.NavigateJournal) // This is a bit hacky, but it allows us to trigger the journal tutorial when picking up the astrolabe
+            if (currentStep == TutorialStep.PickUpItem && currentPopup)
+                currentPopup.Complete();
+
+            if (currentStep == TutorialStep.NavigateJournal && currentPopup) // This is a bit hacky, but it allows us to trigger the journal tutorial when picking up the astrolabe
                 StartCoroutine(DelayNavigationPopup());
         }
 
@@ -172,12 +171,10 @@ namespace Assets._Teams.Island_1.Scripts.User_Interface
 
         private void OnTutorialItemUse(IPickup pickup)
         {
-            usePopup.Complete();
         }
 
         private void OnTutorialItemDrop(IPickup pickup)
         {
-            dropPopup.Complete();
         }
     }
 }

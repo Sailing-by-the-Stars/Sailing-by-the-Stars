@@ -1,9 +1,9 @@
 using UnityEngine;
 using System.Collections;
-using System;
 
 /// <summary>
 /// Code by Alonso
+/// Modified by Christina
 /// </summary>
 
 public class BordersOfTheWorld : MonoBehaviour
@@ -11,7 +11,16 @@ public class BordersOfTheWorld : MonoBehaviour
     [SerializeField] private float duration = 1.5f;
     private bool rotating = false;
 
-    [SerializeField] private GameObject AudioManager;
+    [Tooltip("Script tries to find reference if unassigned")]
+    [SerializeField] private PlayOutBounds boundsAudio;
+
+    private void Start()
+    {
+        if (boundsAudio == null)
+        {
+            boundsAudio = FindFirstObjectByType<PlayOutBounds>();
+        }
+    }
 
     private void OnCollisionEnter(Collision collision)
     {
@@ -26,11 +35,12 @@ public class BordersOfTheWorld : MonoBehaviour
 
     private IEnumerator Rote180(Transform objetivo)
     {
-        PlayOutBounds playOB = AudioManager.GetComponent<PlayOutBounds>();
-
         rotating = true;
 
-        playOB.PlaySound();
+        if (boundsAudio != null)
+        {
+            boundsAudio.PlaySound();
+        }
 
         Quaternion rotacionInicial = objetivo.rotation;
         Quaternion rotacionFinal = rotacionInicial * Quaternion.Euler(0f, 180f, 0f);
@@ -43,7 +53,10 @@ public class BordersOfTheWorld : MonoBehaviour
             yield return null;
         }
 
-        playOB.StopSound();
+        if (boundsAudio != null)
+        {
+            boundsAudio.StopSound();
+        }
         objetivo.rotation = rotacionFinal;
         rotating = false;
     }
