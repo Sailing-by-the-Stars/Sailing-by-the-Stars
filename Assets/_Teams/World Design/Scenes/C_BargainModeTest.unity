@@ -137,7 +137,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 750082285709223277, guid: 91c63f1ff69b07e478a16ebed0b033c1, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2785956284013889612, guid: 91c63f1ff69b07e478a16ebed0b033c1, type: 3}
       propertyPath: m_Size.z
@@ -347,7 +347,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6229719560940771257, guid: 55153bb6d8e70a34eabf3f0ab395fdeb, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -2251
+      value: -1994.9
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -544,7 +544,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6736058736273579916, guid: b6d81394640966a4d9eddec62111776c, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 149
+      value: 405.1
       objectReference: {fileID: 0}
     - target: {fileID: 6736058736273579916, guid: b6d81394640966a4d9eddec62111776c, type: 3}
       propertyPath: m_LocalRotation.w
@@ -2178,7 +2178,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5489492013889659339, guid: 9b5b55479a9dfe241b7b2730a512698b, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7063396328478756431, guid: 9b5b55479a9dfe241b7b2730a512698b, type: 3}
       propertyPath: defaultTimerDuration
@@ -2368,8 +2368,8 @@ MonoBehaviour:
     weight: 1
   - state: {fileID: 11400000, guid: 80bd15c948fb9b74bb9c403cf0c37b59, type: 2}
     weight: 2
-  minAmbientChangeInterval: 60
-  maxAmbientChangeInterval: 90
+  minAmbientChangeInterval: 10
+  maxAmbientChangeInterval: 10
   ambientChangeTransitionTime: 10
 --- !u!4 &5428209381684056749
 Transform:
@@ -2520,10 +2520,10 @@ MonoBehaviour:
   windDirectionOnStart: {x: 0, y: 0, z: 1}
   rerollIntervalSeconds: 40
   randomEventsActive: 1
-  autoRerollWindIntensity: 5
+  autoRerollWindIntensity: 2
   windObject: {fileID: 0}
-  minAudibleWindSpeedMps: 1
-  minAudibleAudioValue: 0.12
+  minAudibleWindSpeedMps: 2
+  minAudibleAudioValue: 0
   maxWindSpeedForFullAudioMps: 20
   audioResponseExponent: 0.8
 --- !u!114 &7038033781303949011
