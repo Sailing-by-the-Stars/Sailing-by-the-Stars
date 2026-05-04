@@ -44,6 +44,12 @@ public class Movement : MonoBehaviour
 
     [SerializeField] string playerState = "Land";
 
+
+    [Header("Particle System")]
+    [SerializeField] private ParticleSystem boatFoam;
+    [SerializeField] private ParticleSystem sideFoamRight;
+    [SerializeField] private ParticleSystem sideFoamLeft;
+
     private void Awake()
     {
         playerControls = new PlayerControls();
@@ -244,6 +250,10 @@ public class Movement : MonoBehaviour
 
         buoyancyController.enabled = true;
         boatController.enabled = true;
+
+        boatFoam.Play();
+        sideFoamRight.Play();
+        sideFoamLeft.Play();
     }
 
     public void ExitBoat()

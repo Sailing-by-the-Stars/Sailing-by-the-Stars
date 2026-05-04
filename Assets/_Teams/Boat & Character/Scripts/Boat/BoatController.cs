@@ -51,10 +51,7 @@ public class BoatController : MonoBehaviour
     [SerializeField] private GameObject rudderPivot;
     [SerializeField] private GameObject flagPivot;
 
-    [Header("Particle System")]
-    [SerializeField] private ParticleSystem boatFoam;
-    [SerializeField] private ParticleSystem sideFoamRight;
-    [SerializeField] private ParticleSystem sideFoamLeft;
+    
 
 
     private Rigidbody rigidBody;
@@ -106,9 +103,7 @@ public class BoatController : MonoBehaviour
         RotateRudder();
         RotateMastAndSail();
         RotateFlagIntoWind();
-        boatFoam.Play();
-        sideFoamRight.Play();
-        sideFoamLeft.Play();
+        
     }
 
     void FixedUpdate()
@@ -143,6 +138,7 @@ public class BoatController : MonoBehaviour
         applyWaterDrag();
 
         forwardSpeed = transform.InverseTransformVector(rigidBody.linearVelocity).z;
+        
     }
 
     //Calculates the force of drag experienced on the sail, used when running downwind and broadreach
