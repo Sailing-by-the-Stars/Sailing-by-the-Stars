@@ -20,6 +20,8 @@ namespace _Teams.World_Design.Scripts.Checkpoints
         [SerializeField] private Transform currentBoatResetPoint;
         
         private DeathEffect deathEffect;
+        private Rigidbody boatRb;
+        private BoatController boatController;
 
         private void Awake()
         {
@@ -31,6 +33,11 @@ namespace _Teams.World_Design.Scripts.Checkpoints
             if (boatResetObject == null)
             {
                 boatResetObject = FindFirstObjectByType<BoatController>().transform;
+            }
+            if (boatResetObject != null)
+            {
+                boatRb = boatResetObject.GetComponent<Rigidbody>();
+                boatController = boatResetObject.GetComponent<BoatController>();
             }
             
             deathEffect = FindFirstObjectByType<DeathEffect>();
@@ -58,12 +65,26 @@ namespace _Teams.World_Design.Scripts.Checkpoints
             
             if (boatResetObject != null && currentBoatResetPoint != null)
             {
+                // reset velocity and anchor
+                if (boatRb != null)
+                {
+                    boatRb.linearVelocity = Vector3.zero;
+                    boatRb.angularVelocity = Vector3.zero;
+                }
+                if (boatController != null)
+                {
+                    boatController.DropAnchor();
+                }
+
+
                 boatResetObject.position = currentBoatResetPoint.position;
                 boatResetObject.rotation = currentBoatResetPoint.rotation;
             }
 
-            
-            StartCoroutine(deathEffect.DeathSequence());
+            if (deathEffect != null)
+            {
+                deathEffect.PlayDeathSequence();
+            }
         }
 
         private bool IsPlayerInsideBoatResetObject()
