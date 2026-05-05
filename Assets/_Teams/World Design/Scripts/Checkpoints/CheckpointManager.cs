@@ -7,7 +7,8 @@ namespace _Teams.World_Design.Scripts.Checkpoints
     {
         [Header("Checkpoint")]
         [SerializeField] private Checkpoint currentCheckpoint;
-        
+        [SerializeField] private bool anchorBoatOnRespawn = true;
+
         [Header("Reset Objects")]
         [SerializeField] private String playerResetObjectTag = "Player";
         
@@ -71,7 +72,7 @@ namespace _Teams.World_Design.Scripts.Checkpoints
                     boatRb.linearVelocity = Vector3.zero;
                     boatRb.angularVelocity = Vector3.zero;
                 }
-                if (boatController != null)
+                if (boatController != null && anchorBoatOnRespawn)
                 {
                     boatController.DropAnchor();
                 }

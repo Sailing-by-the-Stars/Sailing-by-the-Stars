@@ -105,8 +105,7 @@ public class WindController : MonoBehaviour, IWeatherEventController
         Vector3 currentWindDirection = new Vector3(Mathf.Sin(radians), 0f, Mathf.Cos(radians));
         
         SetRandomEventsActive(weatherValues.windRandomEventsActive);
-        // TODO: These don't need to be updated every frame. Decide if they will be updated in Manager for
-        // each new state or use event system / logic internally
+
         ChangeDirection(currentWindDirection * weatherValues.windSpeed);
 
         if (windAudioController != null)
@@ -130,7 +129,7 @@ public class WindController : MonoBehaviour, IWeatherEventController
             return 0f;
         }
 
-        float fullAudioSpeed = Mathf.Max(minAudibleWindSpeedMps + 0.01f, maxWindSpeedForFullAudioMps);
+        float fullAudioSpeed = Mathf.Max(minAudibleWindSpeedMps, maxWindSpeedForFullAudioMps);
 
         if (speed <= minAudibleWindSpeedMps)
         {
