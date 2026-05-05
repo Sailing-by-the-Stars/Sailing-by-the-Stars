@@ -9,7 +9,9 @@ using UnityEngine.UI;
 /// When the player walks through it for the first time:
 ///   1. Screen fades to black
 ///   2. Player is teleported back to the respawn point
-///   3. The WakeUp blink animation plays, as if they're waking up again
+///   3. Blockade 1 is disabled
+///   4. Blockade 2 is enabled
+///   5. The WakeUp blink animation plays, as if they're waking up again
 ///
 /// After that the trigger does nothing, so the player can pass freely.
 ///
@@ -38,6 +40,13 @@ public class PointOfNoReturn : MonoBehaviour
     [Tooltip("Drag the Eyelids GameObject (the one with the WakeUp script) here.")]
     public WakeUp wakeUp;
 
+    [Header("Rock Blockades")]
+    [Tooltip("This blockade is active at the start of the game and disabled after respawn.")]
+    public GameObject blockade1;
+
+    [Tooltip("This blockade is inactive at the start of the game and enabled after respawn.")]
+    public GameObject blockade2;
+
     private bool _hasTriggered = false;
 
     private void Awake()
@@ -47,7 +56,13 @@ public class PointOfNoReturn : MonoBehaviour
         // Start with the fade panel invisible
         if (fadePanel != null)
             SetFadeAlpha(0f);
+
+        // Start state:
+        // Blockade 1 blocks the first path.
+        // Blockade 2 is disabled until the player respawns.
+        SetInitialBlockadeState();
     }
+
 
     private void OnTriggerEnter(Collider other)
     {
@@ -110,6 +125,13 @@ public class PointOfNoReturn : MonoBehaviour
             rb.angularVelocity  = Vector3.zero;
         }
 
+        // Switch the rock blockades after the player has respawned
+        if (blockade1 != null)
+            blockade1.SetActive(false);
+
+        if (blockade2 != null)
+            blockade2.SetActive(true);
+
         if (movement != null) movement.enabled = true;
 
         yield return new WaitForSecondsRealtime(0.2f);
@@ -134,6 +156,15 @@ public class PointOfNoReturn : MonoBehaviour
             Debug.LogWarning("[PointOfNoReturn] No WakeUp reference assigned — blink skipped.", this);
 
         Debug.Log("[PointOfNoReturn] Player returned to island start.");
+    }
+
+    private void SetInitialBlockadeState()
+    {
+        if (blockade1 != null)
+            blockade1.SetActive(true);
+
+        if (blockade2 != null)
+            blockade2.SetActive(false);
     }
 
     private void SetFadeAlpha(float alpha)
