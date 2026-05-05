@@ -2,6 +2,7 @@
  * Created by Christina Pence
  * Contributed to by:
  */
+using _Teams.World_Design.Scripts.Checkpoints;
 using UnityEngine;
 
 /// <summary>
@@ -14,6 +15,9 @@ public class BargainingZoneEffect : MonoBehaviour, IZoneEffect
 {
     private BargainingController controller;
     [SerializeField] private float audioIntensity = 1.0f;
+    [Tooltip("World respawn checkpoint to teleport player to on timer fail." +
+        "Event uses last world checkpoint if this is not assigned")]
+    [SerializeField] private Checkpoint respawnCheckpoint;
 
     private void Start()
     {
@@ -25,6 +29,11 @@ public class BargainingZoneEffect : MonoBehaviour, IZoneEffect
     }
     public void OnEnter(GameObject instigator)
     {
+        // set checkpoint on zone enter so player does not need to enter from specific position or trigger area
+        if (respawnCheckpoint != null)
+        {
+            respawnCheckpoint.SetAsActiveCheckpoint();
+        }
         if (controller == null)
         {
             return;
