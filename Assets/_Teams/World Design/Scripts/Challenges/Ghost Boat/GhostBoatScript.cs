@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace _Teams.World_Design.Scripts.Challenges.Ghost_Boat
@@ -16,6 +17,13 @@ namespace _Teams.World_Design.Scripts.Challenges.Ghost_Boat
         [Header("Optional Rotation")]
         [SerializeField] private bool faceTarget;
 
+        [Header("Shader Adjustments")]
+        [SerializeField] private Material inViewMaterial;
+        [Tooltip("Leave empty to automatically find all renderers on this boat and its children")]
+        [SerializeField] private Renderer[] targetRenderers;
+        
+        private Dictionary<Renderer, Material[]> originalMaterials = new Dictionary<Renderer, Material[]>();
+
         private GhostBoatAudio ghostBoatAudio;
         private bool wasInView = false;
 
@@ -25,6 +33,11 @@ namespace _Teams.World_Design.Scripts.Challenges.Ghost_Boat
             if (ghostBoatAudio == null)
             {
                 Debug.LogWarning(gameObject.name + ": GhostBoatAudio not found in scene (check audio manager)");
+            }
+
+            if (inViewMaterial != null)
+            {
+                SetOriginalRenderer();
             }
         }
 
@@ -40,9 +53,14 @@ namespace _Teams.World_Design.Scripts.Challenges.Ghost_Boat
             // only update audio if in view has changed since last frame
             if (isCentered != wasInView)
             {
-                if (ghostBoatAudio != null)
+                if (ghostBoatAudio)
                 {
                     ghostBoatAudio.SetInView(isCentered);
+                }
+
+                if (inViewMaterial)
+                {
+                    ApplyMaterial(isCentered);
                 }
             }
             wasInView = isCentered;
@@ -63,6 +81,28 @@ namespace _Teams.World_Design.Scripts.Challenges.Ghost_Boat
                 if (lookDirection.sqrMagnitude > 0.0001f)
                 {
                     transform.rotation = Quaternion.LookRotation(lookDirection.normalized, Vector3.up);
+                }
+            }
+        }
+
+        private void ApplyMaterial(bool isCentered)
+        {
+            foreach (var (key, value) in originalMaterials)
+            {
+                if (!key) continue;
+                        
+                if (isCentered)
+                {
+                    Material[] tempMats = new Material[value.Length];
+                    for (int i = 0; i < tempMats.Length; i++)
+                    {
+                        tempMats[i] = inViewMaterial;
+                    }
+                    key.sharedMaterials = tempMats;
+                }
+                else
+                {
+                    key.sharedMaterials = value;
                 }
             }
         }
@@ -100,6 +140,21 @@ namespace _Teams.World_Design.Scripts.Challenges.Ghost_Boat
             if (ghostBoatAudio != null)
             {
                 ghostBoatAudio.ResetAudio();
+            }
+        }
+        
+        private void SetOriginalRenderer()
+        {
+            Renderer[] renderersToProcess = targetRenderers != null && targetRenderers.Length > 0 
+                ? targetRenderers 
+                : GetComponentsInChildren<Renderer>(true);
+
+            foreach (Renderer rend in renderersToProcess)
+            {
+                if (rend != null)
+                {
+                    originalMaterials[rend] = rend.sharedMaterials;
+                }
             }
         }
     }
