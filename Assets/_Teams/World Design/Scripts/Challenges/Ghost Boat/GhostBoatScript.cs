@@ -2,6 +2,7 @@ using UnityEngine;
 
 namespace _Teams.World_Design.Scripts.Challenges.Ghost_Boat
 {
+    [RequireComponent(typeof(GhostBoatAudio))]
     public class GhostBoatScript : MonoBehaviour
     {
         [Header("Follow Target")]
@@ -21,11 +22,18 @@ namespace _Teams.World_Design.Scripts.Challenges.Ghost_Boat
 
         private void Start()
         {
-            ghostBoatAudio = FindFirstObjectByType<GhostBoatAudio>();
+            ghostBoatAudio = GetComponent<GhostBoatAudio>();
             if (ghostBoatAudio == null)
             {
-                Debug.LogWarning(gameObject.name + ": GhostBoatAudio not found in scene (check audio manager)");
+                Debug.LogWarning(gameObject.name + ": GhostBoatAudio not found in scene (check prefab)");
             }
+            // Check initial view state on spawn
+            bool initiallyInView = IsInCenterView();
+            if (ghostBoatAudio != null)
+            {
+                ghostBoatAudio.SetInView(initiallyInView);
+            }
+            wasInView = initiallyInView;
         }
 
         public void SetTarget(Transform newTarget)
