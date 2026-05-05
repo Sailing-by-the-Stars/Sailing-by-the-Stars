@@ -19,7 +19,7 @@ namespace _Teams.World_Design.Scripts.Checkpoints
                 checkpointManager = FindFirstObjectByType<CheckpointManager>();
                 if (checkpointManager == null)
                 {
-                    Debug.LogWarning($"{nameof(DeathZone)} could not find a {nameof(CheckpointManager)} in the scene.", this);
+                    Debug.LogWarning($"{nameof(Checkpoint)} could not find a {nameof(CheckpointManager)} in the scene.", this);
                 }
             }
             
@@ -27,15 +27,17 @@ namespace _Teams.World_Design.Scripts.Checkpoints
         
         private void OnTriggerEnter(Collider other)
         {
-            if (!other.CompareTag(instigatorTag))
+            if (!other.CompareTag(instigatorTag) || checkpointManager == null)
             {
                 return;
             }
-            
+            SetAsActiveCheckpoint();
+        }
+        public void SetAsActiveCheckpoint()
+        {
             checkpointManager.SetCheckpoint(this);
             checkpointManager.SetBoatResetPoint(boatResetPoint);
             checkpointManager.SetPlayerResetPoint(playerResetPoint);
         }
-        
     }
 }
