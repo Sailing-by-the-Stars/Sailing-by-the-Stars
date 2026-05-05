@@ -33,13 +33,41 @@ public class Journal : ToolPickup, AstroTutorialStep
     List<Page> pages = new();
     [SerializeField]
     int pageNr = 0;
-
     float bookangle = 0;
     [SerializeField]
     float angelPerSecond = 0;
+    
+    [SerializeField]
+    int sectionOnePageNr;
+    
+    [SerializeField]
+    int sectionTwoPageNr;
+    
+    [SerializeField]
+    int sectionThreePageNr;
+    
+    [SerializeField]
+    int sectionFourPageNr;
 
+    [SerializeField]
+    int sectionFivePageNr;
+    
+    [SerializeField]
+    int sectionSixPageNr;
+    
+    [SerializeField]
+    int sectionSevenPageNr;
+    
+    [SerializeField]
+    int sectionEightPageNr;
+
+    [SerializeField]
+    int sectionNinePageNr;
+    
     SkinnedMeshRenderer bookRenderer;
 
+    private Transform bookmarkTransform;
+    List<int> sectionPageNrs = new List<int>();
 
     public override void Grab(PickupController pickupController)
     {
@@ -95,6 +123,146 @@ public class Journal : ToolPickup, AstroTutorialStep
             if (Input.GetKeyDown(KeyCode.E))
             {
                 pageNr += 1;
+            }
+
+            if (bookOpened)
+            {
+                //Jump to the first page of the section mapped to that key
+                if (Input.GetKeyDown(KeyCode.Alpha1))
+                {
+                    if (sectionOnePageNr <= pages.Count - 1)
+                    {
+                        pageNr = sectionOnePageNr;
+                        
+                        for (int i = 0; i < bookmarkTransform.childCount; i++)
+                        {
+                            bookmarkTransform.GetChild(i).GetComponent<Renderer>().material.color = Color.white;
+                        }
+                        
+                        bookmarkTransform.GetChild(0).GetComponent<Renderer>().material.color = Color.green;
+                    }
+                }
+
+                if (Input.GetKeyDown(KeyCode.Alpha2))
+                {
+                    if (sectionTwoPageNr <= pages.Count - 1)
+                    {
+                        pageNr = sectionTwoPageNr;
+                        
+                        for (int i = 0; i < bookmarkTransform.childCount; i++)
+                        {
+                            bookmarkTransform.GetChild(i).GetComponent<Renderer>().material.color = Color.white;
+                        }
+                        
+                        bookmarkTransform.GetChild(1).GetComponent<Renderer>().material.color = Color.green;
+                    }
+                }
+                
+                if (Input.GetKeyDown(KeyCode.Alpha3))
+                {
+                    if (sectionTwoPageNr <= pages.Count - 1)
+                    {
+                        pageNr = sectionThreePageNr;
+                        
+                        for (int i = 0; i < bookmarkTransform.childCount; i++)
+                        {
+                            bookmarkTransform.GetChild(i).GetComponent<Renderer>().material.color = Color.white;
+                        }
+                        
+                        bookmarkTransform.GetChild(2).GetComponent<Renderer>().material.color = Color.green;
+                    }
+                }
+
+                if (Input.GetKeyDown(KeyCode.Alpha4))
+                {
+                    if (sectionFourPageNr <= pages.Count - 1)
+                    {
+                        pageNr = sectionFourPageNr;
+                        
+                        for (int i = 0; i < bookmarkTransform.childCount; i++)
+                        {
+                            bookmarkTransform.GetChild(i).GetComponent<Renderer>().material.color = Color.white;
+                        }
+                        
+                        bookmarkTransform.GetChild(3).GetComponent<Renderer>().material.color = Color.green;
+                    }
+                }
+
+                if (Input.GetKeyDown(KeyCode.Alpha5))
+                {
+                    if (sectionFivePageNr <= pages.Count - 1)
+                    {
+                        pageNr = sectionFivePageNr;
+                        
+                        for (int i = 0; i < bookmarkTransform.childCount; i++)
+                        {
+                            bookmarkTransform.GetChild(i).GetComponent<Renderer>().material.color = Color.white;
+                        }
+                        
+                        bookmarkTransform.GetChild(4).GetComponent<Renderer>().material.color = Color.green;
+                    }
+                }
+
+                if (Input.GetKeyDown(KeyCode.Alpha6))
+                {
+                    if (sectionSixPageNr <= pages.Count - 1)
+                    {
+                        pageNr = sectionSixPageNr;
+                        
+                        for (int i = 0; i < bookmarkTransform.childCount; i++)
+                        {
+                            bookmarkTransform.GetChild(i).GetComponent<Renderer>().material.color = Color.white;
+                        }
+                        
+                        bookmarkTransform.GetChild(5).GetComponent<Renderer>().material.color = Color.green;
+                    }
+                }
+
+                if (Input.GetKeyDown(KeyCode.Alpha7))
+                {
+                    if (sectionSevenPageNr <= pages.Count - 1)
+                    {
+                        pageNr = sectionSevenPageNr;
+                        
+                        for (int i = 0; i < bookmarkTransform.childCount; i++)
+                        {
+                            bookmarkTransform.GetChild(i).GetComponent<Renderer>().material.color = Color.white;
+                        }
+                        
+                        bookmarkTransform.GetChild(6).GetComponent<Renderer>().material.color = Color.green;
+                    }
+                }
+
+                if (Input.GetKeyDown(KeyCode.Alpha8))
+                {
+                    if (sectionEightPageNr <= pages.Count - 1)
+                    {
+                        pageNr = sectionEightPageNr;
+                        
+                        for (int i = 0; i < bookmarkTransform.childCount; i++)
+                        {
+                            bookmarkTransform.GetChild(i).GetComponent<Renderer>().material.color = Color.white;
+                        }
+                        
+                        bookmarkTransform.GetChild(7).GetComponent<Renderer>().material.color = Color.green;
+                    }
+                }
+
+                if (Input.GetKeyDown(KeyCode.Alpha9))
+                {
+                    if (sectionNinePageNr <= pages.Count - 1)
+                    {
+                        pageNr = sectionNinePageNr;
+                        
+                        for (int i = 0; i < bookmarkTransform.childCount; i++)
+                        {
+                            bookmarkTransform.GetChild(i).GetComponent<Renderer>().material.color = Color.white;
+                        }
+                        
+                        bookmarkTransform.GetChild(8).GetComponent<Renderer>().material.color = Color.green;
+                    }
+                }
+            
             }
 
             if (pageNr < 0)
@@ -192,6 +360,12 @@ public class Journal : ToolPickup, AstroTutorialStep
                 if (bookangle < 0)
                 {
                     bookangle = 0;
+                    
+                    //Show bookmarks
+                    for (int i = 0; i < bookmarkTransform.childCount; i++)
+                    {
+                        bookmarkTransform.GetChild(i).gameObject.SetActive(true);
+                    }
                 }
                 else
                 {
@@ -210,6 +384,13 @@ public class Journal : ToolPickup, AstroTutorialStep
                 {
                     bookangle = 100;
                     transform.GetChild(0).gameObject.SetActive(false);
+                }
+                
+                //Hide bookmarks and reset section selection
+                for (int i = 0; i < bookmarkTransform.childCount; i++)
+                {
+                    bookmarkTransform.GetChild(i).gameObject.SetActive(false);
+                    bookmarkTransform.GetChild(i).GetComponent<Renderer>().material.color = Color.white;
                 }
             }
 
@@ -264,8 +445,19 @@ public class Journal : ToolPickup, AstroTutorialStep
         }
 
         bookRenderer = GetComponentInChildren<SkinnedMeshRenderer>();
-
+        
         leftPageQ.enabled = false;
         rightPageQ.enabled = false;
+
+        bookmarkTransform = transform.GetChild(0).GetChild(0).GetChild(2);
+        sectionPageNrs.Add(sectionOnePageNr);
+        sectionPageNrs.Add(sectionTwoPageNr);
+        sectionPageNrs.Add(sectionThreePageNr);
+        sectionPageNrs.Add(sectionFourPageNr);
+        sectionPageNrs.Add(sectionFivePageNr);
+        sectionPageNrs.Add(sectionSixPageNr);
+        sectionPageNrs.Add(sectionSevenPageNr);
+        sectionPageNrs.Add(sectionEightPageNr);
+        sectionPageNrs.Add(sectionNinePageNr);
     }
 }
