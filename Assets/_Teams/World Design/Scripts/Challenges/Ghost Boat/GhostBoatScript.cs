@@ -36,6 +36,7 @@ namespace _Teams.World_Design.Scripts.Challenges.Ghost_Boat
                 Debug.LogWarning(gameObject.name + ": GhostBoatAudio not found in scene (check prefab)");
             }
 
+            // Save original materials to switch materials without loosing original material
             if (inViewMaterial != null)
             {
                 SetOriginalRenderer();
