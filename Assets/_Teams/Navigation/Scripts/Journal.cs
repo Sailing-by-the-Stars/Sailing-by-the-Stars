@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
+using static System.Net.Mime.MediaTypeNames;
 using static UnityEngine.Rendering.DebugUI;
 
 [Serializable]
@@ -28,6 +29,10 @@ public class Journal : ToolPickup, AstroTutorialStep
 
     MeshRenderer leftPageQ;
     MeshRenderer rightPageQ;
+
+
+    private float maxPageWidth = 0f;
+    private float maxPageHeight = 0f;
 
     [SerializeField]
     List<Page> pages = new();
@@ -81,7 +86,7 @@ public class Journal : ToolPickup, AstroTutorialStep
         bookangle = 101;
         bookOpened = false;
 
-        transform.GetChild(0).gameObject.SetActive(false);
+        transform.GetChild(1).gameObject.SetActive(false);
 
         initalRot = Quaternion.Euler(90, 90, 90);
         transform.localRotation = initalRot;
@@ -115,12 +120,12 @@ public class Journal : ToolPickup, AstroTutorialStep
     {
         if (isEquipped)
         {
-            if (Input.GetKeyDown(KeyCode.Q))
+            if (Input.GetKeyDown(KeyCode.Q) && bookVisible && bookOpened)
             {
                 pageNr -= 1;
             }
 
-            if (Input.GetKeyDown(KeyCode.E))
+            if (Input.GetKeyDown(KeyCode.E) && bookVisible && bookOpened)
             {
                 pageNr += 1;
             }
@@ -130,7 +135,7 @@ public class Journal : ToolPickup, AstroTutorialStep
                 //Jump to the first page of the section mapped to that key
                 if (Input.GetKeyDown(KeyCode.Alpha1))
                 {
-                    if (sectionOnePageNr <= pages.Count - 1)
+                    if (sectionPageNrs[0] <= pages.Count - 1)
                     {
                         pageNr = sectionOnePageNr;
                         
@@ -145,7 +150,7 @@ public class Journal : ToolPickup, AstroTutorialStep
 
                 if (Input.GetKeyDown(KeyCode.Alpha2))
                 {
-                    if (sectionTwoPageNr <= pages.Count - 1)
+                    if (sectionPageNrs[1] <= pages.Count - 1)
                     {
                         pageNr = sectionTwoPageNr;
                         
@@ -173,6 +178,7 @@ public class Journal : ToolPickup, AstroTutorialStep
                     }
                 }
 
+                /*
                 if (Input.GetKeyDown(KeyCode.Alpha4))
                 {
                     if (sectionFourPageNr <= pages.Count - 1)
@@ -262,7 +268,7 @@ public class Journal : ToolPickup, AstroTutorialStep
                         bookmarkTransform.GetChild(8).GetComponent<Renderer>().material.color = Color.green;
                     }
                 }
-            
+                */
             }
 
             if (pageNr < 0)
@@ -279,24 +285,9 @@ public class Journal : ToolPickup, AstroTutorialStep
             {
                 leftPageQ.enabled = true;
 
-                Texture tex = pages[pageNr].leftPage;
-                Transform rt = leftPageQ.transform;
+                FixScaling(pages[pageNr].leftPage, leftPageQ.transform);
 
-                float width = tex.width;
-                float height = tex.height;
-
-                if (width > height)
-                {
-                    float ratio = height / width;
-                    rt.localScale = new Vector2(1f, ratio);
-                }
-                else
-                {
-                    float ratio = width / height;
-                    rt.localScale = new Vector2(ratio, 1f);
-                }
-
-                leftPageQ.sharedMaterial.mainTexture = tex;
+                leftPageQ.sharedMaterial.mainTexture = pages[pageNr].leftPage;
             }
             else
             {
@@ -308,24 +299,8 @@ public class Journal : ToolPickup, AstroTutorialStep
             {
                 rightPageQ.enabled = true;
 
-                Texture tex = pages[pageNr].rightPage;
-                Transform rt = rightPageQ.transform;
-
-                float width = tex.width;
-                float height = tex.height;
-
-                if (width > height)
-                {
-                    float ratio = height / width;
-                    rt.localScale = new Vector2(1f, ratio);
-                }
-                else
-                {
-                    float ratio = width / height;
-                    rt.localScale = new Vector2(ratio, 1f);
-                }
-
-                rightPageQ.sharedMaterial.mainTexture = tex;
+                FixScaling(pages[pageNr].rightPage, rightPageQ.transform);
+                rightPageQ.sharedMaterial.mainTexture = pages[pageNr].rightPage;
             }
             else
             {
@@ -342,7 +317,7 @@ public class Journal : ToolPickup, AstroTutorialStep
                 }
                 else
                 {
-                    transform.GetChild(0).gameObject.SetActive(true);
+                    transform.GetChild(1).gameObject.SetActive(true);
                     bookVisible = true;
                     bookOpened = true;
                     bookangle = 100;
@@ -383,7 +358,7 @@ public class Journal : ToolPickup, AstroTutorialStep
                 if (bookangle > 100)
                 {
                     bookangle = 100;
-                    transform.GetChild(0).gameObject.SetActive(false);
+                    transform.GetChild(1).gameObject.SetActive(false);
                 }
                 
                 //Hide bookmarks and reset section selection
@@ -405,6 +380,37 @@ public class Journal : ToolPickup, AstroTutorialStep
         }
     }
 
+
+    void FixScaling(Texture tex, Transform trans)
+    {
+        if (maxPageWidth == 0f || maxPageHeight == 0f)
+        {
+            maxPageWidth = trans.localScale.x;
+            maxPageHeight = trans.localScale.y;
+        }
+
+        float texWidth = tex.width;
+        float texHeight = tex.height;
+
+        float texRatio = texWidth / texHeight;
+        float maxRatio = maxPageWidth / maxPageHeight;
+
+        float newWidth;
+        float newHeight;
+
+        if (texRatio > maxRatio)
+        {
+            newWidth = maxPageWidth;
+            newHeight = maxPageWidth / texRatio;
+        }
+        else
+        {
+            newHeight = maxPageHeight;
+            newWidth = maxPageHeight * texRatio;
+        }
+
+        trans.localScale = new Vector2(newWidth, newHeight);
+    }
 
 
 
