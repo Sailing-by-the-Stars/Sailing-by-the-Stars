@@ -36,10 +36,13 @@ public class FlatStarField : MonoBehaviour
     {
         manualStars.Clear();
 
+        UnityEngine.Random.InitState(1);
         //int I = 0;
         foreach ((string, int[]) ints in constellations)
         {
             Constelation New = new();
+
+            New.debugColor = Color.HSVToRGB(UnityEngine.Random.value, 1f, 1f);
             New.name = ints.Item1;
             foreach (int i in ints.Item2)
             {
@@ -239,6 +242,7 @@ public class FlatStarField : MonoBehaviour
             //>
 
             GameObject stargo = null;
+            Constelation starConstelation = null;
 
             bool isManualStar = false;
 
@@ -253,6 +257,8 @@ public class FlatStarField : MonoBehaviour
                     
 
                     isManualStar = true;
+
+                    starConstelation = manualStar;
 
                     if (manualStar.starPrefab)
                     {
@@ -300,7 +306,7 @@ public class FlatStarField : MonoBehaviour
 #endif
                         }
                     }
-                    
+
                     stargo.name = $"HR {star.catalog_number} {manualStar.name}";
 
                     if (isManualStar)
@@ -389,15 +395,37 @@ public class FlatStarField : MonoBehaviour
             half intensityMul;
             intensityMul = (half)MathF.Pow(2.0f, emissionMult);
             StarInfo starInfo = stargo.AddComponent<StarInfo>();
-            starInfo.matColor = star.colour;
+
+#if UNITY_EDITOR
+            if(isManualStar && starConstelation != null)
+            {
+                starInfo.matColor = starConstelation.debugColor;
+                starInfo.emissionColor = starConstelation.debugColor * intensityMul * starSize;
+                starInfo.emissionMult = intensityMul * starSize;
+            }
+            else
+            {
+
+                starInfo.matColor = star.colour;
+                Color tempColor = star.colour * intensityMul * starSize;
+
+                tempColor = BoostChroma(tempColor, chromaBoost);
+
+                starInfo.emissionColor = tempColor;
+                starInfo.emissionMult = intensityMul * starSize;
+            }
+
+
+#else
             Color tempColor = star.colour * intensityMul * starSize;
 
             tempColor = BoostChroma(tempColor, chromaBoost);
 
             starInfo.emissionColor = tempColor;
             starInfo.emissionMult = intensityMul * starSize;
+#endif
 
-            meshRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+                meshRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
             meshRenderer.receiveShadows = false;
             meshRenderer.motionVectorGenerationMode = MotionVectorGenerationMode.Camera;
 
