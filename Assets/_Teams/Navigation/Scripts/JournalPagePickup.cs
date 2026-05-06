@@ -32,7 +32,6 @@ public class JournalPagePickup : MonoBehaviour, IPickup
     {
         var pickupController = interactionController.GetComponent<PickupController>();
         Grab(pickupController);
-        Debug.LogError("dit werkt ig");
     }
 
     public virtual void Grab(PickupController pickupController)
