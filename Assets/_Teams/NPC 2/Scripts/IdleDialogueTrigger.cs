@@ -4,31 +4,36 @@ using UnityEngine;
 // Programmer: Boas
 
 /// <summary>
-/// Triggers dialogue when the player has been idle for a set duration.
+/// Triggers dialogue when the player is idle inside a trigger area.
 /// </summary>
-public class IdleDialogueTrigger : MonoBehaviour
+[RequireComponent(typeof(Collider))]
+public class AreaIdleDialogueTrigger : MonoBehaviour
 {
     public List<ConditionalDialogue> dialogues;
 
-    [Header("How many seconds before it triggers dialogue")]
     [SerializeField] private float idleTime = 5f;
-
-    [Header("Can it trigger only once?")]
     [SerializeField] private bool triggerOnce = true;
 
     private float lastInputTime;
     private bool hasTriggered = false;
+    private bool playerInside = false;
 
-    private void Start()
+    private void Awake()
     {
-        lastInputTime = Time.time;
+        GetComponent<Collider>().isTrigger = true;
     }
 
     private void Update()
     {
+        if (!playerInside) return;
+
         if (IsPlayerActing())
         {
             lastInputTime = Time.time;
+
+            if (!triggerOnce)
+                hasTriggered = false;
+
             return;
         }
 
@@ -41,6 +46,22 @@ public class IdleDialogueTrigger : MonoBehaviour
             StartDialogue();
             hasTriggered = true;
         }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (!other.CompareTag("Player")) return;
+
+        playerInside = true;
+
+        lastInputTime = Time.time;
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (!other.CompareTag("Player")) return;
+
+        playerInside = false;
     }
 
     private bool IsPlayerActing()
@@ -80,6 +101,6 @@ public class IdleDialogueTrigger : MonoBehaviour
             }
         }
 
-        Debug.LogWarning("No valid idle dialogue found.");
+        Debug.LogWarning("No valid idle dialogue found for this area.");
     }
 }
