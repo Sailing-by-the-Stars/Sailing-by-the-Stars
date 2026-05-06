@@ -1,4 +1,3 @@
-
 using UnityEngine;
 
 public class WindObject : MonoBehaviour
@@ -15,6 +14,10 @@ public class WindObject : MonoBehaviour
     [SerializeField, Tooltip("True when Wind Trail B is currently playing.")] 
     private bool enableWindTrailB;
     [SerializeField]private bool isTrailAActive = true;
+
+    [Header("Wind Zones")]
+    [SerializeField] private GameObject windZoneA;
+    [SerializeField] private GameObject windZoneB;
     
     [SerializeField, Min(0f)] private float restartAngleThreshold = 1f;
     [SerializeField, Min(0f)] private float windTrailIntensity = 1f;
@@ -55,11 +58,13 @@ public class WindObject : MonoBehaviour
             {
                 windTrailB.Stop(true, ParticleSystemStopBehavior.StopEmitting);
                 enableWindTrailB = false;
+                SetWindZoneActive(windZoneB, false);
             }
             else
             {
                 windTrailA.Stop(true, ParticleSystemStopBehavior.StopEmitting);
                 enableWindTrailA = false;
+                SetWindZoneActive(windZoneA, false);
             }
         }
     }
@@ -241,16 +246,20 @@ public class WindObject : MonoBehaviour
             windTrailA.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
             windTrailA.Play(true);
         }
+        SetWindZoneActive(windZoneA, true);
 
         if (windTrailB != null)
         {
             windTrailB.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+            SetWindZoneActive(windZoneB, false);
 
             // If Trail A is not assigned, use Trail B as the active fallback.
             if (windTrailA == null)
             {
                 isTrailAActive = false;
                 windTrailB.Play(true);
+                SetWindZoneActive(windZoneA, false);
+                SetWindZoneActive(windZoneB, true);
             }
         }
 
@@ -262,12 +271,18 @@ public class WindObject : MonoBehaviour
         Debug.Log("SwapActiveWindTrail");
         ParticleSystem activeTrail = isTrailAActive ? windTrailA : windTrailB;
         ParticleSystem nextTrail = isTrailAActive ? windTrailB : windTrailA;
+        GameObject activeZone = isTrailAActive ? windZoneA : windZoneB;
+        GameObject nextZone = isTrailAActive ? windZoneB : windZoneA;
 
         if (nextTrail == null)
         {
             if (activeTrail != null && !activeTrail.isPlaying)
             {
                 activeTrail.Play(true);
+            }
+            if (activeZone != null && !activeZone.activeSelf)
+            {
+                SetWindZoneActive(activeZone, true);
             }
 
             SyncWindTrailPlaybackFlags();
@@ -278,9 +293,12 @@ public class WindObject : MonoBehaviour
         {
             activeTrail.Stop(true, ParticleSystemStopBehavior.StopEmitting);
         }
+        SetWindZoneActive(activeZone, false);
 
         nextTrail.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
         nextTrail.Play(true);
+        SetWindZoneActive(nextZone, true);
+        
         isTrailAActive = !isTrailAActive;
         SyncWindTrailPlaybackFlags();
     }
@@ -297,7 +315,18 @@ public class WindObject : MonoBehaviour
             windTrailB.Stop(true, ParticleSystemStopBehavior.StopEmitting);
         }
 
+        SetWindZoneActive(windZoneA, false);
+        SetWindZoneActive(windZoneB, false);
+
         SyncWindTrailPlaybackFlags();
+    }
+    
+    private void SetWindZoneActive(GameObject zone, bool isActive)
+    {
+        if (zone != null)
+        {
+            zone.SetActive(isActive);
+        }
     }
 
     private void RotateWindArrowsByAssignedDirections()
