@@ -4,6 +4,7 @@ using UnityEngine.InputSystem.LowLevel;
 //Creator: Joost
 //Edited by: Johan
 //edited by: Jardi (the sprint working, hacky though it is)
+//edited by: Vasilis (particle system on enter and exit boat)
 public class Movement : MonoBehaviour
 {
     [Header("Movement Settings")]
@@ -43,6 +44,12 @@ public class Movement : MonoBehaviour
     [SerializeField] Animator animator;
 
     [SerializeField] string playerState = "Land";
+
+
+    [Header("Particle System")]
+    [SerializeField] private ParticleSystem boatFoam;
+    [SerializeField] private ParticleSystem sideFoamRight;
+    [SerializeField] private ParticleSystem sideFoamLeft;
 
     private void Awake()
     {
@@ -244,6 +251,13 @@ public class Movement : MonoBehaviour
 
         buoyancyController.enabled = true;
         boatController.enabled = true;
+
+        boatFoam.gameObject.SetActive(true);
+        sideFoamLeft.gameObject.SetActive(true);
+        sideFoamRight.gameObject.SetActive(true);
+        boatFoam.Play();
+        sideFoamRight.Play();
+        sideFoamLeft.Play();
     }
 
     public void ExitBoat()
@@ -256,6 +270,15 @@ public class Movement : MonoBehaviour
 
         buoyancyController.enabled = false;
         boatController.enabled = false;
+
+        boatFoam.gameObject.SetActive(false);
+        sideFoamLeft.gameObject.SetActive(false);
+        sideFoamRight.gameObject.SetActive(false);
+
+        boatFoam.Stop();
+        sideFoamLeft.Stop();
+        sideFoamRight.Stop();
+
     }
 
     void Jump()
