@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1973395471866357105}
   - component: {fileID: 8029217184923720319}
   m_Layer: 5
-  m_Name: wasdControls
+  m_Name: SprintControls
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -111,8 +111,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 208.74927, y: 0.000030517578}
-  m_SizeDelta: {x: 602.5013, y: 100}
+  m_AnchoredPosition: {x: 235.24854, y: 0.000030517578}
+  m_SizeDelta: {x: 549.5028, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2801689006547585338
 CanvasRenderer:
@@ -142,7 +142,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: to move around
+  m_text: to sprint
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 56daeb1c04b612f429f2a2042d016445, type: 2}
   m_sharedMaterial: {fileID: -9093063763256149761, guid: 56daeb1c04b612f429f2a2042d016445, type: 2}
@@ -223,9 +223,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2755631744394848597}
-  - component: {fileID: 7468755768373502280}
+  - component: {fileID: 2732953412917784219}
   m_Layer: 5
-  m_Name: Move Popup
+  m_Name: Sprint Popup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -252,7 +252,7 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &7468755768373502280
+--- !u!114 &2732953412917784219
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -261,11 +261,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 7542348732000136647}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eb1c38033fa5a3743a81dd003037c83b, type: 3}
+  m_Script: {fileID: 11500000, guid: 230fb5643c71077459c079e7ae2c8b50, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::MoveTutorial
-  Step: 2
-  requiredTimeMovementKeysPressedMs: 1000
+  m_EditorClassIdentifier: Assembly-CSharp::Assets._Teams.Island_1.Scripts.User_Interface.SprintTutorial
+  Step: 3
+  requiredTimeSprintKeyPressedMs: 1000
   progressbarMask: {fileID: 1410597120687829726}
 --- !u!1 &7556694798293662425
 GameObject:
@@ -279,7 +279,7 @@ GameObject:
   - component: {fileID: 1590556705223506380}
   - component: {fileID: 5091950099547726183}
   m_Layer: 5
-  m_Name: WASD
+  m_Name: Shift
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -301,8 +301,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -304.938, y: -3.1519}
-  m_SizeDelta: {x: 410.1241, y: 93.6962}
+  m_AnchoredPosition: {x: -279.6549, y: -1.9121}
+  m_SizeDelta: {x: 460.6902, y: 96.1758}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1590556705223506380
 CanvasRenderer:
@@ -332,7 +332,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: WASD
+  m_text: Shift
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: d50d4bb6dd1c69f4e8992e2819fdc8a9, type: 2}
   m_sharedMaterial: {fileID: -9093063763256149761, guid: d50d4bb6dd1c69f4e8992e2819fdc8a9, type: 2}
