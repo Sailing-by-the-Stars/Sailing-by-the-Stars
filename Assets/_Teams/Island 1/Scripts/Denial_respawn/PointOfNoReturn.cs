@@ -12,6 +12,7 @@ using UnityEngine.UI;
 ///   3. Blockade 1 is disabled
 ///   4. Blockade 2 is enabled
 ///   5. The WakeUp blink animation plays, as if they're waking up again
+///   6. journal is enabled
 ///
 /// After that the trigger does nothing, so the player can pass freely.
 ///
@@ -46,6 +47,13 @@ public class PointOfNoReturn : MonoBehaviour
 
     [Tooltip("This blockade is inactive at the start of the game and enabled after respawn.")]
     public GameObject blockade2;
+
+    [Header("Journals")]
+    [Tooltip("This journal is desabled at the start of the game and enabled after respawn.")]
+    public GameObject journal1;
+
+    [Tooltip("This journal is desabled at the start of the game and enabled after respawn.")]
+    public GameObject journal2;
 
     private bool _hasTriggered = false;
 
@@ -132,6 +140,12 @@ public class PointOfNoReturn : MonoBehaviour
         if (blockade2 != null)
             blockade2.SetActive(true);
 
+        if (journal1 != null)
+            journal1.SetActive(true);
+
+        if (journal2 != null)
+            journal2.SetActive(true);
+
         if (movement != null) movement.enabled = true;
 
         yield return new WaitForSecondsRealtime(0.2f);
@@ -165,6 +179,12 @@ public class PointOfNoReturn : MonoBehaviour
 
         if (blockade2 != null)
             blockade2.SetActive(false);
+        
+        if (journal1 != null)
+            journal1.SetActive(false);
+
+        if (journal2 != null)
+            journal2.SetActive(false);
     }
 
     private void SetFadeAlpha(float alpha)
