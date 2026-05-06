@@ -5,6 +5,7 @@
 
 using UnityEngine;
 using System.Linq;
+using UnityEngine.Rendering;
 
 [RequireComponent(typeof(Rigidbody))]
 public class BoatController : MonoBehaviour
@@ -21,6 +22,7 @@ public class BoatController : MonoBehaviour
     [SerializeField] private float maxTiltAngle = 10f;
     [SerializeField] private float rudderTorqueStrength = 30f;
     [SerializeField] private float sidedriftCorrectionStrength = 150f;
+    [SerializeField] private float lightIntensity = 1393.47f;
     [SerializeField] private bool useLocalWindSpeed = true;
     [SerializeField] private bool enableWindForces = true;
 
@@ -57,6 +59,7 @@ public class BoatController : MonoBehaviour
     private GameObject[] rudderObjects;
     private GameObject[] mastObjects;
     private GameObject flagObject;
+    private Light lanternLight;
 
     private bool anchorDropped = true;
 
@@ -88,6 +91,8 @@ public class BoatController : MonoBehaviour
             enabled = false;
             return;
         }
+
+        lanternLight = GetComponentInChildren<Light>();
     }
 
     void OnEnable()
@@ -136,6 +141,7 @@ public class BoatController : MonoBehaviour
 
         applyWaterDrag();
         TiltLimiter();
+        WindCaughtIndicator(mastDirectionIntoWind);
 
         forwardSpeed = transform.InverseTransformVector(rigidBody.linearVelocity).z;
         
@@ -346,5 +352,22 @@ public class BoatController : MonoBehaviour
         }
 
         transform.eulerAngles = currentRotation;
+    }
+
+    private void WindCaughtIndicator(float apparentWindAngle)
+    {
+        float liftDifference = Mathf.DeltaAngle(0, apparentWindAngle);
+        float dragDifference = Mathf.DeltaAngle(90, apparentWindAngle);
+        float drag2Difference = Mathf.DeltaAngle(-90, apparentWindAngle);
+        float lightMultiplier = 1f;
+
+        if (Mathf.Abs(liftDifference) < 10f)
+            lightMultiplier = 1f + 1.5f * (10f - Mathf.Abs(liftDifference)) / 10f;
+        else if (Mathf.Abs(dragDifference) < 10f)
+            lightMultiplier = 1f + 1.5f * (10f - Mathf.Abs(dragDifference)) / 10f;
+        else if (Mathf.Abs(drag2Difference) < 10f)
+            lightMultiplier = 1f + 1.5f * (10f - Mathf.Abs(drag2Difference)) / 10f;
+
+        lanternLight.intensity = LightUnitUtils.LumenToCandela(lightIntensity * lightMultiplier, 4f * Mathf.PI);
     }
 }
