@@ -3,9 +3,8 @@
 *   Contributed to by: 
 */
 
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
+using System.Linq;
 
 [RequireComponent(typeof(Rigidbody))]
 public class BoatController : MonoBehaviour
@@ -19,7 +18,7 @@ public class BoatController : MonoBehaviour
     [SerializeField] private float waterDensity = 1000f;
     [SerializeField] private float keelDragStrength = 100f;
     [SerializeField] private float baseForwardForce = 900f;
-    [SerializeField] private float maxRotationRate = 10f;
+    [SerializeField] private float maxTiltAngle = 10f;
     [SerializeField] private float rudderTorqueStrength = 30f;
     [SerializeField] private float sidedriftCorrectionStrength = 150f;
     [SerializeField] private bool useLocalWindSpeed = true;
@@ -136,6 +135,7 @@ public class BoatController : MonoBehaviour
         }
 
         applyWaterDrag();
+        TiltLimiter();
 
         forwardSpeed = transform.InverseTransformVector(rigidBody.linearVelocity).z;
         
@@ -322,5 +322,29 @@ public class BoatController : MonoBehaviour
 
         float flagAOA = Vector3.SignedAngle(flagDirection, windDirection, Vector3.up);
         flagObject.transform.RotateAround(flagPivot.transform.position, flagPivot.transform.up, flagAOA);
+    }
+
+    private void TiltLimiter()
+    {
+        float zAngle = transform.rotation.eulerAngles.z % 360;
+        if (zAngle > 180f) zAngle -= 360f;
+
+        Vector3 currentRotation = transform.eulerAngles;
+
+        if (zAngle > maxTiltAngle || zAngle < -maxTiltAngle)
+        {
+            zAngle = Mathf.Clamp(zAngle, - maxTiltAngle, maxTiltAngle);
+            currentRotation.z = zAngle;
+        }
+
+        float xAngle = Mathf.DeltaAngle(transform.eulerAngles.x, 0f);
+
+        if (Mathf.Abs(xAngle) > 2f)
+        {
+            xAngle = Mathf.Clamp(xAngle, -2f, 2f);
+            currentRotation.x = -xAngle;
+        }
+
+        transform.eulerAngles = currentRotation;
     }
 }

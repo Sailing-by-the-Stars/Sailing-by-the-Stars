@@ -1514,7 +1514,7 @@ MonoBehaviour:
   waterDensity: 1000
   keelDragStrength: 300
   baseForwardForce: 1000
-  maxRotationRate: 10
+  maxTiltAngle: 10
   rudderTorqueStrength: 35
   sidedriftCorrectionStrength: 250
   useLocalWindSpeed: 0
@@ -1589,7 +1589,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BuoyancyController
   draft: 0.3
   accuracy: 3
-  waveTorqueStrength: 100
+  waveTorqueStrength: 200
   centerOfMass: {x: 0, y: -0.5, z: 0}
   waterSurface: {fileID: 0}
   buoyancyQuadObject: {fileID: 7051391685873645361}
