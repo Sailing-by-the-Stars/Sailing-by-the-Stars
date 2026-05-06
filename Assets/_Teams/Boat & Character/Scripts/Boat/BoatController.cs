@@ -23,6 +23,7 @@ public class BoatController : MonoBehaviour
     [SerializeField] private float rudderTorqueStrength = 30f;
     [SerializeField] private float sidedriftCorrectionStrength = 150f;
     [SerializeField] private float lightIntensity = 1393.47f;
+    [SerializeField] private float lightIntensityMultiplier = 3f;
     [SerializeField] private bool useLocalWindSpeed = true;
     [SerializeField] private bool enableWindForces = true;
 
@@ -359,15 +360,15 @@ public class BoatController : MonoBehaviour
         float liftDifference = Mathf.DeltaAngle(0, apparentWindAngle);
         float dragDifference = Mathf.DeltaAngle(90, apparentWindAngle);
         float drag2Difference = Mathf.DeltaAngle(-90, apparentWindAngle);
-        float lightMultiplier = 1f;
+        float intensityMultiplier = 1f;
 
         if (Mathf.Abs(liftDifference) < 10f)
-            lightMultiplier = 1f + 1.5f * (10f - Mathf.Abs(liftDifference)) / 10f;
+            intensityMultiplier = 1f + lightIntensityMultiplier * (10f - Mathf.Abs(liftDifference)) / 10f;
         else if (Mathf.Abs(dragDifference) < 10f)
-            lightMultiplier = 1f + 1.5f * (10f - Mathf.Abs(dragDifference)) / 10f;
+            intensityMultiplier = 1f + lightIntensityMultiplier * (10f - Mathf.Abs(dragDifference)) / 10f;
         else if (Mathf.Abs(drag2Difference) < 10f)
-            lightMultiplier = 1f + 1.5f * (10f - Mathf.Abs(drag2Difference)) / 10f;
+            intensityMultiplier = 1f + lightIntensityMultiplier * (10f - Mathf.Abs(drag2Difference)) / 10f;
 
-        lanternLight.intensity = LightUnitUtils.LumenToCandela(lightIntensity * lightMultiplier, 4f * Mathf.PI);
+        lanternLight.intensity = LightUnitUtils.LumenToCandela(lightIntensity * intensityMultiplier, 4f * Mathf.PI);
     }
 }
