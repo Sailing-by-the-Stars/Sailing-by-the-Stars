@@ -32,6 +32,7 @@ public class JournalPagePickup : MonoBehaviour, IPickup
     {
         var pickupController = interactionController.GetComponent<PickupController>();
         Grab(pickupController);
+        Debug.LogError("dit werkt ig");
     }
 
     public virtual void Grab(PickupController pickupController)
@@ -44,6 +45,17 @@ public class JournalPagePickup : MonoBehaviour, IPickup
             journal = pickupController.transform
                 .Find("Main Camera")
                 .Find("journal")
+                .GetComponent<Journal>();
+        }
+
+        if (!pickupController.transform
+                .Find("Main Camera")
+                .Find("journal(Clone)")
+                .IsUnityNull() && journal.IsUnityNull())
+        {
+                journal = pickupController.transform
+                .Find("Main Camera")
+                .Find("journal(Clone)")
                 .GetComponent<Journal>();
         }
     }
@@ -65,6 +77,7 @@ public class JournalPagePickup : MonoBehaviour, IPickup
     {
         if (journal.IsUnityNull()) 
         {
+            Debug.LogWarning("there is no journal to add pages to!");
             return false;
         }
         

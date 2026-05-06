@@ -335,7 +335,7 @@ public class Journal : ToolPickup, AstroTutorialStep
                 if (bookangle < 0)
                 {
                     bookangle = 0;
-                    
+
                     //Show bookmarks
                     for (int i = 0; i < bookmarkTransform.childCount; i++)
                     {
@@ -360,7 +360,7 @@ public class Journal : ToolPickup, AstroTutorialStep
                     bookangle = 100;
                     transform.GetChild(1).gameObject.SetActive(false);
                 }
-                
+
                 //Hide bookmarks and reset section selection
                 for (int i = 0; i < bookmarkTransform.childCount; i++)
                 {
@@ -368,15 +368,12 @@ public class Journal : ToolPickup, AstroTutorialStep
                     bookmarkTransform.GetChild(i).GetComponent<Renderer>().material.color = Color.white;
                 }
             }
-
-                bookRenderer.SetBlendShapeWeight(0, bookangle);
         }
         else
         {
             leftPageQ.enabled = false;
             rightPageQ.enabled = false;
             bookangle = 100;
-            bookRenderer.SetBlendShapeWeight(0, bookangle);
         }
     }
 
