@@ -105,7 +105,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AcceptanceVisibility
   modelRoot: {fileID: 4358013586571462115}
   startHidden: 0
-  oneAndDone: 0
+  oneAndDone: 1
 --- !u!1 &2554280505184475049
 GameObject:
   m_ObjectHideFlags: 0
@@ -115,6 +115,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4493468569314225674}
+  - component: {fileID: 4869846616284863397}
   m_Layer: 0
   m_Name: AcceptanceStaticWatcher
   m_TagString: Untagged
@@ -139,6 +140,18 @@ Transform:
   - {fileID: 3976985135715934041}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4869846616284863397
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2554280505184475049}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5da23061fd7a49e46b66508ed5a06ec6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NPCLookAtPlayer
 --- !u!1001 &1748206007007983216
 PrefabInstance:
   m_ObjectHideFlags: 0
