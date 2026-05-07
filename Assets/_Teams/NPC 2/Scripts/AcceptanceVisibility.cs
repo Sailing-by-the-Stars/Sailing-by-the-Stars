@@ -1,5 +1,7 @@
 using UnityEngine;
 
+// Old
+
 /// <summary>
 /// Ensures only one static NPC is visible at a time.
 /// Works with NPCs made of multiple mesh parts.
