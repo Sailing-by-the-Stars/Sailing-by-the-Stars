@@ -37,6 +37,8 @@
         ToggleJournal,
 
         // This is the last step, most likely there won't be a popup, but it's here just in case 
-        Completed
+        Completed,
+
+        RotateAstrolabe,
     }
 }
