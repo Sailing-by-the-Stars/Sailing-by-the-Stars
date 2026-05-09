@@ -168,6 +168,15 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""DockInteract"",
+                    ""type"": ""Button"",
+                    ""id"": ""9138433c-c3de-4e9b-995f-85e5699b9d28"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -322,6 +331,17 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
                     ""action"": ""Interact"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b276248e-5611-49d1-ac57-11da8228f287"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""DockInteract"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -906,6 +926,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         m_Land_Move = m_Land.FindAction("Move", throwIfNotFound: true);
         m_Land_Jump = m_Land.FindAction("Jump", throwIfNotFound: true);
         m_Land_Interact = m_Land.FindAction("Interact", throwIfNotFound: true);
+        m_Land_DockInteract = m_Land.FindAction("DockInteract", throwIfNotFound: true);
         // BoatSail
         m_BoatSail = asset.FindActionMap("BoatSail", throwIfNotFound: true);
         m_BoatSail_Move = m_BoatSail.FindAction("Move", throwIfNotFound: true);
@@ -1101,6 +1122,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     private readonly InputAction m_Land_Move;
     private readonly InputAction m_Land_Jump;
     private readonly InputAction m_Land_Interact;
+    private readonly InputAction m_Land_DockInteract;
     /// <summary>
     /// Provides access to input actions defined in input action map "Land".
     /// </summary>
@@ -1124,6 +1146,10 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Land/Interact".
         /// </summary>
         public InputAction @Interact => m_Wrapper.m_Land_Interact;
+        /// <summary>
+        /// Provides access to the underlying input action "Land/DockInteract".
+        /// </summary>
+        public InputAction @DockInteract => m_Wrapper.m_Land_DockInteract;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -1159,6 +1185,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @Interact.started += instance.OnInteract;
             @Interact.performed += instance.OnInteract;
             @Interact.canceled += instance.OnInteract;
+            @DockInteract.started += instance.OnDockInteract;
+            @DockInteract.performed += instance.OnDockInteract;
+            @DockInteract.canceled += instance.OnDockInteract;
         }
 
         /// <summary>
@@ -1179,6 +1208,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @Interact.started -= instance.OnInteract;
             @Interact.performed -= instance.OnInteract;
             @Interact.canceled -= instance.OnInteract;
+            @DockInteract.started -= instance.OnDockInteract;
+            @DockInteract.performed -= instance.OnDockInteract;
+            @DockInteract.canceled -= instance.OnDockInteract;
         }
 
         /// <summary>
@@ -1641,6 +1673,13 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnInteract(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "DockInteract" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnDockInteract(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "BoatSail" which allows adding and removing callbacks.
