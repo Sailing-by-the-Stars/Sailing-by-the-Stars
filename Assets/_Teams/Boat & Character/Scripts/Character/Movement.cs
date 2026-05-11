@@ -16,8 +16,8 @@ public class Movement : MonoBehaviour
 
     [Header("Camera Setting")]
     [SerializeField] float mouseSensitivity = 10f;
-    [SerializeField] float minXRotation = -90f;
-    [SerializeField] float maxXRotation = 90f;
+    [SerializeField] float minYRotation = -90f;
+    [SerializeField] float maxYRotation = 90f;
     bool limitCamMovement = false;
 
     [Header("Collision Handling")]
@@ -209,16 +209,16 @@ public class Movement : MonoBehaviour
 
         if (limitCamMovement != true)
         {
-            // Rotating the Y rotation
-            yCamRotation += cameraMoveDirection.x;
-            yCamRotation = FixRotationLimit(yCamRotation);
-            gameObject.transform.rotation = Quaternion.Euler(0, yCamRotation, 0);
+            // Rotating the X rotation
+            xCamRotation += cameraMoveDirection.x;
+            xCamRotation = FixRotationLimit(xCamRotation);
+            gameObject.transform.rotation = Quaternion.Euler(0, xCamRotation, 0);
         }
 
-        // Rotating the X rotation
-        xCamRotation -= cameraMoveDirection.y;
-        xCamRotation = Mathf.Clamp(xCamRotation, minXRotation, maxXRotation);
-        cam.transform.localRotation = Quaternion.Euler(xCamRotation, 0, 0);
+        // Rotating the Y rotation
+        yCamRotation -= cameraMoveDirection.y;
+        yCamRotation = Mathf.Clamp(yCamRotation, minYRotation, maxYRotation);
+        cam.transform.localRotation = Quaternion.Euler(yCamRotation, 0, 0);
  }
 
     /// <summary>
