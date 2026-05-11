@@ -113,13 +113,12 @@ public class Altar : MonoBehaviour, IInteractable
         foreach (var candle in candles)
             candle.enabled = true;
         ritualCompleted = true;
+        Debug.Log("Bargain Completed.");
     }
 
     private void OpenRewardCompartment()
     {
         if (!rewardDoor || !ritualCompleted) return;
-        Debug.Log("Bargain Completed.");
-        PuzzleProgress.MarkComplete("bargaining");
         
         rewardDoorCurrentOffset = Mathf.Lerp(rewardDoorCurrentOffset, rewardDoorTargetOffset, rewardDoorMoveSpeed * Time.deltaTime);
         rewardDoor.localPosition = rewardDoorStartPos + Vector3.forward * rewardDoorCurrentOffset;

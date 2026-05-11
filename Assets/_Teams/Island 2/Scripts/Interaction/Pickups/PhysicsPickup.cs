@@ -35,6 +35,13 @@ public class PhysicsPickup : MonoBehaviour, IPickup
         GameEvents.ExecOnPickup(this);
     }
 
+    public virtual void CollectAndDestroy()
+    {
+        SetPhysicsValue(true);
+        GameEvents.ExecOnPickup(this);
+        Destroy(gameObject);
+    }
+
     public virtual void Drop(PickupController pickupController)
     {
         transform.parent = null;
