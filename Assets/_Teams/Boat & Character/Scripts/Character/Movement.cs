@@ -100,6 +100,8 @@ public class Movement : MonoBehaviour
 
     private void Update()
     {
+        RotateCamera();
+
         if (!isOnBoat)
         {
             Jump();
@@ -132,8 +134,6 @@ public class Movement : MonoBehaviour
 
     void FixedUpdate()
     {
-        RotateCamera();
-
         Interact();
         switch (playerState)
         {
@@ -205,7 +205,7 @@ public class Movement : MonoBehaviour
     void RotateCamera()
     {
         Vector2 lookDirection = playerControls.Looking.Look.ReadValue<Vector2>();
-        Vector2 cameraMoveDirection = lookDirection * mouseSensitivity * Time.deltaTime;
+        Vector2 cameraMoveDirection = lookDirection * mouseSensitivity;
 
         if (limitCamMovement != true)
         {
@@ -219,7 +219,7 @@ public class Movement : MonoBehaviour
         xCamRotation -= cameraMoveDirection.y;
         xCamRotation = Mathf.Clamp(xCamRotation, minXRotation, maxXRotation);
         cam.transform.localRotation = Quaternion.Euler(xCamRotation, 0, 0);
- }
+    }
 
     /// <summary>
     /// This function makes sure that IF the game gets played long enough
