@@ -64,10 +64,12 @@ public class TempStateMachine : MonoBehaviour
 
             case GameState.Journal:
 
+                SetCursorVisibility(true);
                 break;
 
             case GameState.Astrolabe:
 
+                SetCursorVisibility(false);
                 break;
 
             default:
