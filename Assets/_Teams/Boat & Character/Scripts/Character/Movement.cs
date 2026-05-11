@@ -59,38 +59,40 @@ public class Movement : MonoBehaviour
     private DockPoint[] _docks;
     private DockInteractionUI _dockUI;
 
-    private void Awake()
-    {
-        playerControls = new PlayerControls();
-    }
+    // private void Awake()
+    // {
+    //     playerControls = new PlayerControls();
+    // }
 
-    private void OnEnable()
-    {
-        playerControls.Land.Enable();
-        playerControls.Looking.Enable();
-    }
+    // private void OnEnable()
+    // {
+    //     playerControls.Land.Enable();
+    //     playerControls.Looking.Enable();
+    // }
 
-    private void OnDisable()
-    {
-        playerControls.Land.Disable();
-        playerControls.BoatSail.Disable();
-        playerControls.BoatRudder.Disable();
-        playerControls.Looking.Disable();
-    }
+    // private void OnDisable()
+    // {
+    //     playerControls.Land.Disable();
+    //     playerControls.BoatSail.Disable();
+    //     playerControls.BoatRudder.Disable();
+    //     playerControls.Looking.Disable();
+    // }
 
     void Start()
     {
+        playerControls = TempStateMachine.Instance.PlayerControls;
+ 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         cam = GetComponentInChildren<Camera>();
         rb = GetComponent<Rigidbody>();
-
+ 
         if (boat != null)
         {
             boatController = boat.GetComponent<BoatController>();
             buoyancyController = boat.GetComponent<BuoyancyController>();
         }
-
+ 
         // ADDED BY JANTINA
         _docks = FindObjectsByType<DockPoint>(FindObjectsSortMode.None);
         _dockUI = FindFirstObjectByType<DockInteractionUI>();
