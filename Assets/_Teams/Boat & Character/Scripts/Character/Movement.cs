@@ -187,7 +187,7 @@ public class Movement : MonoBehaviour
         //replace everything in the //'s with your own code
         //this is just so we can test even if the ship doesn't work
         //>
-        if (Input.GetKey(KeyCode.LeftShift))
+        if (playerControls.Land.Sprint.triggered)
         {
             rb.MovePosition(rb.position + rb.transform.forward * moveDirection.y * movementSpeed * sprintMultiplier * Time.deltaTime);
             rb.MovePosition(rb.position + rb.transform.right * moveDirection.x * movementSpeed * sprintMultiplier * Time.deltaTime);
@@ -205,7 +205,7 @@ public class Movement : MonoBehaviour
     void RotateCamera()
     {
         Vector2 lookDirection = playerControls.Looking.Look.ReadValue<Vector2>();
-        Vector2 cameraMoveDirection = lookDirection * mouseSensitivity * Time.deltaTime;
+        Vector2 cameraMoveDirection = lookDirection * mouseSensitivity * Time.fixedDeltaTime;
 
         if (limitCamMovement != true)
         {

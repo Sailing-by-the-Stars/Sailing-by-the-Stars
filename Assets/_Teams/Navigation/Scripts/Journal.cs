@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using static System.Net.Mime.MediaTypeNames;
 using static UnityEngine.Rendering.DebugUI;
@@ -15,6 +16,9 @@ public class Page
 
 public class Journal : ToolPickup, AstroTutorialStep
 {
+    PlayerControls playerControls;
+
+
     [NonSerialized]
     public TutorialSequence currentSequence;
     [NonSerialized]
@@ -74,6 +78,43 @@ public class Journal : ToolPickup, AstroTutorialStep
     private Transform bookmarkTransform;
     List<int> sectionPageNrs = new List<int>();
 
+
+    private void OnEnable()
+    {
+        playerControls = TempStateMachine.Instance.PlayerControls;
+
+        playerControls.Journal.BookmarkPage.performed += OpenBookmark;
+    }
+
+    public void OpenBookmark(InputAction.CallbackContext ctx)
+    {
+        int numKeyValue; 
+
+        int.TryParse(ctx.control.name, out numKeyValue);
+
+        if(numKeyValue - 1 < 0)
+        {
+            return;
+        }
+
+        if (bookOpened)
+        {
+                if (sectionPageNrs[numKeyValue - 1] <= pages.Count - 1)
+                {
+                    pageNr = sectionOnePageNr;
+
+                    for (int i = 0; i < bookmarkTransform.childCount; i++)
+                    {
+                        bookmarkTransform.GetChild(i).GetComponent<Renderer>().material.color = Color.white;
+                    }
+
+                    bookmarkTransform.GetChild(numKeyValue - 1).GetComponent<Renderer>().material.color = Color.green;
+                }
+        }
+
+    }
+
+
     public override void Grab(PickupController pickupController)
     {
         base.Grab(pickupController);
@@ -120,156 +161,17 @@ public class Journal : ToolPickup, AstroTutorialStep
     {
         if (isEquipped)
         {
-            if (Input.GetKeyDown(KeyCode.Q) && bookVisible && bookOpened)
+            if (playerControls.Journal.PreviousPage.triggered && bookVisible && bookOpened)
             {
                 pageNr -= 1;
             }
 
-            if (Input.GetKeyDown(KeyCode.E) && bookVisible && bookOpened)
+            if (playerControls.Journal.NextPage.triggered && bookVisible && bookOpened)
             {
                 pageNr += 1;
             }
 
-            if (bookOpened)
-            {
-                //Jump to the first page of the section mapped to that key
-                if (Input.GetKeyDown(KeyCode.Alpha1))
-                {
-                    if (sectionPageNrs[0] <= pages.Count - 1)
-                    {
-                        pageNr = sectionOnePageNr;
-                        
-                        for (int i = 0; i < bookmarkTransform.childCount; i++)
-                        {
-                            bookmarkTransform.GetChild(i).GetComponent<Renderer>().material.color = Color.white;
-                        }
-                        
-                        bookmarkTransform.GetChild(0).GetComponent<Renderer>().material.color = Color.green;
-                    }
-                }
-
-                if (Input.GetKeyDown(KeyCode.Alpha2))
-                {
-                    if (sectionPageNrs[1] <= pages.Count - 1)
-                    {
-                        pageNr = sectionTwoPageNr;
-                        
-                        for (int i = 0; i < bookmarkTransform.childCount; i++)
-                        {
-                            bookmarkTransform.GetChild(i).GetComponent<Renderer>().material.color = Color.white;
-                        }
-                        
-                        bookmarkTransform.GetChild(1).GetComponent<Renderer>().material.color = Color.green;
-                    }
-                }
-                
-                if (Input.GetKeyDown(KeyCode.Alpha3))
-                {
-                    if (sectionTwoPageNr <= pages.Count - 1)
-                    {
-                        pageNr = sectionThreePageNr;
-                        
-                        for (int i = 0; i < bookmarkTransform.childCount; i++)
-                        {
-                            bookmarkTransform.GetChild(i).GetComponent<Renderer>().material.color = Color.white;
-                        }
-                        
-                        bookmarkTransform.GetChild(2).GetComponent<Renderer>().material.color = Color.green;
-                    }
-                }
-
-                /*
-                if (Input.GetKeyDown(KeyCode.Alpha4))
-                {
-                    if (sectionFourPageNr <= pages.Count - 1)
-                    {
-                        pageNr = sectionFourPageNr;
-                        
-                        for (int i = 0; i < bookmarkTransform.childCount; i++)
-                        {
-                            bookmarkTransform.GetChild(i).GetComponent<Renderer>().material.color = Color.white;
-                        }
-                        
-                        bookmarkTransform.GetChild(3).GetComponent<Renderer>().material.color = Color.green;
-                    }
-                }
-
-                if (Input.GetKeyDown(KeyCode.Alpha5))
-                {
-                    if (sectionFivePageNr <= pages.Count - 1)
-                    {
-                        pageNr = sectionFivePageNr;
-                        
-                        for (int i = 0; i < bookmarkTransform.childCount; i++)
-                        {
-                            bookmarkTransform.GetChild(i).GetComponent<Renderer>().material.color = Color.white;
-                        }
-                        
-                        bookmarkTransform.GetChild(4).GetComponent<Renderer>().material.color = Color.green;
-                    }
-                }
-
-                if (Input.GetKeyDown(KeyCode.Alpha6))
-                {
-                    if (sectionSixPageNr <= pages.Count - 1)
-                    {
-                        pageNr = sectionSixPageNr;
-                        
-                        for (int i = 0; i < bookmarkTransform.childCount; i++)
-                        {
-                            bookmarkTransform.GetChild(i).GetComponent<Renderer>().material.color = Color.white;
-                        }
-                        
-                        bookmarkTransform.GetChild(5).GetComponent<Renderer>().material.color = Color.green;
-                    }
-                }
-
-                if (Input.GetKeyDown(KeyCode.Alpha7))
-                {
-                    if (sectionSevenPageNr <= pages.Count - 1)
-                    {
-                        pageNr = sectionSevenPageNr;
-                        
-                        for (int i = 0; i < bookmarkTransform.childCount; i++)
-                        {
-                            bookmarkTransform.GetChild(i).GetComponent<Renderer>().material.color = Color.white;
-                        }
-                        
-                        bookmarkTransform.GetChild(6).GetComponent<Renderer>().material.color = Color.green;
-                    }
-                }
-
-                if (Input.GetKeyDown(KeyCode.Alpha8))
-                {
-                    if (sectionEightPageNr <= pages.Count - 1)
-                    {
-                        pageNr = sectionEightPageNr;
-                        
-                        for (int i = 0; i < bookmarkTransform.childCount; i++)
-                        {
-                            bookmarkTransform.GetChild(i).GetComponent<Renderer>().material.color = Color.white;
-                        }
-                        
-                        bookmarkTransform.GetChild(7).GetComponent<Renderer>().material.color = Color.green;
-                    }
-                }
-
-                if (Input.GetKeyDown(KeyCode.Alpha9))
-                {
-                    if (sectionNinePageNr <= pages.Count - 1)
-                    {
-                        pageNr = sectionNinePageNr;
-                        
-                        for (int i = 0; i < bookmarkTransform.childCount; i++)
-                        {
-                            bookmarkTransform.GetChild(i).GetComponent<Renderer>().material.color = Color.white;
-                        }
-                        
-                        bookmarkTransform.GetChild(8).GetComponent<Renderer>().material.color = Color.green;
-                    }
-                }
-                */
-            }
+            
 
             if (pageNr < 0)
             {
@@ -308,7 +210,7 @@ public class Journal : ToolPickup, AstroTutorialStep
             }
 
 
-            if (Input.GetKeyDown(KeyCode.J))
+            if (playerControls.Journal.Open.triggered)
             {
                 if (bookVisible)
                 { 
@@ -377,6 +279,20 @@ public class Journal : ToolPickup, AstroTutorialStep
         }
     }
 
+
+    private void SetItemByKeyValue(UnityEngine.InputSystem.InputAction.CallbackContext ctx)
+    {
+
+        int numKeyValue; // the number key value we want from this keypress
+
+        int.TryParse(ctx.control.name, out numKeyValue);
+        // Warning! If ctx.control.name can't parse as an int, numKeyValue will be 0
+
+        Debug.Log("int value of keypress is: " + numKeyValue);
+
+        // Now do something with the key value ...
+
+    }
 
     void FixScaling(Texture tex, Transform trans)
     {
