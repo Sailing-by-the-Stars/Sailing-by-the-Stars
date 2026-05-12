@@ -61,7 +61,7 @@ Transform:
   m_GameObject: {fileID: 3797419422745476293}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -2400, y: -497.71, z: -2400}
+  m_LocalPosition: {x: -2531.69, y: -496.153, z: -1841.56}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -137,7 +137,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97c3c2011de0df84ebdd1cd5f43e8548, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GlobeShape
-  globeRadius: 2400
+  globeRadius: 2600
   resolution: 10
   offsetY: 500
   operationDivisions: 3
@@ -241,13 +241,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8696826859174166867}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: 0.9384639, z: -0, w: -0.3453775}
-  m_LocalPosition: {x: 2926, y: 565, z: 1071}
+  m_LocalRotation: {x: -0, y: -0.99842054, z: -0, w: -0.056181867}
+  m_LocalPosition: {x: 2670, y: 565, z: 1215}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 6229719560940771257}
-  m_LocalEulerAnglesHint: {x: 0, y: 220.41, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 533.559, z: 0}
 --- !u!114 &6030010832298711223
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -262,7 +262,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FlatStarField
   starPositionType: {fileID: 11400000, guid: ee76574175deddf4fbaf8a3699bd9f96, type: 2}
   starMat: {fileID: 2100000, guid: a91d9c5efdb9cc04f9fb428ad73b0755, type: 2}
-  starFieldScale: 4500
+  starFieldScale: 2800
   brightnessCurve:
     serializedVersion: 2
     m_Curve:
@@ -295,143 +295,190 @@ MonoBehaviour:
   - name: Ursa Major
     starIDs: c7100000cd100000ca1100003412000029130000be13000047140000ad0e0000fb0c0000300f0000360f0000bf0e0000f10d00000a0e0000a6110000ef100000c10f0000e50f0000
     starPrefab: {fileID: 0}
+    debugColor: {r: 1, g: 0, b: 0.0018920898, a: 1}
   - name: Draco
     starIDs: 52110000b3120000ab1400007016000062170000f4170000fc1800000f1b0000b81c00009e1d00008e1c0000201a00009b19000088190000311a0000
     starPrefab: {fileID: 0}
+    debugColor: {r: 0.6455765, g: 0, b: 1, a: 1}
   - name: Eridanus
     starIDs: c90500008f0600008206000018060000f0050000b7050000700400003c040000d80300006a0300003203000097030000eb0300004004000095040000b8050000
     starPrefab: {fileID: 0}
+    debugColor: {r: 0.08590317, g: 0, b: 1, a: 1}
   - name: Orion
     starIDs: 9c0700006f0700003c070000d4070000b10600000d080000fe060000730700004c0800009708000057080000ff0700006f080000070600000806000022060000100600001f060000
     starPrefab: {fileID: 0}
+    debugColor: {r: 0, g: 1, b: 0.7627373, a: 1}
   - name: Ursa Minor
     starIDs: a8010000851a0000b21800000f170000e417000067160000bb150000
     starPrefab: {fileID: 0}
+    debugColor: {r: 0, g: 0.43343544, b: 1, a: 1}
   - name: Cepheus
     starIDs: e21f00002e2000000e23000011210000f6210000
     starPrefab: {fileID: 0}
+    debugColor: {r: 0.7087364, g: 0, b: 1, a: 1}
   - name: Camelopardus
     starIDs: 960600007c040000060600000b040000
     starPrefab: {fileID: 0}
+    debugColor: {r: 1, g: 0, b: 0.5136976, a: 1}
   - name: Lacerta
     starIDs: 89210000322100007c2100005a210000832100005d210000
     starPrefab: {fileID: 0}
+    debugColor: {r: 1, g: 0.82412493, b: 0, a: 1}
   - name: Cassiopeia
     starIDs: 15000000a800000008010000930100001e020000
     starPrefab: {fileID: 0}
+    debugColor: {r: 0.4586494, g: 1, b: 0, a: 1}
   - name: Pegasus
     starIDs: 4d22000047220000270000000f000000ba2100000221000074200000510100005b020000a5000000e20000000d010000ee20000006210000ca210000d9210000db2100007b200000
     starPrefab: {fileID: 0}
+    debugColor: {r: 0, g: 0.6633196, b: 1, a: 1}
   - name: Monoceros
     starIDs: 9a0b0000740c00009a0a000034090000b3080000ca090000fa0800007e080000
     starPrefab: {fileID: 0}
+    debugColor: {r: 0.6936784, g: 0, b: 1, a: 1}
   - name: Gemini
     starIDs: 4a0b00004b0b0000ae0b000075090000d90a0000a90900005a0a0000a808000027090000b4090000ee08000056080000cb0a0000890a0000ec090000050b0000590b0000a90b0000
     starPrefab: {fileID: 0}
+    debugColor: {r: 0.027124882, g: 1, b: 0, a: 1}
   - name: Cancer
     starIDs: 930d0000790d0000850d0000f40d0000b10c0000be0c0000
     starPrefab: {fileID: 0}
+    debugColor: {r: 0, g: 1, b: 0.7602744, a: 1}
   - name: Leo
     starIDs: 8e0f0000b6110000d90f000005110000210f0000bf0f000007110000870f0000410f0000
     starPrefab: {fileID: 0}
+    debugColor: {r: 1, g: 0.97166, b: 0, a: 1}
   - name: Leo Minor
     starIDs: d80e0000860f00000410000097100000
     starPrefab: {fileID: 0}
+    debugColor: {r: 1, g: 0, b: 0.23338366, a: 1}
   - name: Lynx
     starIDs: 790e00006a0e00001c0e0000fb0d0000cb0c0000020b0000000a0000be080000
     starPrefab: {fileID: 0}
+    debugColor: {r: 1, g: 0, b: 0.9765701, a: 1}
   - name: Canes Venatici
     starIDs: b112000033130000
     starPrefab: {fileID: 0}
+    debugColor: {r: 1, g: 0, b: 0.7349739, a: 1}
   - name: Taurus
     starIDs: b105000081050000840500005d05000042050000740400007607000006040000d70400006d050000d905000006040000d70400006d050000d9050000
     starPrefab: {fileID: 0}
+    debugColor: {r: 0.9585285, g: 0, b: 1, a: 1}
   - name: Aires
     starIDs: 69020000210200002902000046030000
     starPrefab: {fileID: 0}
+    debugColor: {r: 0.721508, g: 1, b: 0, a: 1}
   - name: Triangulum
     starIDs: 980200006e02000020020000
     starPrefab: {fileID: 0}
+    debugColor: {r: 1, g: 0.4563182, b: 0, a: 1}
   - name: Perseus
     starIDs: 4203000093030000f903000062040000a8030000c40400009903000048030000cc040000b30400006b040000
     starPrefab: {fileID: 0}
+    debugColor: {r: 0.10658693, g: 1, b: 0, a: 1}
   - name: Cygnus
     starIDs: f41e0000741e0000681d0000f91c0000bf1d0000fc1c00000d1f0000b31f000075200000a01c0000
     starPrefab: {fileID: 0}
+    debugColor: {r: 0, g: 0.015889168, b: 1, a: 1}
   - name: Lyra
     starIDs: 591b00000a1c0000c21b0000e31b0000901b0000
     starPrefab: {fileID: 0}
+    debugColor: {r: 0.53630114, g: 1, b: 0, a: 1}
   - name: Vulpecula
     starIDs: e51d0000ee1c0000
     starPrefab: {fileID: 0}
+    debugColor: {r: 0, g: 1, b: 0.16659784, a: 1}
   - name: Delphinus
     starIDs: 0c1f0000e21e0000f81e0000ca1e0000ac1e0000
     starPrefab: {fileID: 0}
+    debugColor: {r: 0, g: 1, b: 0.49596024, a: 1}
   - name: Equuleus
     starIDs: a11f0000bb1f0000f21f0000c31f0000
     starPrefab: {fileID: 0}
+    debugColor: {r: 0, g: 1, b: 0.3710122, a: 1}
   - name: Sagitta
     starIDs: ff1d0000d31d0000701d0000371d0000401d0000
     starPrefab: {fileID: 0}
+    debugColor: {r: 1, g: 0, b: 0.20676327, a: 1}
   - name: Aquila
     starIDs: 651d0000851d0000b21d0000d11c0000431c0000441c0000081c0000921d00001e1e0000
     starPrefab: {fileID: 0}
+    debugColor: {r: 0.25946188, g: 0, b: 1, a: 1}
   - name: Serpens
     starIDs: f71600002d170000eb1600009d160000de1600000417000000170000f9160000a8170000
     starPrefab: {fileID: 0}
+    debugColor: {r: 1, g: 0.80224097, b: 0, a: 1}
   - name: Ophiuchus
     starIDs: 9c1900009b180000cb190000bb1700001f180000ea18000077190000
     starPrefab: {fileID: 0}
+    debugColor: {r: 0.7549033, g: 1, b: 0, a: 1}
   - name: Serpens Cauda
     starIDs: e51b0000061b0000d51a0000631a0000d51a0000801b0000e51b0000
     starPrefab: {fileID: 0}
+    debugColor: {r: 0.78035355, g: 1, b: 0, a: 1}
   - name: Scutum
     starIDs: 971b00009a1b00003d1b0000121b0000cf1b0000
     starPrefab: {fileID: 0}
+    debugColor: {r: 0, g: 1, b: 0.946424, a: 1}
   - name: Sagittarius
     starIDs: d11b0000cc1b00001a1c0000011b0000421c0000a91c0000b41c0000cb1a0000
     starPrefab: {fileID: 0}
+    debugColor: {r: 1, g: 0.90772474, b: 0, a: 1}
   - name: Bootes
     starIDs: 5014000073140000dc140000351500003b1500006515000082150000e215000031160000
     starPrefab: {fileID: 0}
+    debugColor: {r: 0.62413836, g: 0, b: 1, a: 1}
   - name: Corona Borealis
     starIDs: 9216000073160000a1160000d9160000011700003b17000053170000
     starPrefab: {fileID: 0}
+    debugColor: {r: 1, g: 0.10185243, b: 0, a: 1}
   - name: Virgo
     starIDs: f31300002e130000d912000051120000bc110000c01300004c140000c3140000da140000
     starPrefab: {fileID: 0}
+    debugColor: {r: 1, g: 0.76044, b: 0, a: 1}
   - name: Libra
     starIDs: 9b150000351600009b160000bc160000
     starPrefab: {fileID: 0}
+    debugColor: {r: 0.23759818, g: 1, b: 0, a: 1}
   - name: Aquarius
     starIDs: de2000002820000046210000a22100000522000082220000e4220000082300001822000048200000
     starPrefab: {fileID: 0}
+    debugColor: {r: 0, g: 1, b: 0.923368, a: 1}
   - name: Picies
     starIDs: 230100007f01000068010000b5010000fe0100005302000025020000e9010000b201000026010000e0000000500000007023000009230000d4220000ae22000094220000cf220000182300002c230000
     starPrefab: {fileID: 0}
+    debugColor: {r: 0, g: 0.2003274, b: 1, a: 1}
   - name: Cetus
     starIDs: 2d03000080030000ce02000089020000f20200008f030000240300000b030000a90200000d030000c40200001b020000920100004e010000bc0000004a0000002b030000e4020000c6020000fd010000
     starPrefab: {fileID: 0}
+    debugColor: {r: 0.5589495, g: 0, b: 1, a: 1}
   - name: Hercules
     starIDs: 0418000044180000cc1700001818000061180000cf1700004c180000b41800000a1900001219000024190000551900007e190000bc190000271a00002f1a00007b1a0000
     starPrefab: {fileID: 0}
+    debugColor: {r: 1, g: 0.19763163, b: 0, a: 1}
   - name: Crux
     starIDs: f51200007a1200005c12000030120000
     starPrefab: {fileID: 0}
+    debugColor: {r: 0, g: 0.16280413, b: 1, a: 1}
   - name: Auriga
     starIDs: ac060000280800002f080000ff060000290600004c060000
     starPrefab: {fileID: 0}
+    debugColor: {r: 1, g: 0.7390009, b: 0, a: 1}
   twinklingStars:
+  - starID: 4301
+    targetAngle: 35
   - starID: 542
     targetAngle: 60
-  - starID: 5735
-    targetAngle: 55
-  - starID: 2088
-    targetAngle: 45
-  - starID: 4069
-    targetAngle: 60
-  - starID: 2890
+  - starID: 8498
     targetAngle: 50
+  - starID: 1203
+    targetAngle: 65
+  - starID: 3323
+    targetAngle: 50
+  - starID: 4301
+    targetAngle: 65
+  - starID: 1570
+    targetAngle: 55
   minManualSize: 10
   manualSizeMult: 1.1
   flatManualSizeAdd: 4

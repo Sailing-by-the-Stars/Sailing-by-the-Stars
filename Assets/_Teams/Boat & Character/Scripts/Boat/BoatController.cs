@@ -3,9 +3,9 @@
 *   Contributed to by: 
 */
 
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
+using System.Linq;
+using UnityEngine.Rendering;
 
 [RequireComponent(typeof(Rigidbody))]
 public class BoatController : MonoBehaviour
@@ -19,9 +19,11 @@ public class BoatController : MonoBehaviour
     [SerializeField] private float waterDensity = 1000f;
     [SerializeField] private float keelDragStrength = 100f;
     [SerializeField] private float baseForwardForce = 900f;
-    [SerializeField] private float maxRotationRate = 10f;
+    [SerializeField] private float maxTiltAngle = 10f;
     [SerializeField] private float rudderTorqueStrength = 30f;
     [SerializeField] private float sidedriftCorrectionStrength = 150f;
+    [SerializeField] private float lightIntensity = 1393.47f;
+    [SerializeField] private float lightIntensityMultiplier = 3f;
     [SerializeField] private bool useLocalWindSpeed = true;
     [SerializeField] private bool enableWindForces = true;
 
@@ -51,16 +53,14 @@ public class BoatController : MonoBehaviour
     [SerializeField] private GameObject rudderPivot;
     [SerializeField] private GameObject flagPivot;
 
-    [Header("Particle System")]
-    [SerializeField] private ParticleSystem boatFoam;
-    [SerializeField] private ParticleSystem sideFoamRight;
-    [SerializeField] private ParticleSystem sideFoamLeft;
+    
 
 
     private Rigidbody rigidBody;
     private GameObject[] rudderObjects;
     private GameObject[] mastObjects;
     private GameObject flagObject;
+    private Light lanternLight;
 
     private bool anchorDropped = true;
 
@@ -92,6 +92,8 @@ public class BoatController : MonoBehaviour
             enabled = false;
             return;
         }
+
+        lanternLight = GetComponentInChildren<Light>();
     }
 
     void OnEnable()
@@ -106,9 +108,7 @@ public class BoatController : MonoBehaviour
         RotateRudder();
         RotateMastAndSail();
         RotateFlagIntoWind();
-        boatFoam.Play();
-        sideFoamRight.Play();
-        sideFoamLeft.Play();
+        
     }
 
     void FixedUpdate()
@@ -141,8 +141,11 @@ public class BoatController : MonoBehaviour
         }
 
         applyWaterDrag();
+        TiltLimiter();
+        WindCaughtIndicator(mastDirectionIntoWind);
 
         forwardSpeed = transform.InverseTransformVector(rigidBody.linearVelocity).z;
+        
     }
 
     //Calculates the force of drag experienced on the sail, used when running downwind and broadreach
@@ -326,5 +329,46 @@ public class BoatController : MonoBehaviour
 
         float flagAOA = Vector3.SignedAngle(flagDirection, windDirection, Vector3.up);
         flagObject.transform.RotateAround(flagPivot.transform.position, flagPivot.transform.up, flagAOA);
+    }
+
+    private void TiltLimiter()
+    {
+        float zAngle = transform.rotation.eulerAngles.z % 360;
+        if (zAngle > 180f) zAngle -= 360f;
+
+        Vector3 currentRotation = transform.eulerAngles;
+
+        if (zAngle > maxTiltAngle || zAngle < -maxTiltAngle)
+        {
+            zAngle = Mathf.Clamp(zAngle, - maxTiltAngle, maxTiltAngle);
+            currentRotation.z = zAngle;
+        }
+
+        float xAngle = Mathf.DeltaAngle(transform.eulerAngles.x, 0f);
+
+        if (Mathf.Abs(xAngle) > 2f)
+        {
+            xAngle = Mathf.Clamp(xAngle, -2f, 2f);
+            currentRotation.x = -xAngle;
+        }
+
+        transform.eulerAngles = currentRotation;
+    }
+
+    private void WindCaughtIndicator(float apparentWindAngle)
+    {
+        float liftDifference = Mathf.DeltaAngle(0, apparentWindAngle);
+        float dragDifference = Mathf.DeltaAngle(90, apparentWindAngle);
+        float drag2Difference = Mathf.DeltaAngle(-90, apparentWindAngle);
+        float intensityMultiplier = 1f;
+
+        if (Mathf.Abs(liftDifference) < 10f)
+            intensityMultiplier = 1f + lightIntensityMultiplier * (10f - Mathf.Abs(liftDifference)) / 10f;
+        else if (Mathf.Abs(dragDifference) < 10f)
+            intensityMultiplier = 1f + lightIntensityMultiplier * (10f - Mathf.Abs(dragDifference)) / 10f;
+        else if (Mathf.Abs(drag2Difference) < 10f)
+            intensityMultiplier = 1f + lightIntensityMultiplier * (10f - Mathf.Abs(drag2Difference)) / 10f;
+
+        lanternLight.intensity = LightUnitUtils.LumenToCandela(lightIntensity * intensityMultiplier, 4f * Mathf.PI);
     }
 }

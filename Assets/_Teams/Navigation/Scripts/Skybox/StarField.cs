@@ -11,6 +11,7 @@ public class Constelation
     public string name = "";
     public List<int> starIDs = new();
     public GameObject starPrefab;
+    public Color debugColor = Color.violet;
 }
 
 [Serializable]

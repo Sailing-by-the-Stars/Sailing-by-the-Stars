@@ -1,57 +1,95 @@
 using UnityEngine;
-using System.Collections;
 
-public enum GameState { Moving, Dialogue }
+public enum GameState { Moving, Dialogue, Sailing, Journal, Astrolabe}
 
 public class TempStateMachine : MonoBehaviour
 {
-    private Movement movement;
     public static TempStateMachine Instance;
-    public GameState gameState;
 
-    private GameState previousState;
+    public PlayerControls PlayerControls { get; private set; }
+    public GameState gameState { get; private set; } = (GameState)(-1);
 
-    public void Awake()
+    private void Awake()
     {
         Instance = this;
-        gameState = GameState.Moving;
-        previousState = GameState.Moving;
-        movement = FindFirstObjectByType<Movement>().GetComponent<Movement>();
+
+        PlayerControls = new PlayerControls();
+
+        //PlayerControls.Enable();
+
+        PlayerControls.Debug.Enable();
+
+        SetState(GameState.Moving);
     }
 
-    public void Update()
+    private void OnDestroy()
     {
-        if (gameState != previousState)
-        {
-            if (gameState == GameState.Dialogue)
-                StartCoroutine(DisableMovementNextFrame());
-            else
-            {
-                movement.enabled = true;
-                Cursor.visible = false;
-                Cursor.lockState = CursorLockMode.Locked;
-            }
-            previousState = gameState;
-        }
+        PlayerControls.Disable();
+    }
 
-        switch (gameState)
+    public void SetState(GameState newState)
+    {
+        if (newState == gameState) return;
+
+        gameState = newState;
+
+        /*PlayerControls.Land.Disable();
+        PlayerControls.Looking.Disable();
+        PlayerControls.BoatSail.Disable();
+        PlayerControls.BoatRudder.Disable();
+        PlayerControls.BoatAnchor.Disable();
+        PlayerControls.Dialogue.Disable();*/
+
+        PlayerControls.Disable();
+        PlayerControls.Debug.Enable();
+
+        switch (newState)
         {
             case GameState.Moving:
-                Cursor.visible = false;
-                Cursor.lockState = CursorLockMode.Locked;
+                PlayerControls.Land.Enable();
+                PlayerControls.Looking.Enable(); 
+                PlayerControls.Interaction.Enable();
+                SetCursorVisibility(false);
                 break;
+
             case GameState.Dialogue:
-                Cursor.visible = true;
-                Cursor.lockState = CursorLockMode.None;
+                PlayerControls.Dialogue.Enable(); 
+                SetCursorVisibility(true);
+                break;
+
+            case GameState.Sailing:
+                PlayerControls.Land.Enable();
+                PlayerControls.Looking.Enable();
+                SetCursorVisibility(false);
+                break;
+
+            case GameState.Journal:
+
+                SetCursorVisibility(true);
+                break;
+
+            case GameState.Astrolabe:
+
+                SetCursorVisibility(false);
+                break;
+
+            default:
+                Debug.LogError("The player state is set completely wrong.");
                 break;
         }
     }
 
-    private IEnumerator DisableMovementNextFrame()
+    void SetCursorVisibility(bool state)
     {
-        yield return null;
-        movement.enabled = false;
-        Cursor.visible = true;
-        Cursor.lockState = CursorLockMode.None;
+        if (state)
+        {
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+        }
+        else
+        {
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
+        }
     }
 }
