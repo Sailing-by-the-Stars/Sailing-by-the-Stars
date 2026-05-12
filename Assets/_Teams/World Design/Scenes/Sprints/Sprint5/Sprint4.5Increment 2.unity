@@ -591,6 +591,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &444979212 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8753235426418177191, guid: e92c6a8be8b03f846b470918c2e4b9bd, type: 3}
+  m_PrefabInstance: {fileID: 1476067727}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &485101354
 GameObject:
   m_ObjectHideFlags: 0
@@ -1721,6 +1726,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d8f6fd535518f5540b4bcc3099582f77, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.RenderPipelines.HighDefinition.Runtime::UnityEngine.Rendering.HighDefinition.WaterSurface
+--- !u!4 &1304418769 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6079649290910364300, guid: e92c6a8be8b03f846b470918c2e4b9bd, type: 3}
+  m_PrefabInstance: {fileID: 1476067727}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1323012221
 GameObject:
   m_ObjectHideFlags: 0
@@ -1870,18 +1880,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: LostSoulFollowerSpawnZone
       objectReference: {fileID: 0}
-    - target: {fileID: 3818052134608258279, guid: e92c6a8be8b03f846b470918c2e4b9bd, type: 3}
-      propertyPath: m_IsTrigger
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5904419380770644387, guid: e92c6a8be8b03f846b470918c2e4b9bd, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5904419380770644387, guid: e92c6a8be8b03f846b470918c2e4b9bd, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 5904419380770644387, guid: e92c6a8be8b03f846b470918c2e4b9bd, type: 3}
       propertyPath: m_LocalPosition.x
       value: -41.43
@@ -1892,7 +1890,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5904419380770644387, guid: e92c6a8be8b03f846b470918c2e4b9bd, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 589.03
+      value: 573.01
       objectReference: {fileID: 0}
     - target: {fileID: 5904419380770644387, guid: e92c6a8be8b03f846b470918c2e4b9bd, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1922,18 +1920,26 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6079649290910364300, guid: e92c6a8be8b03f846b470918c2e4b9bd, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 10.46
-      objectReference: {fileID: 0}
-    - target: {fileID: 6079649290910364300, guid: e92c6a8be8b03f846b470918c2e4b9bd, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -0.76
-      objectReference: {fileID: 0}
     - target: {fileID: 6686590130506657839, guid: e92c6a8be8b03f846b470918c2e4b9bd, type: 3}
-      propertyPath: ghostBoatPrefab
+      propertyPath: spawnPoint
       value: 
-      objectReference: {fileID: 3201984235932103039, guid: 5273191e7557ce94fa5f496876b9792d, type: 3}
+      objectReference: {fileID: 1304418769}
+    - target: {fileID: 6686590130506657839, guid: e92c6a8be8b03f846b470918c2e4b9bd, type: 3}
+      propertyPath: triggerZone
+      value: 
+      objectReference: {fileID: 444979212}
+    - target: {fileID: 8753235426418177191, guid: e92c6a8be8b03f846b470918c2e4b9bd, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 140.29167
+      objectReference: {fileID: 0}
+    - target: {fileID: 8753235426418177191, guid: e92c6a8be8b03f846b470918c2e4b9bd, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 259.07605
+      objectReference: {fileID: 0}
+    - target: {fileID: 8753235426418177191, guid: e92c6a8be8b03f846b470918c2e4b9bd, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -134.5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2621,14 +2627,6 @@ PrefabInstance:
     - target: {fileID: 3201984235932103039, guid: 5273191e7557ce94fa5f496876b9792d, type: 3}
       propertyPath: m_Name
       value: LostSoulFollower
-      objectReference: {fileID: 0}
-    - target: {fileID: 5515349044611414855, guid: 5273191e7557ce94fa5f496876b9792d, type: 3}
-      propertyPath: offset.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5515349044611414855, guid: 5273191e7557ce94fa5f496876b9792d, type: 3}
-      propertyPath: offset.z
-      value: 50
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

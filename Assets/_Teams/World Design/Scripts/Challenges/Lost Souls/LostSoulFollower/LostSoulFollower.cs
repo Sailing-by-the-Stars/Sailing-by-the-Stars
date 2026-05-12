@@ -22,7 +22,14 @@ namespace _Teams.World_Design.Scripts.Challenges.Lost_Souls
         [Header("Opacity Settings")]
         [SerializeField] private float maxOpacity = 1f;
         [SerializeField] private float minOpacity = 0.3f;
-        [SerializeField] private float opacityFadeSpeed = 5f;
+        [SerializeField] private float minFadeOpacity = 0.0001f;
+        [SerializeField] private float fadeOutTime = 1f;
+
+        [Header("Speed Based Fading")]
+        [Tooltip("Speed below which the follower is completely transparent.")]
+        [SerializeField] private float minFadeSpeed = 0.1f;
+        [Tooltip("Speed above which the follower has normal opacity.")]
+        [SerializeField] private float maxFadeSpeed = 2f;
 
         [Header("Shader Adjustments")]
         [Tooltip("Leave empty to automatically find all renderers on this boat and its children")]
@@ -38,6 +45,7 @@ namespace _Teams.World_Design.Scripts.Challenges.Lost_Souls
         private GhostBoatAudio ghostBoatAudio;
         private bool wasInView = false;
         private float currentOpacity;
+        private Vector3 lastPosition;
 
         private static readonly int OpacityID = Shader.PropertyToID("Opacity");
         private static readonly int UnderOpacityID = Shader.PropertyToID("_Opacity");
@@ -70,6 +78,7 @@ namespace _Teams.World_Design.Scripts.Challenges.Lost_Souls
                 ghostBoatAudio.SetInView(initiallyInView);
             }
             wasInView = initiallyInView;
+            lastPosition = transform.position;
         }
 
         public void SetTarget(Transform newTarget)
@@ -80,10 +89,25 @@ namespace _Teams.World_Design.Scripts.Challenges.Lost_Souls
         private void LateUpdate()
         {
             MoveToTarget();
+
+            float currentSpeed = Time.deltaTime > 0f ? (transform.position - lastPosition).magnitude / Time.deltaTime : 0f;
+            lastPosition = transform.position;
+
             bool isCentered = IsInCenterView();
 
-            float targetOpacity = isCentered ? minOpacity : maxOpacity;
-            currentOpacity = Mathf.Lerp(currentOpacity, targetOpacity, Time.deltaTime * opacityFadeSpeed);
+            float baseTargetOpacity = isCentered ? minOpacity : maxOpacity;
+            
+            float speedMultiplier = 1f;
+            if (maxFadeSpeed > minFadeSpeed)
+            {
+                speedMultiplier = Mathf.Clamp01((currentSpeed - minFadeSpeed) / (maxFadeSpeed - minFadeSpeed));
+            }
+            
+            float targetOpacity = baseTargetOpacity * speedMultiplier;
+            targetOpacity = Mathf.Max(targetOpacity, minFadeOpacity);
+
+            float opacityDelta = fadeOutTime > 0f ? (maxOpacity / fadeOutTime) * Time.deltaTime : 1000f;
+            currentOpacity = Mathf.MoveTowards(currentOpacity, targetOpacity, opacityDelta);
             UpdateOpacity(currentOpacity);
 
             // only update audio if in view has changed since last frame

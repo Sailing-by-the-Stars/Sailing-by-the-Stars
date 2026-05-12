@@ -588,11 +588,13 @@ MonoBehaviour:
   sideDistance: 20
   followSpeed: 0.5
   playerCamera: {fileID: 0}
-  centerTolerance: 0.1
+  centerTolerance: 0.187
   faceTarget: 0
-  maxOpacity: 1
-  minOpacity: 0.3
-  opacityFadeSpeed: 5
+  maxOpacity: 1.1
+  minOpacity: 0.0001
+  fadeOutTime: 5
+  minFadeSpeed: 0.1
+  maxFadeSpeed: 2
   targetRenderers: []
   targetLights:
   - {fileID: 1104758859091948341}
@@ -1303,7 +1305,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -876546973899608171, guid: fa060c28df875fb4f89d4ebbea68232e, type: 3}
+  - {fileID: -876546973899608171, guid: 02ddda80bf626474a826a307e4775214, type: 3}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
