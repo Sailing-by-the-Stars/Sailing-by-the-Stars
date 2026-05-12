@@ -20,6 +20,7 @@ namespace _Teams.World_Design.Scripts.Challenges.Lost_Souls
         [SerializeField] private float fadeStartRange = 40f;
         [SerializeField] private float fadeEndRange = 10f;
         [SerializeField] private float maxOpacity = 1.1f;
+        [SerializeField] private float minFadeOpacity = 0.0001f;
 
         [Header("Debug")]
         [SerializeField] private float distanceToPlayer;
@@ -151,7 +152,7 @@ namespace _Teams.World_Design.Scripts.Challenges.Lost_Souls
         
         private System.Collections.IEnumerator FadeIn()
         {
-            isFadingOut = true; // Disable distance fading while appearing
+            isFadingOut = true; 
             float elapsedTime = 0f;
 
             while (elapsedTime < fadeDuration)
@@ -162,11 +163,14 @@ namespace _Teams.World_Design.Scripts.Challenges.Lost_Souls
                 yield return null;
             }
             
-            isFadingOut = false; // Re-enable distance fading
+            isFadingOut = false; 
         }
 
         private void UpdateOpacity(float opacity)
         {
+            bool isMinOpacity = opacity <= minFadeOpacity;
+            opacity = Mathf.Max(opacity, minFadeOpacity);
+
             foreach (var kvp in originalMaterials)
             {
                 Renderer key = kvp.Key;
@@ -192,7 +196,11 @@ namespace _Teams.World_Design.Scripts.Challenges.Lost_Souls
             {
                 if (kvp.Key != null)
                 {
-                    kvp.Key.intensity = kvp.Value * normalizedOpacity;
+                    kvp.Key.enabled = !isMinOpacity;
+                    if (!isMinOpacity)
+                    {
+                        kvp.Key.intensity = kvp.Value * normalizedOpacity;
+                    }
                 }
             }
         }

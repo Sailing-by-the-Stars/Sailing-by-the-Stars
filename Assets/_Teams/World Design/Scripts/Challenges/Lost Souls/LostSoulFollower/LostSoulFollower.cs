@@ -18,6 +18,8 @@ namespace _Teams.World_Design.Scripts.Challenges.Lost_Souls
 
         [Header("Optional Rotation")]
         [SerializeField] private bool faceTarget;
+        [Tooltip("If true, copies the rotation of the target (unless faceTarget is true).")]
+        [SerializeField] private bool copyTargetRotation = true;
 
         [Header("Opacity Settings")]
         [SerializeField] private float maxOpacity = 1f;
@@ -68,10 +70,9 @@ namespace _Teams.World_Design.Scripts.Challenges.Lost_Souls
                 }
             }
 
-            currentOpacity = maxOpacity;
+            currentOpacity = minFadeOpacity;
             UpdateOpacity(currentOpacity);
 
-            // Check initial view state on spawn
             bool initiallyInView = IsInCenterView();
             if (ghostBoatAudio != null)
             {
@@ -110,7 +111,6 @@ namespace _Teams.World_Design.Scripts.Challenges.Lost_Souls
             currentOpacity = Mathf.MoveTowards(currentOpacity, targetOpacity, opacityDelta);
             UpdateOpacity(currentOpacity);
 
-            // only update audio if in view has changed since last frame
             if (isCentered != wasInView)
             {
                 if (ghostBoatAudio)
@@ -137,10 +137,19 @@ namespace _Teams.World_Design.Scripts.Challenges.Lost_Souls
                     transform.rotation = Quaternion.LookRotation(lookDirection.normalized, Vector3.up);
                 }
             }
+            else if (copyTargetRotation)
+            {
+                float speed = followSpeed <= 0f ? 1f : followSpeed * 10f * Time.deltaTime;
+                Quaternion targetRotationY = Quaternion.Euler(0f, target.eulerAngles.y, 0f);
+                Quaternion currentRotationY = Quaternion.Euler(0f, transform.eulerAngles.y, 0f);
+                transform.rotation = Quaternion.Slerp(currentRotationY, targetRotationY, speed);
+            }
         }
 
         private void UpdateOpacity(float opacity)
         {
+            bool isMinOpacity = opacity <= minFadeOpacity;
+
             foreach (var kvp in originalMaterials)
             {
                 Renderer key = kvp.Key;
@@ -166,7 +175,11 @@ namespace _Teams.World_Design.Scripts.Challenges.Lost_Souls
             {
                 if (kvp.Key != null)
                 {
-                    kvp.Key.intensity = kvp.Value * normalizedOpacity;
+                    kvp.Key.enabled = !isMinOpacity;
+                    if (!isMinOpacity)
+                    {
+                        kvp.Key.intensity = kvp.Value * normalizedOpacity;
+                    }
                 }
             }
         }
@@ -175,9 +188,8 @@ namespace _Teams.World_Design.Scripts.Challenges.Lost_Souls
         {
             if (target == null) return;
             
-            // Calculate desired position to be strictly on the left side (-right) of the target based on its rotation
             Vector3 desiredPosition = target.position - target.right * sideDistance;
-            desiredPosition.y = 0f; // Keep on ground level, adjust if needed for your game
+            desiredPosition.y = 0f;
             float speed = followSpeed <= 0f ? 1f : followSpeed * Time.deltaTime;
             transform.position = Vector3.Lerp(transform.position, desiredPosition, speed);
         }
@@ -221,9 +233,10 @@ namespace _Teams.World_Design.Scripts.Challenges.Lost_Souls
             {
                 if (rend != null)
                 {
-                    originalMaterials[rend] = rend.materials; // Use .materials to get instances, same as LostSoulBoatScript
+                    originalMaterials[rend] = rend.materials;
                 }
             }
         }
     }
 }
+

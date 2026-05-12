@@ -36,7 +36,6 @@ namespace _Teams.World_Design.Scripts.Challenges.Lost_Souls
 
             if (triggerZone != null)
             {
-                // Attach helper to forward trigger events from the child to this script
                 TriggerForwarder forwarder = triggerZone.gameObject.AddComponent<TriggerForwarder>();
                 forwarder.onTriggerEnterAction = HandleTriggerEnter;
                 forwarder.onTriggerExitAction = HandleTriggerExit;
