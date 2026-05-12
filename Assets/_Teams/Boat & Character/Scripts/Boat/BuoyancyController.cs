@@ -111,7 +111,7 @@ public class BuoyancyController : MonoBehaviour
             float deltaHeight = globalVertex.y - searchResult[i].projectedPositionWS.y;
             float accuracyDivider = 1f / Mathf.Pow(accuracy + 1, 2f); 
 
-            Vector3 torqueVector = new Vector3(buoyancyVertices[i].y * 3 * deltaHeight * waveTorqueStrength * accuracyDivider, 0f, -buoyancyVertices[i].x * deltaHeight * waveTorqueStrength * accuracyDivider);
+            Vector3 torqueVector = new Vector3(buoyancyVertices[i].y * 2 * deltaHeight * waveTorqueStrength * accuracyDivider, 0f, -buoyancyVertices[i].x * deltaHeight * waveTorqueStrength * accuracyDivider);
             rigidBody.AddRelativeTorque(torqueVector, ForceMode.Force);
         }
     }

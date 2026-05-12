@@ -3,7 +3,7 @@ using FMODUnity;
 using UnityEngine;
 
 /// <summary>
-/// 2D audio controller for the ghost boat challenge. Attach to the audio manager on the player.
+/// Audio controller for the ghost boat challenge. Attach to the the spawn prefab with listener (listen to self).
 /// Drives the clock parameter based on whether the player is looking at the ghost boat,
 /// and plays a one-shot sound when the boat is spotted.
 /// </summary>
@@ -17,7 +17,7 @@ public class GhostBoatAudio : MonoBehaviour
     private EventInstance boatStopInstance;
     private PARAMETER_ID inViewParameterId;
 
-    private void Start()
+    private void Awake()
     {
         if (ghostBoatEventAudio.IsNull)
         {
@@ -37,8 +37,14 @@ public class GhostBoatAudio : MonoBehaviour
         if (audioInstance.isValid())
         {
             audioInstance.setParameterByID(inViewParameterId, inView ? 0f : 1f);
+            /* Debug.Log("In view: " + inView);
+            audioInstance.getParameterByID(inViewParameterId, out float value);
+            Debug.Log($"Clockon parameter value: {value}");
+            audioInstance.getPlaybackState(out PLAYBACK_STATE state);
+            Debug.Log($"Playback state: {state}");
+            audioInstance.getVolume(out float volume);
+            Debug.Log($"Instance volume: {volume}"); */
         }
-
 
         if (inView)
         {

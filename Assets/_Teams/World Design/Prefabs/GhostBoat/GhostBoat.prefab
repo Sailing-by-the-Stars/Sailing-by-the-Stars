@@ -454,7 +454,8 @@ GameObject:
   - component: {fileID: 7041716456246894415}
   - component: {fileID: 1165194768615369954}
   - component: {fileID: 6771468533994905110}
-  - component: {fileID: 1386108302455562955}
+  - component: {fileID: 7197629999198402336}
+  - component: {fileID: -597802886318475769}
   m_Layer: 0
   m_Name: GhostBoat
   m_TagString: GhostBoat
@@ -471,8 +472,8 @@ Transform:
   m_GameObject: {fileID: 3201984235932103039}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 24.63, y: -0.01, z: 398.63}
-  m_LocalScale: {x: 1.5127, y: 1.5127, z: 1.5127}
+  m_LocalPosition: {x: 24.84, y: -0.01, z: 398.63}
+  m_LocalScale: {x: 1.352248, y: 1.352248, z: 1.352248}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6224401418182078771}
@@ -524,25 +525,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::_Teams.World_Design.Scripts.Challenges.Ghost_Boat.GhostBoatScript
   target: {fileID: 0}
   offset: {x: 0, y: 0, z: -8}
-  followSpeed: 0.05
+  followSpeed: 0.085
   playerCamera: {fileID: 0}
   centerTolerance: 0.152
   faceTarget: 1
-  parameterName: Clockon
-  ghostBoatEventAudio:
-    Guid:
-      Data1: -1717487581
-      Data2: 1329986160
-      Data3: 323660442
-      Data4: -675228333
-    Path: event:/ChallengeEvents/event_Denial_GhostBoat
-  boatStopSound:
-    Guid:
-      Data1: 254614236
-      Data2: 1210134590
-      Data3: -856305484
-      Data4: -90045178
-    Path: event:/ChallengeEvents/event_BoatStop
+  inViewMaterial: {fileID: 2100000, guid: ef95736e831d5f64b8543574d1e61e40, type: 2}
+  targetRenderers: []
 --- !u!114 &6771468533994905110
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -564,7 +552,7 @@ MonoBehaviour:
   obstacleLayers:
     serializedVersion: 2
     m_Bits: 0
---- !u!114 &1386108302455562955
+--- !u!114 &7197629999198402336
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -573,28 +561,38 @@ MonoBehaviour:
   m_GameObject: {fileID: 3201984235932103039}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Script: {fileID: 11500000, guid: cf6edb37eddade24d999e35d95fabee6, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: FMODUnity::FMODUnity.StudioEventEmitter
-  CollisionTag: 
-  EventReference:
+  m_EditorClassIdentifier: Assembly-CSharp::GhostBoatAudio
+  parameterName: Clockon
+  ghostBoatEventAudio:
     Guid:
       Data1: -1717487581
       Data2: 1329986160
       Data3: 323660442
       Data4: -675228333
     Path: event:/ChallengeEvents/event_Denial_GhostBoat
-  Event: 
-  EventPlayTrigger: 1
-  EventStopTrigger: 2
-  AllowFadeout: 1
-  TriggerOnce: 0
-  Preload: 0
-  NonRigidbodyVelocity: 0
-  Params: []
-  OverrideAttenuation: 1
-  OverrideMinDistance: 0.90000004
-  OverrideMaxDistance: 500
+  boatStopSound:
+    Guid:
+      Data1: 254614236
+      Data2: 1210134590
+      Data3: -856305484
+      Data4: -90045178
+    Path: event:/ChallengeEvents/event_BoatStop
+--- !u!114 &-597802886318475769
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3201984235932103039}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86c6556701af9e04380698b89f691b6e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: FMODUnity::FMODUnity.StudioListener
+  nonRigidbodyVelocity: 0
+  attenuationObject: {fileID: 3201984235932103039}
 --- !u!1 &3744536236126380214
 GameObject:
   m_ObjectHideFlags: 0

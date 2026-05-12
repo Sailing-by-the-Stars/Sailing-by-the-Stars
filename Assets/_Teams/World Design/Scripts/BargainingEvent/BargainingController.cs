@@ -5,6 +5,7 @@
 using System.Collections;
 using UnityEngine;
 using FMODUnity;
+using _Teams.World_Design.Scripts.Checkpoints;
 
 /// <summary>
 /// Controls the Bargaining grief event.
@@ -35,7 +36,7 @@ using FMODUnity;
 ///   (Ordered Checkpoints) Final checkpoint reached: event completed permanently
 ///   (StarEvents) Star found: entity despawned, cooldown, entity respawns, timer resets
 ///   (StarEvents) Event ends permanently by distance check.
-///   Timer reaches 0: kill effects, player teleported to respawn point, event resets
+///   Timer reaches 0: kill effects, player teleported to last world respawn checkpoint, event resets
 /// </summary>
 
 public enum BargainingEventMode
@@ -54,8 +55,6 @@ public class BargainingController : MonoBehaviour
     [SerializeField] private Transform[] endConditionTransforms;
     [Tooltip("Distance threshold to end the event from transform when using distance end condition")]
     [SerializeField] private float endConditionDistance = 30f;
-    [Tooltip("Position to teleport player to on timer fail. Place outside event zone.")]
-    [SerializeField] private Transform respawnPoint;
     [Tooltip("The parent zone; deactivated on event complete")]
     [SerializeField] private WorldEventZone zone;
 
@@ -87,8 +86,8 @@ public class BargainingController : MonoBehaviour
     private GameObject eventTarget;
     private Coroutine cooldownRoutine;
 
-    // respawn visual
-    private DeathEffect screenEffects;
+    // World checkpoint respawning
+    private CheckpointManager checkpointManager;
 
     // audio
     private SetBargainingTimer timerAudio;
@@ -99,8 +98,8 @@ public class BargainingController : MonoBehaviour
 
     private void Start()
     {
+        checkpointManager = FindFirstObjectByType<CheckpointManager>();
         timerAudio = FindFirstObjectByType<SetBargainingTimer>();
-        screenEffects = FindFirstObjectByType<DeathEffect>();
 
         if (eventMode == BargainingEventMode.StarEvents && endConditionTransforms == null)
         {
@@ -150,7 +149,7 @@ public class BargainingController : MonoBehaviour
         if (timerRemaining <= 0f)
         {
             eventActive = false; // stop timer immediately to prevent multiple coroutine starts
-            StartCoroutine(HandleTimerFail());
+            HandleTimerFail();
         }
     }
     /// <summary>
@@ -222,7 +221,10 @@ public class BargainingController : MonoBehaviour
     }
     private void CheckEndConditionDistance()
     {
-        if (endConditionTransforms == null || eventTarget == null) return;
+        if (endConditionTransforms == null || eventTarget == null)
+        {
+            return;
+        }
 
         foreach (Transform target in endConditionTransforms)
         {
@@ -300,26 +302,17 @@ public class BargainingController : MonoBehaviour
         SpawnEntity(nextTimerDuration);
         eventActive = true;
     }
-    private IEnumerator HandleTimerFail()
+    private void HandleTimerFail()
     {
         DespawnEntity();
         if (timerAudio != null)
         {
             timerAudio.ResetIntensity();
         }
-        // visuals
-        yield return StartCoroutine(TimerFailRoutine());
 
-        if (respawnPoint != null && eventTarget != null)
+        if (checkpointManager != null)
         {
-            Rigidbody rb = eventTarget.GetComponent<Rigidbody>();
-            if (rb != null)
-            {
-                rb.linearVelocity = Vector3.zero;
-                rb.angularVelocity = Vector3.zero;
-            }
-            eventTarget.transform.position = respawnPoint.position;
-            eventTarget.transform.rotation = respawnPoint.rotation;
+            checkpointManager.GoToCheckpoint();
         }
         // reset event so it can trigger again
         if (eventMode == BargainingEventMode.OrderedCheckpoints)
@@ -354,15 +347,6 @@ public class BargainingController : MonoBehaviour
         {
             zone.gameObject.SetActive(false);
         }
-    }
-
-    private IEnumerator TimerFailRoutine()
-    {
-        if (screenEffects == null)
-        {
-            yield break;
-        }
-        screenEffects.PlayDeathSequence();
     }
 
 #if UNITY_EDITOR
