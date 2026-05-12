@@ -23,6 +23,13 @@ public class PickupController : MonoBehaviour
     
     public bool HasPickup => currentPickup != null;
 
+    PlayerControls playerControls;
+
+    private void Start()
+    {
+        playerControls = TempStateMachine.Instance.PlayerControls;
+    }
+
     public void GrabPickup(IPickup newPickup)
     {
         currentPickup = newPickup;
