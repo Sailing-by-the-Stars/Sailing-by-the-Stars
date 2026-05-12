@@ -10,6 +10,7 @@ using UnityEngine.UI;
 public class Astrolabe : ToolPickup, AstroTutorialStep
 {
     PlayerControls playerControls;
+    GameState prevState;
 
     [NonSerialized]
     public TutorialSequence currentSequence;
@@ -217,18 +218,20 @@ public class Astrolabe : ToolPickup, AstroTutorialStep
                 }
 
                 visible = !visible;
-                foreach (Renderer rend in renderers)
-                {
-                    rend.enabled = visible;
-                }
-
-                foreach (TMP_Text text in textBoxes)
-                {
-                    text.enabled = visible;
-                }
 
                 if (visible == false)
                 {
+                    foreach (Renderer rend in renderers)
+                    {
+                        rend.enabled = visible;
+                    }
+
+                    foreach (TMP_Text text in textBoxes)
+                    {
+                        text.enabled = visible;
+                    }
+
+
                     if (zoomedIn)
                     {
                         zoomedIn = false;
@@ -237,9 +240,31 @@ public class Astrolabe : ToolPickup, AstroTutorialStep
                             zoomCoroutine = StartCoroutine(ZoomOut());
                         }
                     }
+
+                    TempStateMachine.Instance.SetState(prevState);
+
                 }
                 else
                 {
+                    if (TempStateMachine.Instance.gameState == GameState.Journal)
+                    {
+                        visible = !visible;
+                        return;
+                    }
+
+                    foreach (Renderer rend in renderers)
+                    {
+                        rend.enabled = visible;
+                    }
+
+                    foreach (TMP_Text text in textBoxes)
+                    {
+                        text.enabled = visible;
+                    }
+
+
+                    prevState = TempStateMachine.Instance.gameState;
+                    TempStateMachine.Instance.SetState(GameState.Astrolabe);
                     zoomedIn = true;
                     if (zoomCoroutine == null)
                     {

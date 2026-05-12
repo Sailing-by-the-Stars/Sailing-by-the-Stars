@@ -18,6 +18,8 @@ public class Journal : ToolPickup, AstroTutorialStep
 {
     PlayerControls playerControls;
 
+    GameState prevState;
+
 
     [NonSerialized]
     public TutorialSequence currentSequence;
@@ -84,6 +86,11 @@ public class Journal : ToolPickup, AstroTutorialStep
         playerControls = TempStateMachine.Instance.PlayerControls;
 
         playerControls.Journal.BookmarkPage.performed += OpenBookmark;
+    }
+
+    private void OnDisable()
+    {
+        playerControls.Journal.BookmarkPage.performed -= OpenBookmark;
     }
 
     public void OpenBookmark(InputAction.CallbackContext ctx)
@@ -216,9 +223,16 @@ public class Journal : ToolPickup, AstroTutorialStep
                 { 
                     bookVisible = false;
                     bookOpened = false;
+
+                    TempStateMachine.Instance.SetState(prevState);
                 }
                 else
                 {
+                    if (TempStateMachine.Instance.gameState == GameState.Astrolabe)
+                    {
+                        return;
+                    }
+
                     transform.GetChild(1).gameObject.SetActive(true);
                     bookVisible = true;
                     bookOpened = true;
@@ -228,6 +242,9 @@ public class Journal : ToolPickup, AstroTutorialStep
                     {
                         TutorialSequence.Instance.NextStep(1);
                     }
+
+                    prevState = TempStateMachine.Instance.gameState;
+                    TempStateMachine.Instance.SetState(GameState.Journal);
                 }
             }
 
