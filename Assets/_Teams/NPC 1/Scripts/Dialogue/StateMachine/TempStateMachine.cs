@@ -48,6 +48,7 @@ public class TempStateMachine : MonoBehaviour
             case GameState.Moving:
                 PlayerControls.Land.Enable();
                 PlayerControls.Looking.Enable(); 
+                PlayerControls.Interaction.Enable();
                 SetCursorVisibility(false);
                 break;
 
