@@ -38,11 +38,12 @@ namespace _Teams.World_Design.Scripts.Challenges.Lost_Souls
             {
                 // Attach helper to forward trigger events from the child to this script
                 TriggerForwarder forwarder = triggerZone.gameObject.AddComponent<TriggerForwarder>();
-                forwarder.triggerHandler = this;
+                forwarder.onTriggerEnterAction = HandleTriggerEnter;
+                forwarder.onTriggerExitAction = HandleTriggerExit;
             }
         }
 
-        public void OnTriggerEnter(Collider other)
+        public void HandleTriggerEnter(Collider other)
         {
             if (other.CompareTag(instigatorTag))
             {
@@ -52,7 +53,7 @@ namespace _Teams.World_Design.Scripts.Challenges.Lost_Souls
             }
         }
 
-        public void OnTriggerExit(Collider other)
+        public void HandleTriggerExit(Collider other)
         {
             if (other.CompareTag(instigatorTag))
             {
@@ -127,29 +128,5 @@ namespace _Teams.World_Design.Scripts.Challenges.Lost_Souls
         }
 
 
-    }
-
-    /// <summary>
-    /// Helper class to forward trigger events from child colliders.
-    /// </summary>
-    public class TriggerForwarder : MonoBehaviour
-    {
-        public LostSoulsZone triggerHandler;
-
-        private void OnTriggerEnter(Collider other)
-        {
-            if (triggerHandler != null)
-            {
-                triggerHandler.OnTriggerEnter(other);
-            }
-        }
-
-        private void OnTriggerExit(Collider other)
-        {
-            if (triggerHandler != null)
-            {
-                triggerHandler.OnTriggerExit(other);
-            }
-        }
     }
 }
