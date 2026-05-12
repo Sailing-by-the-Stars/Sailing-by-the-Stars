@@ -187,7 +187,7 @@ public class Movement : MonoBehaviour
         //replace everything in the //'s with your own code
         //this is just so we can test even if the ship doesn't work
         //>
-        if (playerControls.Land.Sprint.triggered)
+        if (playerControls.Land.Sprint.IsPressed())
         {
             rb.MovePosition(rb.position + rb.transform.forward * moveDirection.y * movementSpeed * sprintMultiplier * Time.deltaTime);
             rb.MovePosition(rb.position + rb.transform.right * moveDirection.x * movementSpeed * sprintMultiplier * Time.deltaTime);
