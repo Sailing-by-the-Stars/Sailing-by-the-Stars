@@ -12,6 +12,7 @@ public class GlobeShape : MonoBehaviour
     [SerializeField] float offsetY = 5000f;
     [Tooltip("this determines over how manny frames the moving of the stars will be divided")]
     [SerializeField] int operationDivisions = 5;
+    [SerializeField] int operationHeightCutoff = 10;
     [SerializeField] GlobePositionType positionType;
 
     List<Vector3> verticePositions = new();
@@ -22,6 +23,10 @@ public class GlobeShape : MonoBehaviour
     List<StarInfo> relatedMiniStars = new();
     List<List<StarInfo>> dividedMiniStars = new();
     int Iterator;
+
+    private NativeArray<Vector3> initPositions;
+    private NativeArray<Vector3> starPositions;
+    private NativeArray<byte> changed;
     public int iterator
     {
         get => Iterator;
@@ -41,7 +46,12 @@ public class GlobeShape : MonoBehaviour
         }
     }
 
-
+    private void OnDestroy()
+    {
+        initPositions.Dispose();
+        starPositions.Dispose();
+        changed.Dispose();
+    }
     void Start()
     {
         if (positionType == null)
@@ -53,35 +63,35 @@ public class GlobeShape : MonoBehaviour
         {
             return;
         }
-        InitializeMiniStars(operationDivisions);
+        InitializeMiniStars();
 
         DrawSphere();
     }
 
 
-    void InitializeMiniStars(int divisions)
+    void InitializeMiniStars()
     {
+        int divisions = operationDivisions;
+
         if (divisions < 1)
         {
             divisions = 1;
         }
 
-        operationDivisions = divisions;
-
         relatedMiniStars = GetComponentsInChildren<StarInfo>().ToList();
         dividedMiniStars.Clear();
 
-        if (relatedMiniStars.Count <= operationDivisions)
+        if (relatedMiniStars.Count <= divisions)
         {
             dividedMiniStars.Add(relatedMiniStars);
-            operationDivisions = 1;
+            divisions = 1;
             return;
         }
 
-        int starsPerDiv = Mathf.CeilToInt((float)relatedMiniStars.Count / operationDivisions);
+        int starsPerDiv = Mathf.CeilToInt((float)relatedMiniStars.Count / divisions);
         List<StarInfo> starsToDiv = new(relatedMiniStars);
 
-        for (int i = 0; i < operationDivisions && starsToDiv.Count > 0; i++)
+        for (int i = 0; i < divisions && starsToDiv.Count > 0; i++)
         {
             List<StarInfo> remainderStars = starsToDiv.Take(starsPerDiv).ToList();
 
@@ -120,76 +130,113 @@ public class GlobeShape : MonoBehaviour
         transform.position = targetpos;
     }
 
-    // Move stars with multi-core Jobs
+
+    void EnsureCapacity(List<StarInfo> iStars, int count)
+    {
+        if (!initPositions.IsCreated || initPositions.Length != count)
+        {
+            if (initPositions.IsCreated)
+                initPositions.Dispose();
+
+            initPositions = new NativeArray<Vector3>(count, Allocator.Persistent);
+            
+            for (int i = 0; i < count; i++)
+            {
+                initPositions[i] = iStars[i].initpos;
+            }
+        }
+        
+        if (!starPositions.IsCreated || starPositions.Length != count)
+        {
+            if (starPositions.IsCreated)
+                starPositions.Dispose();
+
+            starPositions = new NativeArray<Vector3>(count, Allocator.Persistent);
+        }
+
+        if (!changed.IsCreated || changed.Length != count)
+        {
+            if (changed.IsCreated)
+                changed.Dispose();
+
+            changed = new NativeArray<byte>(count, Allocator.Persistent);
+        }
+    }
+
     public void MoveStars(List<StarInfo> iStars, Transform playerCamera)
     {
         int count = iStars.Count;
 
-        NativeArray<Vector3> starPositions = new NativeArray<Vector3>(count, Allocator.TempJob);
-        NativeArray<byte> changed = new NativeArray<byte>(count, Allocator.TempJob, NativeArrayOptions.ClearMemory);
+        // SETUP DATA
+        EnsureCapacity(iStars, count);
 
-        for (int i = 0; i < count; i++)
+        if (operationDivisions > 1)
         {
-            starPositions[i] = iStars[i].initpos;
-            changed[i] = 1;
+            for (int i = 0; i < count; i++)
+            {
+                initPositions[i] = iStars[i].initpos;
+            }
         }
 
+        Vector3 center = transform.position + new Vector3(globeRadius, -offsetY, globeRadius);
+        float radiusSqr = globeRadius * globeRadius;
+
+        
+        // RUN JOBS
         var job = new StarSphereJob()
         {
-            globeRadius = globeRadius,
-            center = transform.position + new Vector3(globeRadius, -500, globeRadius),
-            radiusSqr = globeRadius * globeRadius,
-            starPositions = starPositions,
+            GlobeRadius = globeRadius,
+            Center = center,
+            RadiusSqr = radiusSqr,
+
+            initialPoss = initPositions,
+            starPoss = starPositions,
             changed = changed
         };
 
-        // Schedule across all stars
         JobHandle handle = job.Schedule(count, 64);
-        // 64 = batch size per job thread, tweak for performance
         handle.Complete();
 
 
+        // APPLY RESULTS
+        float starHeightCutoff = transform.position.y + offsetY + operationHeightCutoff;
+
+        Vector3 StarPos;
         for (int i = 0; i < count; i++)
         {
             if (changed[i] == 1)
             {
-                Transform t = iStars[i].transform;
-                Vector3 newPos = starPositions[i];
-
-                if ((t.position - newPos).sqrMagnitude > 0.001f)
+                StarPos = starPositions[i];
+                if (StarPos.y > starHeightCutoff)
                 {
-                    t.position = newPos;
-                    if (newPos.y > 0) 
-                        t.LookAt(playerCamera.position);
+                    iStars[i].thisTransform.position = StarPos;
                 }
             }
         }
-
-        starPositions.Dispose();
-        changed.Dispose();
     }
 
     // Burst-compiled job
     [BurstCompile(FloatMode = FloatMode.Default, FloatPrecision = FloatPrecision.Standard)]
     struct StarSphereJob : IJobParallelFor
     {
-        public float globeRadius;
-        public Vector3 center;
-        public float radiusSqr;
+        public float GlobeRadius;
+        public Vector3 Center;
+        public float RadiusSqr;
 
-        public NativeArray<Vector3> starPositions;
+        public NativeArray<Vector3> initialPoss;
+        public NativeArray<Vector3> starPoss;
         public NativeArray<byte> changed;
 
         public void Execute(int index)
         {
-            Vector3 starPos = starPositions[index];
+            Vector3 starPos = initialPoss[index];
 
-            float dx = starPos.x - center.x;
-            float dy = starPos.y - center.y;
-            float dz = starPos.z - center.z;
-
+            float dx = starPos.x - Center.x;
+            float dy = starPos.y - Center.y;
+            float dz = starPos.z - Center.z;
+            
             float distSqr = dx * dx + dy * dy + dz * dz;
-            if (distSqr > radiusSqr)
+            if (distSqr > RadiusSqr)
             {
                 changed[index] = 0;
                 return;
@@ -205,10 +252,10 @@ public class GlobeShape : MonoBehaviour
             float ny = dy * invDist;
             float nz = dz * invDist;
 
-            starPositions[index] = new Vector3(
-                center.x + nx * globeRadius,
-                center.y + ny * globeRadius,
-                center.z + nz * globeRadius
+            starPoss[index] = new Vector3(
+                Center.x + nx * GlobeRadius,
+                Center.y + ny * GlobeRadius,
+                Center.z + nz * GlobeRadius
             );
         }
     }
@@ -307,16 +354,6 @@ public class GlobeShape : MonoBehaviour
         targetpos.y -= offsetY;
 
         transform.position = targetpos;
-
-        if (operationDivisions < 1)
-        {
-            operationDivisions = 1;
-        }
-
-        if (Application.isPlaying)
-        {
-            InitializeMiniStars(operationDivisions);
-        }
 
         if (GetComponent<MeshRenderer>() == null || GetComponent<MeshRenderer>().enabled == false)
         {
