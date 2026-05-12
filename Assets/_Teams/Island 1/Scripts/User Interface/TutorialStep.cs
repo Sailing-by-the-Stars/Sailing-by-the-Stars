@@ -19,6 +19,8 @@
         // This will be shown so that players can get used to moving before being asked to do something specific, will be shown directly after the look around tutorial
         Move,
 
+        Sprint,
+
         // This will be shown when the player approaches the first item, the Astrolabe, so that they can get used to picking up items, will be shown directly after the move tutorial
         PickUpItem,
 
@@ -35,6 +37,8 @@
         ToggleJournal,
 
         // This is the last step, most likely there won't be a popup, but it's here just in case 
-        Completed
+        Completed,
+
+        RotateAstrolabe,
     }
 }

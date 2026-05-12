@@ -1,9 +1,12 @@
+using System.Collections;           // ADDED: needed for coroutines
 using UnityEngine;
 using UnityEngine.InputSystem.LowLevel;
 
 //Creator: Joost
 //Edited by: Johan
 //edited by: Jardi (the sprint working, hacky though it is)
+//edited by: Vasilis (particle system on enter and exit boat)
+//edited by: Jantina (dock boarding/disembarking via DockPoint)
 public class Movement : MonoBehaviour
 {
     [Header("Movement Settings")]
@@ -13,8 +16,8 @@ public class Movement : MonoBehaviour
 
     [Header("Camera Setting")]
     [SerializeField] float mouseSensitivity = 10f;
-    [SerializeField] float minXRotation = -90f;
-    [SerializeField] float maxXRotation = 90f;
+    [SerializeField] float minYRotation = -90f;
+    [SerializeField] float maxYRotation = 90f;
     bool limitCamMovement = false;
 
     [Header("Collision Handling")]
@@ -44,37 +47,55 @@ public class Movement : MonoBehaviour
 
     [SerializeField] string playerState = "Land";
 
-    private void Awake()
-    {
-        playerControls = new PlayerControls();
-    }
 
-    private void OnEnable()
-    {
-        playerControls.Land.Enable();
-        playerControls.Looking.Enable();
-    }
+    [Header("Particle System")]
+    [SerializeField] private ParticleSystem boatFoam;
+    [SerializeField] private ParticleSystem sideFoamRight;
+    [SerializeField] private ParticleSystem sideFoamLeft;
 
-    private void OnDisable()
-    {
-        playerControls.Land.Disable();
-        playerControls.BoatSail.Disable();
-        playerControls.BoatRudder.Disable();
-        playerControls.Looking.Disable();
-    }
+    // ADDED BY JANTINA
+    [Header("Dock Transition")]
+    private bool _transitioning = false;
+    private DockPoint[] _docks;
+    private DockInteractionUI _dockUI;
+
+    // private void Awake()
+    // {
+    //     playerControls = new PlayerControls();
+    // }
+
+    // private void OnEnable()
+    // {
+    //     playerControls.Land.Enable();
+    //     playerControls.Looking.Enable();
+    // }
+
+    // private void OnDisable()
+    // {
+    //     playerControls.Land.Disable();
+    //     playerControls.BoatSail.Disable();
+    //     playerControls.BoatRudder.Disable();
+    //     playerControls.Looking.Disable();
+    // }
 
     void Start()
     {
+        playerControls = TempStateMachine.Instance.PlayerControls;
+ 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         cam = GetComponentInChildren<Camera>();
         rb = GetComponent<Rigidbody>();
-
+ 
         if (boat != null)
         {
             boatController = boat.GetComponent<BoatController>();
             buoyancyController = boat.GetComponent<BuoyancyController>();
         }
+ 
+        // ADDED BY JANTINA
+        _docks = FindObjectsByType<DockPoint>(FindObjectsSortMode.None);
+        _dockUI = FindFirstObjectByType<DockInteractionUI>();
     }
 
     private void Update()
@@ -96,6 +117,16 @@ public class Movement : MonoBehaviour
                 }*/
                 rb.AddForce(-rb.linearVelocity);
             }
+        }
+
+        // ADDED BY JANTINA
+        foreach (DockPoint dock in _docks)
+            dock.UpdateUI(isOnBoat, transform.position, boat.transform.position);
+
+        if (!_transitioning && playerControls.Land.DockInteract.WasPressedThisFrame())
+        {
+            foreach (DockPoint dock in _docks)
+                dock.TryInteract(isOnBoat, transform.position, boat.transform.position);
         }
     }
 
@@ -156,7 +187,7 @@ public class Movement : MonoBehaviour
         //replace everything in the //'s with your own code
         //this is just so we can test even if the ship doesn't work
         //>
-        if (Input.GetKey(KeyCode.LeftShift))
+        if (playerControls.Land.Sprint.triggered)
         {
             rb.MovePosition(rb.position + rb.transform.forward * moveDirection.y * movementSpeed * sprintMultiplier * Time.deltaTime);
             rb.MovePosition(rb.position + rb.transform.right * moveDirection.x * movementSpeed * sprintMultiplier * Time.deltaTime);
@@ -174,20 +205,20 @@ public class Movement : MonoBehaviour
     void RotateCamera()
     {
         Vector2 lookDirection = playerControls.Looking.Look.ReadValue<Vector2>();
-        Vector2 cameraMoveDirection = lookDirection * mouseSensitivity * Time.deltaTime;
+        Vector2 cameraMoveDirection = lookDirection * mouseSensitivity * Time.fixedDeltaTime;
 
         if (limitCamMovement != true)
         {
-            // Rotating the Y rotation
-            yCamRotation += cameraMoveDirection.x;
-            yCamRotation = FixRotationLimit(yCamRotation);
-            gameObject.transform.rotation = Quaternion.Euler(0, yCamRotation, 0);
+            // Rotating the X rotation
+            xCamRotation += cameraMoveDirection.x;
+            xCamRotation = FixRotationLimit(xCamRotation);
+            gameObject.transform.rotation = Quaternion.Euler(0, xCamRotation, 0);
         }
 
-        // Rotating the X rotation
-        xCamRotation -= cameraMoveDirection.y;
-        xCamRotation = Mathf.Clamp(xCamRotation, minXRotation, maxXRotation);
-        cam.transform.localRotation = Quaternion.Euler(xCamRotation, 0, 0);
+        // Rotating the Y rotation
+        yCamRotation -= cameraMoveDirection.y;
+        yCamRotation = Mathf.Clamp(yCamRotation, minYRotation, maxYRotation);
+        cam.transform.localRotation = Quaternion.Euler(yCamRotation, 0, 0);
  }
 
     /// <summary>
@@ -211,39 +242,46 @@ public class Movement : MonoBehaviour
     }
 
     //set the player to be able to go on top of the boat
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("boat"))
-        {
-            isOnBoat = true;
-            Debug.LogWarning("IT HITS");
-            transform.SetParent(boat.transform);
-            transform.position = seatPosition.position;
+    // private void OnTriggerEnter(Collider other)
+    // {
+    //     if (other.CompareTag("boat"))
+    //     {
+    //         isOnBoat = true;
+    //         Debug.LogWarning("IT HITS");
+    //         transform.SetParent(boat.transform);
+    //         transform.position = seatPosition.position;
 
-            EntersBoat();
-        }
-    }
+    //         EntersBoat();
+    //     }
+    // }
 
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.CompareTag("boat"))
-        {
-            isOnBoat = true;
-            Debug.LogWarning("IT HITS");
-            transform.SetParent(boat.transform);
-            transform.position = seatPosition.position;
+    // private void OnCollisionEnter(Collision collision)
+    // {
+    //     if (collision.gameObject.CompareTag("boat"))
+    //     {
+    //         isOnBoat = true;
+    //         Debug.LogWarning("IT HITS");
+    //         transform.SetParent(boat.transform);
+    //         transform.position = seatPosition.position;
 
-            EntersBoat();
-        }
-    }
+    //         EntersBoat();
+    //     }
+    // }
 
     void EntersBoat()
     {
-        Destroy(rb);
+        if (rb != null) Destroy(rb);
         isOnBoat = true;
 
         buoyancyController.enabled = true;
         boatController.enabled = true;
+
+        boatFoam.gameObject.SetActive(true);
+        sideFoamLeft.gameObject.SetActive(true);
+        sideFoamRight.gameObject.SetActive(true);
+        boatFoam.Play();
+        sideFoamRight.Play();
+        sideFoamLeft.Play();
     }
 
     public void ExitBoat()
@@ -256,7 +294,63 @@ public class Movement : MonoBehaviour
 
         buoyancyController.enabled = false;
         boatController.enabled = false;
+
+        boatFoam.gameObject.SetActive(false);
+        sideFoamLeft.gameObject.SetActive(false);
+        sideFoamRight.gameObject.SetActive(false);
+
+        boatFoam.Stop();
+        sideFoamLeft.Stop();
+        sideFoamRight.Stop();
+
     }
+
+    // ADDED: Everything below up to Jump() is added by Jantina
+
+    public void BoardBoat(Transform boardSpot)
+    {
+        if (_transitioning) return;
+        StartCoroutine(BoardCoroutine(boardSpot));
+    }
+
+    public void DisembarkBoat(Transform exitSpot)
+    {
+        if (_transitioning) return;
+        StartCoroutine(DisembarkCoroutine(exitSpot));
+    }
+
+    private IEnumerator BoardCoroutine(Transform boardSpot)
+    {
+        _transitioning = true;
+        if (_dockUI != null) yield return StartCoroutine(_dockUI.FadeOut());
+
+        transform.SetParent(boat.transform);
+        transform.position = boardSpot.position;
+        transform.rotation = boardSpot.rotation;
+        EntersBoat();
+        yield return null;
+        if (_dockUI != null) yield return StartCoroutine(_dockUI.FadeIn());
+        _transitioning = false;
+    }
+
+    private IEnumerator DisembarkCoroutine(Transform exitSpot)
+    {
+        _transitioning = true;
+        if (boatController != null) boatController.DropAnchor();
+        SwitchState("Land");
+
+        if (_dockUI != null) yield return StartCoroutine(_dockUI.FadeOut());
+
+        ExitBoat();
+        transform.SetParent(null);
+        transform.position = exitSpot.position;
+        transform.rotation = exitSpot.rotation;
+        yield return null;
+        if (_dockUI != null) yield return StartCoroutine(_dockUI.FadeIn());
+        _transitioning = false;
+    }
+
+    // END ADDED BY JANTINA
 
     void Jump()
     {

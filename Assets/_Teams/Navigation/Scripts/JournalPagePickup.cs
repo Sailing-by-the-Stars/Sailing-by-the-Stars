@@ -46,6 +46,17 @@ public class JournalPagePickup : MonoBehaviour, IPickup
                 .Find("journal")
                 .GetComponent<Journal>();
         }
+
+        if (!pickupController.transform
+                .Find("Main Camera")
+                .Find("journal(Clone)")
+                .IsUnityNull() && journal.IsUnityNull())
+        {
+                journal = pickupController.transform
+                .Find("Main Camera")
+                .Find("journal(Clone)")
+                .GetComponent<Journal>();
+        }
     }
 
     public void Drop(PickupController pickupController)
@@ -65,6 +76,7 @@ public class JournalPagePickup : MonoBehaviour, IPickup
     {
         if (journal.IsUnityNull()) 
         {
+            Debug.LogWarning("there is no journal to add pages to!");
             return false;
         }
         

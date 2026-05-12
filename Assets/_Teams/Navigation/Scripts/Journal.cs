@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
+using static System.Net.Mime.MediaTypeNames;
 using static UnityEngine.Rendering.DebugUI;
 
 [Serializable]
@@ -14,6 +16,9 @@ public class Page
 
 public class Journal : ToolPickup, AstroTutorialStep
 {
+    PlayerControls playerControls;
+
+
     [NonSerialized]
     public TutorialSequence currentSequence;
     [NonSerialized]
@@ -29,16 +34,85 @@ public class Journal : ToolPickup, AstroTutorialStep
     MeshRenderer leftPageQ;
     MeshRenderer rightPageQ;
 
+
+    private float maxPageWidth = 0f;
+    private float maxPageHeight = 0f;
+
     [SerializeField]
     List<Page> pages = new();
     [SerializeField]
     int pageNr = 0;
-
     float bookangle = 0;
     [SerializeField]
     float angelPerSecond = 0;
+    
+    [SerializeField]
+    int sectionOnePageNr;
+    
+    [SerializeField]
+    int sectionTwoPageNr;
+    
+    [SerializeField]
+    int sectionThreePageNr;
+    
+    [SerializeField]
+    int sectionFourPageNr;
 
+    [SerializeField]
+    int sectionFivePageNr;
+    
+    [SerializeField]
+    int sectionSixPageNr;
+    
+    [SerializeField]
+    int sectionSevenPageNr;
+    
+    [SerializeField]
+    int sectionEightPageNr;
+
+    [SerializeField]
+    int sectionNinePageNr;
+    
     SkinnedMeshRenderer bookRenderer;
+
+    private Transform bookmarkTransform;
+    List<int> sectionPageNrs = new List<int>();
+
+
+    private void OnEnable()
+    {
+        playerControls = TempStateMachine.Instance.PlayerControls;
+
+        playerControls.Journal.BookmarkPage.performed += OpenBookmark;
+    }
+
+    public void OpenBookmark(InputAction.CallbackContext ctx)
+    {
+        int numKeyValue; 
+
+        int.TryParse(ctx.control.name, out numKeyValue);
+
+        if(numKeyValue - 1 < 0)
+        {
+            return;
+        }
+
+        if (bookOpened)
+        {
+                if (sectionPageNrs[numKeyValue - 1] <= pages.Count - 1)
+                {
+                    pageNr = sectionOnePageNr;
+
+                    for (int i = 0; i < bookmarkTransform.childCount; i++)
+                    {
+                        bookmarkTransform.GetChild(i).GetComponent<Renderer>().material.color = Color.white;
+                    }
+
+                    bookmarkTransform.GetChild(numKeyValue - 1).GetComponent<Renderer>().material.color = Color.green;
+                }
+        }
+
+    }
 
 
     public override void Grab(PickupController pickupController)
@@ -53,7 +127,7 @@ public class Journal : ToolPickup, AstroTutorialStep
         bookangle = 101;
         bookOpened = false;
 
-        transform.GetChild(0).gameObject.SetActive(false);
+        transform.GetChild(1).gameObject.SetActive(false);
 
         initalRot = Quaternion.Euler(90, 90, 90);
         transform.localRotation = initalRot;
@@ -87,15 +161,17 @@ public class Journal : ToolPickup, AstroTutorialStep
     {
         if (isEquipped)
         {
-            if (Input.GetKeyDown(KeyCode.Q))
+            if (playerControls.Journal.PreviousPage.triggered && bookVisible && bookOpened)
             {
                 pageNr -= 1;
             }
 
-            if (Input.GetKeyDown(KeyCode.E))
+            if (playerControls.Journal.NextPage.triggered && bookVisible && bookOpened)
             {
                 pageNr += 1;
             }
+
+            
 
             if (pageNr < 0)
             {
@@ -111,24 +187,9 @@ public class Journal : ToolPickup, AstroTutorialStep
             {
                 leftPageQ.enabled = true;
 
-                Texture tex = pages[pageNr].leftPage;
-                Transform rt = leftPageQ.transform;
+                FixScaling(pages[pageNr].leftPage, leftPageQ.transform);
 
-                float width = tex.width;
-                float height = tex.height;
-
-                if (width > height)
-                {
-                    float ratio = height / width;
-                    rt.localScale = new Vector2(1f, ratio);
-                }
-                else
-                {
-                    float ratio = width / height;
-                    rt.localScale = new Vector2(ratio, 1f);
-                }
-
-                leftPageQ.sharedMaterial.mainTexture = tex;
+                leftPageQ.sharedMaterial.mainTexture = pages[pageNr].leftPage;
             }
             else
             {
@@ -140,24 +201,8 @@ public class Journal : ToolPickup, AstroTutorialStep
             {
                 rightPageQ.enabled = true;
 
-                Texture tex = pages[pageNr].rightPage;
-                Transform rt = rightPageQ.transform;
-
-                float width = tex.width;
-                float height = tex.height;
-
-                if (width > height)
-                {
-                    float ratio = height / width;
-                    rt.localScale = new Vector2(1f, ratio);
-                }
-                else
-                {
-                    float ratio = width / height;
-                    rt.localScale = new Vector2(ratio, 1f);
-                }
-
-                rightPageQ.sharedMaterial.mainTexture = tex;
+                FixScaling(pages[pageNr].rightPage, rightPageQ.transform);
+                rightPageQ.sharedMaterial.mainTexture = pages[pageNr].rightPage;
             }
             else
             {
@@ -165,7 +210,7 @@ public class Journal : ToolPickup, AstroTutorialStep
             }
 
 
-            if (Input.GetKeyDown(KeyCode.J))
+            if (playerControls.Journal.Open.triggered)
             {
                 if (bookVisible)
                 { 
@@ -174,7 +219,7 @@ public class Journal : ToolPickup, AstroTutorialStep
                 }
                 else
                 {
-                    transform.GetChild(0).gameObject.SetActive(true);
+                    transform.GetChild(1).gameObject.SetActive(true);
                     bookVisible = true;
                     bookOpened = true;
                     bookangle = 100;
@@ -192,6 +237,12 @@ public class Journal : ToolPickup, AstroTutorialStep
                 if (bookangle < 0)
                 {
                     bookangle = 0;
+
+                    //Show bookmarks
+                    for (int i = 0; i < bookmarkTransform.childCount; i++)
+                    {
+                        bookmarkTransform.GetChild(i).gameObject.SetActive(true);
+                    }
                 }
                 else
                 {
@@ -209,21 +260,70 @@ public class Journal : ToolPickup, AstroTutorialStep
                 if (bookangle > 100)
                 {
                     bookangle = 100;
-                    transform.GetChild(0).gameObject.SetActive(false);
+                    transform.GetChild(1).gameObject.SetActive(false);
+                }
+
+                //Hide bookmarks and reset section selection
+                for (int i = 0; i < bookmarkTransform.childCount; i++)
+                {
+                    bookmarkTransform.GetChild(i).gameObject.SetActive(false);
+                    bookmarkTransform.GetChild(i).GetComponent<Renderer>().material.color = Color.white;
                 }
             }
-
-                bookRenderer.SetBlendShapeWeight(0, bookangle);
         }
         else
         {
             leftPageQ.enabled = false;
             rightPageQ.enabled = false;
             bookangle = 100;
-            bookRenderer.SetBlendShapeWeight(0, bookangle);
         }
     }
 
+
+    private void SetItemByKeyValue(UnityEngine.InputSystem.InputAction.CallbackContext ctx)
+    {
+
+        int numKeyValue; // the number key value we want from this keypress
+
+        int.TryParse(ctx.control.name, out numKeyValue);
+        // Warning! If ctx.control.name can't parse as an int, numKeyValue will be 0
+
+        Debug.Log("int value of keypress is: " + numKeyValue);
+
+        // Now do something with the key value ...
+
+    }
+
+    void FixScaling(Texture tex, Transform trans)
+    {
+        if (maxPageWidth == 0f || maxPageHeight == 0f)
+        {
+            maxPageWidth = trans.localScale.x;
+            maxPageHeight = trans.localScale.y;
+        }
+
+        float texWidth = tex.width;
+        float texHeight = tex.height;
+
+        float texRatio = texWidth / texHeight;
+        float maxRatio = maxPageWidth / maxPageHeight;
+
+        float newWidth;
+        float newHeight;
+
+        if (texRatio > maxRatio)
+        {
+            newWidth = maxPageWidth;
+            newHeight = maxPageWidth / texRatio;
+        }
+        else
+        {
+            newHeight = maxPageHeight;
+            newWidth = maxPageHeight * texRatio;
+        }
+
+        trans.localScale = new Vector2(newWidth, newHeight);
+    }
 
 
 
@@ -264,8 +364,19 @@ public class Journal : ToolPickup, AstroTutorialStep
         }
 
         bookRenderer = GetComponentInChildren<SkinnedMeshRenderer>();
-
+        
         leftPageQ.enabled = false;
         rightPageQ.enabled = false;
+
+        bookmarkTransform = transform.GetChild(0).GetChild(0).GetChild(2);
+        sectionPageNrs.Add(sectionOnePageNr);
+        sectionPageNrs.Add(sectionTwoPageNr);
+        sectionPageNrs.Add(sectionThreePageNr);
+        sectionPageNrs.Add(sectionFourPageNr);
+        sectionPageNrs.Add(sectionFivePageNr);
+        sectionPageNrs.Add(sectionSixPageNr);
+        sectionPageNrs.Add(sectionSevenPageNr);
+        sectionPageNrs.Add(sectionEightPageNr);
+        sectionPageNrs.Add(sectionNinePageNr);
     }
 }
