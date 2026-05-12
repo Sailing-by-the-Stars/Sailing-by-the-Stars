@@ -585,13 +585,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_Teams.World_Design.Scripts.Challenges.Ghost_Boat.LostSoulBoatScript
   playerTransform: {fileID: 0}
-  canWander: 1
-  wanderSpeed: 1
-  wanderDistance: 10
+  moveSpeed: 3
+  timeUntilFade: 40
+  fadeDuration: 5
   fadeStartRange: 40
-  fadeEndRange: 10
+  fadeEndRange: 30
   maxOpacity: 0.3
   distanceToPlayer: 0
+  targetLights:
+  - {fileID: 1104758859091948341}
+  - {fileID: 6345015062636106863}
+  - {fileID: 8214381008974798218}
+  - {fileID: 2564323770612402623}
   targetRenderers: []
 --- !u!1 &3744536236126380214
 GameObject:
@@ -1387,7 +1392,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -876546973899608171, guid: fa060c28df875fb4f89d4ebbea68232e, type: 3}
+  - {fileID: -876546973899608171, guid: 02ddda80bf626474a826a307e4775214, type: 3}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

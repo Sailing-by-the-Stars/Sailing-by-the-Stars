@@ -19,10 +19,14 @@ namespace _Teams.World_Design.Scripts.Challenges.Lost_Souls
         [Header("Opacity Distance Fading")]
         [SerializeField] private float fadeStartRange = 40f;
         [SerializeField] private float fadeEndRange = 10f;
-        [SerializeField, Range(0f, 1f)] private float maxOpacity = 0.3f;
+        [SerializeField] private float maxOpacity = 1.1f;
 
         [Header("Debug")]
         [SerializeField] private float distanceToPlayer;
+
+        [Header("Lights")]
+        [Tooltip("List of lights to fade in/out with the boat")]
+        [SerializeField] private List<Light> targetLights = new List<Light>();
 
         [Header("Shader Adjustments")]
         [Tooltip("Leave empty to automatically find all renderers on this boat and its children")]
@@ -30,18 +34,21 @@ namespace _Teams.World_Design.Scripts.Challenges.Lost_Souls
         
         [SerializeField] private Dictionary<Renderer, Material[]> originalMaterials = new Dictionary<Renderer, Material[]>();
 
+        private Dictionary<Light, float> originalLightIntensities = new Dictionary<Light, float>();
+
         public System.Action<LostSoulBoatScript> OnFadeComplete;
 
         private GhostBoatAudio ghostBoatAudio;
         private bool isFadingOut;
         private float currentOpacity;
 
-        private static readonly int BaseColorID = Shader.PropertyToID("_BaseColor");
-        private static readonly int ColorID = Shader.PropertyToID("_Color");
+        private static readonly int OpacityID = Shader.PropertyToID("Opacity");
+        private static readonly int UnderOpacityID = Shader.PropertyToID("_Opacity");
 
         private void Start()
         {
             originalMaterials = new Dictionary<Renderer, Material[]>();
+            originalLightIntensities = new Dictionary<Light, float>();
             
             targetRenderers = targetRenderers != null && targetRenderers.Length > 0 
                 ? targetRenderers 
@@ -53,6 +60,14 @@ namespace _Teams.World_Design.Scripts.Challenges.Lost_Souls
                 if (rend != null)
                 {
                     originalMaterials[rend] = rend.materials; 
+                }
+            }
+
+            foreach (Light tLight in targetLights)
+            {
+                if (tLight != null)
+                {
+                    originalLightIntensities[tLight] = tLight.intensity;
                 }
             }
 
@@ -76,6 +91,8 @@ namespace _Teams.World_Design.Scripts.Challenges.Lost_Souls
             UpdateOpacity(currentOpacity);
             
             Invoke(nameof(StartFadeAndDelete), timeUntilFade);
+
+            StartFadeIn();
         }
 
         private void Update()
@@ -108,7 +125,7 @@ namespace _Teams.World_Design.Scripts.Challenges.Lost_Souls
         {
             StartCoroutine(FadeAndDelete());
         }
-
+        
         private System.Collections.IEnumerator FadeAndDelete()
         {
             isFadingOut = true;
@@ -125,6 +142,28 @@ namespace _Teams.World_Design.Scripts.Challenges.Lost_Souls
 
             OnFadeComplete?.Invoke(this);
         }
+        public void StartFadeIn()
+        {
+            StartCoroutine(FadeIn());
+        }
+
+
+        
+        private System.Collections.IEnumerator FadeIn()
+        {
+            isFadingOut = true; // Disable distance fading while appearing
+            float elapsedTime = 0f;
+
+            while (elapsedTime < fadeDuration)
+            {
+                elapsedTime += Time.deltaTime;
+                currentOpacity = Mathf.Lerp(0, maxOpacity, elapsedTime / fadeDuration);
+                UpdateOpacity(currentOpacity);
+                yield return null;
+            }
+            
+            isFadingOut = false; // Re-enable distance fading
+        }
 
         private void UpdateOpacity(float opacity)
         {
@@ -137,18 +176,23 @@ namespace _Teams.World_Design.Scripts.Challenges.Lost_Souls
         
                 foreach (Material mat in cachedMaterials)
                 {
-                    if (mat.HasProperty(BaseColorID))
+                    if (mat.HasProperty(OpacityID))
                     {
-                        Color c = mat.GetColor(BaseColorID);
-                        c.a = opacity;
-                        mat.SetColor(BaseColorID, c);
+                        mat.SetFloat(OpacityID, opacity);
                     }
-                    else if (mat.HasProperty(ColorID))
+                    else if (mat.HasProperty(UnderOpacityID))
                     {
-                        Color c = mat.GetColor(ColorID);
-                        c.a = opacity;
-                        mat.SetColor(ColorID, c);
+                        mat.SetFloat(UnderOpacityID, opacity);
                     }
+                }
+            }
+
+            float normalizedOpacity = maxOpacity > 0f ? Mathf.Clamp01(opacity / maxOpacity) : 0f;
+            foreach (var kvp in originalLightIntensities)
+            {
+                if (kvp.Key != null)
+                {
+                    kvp.Key.intensity = kvp.Value * normalizedOpacity;
                 }
             }
         }

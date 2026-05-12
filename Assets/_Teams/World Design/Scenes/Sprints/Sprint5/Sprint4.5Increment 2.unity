@@ -240,6 +240,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1238450087}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!108 &106265927 stripped
+Light:
+  m_CorrespondingSourceObject: {fileID: 1104758859091948341, guid: da1a178bdc43e8843bf98c1cc3787213, type: 3}
+  m_PrefabInstance: {fileID: 3326404310421641240}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &180427522 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6736058736273579916, guid: b6d81394640966a4d9eddec62111776c, type: 3}
@@ -735,6 +740,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1238450087}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!108 &544673443 stripped
+Light:
+  m_CorrespondingSourceObject: {fileID: 8214381008974798218, guid: da1a178bdc43e8843bf98c1cc3787213, type: 3}
+  m_PrefabInstance: {fileID: 3326404310421641240}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &620939362
 GameObject:
   m_ObjectHideFlags: 0
@@ -1492,6 +1502,7 @@ MonoBehaviour:
   spawnZone: {fileID: 0}
   lostSoulBoatPrefabList:
   - {fileID: 8273026993531413002, guid: da1a178bdc43e8843bf98c1cc3787213, type: 3}
+  lostSoulBoatList: []
   maxBoatsToSpawn: 5
   minSpawnInterval: 1
   maxSpawnInterval: 3
@@ -1887,6 +1898,11 @@ PrefabInstance:
 ParticleSystem:
   m_CorrespondingSourceObject: {fileID: 238365294816435835, guid: bc1877a99024820448e258949ebaac0a, type: 3}
   m_PrefabInstance: {fileID: 217773227}
+  m_PrefabAsset: {fileID: 0}
+--- !u!108 &1553516136 stripped
+Light:
+  m_CorrespondingSourceObject: {fileID: 2564323770612402623, guid: da1a178bdc43e8843bf98c1cc3787213, type: 3}
+  m_PrefabInstance: {fileID: 3326404310421641240}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1557364858
 PrefabInstance:
@@ -2294,11 +2310,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: FMODUnity::FMODUnity.StudioListener
   nonRigidbodyVelocity: 0
   attenuationObject: {fileID: 7292254324522100366}
---- !u!20 &1574258059 stripped
-Camera:
-  m_CorrespondingSourceObject: {fileID: 1656572733483448602, guid: 2bca4eabfcdde6949b5e11e926281700, type: 3}
-  m_PrefabInstance: {fileID: 1557364858}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1638005275 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2399905773776380872, guid: 700214b8f0ced37439bdaa8e63bdb5eb, type: 3}
@@ -2580,6 +2591,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f958aac2a7d0dde45bcf8f12e99e4fb3, type: 3}
+--- !u!108 &2045970768 stripped
+Light:
+  m_CorrespondingSourceObject: {fileID: 6345015062636106863, guid: da1a178bdc43e8843bf98c1cc3787213, type: 3}
+  m_PrefabInstance: {fileID: 3326404310421641240}
+  m_PrefabAsset: {fileID: 0}
 --- !u!198 &2132640169 stripped
 ParticleSystem:
   m_CorrespondingSourceObject: {fileID: 4099714631464675958, guid: bc1877a99024820448e258949ebaac0a, type: 3}
@@ -2735,9 +2751,25 @@ PrefabInstance:
       value: LostSoul
       objectReference: {fileID: 0}
     - target: {fileID: 8273026993531413002, guid: da1a178bdc43e8843bf98c1cc3787213, type: 3}
-      propertyPath: playerCamera
+      propertyPath: targetLights.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 8273026993531413002, guid: da1a178bdc43e8843bf98c1cc3787213, type: 3}
+      propertyPath: 'targetLights.Array.data[0]'
       value: 
-      objectReference: {fileID: 1574258059}
+      objectReference: {fileID: 106265927}
+    - target: {fileID: 8273026993531413002, guid: da1a178bdc43e8843bf98c1cc3787213, type: 3}
+      propertyPath: 'targetLights.Array.data[1]'
+      value: 
+      objectReference: {fileID: 2045970768}
+    - target: {fileID: 8273026993531413002, guid: da1a178bdc43e8843bf98c1cc3787213, type: 3}
+      propertyPath: 'targetLights.Array.data[2]'
+      value: 
+      objectReference: {fileID: 544673443}
+    - target: {fileID: 8273026993531413002, guid: da1a178bdc43e8843bf98c1cc3787213, type: 3}
+      propertyPath: 'targetLights.Array.data[3]'
+      value: 
+      objectReference: {fileID: 1553516136}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2765,7 +2797,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2663054920502178375, guid: 9af69e67adcbcfd43a905124369a0ce8, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -26.7
+      value: -68
       objectReference: {fileID: 0}
     - target: {fileID: 3873080022757562012, guid: 9af69e67adcbcfd43a905124369a0ce8, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2777,7 +2809,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3873080022757562012, guid: 9af69e67adcbcfd43a905124369a0ce8, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 554.5
+      value: 542
       objectReference: {fileID: 0}
     - target: {fileID: 3873080022757562012, guid: 9af69e67adcbcfd43a905124369a0ce8, type: 3}
       propertyPath: m_LocalRotation.w
@@ -2808,12 +2840,20 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4755448035162299896, guid: 9af69e67adcbcfd43a905124369a0ce8, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4755448035162299896, guid: 9af69e67adcbcfd43a905124369a0ce8, type: 3}
       propertyPath: m_CastShadows
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5113368328921028552, guid: 9af69e67adcbcfd43a905124369a0ce8, type: 3}
       propertyPath: m_CastShadows
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7148995565496269786, guid: 9af69e67adcbcfd43a905124369a0ce8, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 8.29
       objectReference: {fileID: 0}
     - target: {fileID: 7222721898274839692, guid: 9af69e67adcbcfd43a905124369a0ce8, type: 3}
       propertyPath: m_IsTrigger
