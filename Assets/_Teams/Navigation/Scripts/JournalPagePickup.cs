@@ -80,7 +80,9 @@ public class JournalPagePickup : MonoBehaviour, IPickup
             return false;
         }
         
-        journal.GetComponent<Journal>().AddPage(page, pageIDHack);
+        throw new NotImplementedException("add page not implemented yet!");
+
+        //journal.GetComponent<Journal>().AddPage(page, pageIDHack);
         
         return true;
     }

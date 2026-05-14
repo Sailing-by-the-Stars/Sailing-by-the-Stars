@@ -165,9 +165,8 @@ public class GlobeShape : MonoBehaviour
 
     public void MoveStars(List<StarInfo> iStars, Transform playerCamera)
     {
+        //set up data
         int count = iStars.Count;
-
-        // SETUP DATA
         EnsureCapacity(iStars, count);
 
         if (operationDivisions > 1)
@@ -182,7 +181,7 @@ public class GlobeShape : MonoBehaviour
         float radiusSqr = globeRadius * globeRadius;
 
         
-        // RUN JOBS
+        //run jobs
         var job = new StarSphereJob()
         {
             GlobeRadius = globeRadius,
@@ -198,7 +197,7 @@ public class GlobeShape : MonoBehaviour
         handle.Complete();
 
 
-        // APPLY RESULTS
+        //apply results
         float starHeightCutoff = transform.position.y + offsetY + operationHeightCutoff;
 
         Vector3 StarPos;
