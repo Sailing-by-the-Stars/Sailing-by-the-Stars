@@ -1,7 +1,11 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
+using UnityEditor.Rendering.HighDefinition;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using static System.Net.Mime.MediaTypeNames;
@@ -79,6 +83,18 @@ public class Journal : ToolPickup, AstroTutorialStep
 
     private Transform bookmarkTransform;
     List<int> sectionPageNrs = new List<int>();
+    
+    private Camera cam;
+
+    private float initialFOV;
+    private float zoomFOV = 35;
+    private float animationTime = 0.75f;
+    
+    private AnimationCurve animationCurve;
+    public static bool zoomedIn;
+    
+    private Coroutine zoomCoroutine;
+
 
 
     private void OnEnable()
@@ -108,7 +124,7 @@ public class Journal : ToolPickup, AstroTutorialStep
         {
                 if (sectionPageNrs[numKeyValue - 1] <= pages.Count - 1)
                 {
-                    pageNr = sectionOnePageNr;
+                    pageNr = sectionPageNrs[numKeyValue - 1];
 
                     for (int i = 0; i < bookmarkTransform.childCount; i++)
                     {
@@ -120,7 +136,28 @@ public class Journal : ToolPickup, AstroTutorialStep
         }
 
     }
+    
+    //Callback from the bookmark being clicked
+    public void OpenBookmark(int sectionPageNr)
+    {
+        if(sectionPageNr < 0)
+        {
+            return;
+        }
 
+        if (bookOpened)
+        {
+            if (sectionPageNrs[sectionPageNr] <= pages.Count - 1)
+            {
+                pageNr = sectionPageNrs[sectionPageNr];
+                for (int i = 0; i < bookmarkTransform.childCount; i++)
+                {
+                    bookmarkTransform.GetChild(i).GetComponent<Renderer>().material.color = Color.white;
+                }
+            }
+        }
+
+    }
 
     public override void Grab(PickupController pickupController)
     {
@@ -138,6 +175,19 @@ public class Journal : ToolPickup, AstroTutorialStep
 
         initalRot = Quaternion.Euler(90, 90, 90);
         transform.localRotation = initalRot;
+        
+        //Set up values for zoom
+        cam = GetComponentInParent<Camera>();
+        
+        initialFOV = cam.fieldOfView;
+        
+        animationCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
+        
+        zoomedIn = false;
+        if (zoomCoroutine == null)
+        {
+            zoomCoroutine = StartCoroutine(ZoomOut(animationTime - Time.deltaTime));
+        }
     }
 
     public void EnterStep(TutorialSequence sequence)
@@ -216,7 +266,6 @@ public class Journal : ToolPickup, AstroTutorialStep
                 rightPageQ.enabled = false;
             }
 
-
             if (playerControls.Journal.Open.triggered)
             {
                 if (bookVisible)
@@ -267,6 +316,26 @@ public class Journal : ToolPickup, AstroTutorialStep
                     rightPageQ.enabled = false;
                 }
 
+                if (playerControls.Journal.Zoom.triggered)
+                {
+                    if (zoomedIn)
+                    {
+                        zoomedIn = false;
+                        if (zoomCoroutine == null)
+                        {
+                        
+                            zoomCoroutine = StartCoroutine(ZoomOut());
+                        }
+                    }
+                    else
+                    {
+                        zoomedIn = true;
+                        if (zoomCoroutine == null)
+                        {
+                            zoomCoroutine = StartCoroutine(ZoomIn());
+                        }
+                    }
+                }
             }
             else
             {
@@ -395,5 +464,72 @@ public class Journal : ToolPickup, AstroTutorialStep
         sectionPageNrs.Add(sectionSevenPageNr);
         sectionPageNrs.Add(sectionEightPageNr);
         sectionPageNrs.Add(sectionNinePageNr);
+
+        Transform bookmarkPrefabs = transform.GetChild(0).GetChild(0).GetChild(2);
+        for (int i = 0; i < sectionPageNrs.Count; i++)
+        {
+            bookmarkPrefabs.GetChild(i).GetComponent<Bookmark>().pageNr =  sectionPageNrs[i];
+        }
+    }
+    
+    private IEnumerator ZoomIn(float timer = 0)
+    {
+        if (timer == 0)
+        {
+            timer = animationTime;
+        }
+
+        while (timer > 0)
+        {
+            timer -= Time.deltaTime;
+
+            if (zoomedIn == false)
+            {
+                zoomCoroutine = StartCoroutine(ZoomOut(timer));
+                yield break;
+            }
+
+            float T =  timer / animationTime;
+            float curveOutput = animationCurve.Evaluate(T);
+            
+            cam.fieldOfView = zoomFOV + curveOutput * (initialFOV - zoomFOV);
+            
+            yield return new WaitForEndOfFrame();
+        }
+
+        zoomCoroutine = null;
+    }
+    
+    private IEnumerator ZoomOut(float timer = 0)
+    {
+        if (timer == 0)
+        {
+            timer = 0;
+        }
+
+        while (timer < animationTime)
+        {
+            timer += Time.deltaTime;
+
+            if(zoomedIn == true)
+            {
+                zoomCoroutine = StartCoroutine(ZoomIn(timer));
+                yield break;
+            }
+            
+            float T =  timer / animationTime;
+            float curveOutput = animationCurve.Evaluate(T);
+            
+            cam.fieldOfView = zoomFOV + curveOutput * (initialFOV - zoomFOV);
+            
+            yield return new WaitForEndOfFrame();
+        }
+
+        zoomCoroutine = null;
+    }
+
+    private void OnPointerDown(PointerEventData eventData)
+    {
+        
     }
 }
