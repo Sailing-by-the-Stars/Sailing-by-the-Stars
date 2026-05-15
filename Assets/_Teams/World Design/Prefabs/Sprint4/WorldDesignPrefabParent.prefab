@@ -245,37 +245,6 @@ Transform:
   - {fileID: 1714071049644021941}
   m_Father: {fileID: 7023929907804505532}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &6305095901130768422
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 6625382344374023262}
-  m_Layer: 0
-  m_Name: EndDistanceCheck (1)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &6625382344374023262
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6305095901130768422}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.93, y: 0, z: -0.161}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 9410373910990696}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8626656079147916675
 GameObject:
   m_ObjectHideFlags: 0
@@ -2262,7 +2231,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5489492013889659339, guid: 9b5b55479a9dfe241b7b2730a512698b, type: 3}
       propertyPath: m_Name
-      value: Bargaining Star Mode
+      value: Bargaining Event
       objectReference: {fileID: 0}
     - target: {fileID: 6778721197857476706, guid: 9b5b55479a9dfe241b7b2730a512698b, type: 3}
       propertyPath: m_LocalScale.x
@@ -2276,14 +2245,6 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: 184
       objectReference: {fileID: 0}
-    - target: {fileID: 7063396328478756431, guid: 9b5b55479a9dfe241b7b2730a512698b, type: 3}
-      propertyPath: defaultTimerDuration
-      value: 140
-      objectReference: {fileID: 0}
-    - target: {fileID: 7063396328478756431, guid: 9b5b55479a9dfe241b7b2730a512698b, type: 3}
-      propertyPath: 'endConditionTransforms.Array.data[1]'
-      value: 
-      objectReference: {fileID: 6625382344374023262}
     - target: {fileID: 8796580515757296188, guid: 9b5b55479a9dfe241b7b2730a512698b, type: 3}
       propertyPath: m_LocalScale.z
       value: 681.01843
@@ -2298,17 +2259,9 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects:
-    - targetCorrespondingSourceObject: {fileID: 8796580515757296188, guid: 9b5b55479a9dfe241b7b2730a512698b, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 6625382344374023262}
+    m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9b5b55479a9dfe241b7b2730a512698b, type: 3}
---- !u!4 &9410373910990696 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 8796580515757296188, guid: 9b5b55479a9dfe241b7b2730a512698b, type: 3}
-  m_PrefabInstance: {fileID: 8805335448332076372}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &8817812176302179211 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 30958419102271199, guid: 9b5b55479a9dfe241b7b2730a512698b, type: 3}
