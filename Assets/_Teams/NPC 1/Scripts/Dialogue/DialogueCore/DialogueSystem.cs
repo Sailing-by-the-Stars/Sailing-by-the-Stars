@@ -1,6 +1,8 @@
 using UnityEngine;
 using System;
 using System.Collections.Generic;
+using FMODUnity;
+
 // Created by Jantina
 
 public class DialogueSystem : MonoBehaviour
@@ -12,6 +14,8 @@ public class DialogueSystem : MonoBehaviour
 
     [Tooltip("Handles all dialogue UI such as text, choices and typewriter effects.")]
     [SerializeField] private DialogueUIManager uiManager;
+    
+    public EventReference CurrentVoice { get; private set; }
 
     public static DialogueSystem Instance;
     private Dictionary<string, DialogueNode> nodeLookup;
@@ -103,13 +107,30 @@ public class DialogueSystem : MonoBehaviour
     /// </summary>
     public void StartDialogue(Dialogue dialogue, GameObject sender)
     {
-        if (currentDialogue == null || uiManager == null) return;
+        if (dialogue == null || uiManager == null) return;
+
         TempStateMachine.Instance.gameState = GameState.Dialogue;
+
         sendingObject = sender;
         currentDialogue = dialogue;
+
+        var npc = sender.GetComponent<NPCDialogueHolder>();
+
+        if (npc != null)
+        {
+            CurrentVoice = npc.dialogueVoice;
+        }
+        else
+        {
+            CurrentVoice = default;
+        }
+
         BuildNodeLookup();
+
         isDialogueActive = true;
-        if (currentDialogue.hasItemID == true) QuestManager.Instance.RegisterItemCollected(currentDialogue.itemID);
+
+        if (currentDialogue.hasItemID)
+            QuestManager.Instance.RegisterItemCollected(currentDialogue.itemID);
 
         if (currentDialogue.nodes.Count == 0) return;
 

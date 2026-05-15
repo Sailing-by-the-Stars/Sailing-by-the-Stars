@@ -4,6 +4,8 @@ using TMPro;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using FMODUnity;
+
 // Created by Jantina
 public class ShakeData
 {
@@ -12,9 +14,6 @@ public class ShakeData
 }
 public class DialogueUIManager : MonoBehaviour
 {
-
-    
-
     [Tooltip("The main dialogue panel that contains all dialogue UI elements.")]
     [SerializeField] private GameObject dialogueBox;
 
@@ -54,6 +53,10 @@ public class DialogueUIManager : MonoBehaviour
         { "orange", "#ff944d" },
         { "pink", "#ff66cc" }
     };
+
+    [Header("Audio")]
+    [SerializeField] private EventReference defaultDialogueTypeSound;
+
     /// <summary>
     /// Returns true if the typewriter effect is currently running.
     /// </summary>
@@ -393,6 +396,22 @@ public class DialogueUIManager : MonoBehaviour
             dialogueText.text += fullText[i];
             dialogueText.ForceMeshUpdate();
             ApplyShake();
+
+            if (!char.IsWhiteSpace(fullText[i]) &&
+                !char.IsPunctuation(fullText[i]))
+            {
+                var npcVoice = DialogueSystem.Instance.CurrentVoice;
+
+                if (!npcVoice.IsNull)
+                {
+                    RuntimeManager.PlayOneShot(npcVoice);
+                }
+
+                else if (!defaultDialogueTypeSound.IsNull)
+                {
+                    RuntimeManager.PlayOneShot(defaultDialogueTypeSound);
+                }
+            }
 
             float multiplier = Input.GetMouseButton(0) ? 5f : 1f;
             yield return new WaitForSeconds(speed / multiplier);
