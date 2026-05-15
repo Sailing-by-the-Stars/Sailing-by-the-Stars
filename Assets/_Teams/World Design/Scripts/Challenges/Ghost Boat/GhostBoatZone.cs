@@ -37,7 +37,10 @@ namespace _Teams.World_Design.Scripts.Challenges.Ghost_Boat
                 return;
             }
 
-            soundController.SetDenialMusic(musicIntensity);
+            if (soundController != null)
+            {
+                soundController.SetDenialMusic(musicIntensity);
+            }
 
             Transform point = spawnPoint != null ? spawnPoint : transform;
             spawnedGhost = Instantiate(ghostBoatPrefab, point.position, point.rotation);
@@ -58,7 +61,10 @@ namespace _Teams.World_Design.Scripts.Challenges.Ghost_Boat
             if (other.CompareTag(instigatorTag))
             {
                 soundController = FindFirstObjectByType<SetDenialEventMusic>();
-                soundController.SetDenialMusic(0f);
+                if (soundController != null)
+                {
+                    soundController.SetDenialMusic(0f);
+                }
 
                 GhostBoatScript[] ghostBoats = FindObjectsOfType<GhostBoatScript>();
 

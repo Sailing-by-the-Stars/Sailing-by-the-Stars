@@ -260,10 +260,6 @@ public class WeatherManager : MonoBehaviour
                                                  t, curves, c => c.waveCurve);
 
 
-        // Thunder
-        currentValues.chanceOfThunderStrikePerInterval = BlendValue(snapshotValues.chanceOfThunderStrikePerInterval, target.values.chanceOfThunderStrikePerInterval,
-                                                    t, curves, c => c.thunderCurve);
-
         PushToControllers();
     }
     

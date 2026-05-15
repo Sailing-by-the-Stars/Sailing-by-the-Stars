@@ -35,10 +35,6 @@ public struct WeatherValues
     [Tooltip("If true, thunder strikes will occur at random intervals based on chance.")]
     public bool thunderActive;
     
-    [FormerlySerializedAs("thunderIntensity")]
-    [Tooltip("Thunder and lightning chance per interval: 0 = no thunder")]
-    [Range(0f, 1f)] public float chanceOfThunderStrikePerInterval;
-    
     [Header("Ocean")]
     [Tooltip("0 = calmest 1 = highest waves (max driven by HDRP water surface values)")]
     [Range(0f, 1f)] public float waveIntensity;
