@@ -17,6 +17,8 @@ public class PShadowGridManager : MonoBehaviour
     private bool isMoving;
     private int activeMoves;
 
+    [HideInInspector] public int buttonPresses = 0;
+
     private void Awake()
     {
         grid = new PShadowPillar[width, height];
@@ -105,6 +107,7 @@ public class PShadowGridManager : MonoBehaviour
         if (isMoving) return;
         if (direction != -1 && direction != 1) return;
 
+        buttonPresses++;
         if (isRow)
         {
             if (index < 0 || index >= height) return;
