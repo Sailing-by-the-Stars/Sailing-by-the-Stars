@@ -14,14 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.RenderPipelines.HighDefinition.Runtime::UnityEngine.Rendering.HighDefinition.ShadowsMidtonesHighlights
   active: 1
   shadows:
-    m_OverrideState: 1
-    m_Value: {x: 1, y: 0.80621415, z: 0.6073784, w: 0.038960937}
+    m_OverrideState: 0
+    m_Value: {x: 1, y: 1, z: 1, w: 0}
   midtones:
-    m_OverrideState: 1
-    m_Value: {x: 1, y: 0.86319023, z: 0.8386358, w: -0.097402565}
+    m_OverrideState: 0
+    m_Value: {x: 1, y: 1, z: 1, w: 0}
   highlights:
-    m_OverrideState: 1
-    m_Value: {x: 1, y: 0.8547512, z: 0.85203433, w: -0.120129734}
+    m_OverrideState: 0
+    m_Value: {x: 1, y: 1, z: 1, w: 0}
   shadowsStart:
     m_OverrideState: 0
     m_Value: 0
@@ -48,20 +48,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.RenderPipelines.HighDefinition.Runtime::UnityEngine.Rendering.HighDefinition.ColorAdjustments
   active: 1
   postExposure:
-    m_OverrideState: 1
-    m_Value: 0.2
+    m_OverrideState: 0
+    m_Value: 0
   contrast:
-    m_OverrideState: 1
-    m_Value: 8.8
+    m_OverrideState: 0
+    m_Value: 0
   colorFilter:
-    m_OverrideState: 1
-    m_Value: {r: 1, g: 0.93829423, b: 0.9264151, a: 1}
+    m_OverrideState: 0
+    m_Value: {r: 1, g: 1, b: 1, a: 1}
   hueShift:
     m_OverrideState: 0
-    m_Value: 115
+    m_Value: 0
   saturation:
-    m_OverrideState: 1
-    m_Value: 13.1
+    m_OverrideState: 0
+    m_Value: 0
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -102,8 +102,8 @@ MonoBehaviour:
     m_OverrideState: 0
     m_Value: 1
   fixedExposure:
-    m_OverrideState: 1
-    m_Value: -2.21
+    m_OverrideState: 0
+    m_Value: 0
   compensation:
     m_OverrideState: 0
     m_Value: 0
@@ -245,10 +245,10 @@ MonoBehaviour:
   active: 1
   quality:
     m_OverrideState: 0
-    m_Value: 3
+    m_Value: 1
   enabled:
     m_OverrideState: 0
-    m_Value: 1
+    m_Value: 0
   colorMode:
     m_OverrideState: 0
     m_Value: 1
@@ -256,8 +256,8 @@ MonoBehaviour:
     m_OverrideState: 0
     m_Value: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   tint:
-    m_OverrideState: 1
-    m_Value: {r: 1, g: 0.05142339, b: 0, a: 1}
+    m_OverrideState: 0
+    m_Value: {r: 1, g: 1, b: 1, a: 1}
   maxFogDistance:
     m_OverrideState: 0
     m_Value: 5000
@@ -271,29 +271,29 @@ MonoBehaviour:
     m_OverrideState: 0
     m_Value: 1000
   baseHeight:
-    m_OverrideState: 1
-    m_Value: 4
+    m_OverrideState: 0
+    m_Value: 0
   maximumHeight:
-    m_OverrideState: 1
-    m_Value: 120
-  meanFreePath:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: 50
+  meanFreePath:
+    m_OverrideState: 0
+    m_Value: 400
   enableVolumetricFog:
     m_OverrideState: 0
-    m_Value: 1
+    m_Value: 0
   albedo:
     m_OverrideState: 0
-    m_Value: {r: 0.34117648, g: 0.34117648, b: 0.34117648, a: 1}
+    m_Value: {r: 1, g: 1, b: 1, a: 1}
   globalLightProbeDimmer:
     m_OverrideState: 0
     m_Value: 1
   depthExtent:
-    m_OverrideState: 1
-    m_Value: 3
+    m_OverrideState: 0
+    m_Value: 64
   denoisingMode:
     m_OverrideState: 0
-    m_Value: 1
+    m_Value: 2
   anisotropy:
     m_OverrideState: 0
     m_Value: 0
@@ -304,7 +304,7 @@ MonoBehaviour:
     m_OverrideState: 0
     m_Value: 0
   m_FogControlMode:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: 0
   screenResolutionPercentage:
     m_OverrideState: 0
@@ -313,10 +313,10 @@ MonoBehaviour:
     m_OverrideState: 0
     m_Value: 64
   m_VolumetricFogBudget:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: 0.5
   m_ResolutionDepthRatio:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: 0.5
   directionalLightsOnly:
     m_OverrideState: 0
