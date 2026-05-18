@@ -431,13 +431,12 @@ public class LegacyJournal : ToolPickup, AstroTutorialStep
             Debug.LogWarning($"had to fall back! {pageID}");
             pages.Add(page);
         }
-
     }
 
     void Start()
     {
         List<MeshRenderer> images = GetComponentsInChildren<MeshRenderer>().ToList();
-
+        
         foreach (MeshRenderer image in images)
         {
             if (image.name == "leftPage")

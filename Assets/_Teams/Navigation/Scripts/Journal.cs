@@ -1,6 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using Unity.VisualScripting;
+using UnityEditor.Rendering;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -12,11 +15,10 @@ public enum SectionName
     Quests,
 }
 
-
 public class Journal : ToolPickup, AstroTutorialStep
 {
     PlayerControls playerControls;
-
+    GameState prevState;
 
     [NonSerialized]
     public TutorialSequence currentSequence;
@@ -24,22 +26,21 @@ public class Journal : ToolPickup, AstroTutorialStep
     public int currentTutorialStep = -1;
 
     private bool isEquipped;
-    private bool bookVisible;
     private bool bookOpened;
 
-
+    private GameObject bookModel;
+    
     public float maxPageWidth = 0f;
     public float maxPageHeight = 0f;
 
     [SerializeField]
     List<JournalSection> Sections = new();
-
-    int pageNr = 1;
+    
+    int pageNr = 0;
     int curSectionIndex = 0;
 
     List<Bookmark> bookmarks;
-
-
+    
     private Camera cam;
     private float initialFOV;
     private float zoomFOV = 35;
@@ -49,8 +50,16 @@ public class Journal : ToolPickup, AstroTutorialStep
     public static bool zoomedIn;
 
     private Coroutine zoomCoroutine;
+    
+    [HideInInspector]  
+    public MeshRenderer leftPageQ;
 
-
+    [HideInInspector]
+    public MeshRenderer rightPageQ;
+    
+    //Animation stuff
+    private Quaternion initalRot;
+    
     private void OnEnable()
     {
         playerControls = TempStateMachine.Instance.PlayerControls;
@@ -70,16 +79,20 @@ public class Journal : ToolPickup, AstroTutorialStep
 
         //Disable collider to hide interact text
         GetComponent<BoxCollider>().enabled = false;
-        bookVisible = false;
         bookOpened = false;
 
-        transform.GetChild(1).gameObject.SetActive(false);
-
-
+        foreach (Bookmark bookmark in bookmarks)
+        {
+            bookmark.GameObject().SetActive(false);
+        }
+        
+        bookModel.SetActive(false);
+        
+        
         ///animation stuff:
-        //bookangle = 101;
-        //initalRot = Quaternion.Euler(90, 90, 90);
-        //transform.localRotation = initalRot;
+        // bookangle = 101;
+        initalRot = Quaternion.Euler(90, 90, 90);
+        transform.localRotation = initalRot;
 
         //Set up values for zoom
         cam = GetComponentInParent<Camera>();
@@ -119,6 +132,7 @@ public class Journal : ToolPickup, AstroTutorialStep
 
     void Start()
     {
+        bookModel = transform.GetChild(1).gameObject;
         bookmarks = new();
         foreach (Bookmark bookmark in GetComponentsInChildren<Bookmark>())
         {
@@ -129,118 +143,213 @@ public class Journal : ToolPickup, AstroTutorialStep
         {
             section.parentJournal = this;
         }
+        
+        List<MeshRenderer> images = GetComponentsInChildren<MeshRenderer>().ToList();
+        foreach (MeshRenderer image in images)
+        {
+            if (image.name == "leftPage")
+            {
+                leftPageQ = image;
+            }
+
+            if (image.name == "rightPage")
+            {
+                rightPageQ = image;
+            }
+        }
+        
+        leftPageQ.enabled = false;
+        rightPageQ.enabled = false;
     }
 
 
     void Update()
     {
         HandlePageTurn();
-
-
-        if (playerControls.Journal.Zoom.triggered)
-        {
-            if (zoomedIn)
-            {
-                zoomedIn = false;
-                if (zoomCoroutine == null)
-                {
-
-                    zoomCoroutine = StartCoroutine(ZoomOut());
-                }
-            }
-            else
-            {
-                zoomedIn = true;
-                if (zoomCoroutine == null)
-                {
-                    zoomCoroutine = StartCoroutine(ZoomIn());
-                }
-            }
-        }
+        ToggleJournal();
+        ToggleZoom();
     }
 
     void HandlePageTurn()
     {
-        int minSectionNr = 0;
-        int maxSectionNr = 0;
-        JournalSection curSection = null;
-        curSectionIndex = 0;
-        int nrOfPages = 0;
+        if (bookOpened)
+        { 
+            int maxSectionNr = 0;
+            JournalSection curSection = null;
+            curSectionIndex = 0;
+            int totalNrOfPages = 0;
 
-        int i = 0;
-        foreach (JournalSection section in Sections)
-        {
-            maxSectionNr += section.nrOfPages;
-
-            if (maxSectionNr > pageNr && maxSectionNr - section.nrOfPages < pageNr)
+            int i = 0;
+            foreach (JournalSection section in Sections)
             {
-                curSection = section;
-                minSectionNr = maxSectionNr - section.nrOfPages;
-                curSectionIndex = i;
+                maxSectionNr += section.nrOfPages;
+                section.lastPageNr = maxSectionNr;
+                section.firstPageNr = section.lastPageNr - section.nrOfPages;
+
+                if (maxSectionNr >= pageNr && section.firstPageNr <= pageNr)
+                {
+                    curSection = section;
+                    curSectionIndex = i;
+                }
+                
+                i++;
+                totalNrOfPages += section.nrOfPages;
             }
-
-            i++;
-            nrOfPages += section.nrOfPages;
-        }
-
-
-        if (curSection == null)
-        {
-            Debug.LogError("the pageNr is somehow out of range!");
-            return;
-        }
-
-
-        if (playerControls.Journal.PreviousPage.triggered && bookVisible && bookOpened)
-        {
-            pageNr -= 1;
-        }
-
-        if (playerControls.Journal.NextPage.triggered && bookVisible && bookOpened)
-        {
-            pageNr += 1;
-        }
-
-
-
-        if (pageNr < 1)
-        {
-            pageNr = 1;
-        }
-        if (pageNr > nrOfPages)
-        {
-            pageNr = nrOfPages;
-            Debug.Log("hit the end of the journal!");
-        }
-
-        Sections[curSectionIndex].OpenPage(pageNr - minSectionNr);
-
-        if (pageNr < minSectionNr)
-        {
-            if (curSectionIndex > 1)
+            
+            
+            if (curSection == null)
             {
-                OpenSection(Sections[curSectionIndex - 1].sectionName);
+                Debug.LogError($"the pageNr {pageNr} is somehow out of range!");
                 return;
             }
-
-            Debug.LogError("tried going to a section below 0!");
-            return;
-        }
-        if (pageNr > maxSectionNr)
-        {
-            if (curSectionIndex < Sections.Count - 2)
+            
+            // Only run OpenSection() when the pageNr goes in or our out of a section
+            // Doing this while checking if the page number is in the bounds of a section
+            // in the sections loop above would case OpenSection() to be run every frame
+            if (playerControls.Journal.PreviousPage.triggered)
             {
-                OpenSection(Sections[curSectionIndex + 1].sectionName, true);
-                return;
+                pageNr -= 1;
+                
+                if (pageNr < 0)
+                {
+                    pageNr = 0;
+                }
+                
+                if (pageNr < curSection.firstPageNr)
+                {
+                    if (curSectionIndex > 0)
+                    {
+                        OpenSection(Sections[curSectionIndex - 1].sectionName, true);
+                        return;
+                    }
+                
+                    Debug.LogError("tried going to a section below 0!");
+                    return;
+                }
             }
 
-            Debug.LogError($"tried going to a section above {Sections.Count}!");
-            return;
+            if (playerControls.Journal.NextPage.triggered)
+            {
+                pageNr += 1;
+                
+                if (pageNr > totalNrOfPages - 1)
+                {
+                    pageNr = totalNrOfPages - 1;
+                    Debug.Log("hit the end of the journal!");
+                }
+                
+                if (pageNr > curSection.lastPageNr - 1)
+                {
+                    if (curSectionIndex < Sections.Count - 1)
+                    {
+                        OpenSection(Sections[curSectionIndex + 1].sectionName);
+                        return;
+                    }
+                
+                    Debug.LogError($"tried going to a section above {Sections.Count}!");
+                    return;
+                }
+            }
+
+            Sections[curSectionIndex].OpenPage(pageNr - curSection.firstPageNr);
         }
 
     }
 
+    public JournalSection GetSection(SectionName sectionName)
+    {
+        foreach (var section in Sections)
+        {
+            if (section.sectionName == sectionName)
+            {
+                return section;
+            }
+        }
+        
+        Debug.LogError($"couldn't find {sectionName} in the journal!");
+        return null;
+    }
 
+    private void ToggleJournal()
+    {
+        if (isEquipped)
+        {
+            if (playerControls.Journal.Open.triggered)
+            {
+                if (bookOpened)
+                {
+                    bookOpened = false;
+                    leftPageQ.enabled = false;
+                    rightPageQ.enabled = false;
+                    bookModel.SetActive(false);
+                    foreach (Bookmark bookmark in bookmarks)
+                    {
+                        bookmark.GameObject().SetActive(false);
+                    }
+                    
+                    Sections[curSectionIndex].CloseSection();
+                    
+                    TempStateMachine.Instance.SetState(prevState);
+                    
+                    if (zoomedIn)
+                    {
+                        zoomedIn = false;
+                        if (zoomCoroutine == null)
+                        {
+                            zoomCoroutine = StartCoroutine(ZoomOut());
+                        }
+                    }
+                }
+                else
+                {
+                    if (TempStateMachine.Instance.gameState == GameState.Astrolabe)
+                    {
+                        return;
+                    }
+                    
+                    bookOpened = true;
+                    bookModel.SetActive(true);
+                    foreach (Bookmark bookmark in bookmarks)
+                    {
+                        bookmark.GameObject().SetActive(true);
+                    }
+                    
+                    Sections[curSectionIndex].OpenSection();
+                    
+                    prevState = TempStateMachine.Instance.gameState;
+                    TempStateMachine.Instance.SetState(GameState.Journal);
+                }
+            }
+        }
+
+    }
+
+    private void ToggleZoom()
+    {
+        if (playerControls.Journal.Zoom.triggered)
+        {
+            if (bookOpened)
+            {
+                if (zoomedIn)
+                {
+                    zoomedIn = false;
+                    if (zoomCoroutine == null)
+                    {
+                        zoomCoroutine = StartCoroutine(ZoomOut());
+                    }
+                }
+                else
+                {
+                    zoomedIn = true;
+                    if (zoomCoroutine == null)
+                    {
+                        zoomCoroutine = StartCoroutine(ZoomIn());
+                    }
+                }
+            }
+        }
+    }
+    
     public void OpenSection(SectionName sectionName, bool maxPageNr = false)
     {
         if (sectionName == Sections[curSectionIndex].sectionName)
@@ -259,12 +368,22 @@ public class Journal : ToolPickup, AstroTutorialStep
                 section.OpenSection();
                 curSectionIndex = i;
 
+                if (maxPageNr)
+                {
+                    pageNr = section.lastPageNr - 1;
+                }
+                else
+                {
+                    pageNr = section.firstPageNr;
+                }
+                
                 OpenBookmark(sectionName);
                 return;
             }
             i++;
         }
 
+        
         Debug.LogError("couldn't find the section to open!");
     }
 
