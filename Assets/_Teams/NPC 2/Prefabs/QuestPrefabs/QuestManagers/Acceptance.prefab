@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 5494801033521785218}
   - component: {fileID: 1841126766336897774}
   - component: {fileID: 5358312826180907536}
+  - component: {fileID: 4385775604284170426}
   m_Layer: 0
   m_Name: Acceptance
   m_TagString: Untagged
@@ -131,8 +132,27 @@ MonoBehaviour:
   dialogues:
   - dialogue: {fileID: 11400000, guid: 57b6d16ab4c4f954d96e3be906e5141e, type: 2}
     conditions: []
+  dialogueVoice:
+    Guid:
+      Data1: -1234910556
+      Data2: 1116668188
+      Data3: 935574922
+      Data4: 1707393109
+    Path: event:/event_NPCTalk_Acceptance
   hasInteractedBefore: 0
   interactMessage: Press E to Talk
+--- !u!114 &4385775604284170426
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5998106348989580906}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5da23061fd7a49e46b66508ed5a06ec6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NPCLookAtPlayer
 --- !u!1001 &1207803732727846152
 PrefabInstance:
   m_ObjectHideFlags: 0
