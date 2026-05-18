@@ -43,6 +43,7 @@ public class DialogueUIManager : MonoBehaviour
     private string currentFullText;
     private Coroutine vignetteCoroutine;
     private List<ShakeData> currentShakeData;
+    private bool fastForwardHeld;
     private Dictionary<string, string> colorMap = new Dictionary<string, string>()
     {
         { "red", "#ff4d4d" },
@@ -76,17 +77,23 @@ public class DialogueUIManager : MonoBehaviour
     }
     private void Update()
     {
-        if (choiceButton1.gameObject.activeSelf && Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            choiceButton1.onClick.Invoke();
-        }
-
-        if (choiceButton2.gameObject.activeSelf && Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            choiceButton2.onClick.Invoke();
-        }
         if (dialogueBox.activeSelf)
             ApplyShake();
+    }
+    public void TriggerChoice1()
+    {
+        if (choiceButton1.gameObject.activeSelf)
+            choiceButton1.onClick.Invoke();
+    }
+
+    public void TriggerChoice2()
+    {
+        if (choiceButton2.gameObject.activeSelf)
+            choiceButton2.onClick.Invoke();
+    }
+    public void SetFastForward(bool held)
+    {
+        fastForwardHeld = held;
     }
     private void LateUpdate()
     {
@@ -413,7 +420,7 @@ public class DialogueUIManager : MonoBehaviour
                 }
             }
 
-            float multiplier = Input.GetMouseButton(0) ? 5f : 1f;
+            float multiplier = fastForwardHeld ? 5f : 1f;
             yield return new WaitForSeconds(speed / multiplier);
         }
 

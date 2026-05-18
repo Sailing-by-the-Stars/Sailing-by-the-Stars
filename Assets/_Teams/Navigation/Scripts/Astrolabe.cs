@@ -9,6 +9,9 @@ using UnityEngine.UI;
 
 public class Astrolabe : ToolPickup, AstroTutorialStep
 {
+    PlayerControls playerControls;
+    GameState prevState;
+
     [NonSerialized]
     public TutorialSequence currentSequence;
     [NonSerialized]
@@ -45,6 +48,8 @@ public class Astrolabe : ToolPickup, AstroTutorialStep
 
     void Start()
     {
+        playerControls = TempStateMachine.Instance.PlayerControls;
+
         renderers = GetComponentsInChildren<Renderer>().ToList();
         textBoxes = GetComponentsInChildren<TMP_Text>().ToList();
         
@@ -157,7 +162,7 @@ public class Astrolabe : ToolPickup, AstroTutorialStep
             forward.Normalize();
 
             //
-            if (Input.GetMouseButtonDown(0) && visible)
+            if (playerControls.Astrolabe.Rotate.triggered && visible)
             {
                 if (zoomedIn)
                 {
@@ -205,7 +210,7 @@ public class Astrolabe : ToolPickup, AstroTutorialStep
                 }
             }*/
 
-            if (Input.GetKeyDown(KeyCode.Tab))
+            if (playerControls.Astrolabe.Open.triggered)
             {
                 if (currentSequence != null)
                 {
@@ -213,18 +218,20 @@ public class Astrolabe : ToolPickup, AstroTutorialStep
                 }
 
                 visible = !visible;
-                foreach (Renderer rend in renderers)
-                {
-                    rend.enabled = visible;
-                }
-
-                foreach (TMP_Text text in textBoxes)
-                {
-                    text.enabled = visible;
-                }
 
                 if (visible == false)
                 {
+                    foreach (Renderer rend in renderers)
+                    {
+                        rend.enabled = visible;
+                    }
+
+                    foreach (TMP_Text text in textBoxes)
+                    {
+                        text.enabled = visible;
+                    }
+
+
                     if (zoomedIn)
                     {
                         zoomedIn = false;
@@ -233,9 +240,31 @@ public class Astrolabe : ToolPickup, AstroTutorialStep
                             zoomCoroutine = StartCoroutine(ZoomOut());
                         }
                     }
+
+                    TempStateMachine.Instance.SetState(prevState);
+
                 }
                 else
                 {
+                    if (TempStateMachine.Instance.gameState == GameState.Journal)
+                    {
+                        visible = !visible;
+                        return;
+                    }
+
+                    foreach (Renderer rend in renderers)
+                    {
+                        rend.enabled = visible;
+                    }
+
+                    foreach (TMP_Text text in textBoxes)
+                    {
+                        text.enabled = visible;
+                    }
+
+
+                    prevState = TempStateMachine.Instance.gameState;
+                    TempStateMachine.Instance.SetState(GameState.Astrolabe);
                     zoomedIn = true;
                     if (zoomCoroutine == null)
                     {
@@ -268,18 +297,20 @@ public class Astrolabe : ToolPickup, AstroTutorialStep
             if (zoomedIn)
             {
 
-                float scroll = Input.mouseScrollDelta.y;
+                int scroll = (int) playerControls.Astrolabe.ChangeAngle.ReadValue<Vector2>().y;
 
                 if (scroll != 0f && !sideView)
                 {
-                    pointer.Rotate(new Vector3(scroll * 1f, 0, 0));
+                    pointer.Rotate(new Vector3(scroll, 0, 0));
                 }
 
+                /*
                 //Reset astrolabe rotation
                 if (Input.GetKey(KeyCode.Space))
                 {
                     pointer.transform.localRotation = Quaternion.Euler(0, 0, 0);
                 }
+                */
             }
         }
     }

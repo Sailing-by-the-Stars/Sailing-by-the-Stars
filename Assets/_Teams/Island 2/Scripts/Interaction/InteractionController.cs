@@ -23,6 +23,13 @@ public class InteractionController : MonoBehaviour
     private IInteractable currentTargetedInteractable;
     public Transform CurrentHitTransform => currentHit.collider ? currentHit.collider.transform : null;
 
+    PlayerControls playerControls;
+
+    private void Start()
+    {
+        playerControls = TempStateMachine.Instance.PlayerControls;
+    }
+
     private void Update()
     {
         UpdateCurrentInteractable();
@@ -59,9 +66,9 @@ public class InteractionController : MonoBehaviour
         if (currentTargetedInteractable == null || DialogueSystem.Instance.isDialogueActive) return;
 
         // TODO: replace hardcoded key press with Input Actions
-        var key = Keyboard.current.eKey;
+        var key = playerControls.Interaction.Pickup;
 
-        if (key.wasPressedThisFrame)
+        if (key.WasPerformedThisFrame())
         {
             activeInteractable = currentTargetedInteractable;
 
@@ -69,7 +76,7 @@ public class InteractionController : MonoBehaviour
             activeInteractable.HoldInteract(this);
         }
 
-        if (key.wasReleasedThisFrame && activeInteractable != null)
+        if (key.WasReleasedThisFrame() && activeInteractable != null)
         {
             activeInteractable.ReleaseInteract(this);
             activeInteractable = null;
