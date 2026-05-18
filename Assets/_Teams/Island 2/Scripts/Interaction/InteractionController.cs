@@ -68,7 +68,7 @@ public class InteractionController : MonoBehaviour
         // TODO: replace hardcoded key press with Input Actions
         var key = playerControls.Interaction.Pickup;
 
-        if (key.WasPressedThisFrame())
+        if (key.WasPerformedThisFrame())
         {
             activeInteractable = currentTargetedInteractable;
 
@@ -76,7 +76,7 @@ public class InteractionController : MonoBehaviour
             activeInteractable.HoldInteract(this);
         }
 
-        if (!key.WasReleasedThisFrame() && activeInteractable != null)
+        if (key.WasReleasedThisFrame() && activeInteractable != null)
         {
             activeInteractable.ReleaseInteract(this);
             activeInteractable = null;

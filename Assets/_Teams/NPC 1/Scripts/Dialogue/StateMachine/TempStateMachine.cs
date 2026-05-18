@@ -49,27 +49,34 @@ public class TempStateMachine : MonoBehaviour
                 PlayerControls.Land.Enable();
                 PlayerControls.Looking.Enable(); 
                 PlayerControls.Interaction.Enable();
+                PlayerControls.Journal.Enable(); 
+                PlayerControls.Astrolabe.Enable();
                 SetCursorVisibility(false);
                 break;
 
             case GameState.Dialogue:
-                PlayerControls.Dialogue.Enable(); 
+                PlayerControls.Dialogue.Enable();
                 SetCursorVisibility(true);
                 break;
 
             case GameState.Sailing:
                 PlayerControls.Land.Enable();
                 PlayerControls.Looking.Enable();
+                PlayerControls.Journal.Enable();
+                PlayerControls.Astrolabe.Enable();
                 SetCursorVisibility(false);
                 break;
 
             case GameState.Journal:
 
+                PlayerControls.Journal.Enable();
                 SetCursorVisibility(true);
                 break;
 
             case GameState.Astrolabe:
-
+                PlayerControls.Land.Enable();
+                PlayerControls.Looking.Enable();
+                PlayerControls.Astrolabe.Enable();
                 SetCursorVisibility(false);
                 break;
 
