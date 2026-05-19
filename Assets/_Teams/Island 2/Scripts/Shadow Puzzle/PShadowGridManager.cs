@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Experimental.GlobalIllumination;
 
 public class PShadowGridManager : MonoBehaviour
 {
@@ -12,6 +13,10 @@ public class PShadowGridManager : MonoBehaviour
     
     [Tooltip("Keep this low aprox. around 0.08 - 0.25. Free to experiment though.")]
     [SerializeField] private float slidingTime = 0.15f;
+    
+    [Header("Reward References")]
+    [SerializeField] private GameObject rewardDistortionWall;
+    [SerializeField] private List<GameObject> rewardTorches;
 
     private PShadowPillar[,] grid;
     private bool isMoving;
@@ -249,8 +254,14 @@ public class PShadowGridManager : MonoBehaviour
     {
         List<PShadowPillar> pillarsToCheck = grid.Cast<PShadowPillar>().Where(pillar => pillar).ToList();
         if (pillarsToCheck.Any(pillar => !pillar.IsInCorrectPosition())) return;
+
+        rewardDistortionWall.SetActive(false);
+        foreach (GameObject torch in rewardTorches)
+        {
+            torch.GetComponentInChildren<Light>().enabled = true;
+        }
         
-        Debug.Log("PUZZLE SOLVED!");
+        Debug.Log("ANGER PUZZLE SOLVED!");
         PuzzleProgress.MarkComplete("anger");
     }
 
