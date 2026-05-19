@@ -1465,6 +1465,7 @@ Transform:
   - {fileID: 8842444070285005203}
   - {fileID: 555091623949284158}
   - {fileID: 7016384231534973642}
+  - {fileID: 1211191011661833422}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!54 &5384667946113378211
@@ -1507,9 +1508,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BoatController
   dragCoefficient: 1.1
-  liftCoefficient: 1.7
+  liftCoefficient: 2.6
   sailArea: 20
-  underwaterFrontArea: 0.2
+  underwaterFrontArea: 0.15
   airDensity: 1.225
   waterDensity: 1000
   keelDragStrength: 300
@@ -1517,6 +1518,8 @@ MonoBehaviour:
   maxTiltAngle: 10
   rudderTorqueStrength: 35
   sidedriftCorrectionStrength: 250
+  lightIntensity: 1393.47
+  lightIntensityMultiplier: 3
   useLocalWindSpeed: 0
   enableWindForces: 1
   forwardSpeed: 0
@@ -2169,4 +2172,118 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: da11eb0f495051a4291ed89444263163, type: 3}
   m_PrefabInstance: {fileID: 7409984023884608801}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &7677298074623299238
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 6736058736273579916}
+    m_Modifications:
+    - target: {fileID: 238365294816435835, guid: bc1877a99024820448e258949ebaac0a, type: 3}
+      propertyPath: playOnAwake
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 238365294816435835, guid: bc1877a99024820448e258949ebaac0a, type: 3}
+      propertyPath: EmissionModule.enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2136707095735382172, guid: bc1877a99024820448e258949ebaac0a, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2136707095735382172, guid: bc1877a99024820448e258949ebaac0a, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
+    - target: {fileID: 2687852336062787090, guid: bc1877a99024820448e258949ebaac0a, type: 3}
+      propertyPath: m_Name
+      value: Boat Particles
+      objectReference: {fileID: 0}
+    - target: {fileID: 3973978849760753095, guid: bc1877a99024820448e258949ebaac0a, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3973978849760753095, guid: bc1877a99024820448e258949ebaac0a, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
+    - target: {fileID: 4099714631464675958, guid: bc1877a99024820448e258949ebaac0a, type: 3}
+      propertyPath: prewarm
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4099714631464675958, guid: bc1877a99024820448e258949ebaac0a, type: 3}
+      propertyPath: playOnAwake
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4099714631464675958, guid: bc1877a99024820448e258949ebaac0a, type: 3}
+      propertyPath: startDelay.scalar
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4099714631464675958, guid: bc1877a99024820448e258949ebaac0a, type: 3}
+      propertyPath: emitterVelocityMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6903262536331469093, guid: bc1877a99024820448e258949ebaac0a, type: 3}
+      propertyPath: playOnAwake
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8810235090711456360, guid: bc1877a99024820448e258949ebaac0a, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8810235090711456360, guid: bc1877a99024820448e258949ebaac0a, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8810235090711456360, guid: bc1877a99024820448e258949ebaac0a, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8810235090711456360, guid: bc1877a99024820448e258949ebaac0a, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8810235090711456360, guid: bc1877a99024820448e258949ebaac0a, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8810235090711456360, guid: bc1877a99024820448e258949ebaac0a, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8810235090711456360, guid: bc1877a99024820448e258949ebaac0a, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8810235090711456360, guid: bc1877a99024820448e258949ebaac0a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8810235090711456360, guid: bc1877a99024820448e258949ebaac0a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8810235090711456360, guid: bc1877a99024820448e258949ebaac0a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8831373909526707151, guid: bc1877a99024820448e258949ebaac0a, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8831373909526707151, guid: bc1877a99024820448e258949ebaac0a, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: bc1877a99024820448e258949ebaac0a, type: 3}
+--- !u!4 &1211191011661833422 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8810235090711456360, guid: bc1877a99024820448e258949ebaac0a, type: 3}
+  m_PrefabInstance: {fileID: 7677298074623299238}
   m_PrefabAsset: {fileID: 0}
