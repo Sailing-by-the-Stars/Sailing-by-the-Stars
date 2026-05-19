@@ -21,6 +21,8 @@ public class PShadowGridManager : MonoBehaviour
     [SerializeField] private Dialogue buttonHint1;
     [SerializeField] private Dialogue buttonHint2;
     [SerializeField] private Dialogue buttonHint3;
+    [SerializeField] private Dialogue manWomanHint;
+    [SerializeField] private Dialogue braceletHint;
     private int buttonPresses;
 
     private PShadowPillar[,] grid;
@@ -249,13 +251,35 @@ public class PShadowGridManager : MonoBehaviour
         
         activeMoves = 0;
         isMoving = false;
-
-        if (CheckSolvedCondition()) return;
+        
         CheckHintRequirement();
     }
 
     private void CheckHintRequirement()
     {
+        int i = 0;
+        List<PShadowPillar> pillarsToCheck = grid.Cast<PShadowPillar>().Where(pillar => pillar).ToList();
+        foreach (var pillar in pillarsToCheck)
+        {
+            if (!pillar.isBracelet && pillar.IsInCorrectPosition() && manWomanHint)
+            {
+                DialogueSystem.Instance.StartDialogue(manWomanHint, gameObject);
+                manWomanHint = null;
+                continue;
+            } 
+            if (pillar.isBracelet && pillar.IsInCorrectPosition())
+            {
+                i++;
+            }
+            if (i >= 2 && braceletHint)
+            {
+                DialogueSystem.Instance.StartDialogue(braceletHint, gameObject);
+                braceletHint = null;
+            }
+        }
+        
+        if (CheckSolvedCondition()) return;
+        
         if (buttonPresses >= 10 && buttonHint1)
         {
             DialogueSystem.Instance.StartDialogue(buttonHint1, gameObject);
