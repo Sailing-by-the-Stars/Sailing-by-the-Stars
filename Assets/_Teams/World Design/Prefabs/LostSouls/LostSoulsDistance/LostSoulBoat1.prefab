@@ -586,11 +586,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::_Teams.World_Design.Scripts.Challenges.Ghost_Boat.LostSoulBoatScript
   playerTransform: {fileID: 0}
   moveSpeed: 3
-  timeUntilFade: 40
+  timeUntilFade: 20
   fadeDuration: 5
   fadeStartRange: 40
-  fadeEndRange: 30
-  maxOpacity: 0.3
+  fadeEndRange: 20
+  maxOpacity: 0.2
+  minFadeOpacity: 0.0001
   distanceToPlayer: 0
   targetLights:
   - {fileID: 1104758859091948341}
