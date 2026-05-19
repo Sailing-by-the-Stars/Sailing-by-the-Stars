@@ -47,6 +47,10 @@ public class BoatController : MonoBehaviour
     [SerializeField] public SmoothAxis2D rudderAxis;
     [SerializeField] public SmoothAxis2D mastAxis;
 
+    [Header("Particle System")]
+    [SerializeField] private float baseParticleEmissionRate = 0f;
+    [SerializeField] private float speedEmissionMultiplier = 5f;
+
     [Header("")]
     [SerializeField] private GameObject hullObject;
     [SerializeField] private GameObject mastPivot;
@@ -59,6 +63,7 @@ public class BoatController : MonoBehaviour
     private Rigidbody rigidBody;
     private GameObject[] rudderObjects;
     private GameObject[] mastObjects;
+    private ParticleSystem[] boatParticles;
     private GameObject flagObject;
     private Light lanternLight;
 
@@ -93,13 +98,31 @@ public class BoatController : MonoBehaviour
             return;
         }
 
+        boatParticles = GetComponentsInChildren<ParticleSystem>();
+        if (boatParticles.Count() == 0)
+        {
+            Debug.LogError("No particle systems found in children of the boat!");
+            enabled = false;
+            return;
+        }
+
         lanternLight = GetComponentInChildren<Light>();
+
+        EnableParticles();
     }
 
     void OnEnable()
     {
         rudderAxis.Reset();
         mastAxis.Reset();
+
+        if (boatParticles != null)
+            EnableParticles();
+    }
+
+    void OnDisable()
+    {
+        DisableParticles();
     }
 
     // Update is called once per frame
@@ -108,7 +131,7 @@ public class BoatController : MonoBehaviour
         RotateRudder();
         RotateMastAndSail();
         RotateFlagIntoWind();
-        
+        UpdateParticleDensity();
     }
 
     void FixedUpdate()
@@ -370,5 +393,32 @@ public class BoatController : MonoBehaviour
             intensityMultiplier = 1f + lightIntensityMultiplier * (10f - Mathf.Abs(drag2Difference)) / 10f;
 
         lanternLight.intensity = LightUnitUtils.LumenToCandela(lightIntensity * intensityMultiplier, 4f * Mathf.PI);
+    }
+
+    private void EnableParticles()
+    {
+        foreach (ParticleSystem boatParticle in boatParticles)
+        {
+            boatParticle.Play();
+        }
+    }
+
+    private void DisableParticles()
+    {
+        foreach (ParticleSystem boatParticle in boatParticles)
+        {
+            boatParticle.Stop();
+        }
+    }
+
+    private void UpdateParticleDensity()
+    {
+        float emissionRate = baseParticleEmissionRate + forwardSpeed * forwardSpeed * speedEmissionMultiplier;
+
+        foreach (ParticleSystem boatParticle in boatParticles)
+        {
+            var emission = boatParticle.emission;
+            emission.rateOverTime = emissionRate;
+        }
     }
 }

@@ -47,12 +47,6 @@ public class Movement : MonoBehaviour
 
     [SerializeField] string playerState = "Land";
 
-
-    [Header("Particle System")]
-    [SerializeField] private ParticleSystem boatFoam;
-    [SerializeField] private ParticleSystem sideFoamRight;
-    [SerializeField] private ParticleSystem sideFoamLeft;
-
     // ADDED BY JANTINA
     [Header("Dock Transition")]
     private bool _transitioning = false;
@@ -275,13 +269,6 @@ public class Movement : MonoBehaviour
 
         buoyancyController.enabled = true;
         boatController.enabled = true;
-
-        boatFoam.gameObject.SetActive(true);
-        sideFoamLeft.gameObject.SetActive(true);
-        sideFoamRight.gameObject.SetActive(true);
-        boatFoam.Play();
-        sideFoamRight.Play();
-        sideFoamLeft.Play();
     }
 
     public void ExitBoat()
@@ -294,15 +281,6 @@ public class Movement : MonoBehaviour
 
         buoyancyController.enabled = false;
         boatController.enabled = false;
-
-        boatFoam.gameObject.SetActive(false);
-        sideFoamLeft.gameObject.SetActive(false);
-        sideFoamRight.gameObject.SetActive(false);
-
-        boatFoam.Stop();
-        sideFoamLeft.Stop();
-        sideFoamRight.Stop();
-
     }
 
     // ADDED: Everything below up to Jump() is added by Jantina
