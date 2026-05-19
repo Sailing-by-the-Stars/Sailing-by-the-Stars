@@ -2415,6 +2415,10 @@ PrefabInstance:
       propertyPath: EmissionModule.enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 238365294816435835, guid: bc1877a99024820448e258949ebaac0a, type: 3}
+      propertyPath: EmissionModule.rateOverTime.scalar
+      value: 100
+      objectReference: {fileID: 0}
     - target: {fileID: 2136707095735382172, guid: bc1877a99024820448e258949ebaac0a, type: 3}
       propertyPath: m_IsActive
       value: 1
@@ -2444,6 +2448,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4099714631464675958, guid: bc1877a99024820448e258949ebaac0a, type: 3}
+      propertyPath: moveWithTransform
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4099714631464675958, guid: bc1877a99024820448e258949ebaac0a, type: 3}
       propertyPath: startDelay.scalar
       value: 0
       objectReference: {fileID: 0}
@@ -2468,12 +2476,20 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4099714631464675958, guid: bc1877a99024820448e258949ebaac0a, type: 3}
+      propertyPath: EmissionModule.rateOverTime.scalar
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 4099714631464675958, guid: bc1877a99024820448e258949ebaac0a, type: 3}
       propertyPath: CollisionModule.collidesWith.m_Bits
       value: 4096
       objectReference: {fileID: 0}
     - target: {fileID: 6903262536331469093, guid: bc1877a99024820448e258949ebaac0a, type: 3}
       propertyPath: playOnAwake
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6903262536331469093, guid: bc1877a99024820448e258949ebaac0a, type: 3}
+      propertyPath: moveWithTransform
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6903262536331469093, guid: bc1877a99024820448e258949ebaac0a, type: 3}
       propertyPath: startDelay.scalar
