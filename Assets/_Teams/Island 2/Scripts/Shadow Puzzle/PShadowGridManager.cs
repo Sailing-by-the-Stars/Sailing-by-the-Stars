@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.Experimental.GlobalIllumination;
 
 public class PShadowGridManager : MonoBehaviour
 {
@@ -18,11 +17,15 @@ public class PShadowGridManager : MonoBehaviour
     [SerializeField] private GameObject rewardDistortionWall;
     [SerializeField] private List<GameObject> rewardTorches;
 
+    [Header("Puzzle Hints")]
+    [SerializeField] private Dialogue buttonHint1;
+    [SerializeField] private Dialogue buttonHint2;
+    [SerializeField] private Dialogue buttonHint3;
+    private int buttonPresses;
+
     private PShadowPillar[,] grid;
     private bool isMoving;
     private int activeMoves;
-
-    [HideInInspector] public int buttonPresses = 0;
 
     private void Awake()
     {
@@ -247,13 +250,33 @@ public class PShadowGridManager : MonoBehaviour
         activeMoves = 0;
         isMoving = false;
 
-        CheckSolvedCondition();
+        if (CheckSolvedCondition()) return;
+        CheckHintRequirement();
     }
 
-    private void CheckSolvedCondition()
+    private void CheckHintRequirement()
+    {
+        if (buttonPresses >= 10 && buttonHint1)
+        {
+            DialogueSystem.Instance.StartDialogue(buttonHint1, gameObject);
+            buttonHint1 = null;
+        }
+        if (buttonPresses >= 20 && buttonHint2)
+        {
+            DialogueSystem.Instance.StartDialogue(buttonHint2, gameObject);
+            buttonHint2 = null;
+        }
+        if (buttonPresses >= 30 && buttonHint3)
+        {
+            DialogueSystem.Instance.StartDialogue(buttonHint3, gameObject);
+            buttonHint3 = null;
+        }
+    }
+
+    private bool CheckSolvedCondition()
     {
         List<PShadowPillar> pillarsToCheck = grid.Cast<PShadowPillar>().Where(pillar => pillar).ToList();
-        if (pillarsToCheck.Any(pillar => !pillar.IsInCorrectPosition())) return;
+        if (pillarsToCheck.Any(pillar => !pillar.IsInCorrectPosition())) return false;
 
         rewardDistortionWall.SetActive(false);
         foreach (GameObject torch in rewardTorches)
@@ -263,6 +286,8 @@ public class PShadowGridManager : MonoBehaviour
         
         Debug.Log("ANGER PUZZLE SOLVED!");
         PuzzleProgress.MarkComplete("anger");
+
+        return true;
     }
 
     private struct MoveRequest
