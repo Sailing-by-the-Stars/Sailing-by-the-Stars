@@ -12,12 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a27b1591cf442e34da26ab4a98de3513, type: 3}
   m_Name: Button Hint 1
   m_EditorClassIdentifier: Assembly-CSharp::Dialogue
-  hasName: 0
-  npcName: 
+  hasName: 1
+  npcName: Axel
   talkingSpeed: 0.95
   nodes:
   - rid: 7513793525250260992
-  - rid: 7513793525250260994
   hasItemID: 0
   itemID: 0
   references:
@@ -26,12 +25,7 @@ MonoBehaviour:
     - rid: 7513793525250260992
       type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
       data:
-        nodeID: Line_1
-        text: Button Hint 1 Line 1
-        nextNodeID: Line_2
-    - rid: 7513793525250260994
-      type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
-      data:
-        nodeID: Line_2
-        text: Button Hint 1 Line 2
+        nodeID: Hint1_Anger_Puzzle
+        text: <shake>Damn!</shake> I can't get that center pillar to stop...it just
+          keeps hitting the far wall.
         nextNodeID: 

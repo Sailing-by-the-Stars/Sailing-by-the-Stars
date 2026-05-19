@@ -10,22 +10,30 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a27b1591cf442e34da26ab4a98de3513, type: 3}
-  m_Name: Hint1AngerPuzzle
+  m_Name: GrabTrophy
   m_EditorClassIdentifier: Assembly-CSharp::Dialogue
   hasName: 1
   npcName: Axel
   talkingSpeed: 0.95
   nodes:
-  - rid: 141452603536965634
+  - rid: 141452603536965740
+  - rid: 141452603536965741
   hasItemID: 0
   itemID: 0
   references:
     version: 2
     RefIds:
-    - rid: 141452603536965634
+    - rid: 141452603536965740
       type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
       data:
-        nodeID: Hint1_Anger_Puzzle
-        text: <shake>Damn!</shake> I can't get that center pillar to stop...it just
-          keeps hitting the far wall.
+        nodeID: Grab_Trophy
+        text: My trophy for 'Best Up and Coming Scientist' I received at my university's
+          competition!
+        nextNodeID: Grab_Trophy_P2
+    - rid: 141452603536965741
+      type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: Grab_Trophy_P2
+        text: I remember working so hard on my entry, I barely slept at all that
+          month...
         nextNodeID: 

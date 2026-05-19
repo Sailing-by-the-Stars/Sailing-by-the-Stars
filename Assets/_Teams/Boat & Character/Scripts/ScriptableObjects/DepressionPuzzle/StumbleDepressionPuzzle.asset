@@ -10,22 +10,29 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a27b1591cf442e34da26ab4a98de3513, type: 3}
-  m_Name: Button Hint 3
+  m_Name: StumbleDepressionPuzzle
   m_EditorClassIdentifier: Assembly-CSharp::Dialogue
   hasName: 1
   npcName: Axel
   talkingSpeed: 0.95
   nodes:
-  - rid: 7513793525250261079
+  - rid: 141452603536965742
+  - rid: 141452603536965743
   hasItemID: 0
   itemID: 0
   references:
     version: 2
     RefIds:
-    - rid: 7513793525250261079
+    - rid: 141452603536965742
       type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
       data:
-        nodeID: Hint3_Anger_Puzzle
-        text: If I think about it logically, the smaller half should probably be
-          closer to the light source to match the big one's shadow.
+        nodeID: Stumble_Depression_Puzzle
+        text: Oh! Someone left a message...<pause=1>a riddle, huh?
+        nextNodeID: Stumble_Depression_Puzzle_P2
+    - rid: 141452603536965743
+      type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: Stumble_Depression_Puzzle_P2
+        text: Maybe the person who wrote this managed to solve it and get out of
+          this place...<pause=0.5>I should try my best too.
         nextNodeID: 
