@@ -98,7 +98,7 @@ public class BargainingEye : MonoBehaviour
             StopCoroutine(whisperRoutine);
             whisperRoutine = null;
         }
-        ReleaseWhisperInstance();
+        //ReleaseWhisperInstance();
     }
 
     private void ReleaseWhisperInstance()
