@@ -29,8 +29,8 @@ Transform:
   m_GameObject: {fileID: 2147975346961906873}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.39837945, z: -0, w: 0.9172207}
-  m_LocalPosition: {x: -24, y: 0, z: 47}
-  m_LocalScale: {x: 252.39806, y: 10, z: 782.4471}
+  m_LocalPosition: {x: -39.9, y: 0, z: 31.8}
+  m_LocalScale: {x: 252.39806, y: 10, z: 1226.991}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2101527710337218841}
@@ -83,8 +83,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 0.48}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 0.99999785, y: 1, z: 0.83175886}
+  m_Center: {x: -0.000000019577143, y: 0, z: -0.15005603}
 --- !u!114 &6944526111391780561
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -227,10 +227,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BargainingController
   zone: {fileID: 2147975346961906873}
   entityPrefab: {fileID: 3854540384909684288, guid: ec3b58bcf087f28409a676a1e7f10836, type: 3}
-  spawnRadius: 20
-  rearDeadzone: 0
+  spawnRadius: 25
+  rearDeadzone: 90
   firstSpawnDelay: 3
-  reappearanceCooldown: 20
+  reappearanceCooldown: 30
   dissolveSound:
     Guid:
       Data1: 652542529
@@ -252,7 +252,7 @@ MonoBehaviour:
       Data3: 883642755
       Data4: -391209367
     Path: event:/event_OutOfBounds
-  approachSoundLeadTime: 1
+  approachSoundLeadTime: 1.5
 --- !u!1 &7034525113455289781
 GameObject:
   m_ObjectHideFlags: 0
