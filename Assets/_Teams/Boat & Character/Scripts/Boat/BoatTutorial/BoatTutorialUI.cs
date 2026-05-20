@@ -1,5 +1,6 @@
 // Created by Jantina
 using System.Collections;
+using TMPro;
 using UnityEngine;
 
 public class BoatTutorialUI : MonoBehaviour
@@ -13,6 +14,9 @@ public class BoatTutorialUI : MonoBehaviour
     [SerializeField] private CanvasGroup steerRudderPanel;
     [SerializeField] private CanvasGroup adjustSailPanel;
 
+    [Header("Interact Prompt Text")]
+    [SerializeField] private TextMeshProUGUI interactPromptText;
+
     [Header("Fade Settings")]
     [SerializeField] private float fadeDuration = 0.2f;
 
@@ -22,7 +26,14 @@ public class BoatTutorialUI : MonoBehaviour
     private void Awake() => Instance = this;
     private void Start()  => HideAll();
 
-    public void ShowInteractPrompt() => TransitionTo(interactPromptPanel);
+    // Each step passes its own label now
+    public void ShowInteractPrompt(string partName)
+    {
+        if (interactPromptText != null)
+            interactPromptText.text = $"to interact with the {partName}";
+        TransitionTo(interactPromptPanel);
+    }
+
     public void ShowLeavePrompt()    => TransitionTo(leavePromptPanel);
     public void ShowHaulAnchor()     => TransitionTo(haulAnchorPanel);
     public void ShowSteerRudder()    => TransitionTo(steerRudderPanel);
@@ -46,7 +57,6 @@ public class BoatTutorialUI : MonoBehaviour
 
     private IEnumerator CrossFade(CanvasGroup from, CanvasGroup to)
     {
-        // Bring 'to' into the hierarchy visible but transparent
         SetVisible(to, true);
         to.alpha = 0f;
 

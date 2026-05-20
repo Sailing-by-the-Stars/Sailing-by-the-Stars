@@ -46,19 +46,13 @@ public class BoatTutorialManager : MonoBehaviour
         StartAnchorApproach();
     }
 
-    private IEnumerator DisableLandTutorial()
-    {
-        yield return null; // wait one frame for TutorialManager.Instance to exist
-        TutorialManager.Instance?.gameObject.SetActive(false);
-    }
-
 
     private void StartAnchorApproach()
     {
         _currentMajorStep = TutorialStep.HaulAnchor;
         _currentSubStep   = SubStep.Approach;
         anchorHighlighter?.Highlight();
-        BoatTutorialUI.Instance?.ShowInteractPrompt();
+        BoatTutorialUI.Instance?.ShowInteractPrompt("anchor");
     }
 
     public void NotifyEnteredAnchor()
@@ -88,7 +82,7 @@ public class BoatTutorialManager : MonoBehaviour
         _currentMajorStep = TutorialStep.SteerRudder;
         _currentSubStep   = SubStep.Approach;
         rudderHighlighter?.Highlight();
-        BoatTutorialUI.Instance?.ShowInteractPrompt();
+        BoatTutorialUI.Instance?.ShowInteractPrompt("rudder");
     }
 
     public void NotifyEnteredRudder()
@@ -118,7 +112,7 @@ public class BoatTutorialManager : MonoBehaviour
         _currentMajorStep = TutorialStep.AdjustSail;
         _currentSubStep   = SubStep.Approach;
         sailHighlighter?.Highlight();
-        BoatTutorialUI.Instance?.ShowInteractPrompt();
+        BoatTutorialUI.Instance?.ShowInteractPrompt("knot on your left");
     }
 
     public void NotifyEnteredSail()

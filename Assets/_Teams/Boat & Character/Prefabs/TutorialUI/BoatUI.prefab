@@ -98,6 +98,7 @@ MonoBehaviour:
   haulAnchorPanel: {fileID: 8666457747738084566}
   steerRudderPanel: {fileID: 2272227947688314392}
   adjustSailPanel: {fileID: 1443436692661839150}
+  interactPromptText: {fileID: 169248334851748024}
   fadeDuration: 0.25
 --- !u!1001 &13632719534973295
 PrefabInstance:
@@ -691,6 +692,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 7686562048306969019}
     m_Modifications:
+    - target: {fileID: 5201895382948737376, guid: 38692e20e27309f4d9085a8d33eae045, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 303.3756
+      objectReference: {fileID: 0}
+    - target: {fileID: 5201895382948737376, guid: 38692e20e27309f4d9085a8d33eae045, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -371.05353
+      objectReference: {fileID: 0}
+    - target: {fileID: 5201895382948737376, guid: 38692e20e27309f4d9085a8d33eae045, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0.000030517
+      objectReference: {fileID: 0}
+    - target: {fileID: 5771009870520076349, guid: 38692e20e27309f4d9085a8d33eae045, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 27
+      objectReference: {fileID: 0}
+    - target: {fileID: 5771009870520076349, guid: 38692e20e27309f4d9085a8d33eae045, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -0.000030279
+      objectReference: {fileID: 0}
     - target: {fileID: 5914631433901862734, guid: 38692e20e27309f4d9085a8d33eae045, type: 3}
       propertyPath: m_Name
       value: InteractPrompt
@@ -709,7 +730,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8692184395989890606, guid: 38692e20e27309f4d9085a8d33eae045, type: 3}
       propertyPath: m_margin.x
-      value: 90.28174
+      value: 150.99286
       objectReference: {fileID: 0}
     - target: {fileID: 8924792246544784054, guid: 38692e20e27309f4d9085a8d33eae045, type: 3}
       propertyPath: m_Pivot.x
@@ -797,11 +818,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9154850693400494787, guid: 38692e20e27309f4d9085a8d33eae045, type: 3}
       propertyPath: m_margin.x
-      value: -175.65648
+      value: 272.80634
       objectReference: {fileID: 0}
     - target: {fileID: 9154850693400494787, guid: 38692e20e27309f4d9085a8d33eae045, type: 3}
       propertyPath: m_fontColor32.rgba
       value: 4293194741
+      objectReference: {fileID: 0}
+    - target: {fileID: 9154850693400494787, guid: 38692e20e27309f4d9085a8d33eae045, type: 3}
+      propertyPath: m_HorizontalAlignment
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -811,6 +836,17 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 4814143289458016925}
   m_SourcePrefab: {fileID: 100100000, guid: 38692e20e27309f4d9085a8d33eae045, type: 3}
+--- !u!114 &169248334851748024 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 9154850693400494787, guid: 38692e20e27309f4d9085a8d33eae045, type: 3}
+  m_PrefabInstance: {fileID: 9031364620908638843}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
 --- !u!224 &472562431088683213 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8924792246544784054, guid: 38692e20e27309f4d9085a8d33eae045, type: 3}
