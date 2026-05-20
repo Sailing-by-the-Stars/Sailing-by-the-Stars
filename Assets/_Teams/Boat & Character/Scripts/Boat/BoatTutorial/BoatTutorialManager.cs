@@ -52,7 +52,7 @@ public class BoatTutorialManager : MonoBehaviour
         _currentMajorStep = TutorialStep.HaulAnchor;
         _currentSubStep   = SubStep.Approach;
         anchorHighlighter?.Highlight();
-        BoatTutorialUI.Instance?.ShowInteractPrompt("anchor");
+        BoatTutorialUI.Instance?.ShowInteractPrompt("crank on your right");
     }
 
     public void NotifyEnteredAnchor()
@@ -82,7 +82,7 @@ public class BoatTutorialManager : MonoBehaviour
         _currentMajorStep = TutorialStep.SteerRudder;
         _currentSubStep   = SubStep.Approach;
         rudderHighlighter?.Highlight();
-        BoatTutorialUI.Instance?.ShowInteractPrompt("rudder");
+        BoatTutorialUI.Instance?.ShowInteractPrompt("rudder behind you");
     }
 
     public void NotifyEnteredRudder()
@@ -112,7 +112,7 @@ public class BoatTutorialManager : MonoBehaviour
         _currentMajorStep = TutorialStep.AdjustSail;
         _currentSubStep   = SubStep.Approach;
         sailHighlighter?.Highlight();
-        BoatTutorialUI.Instance?.ShowInteractPrompt("knot on your left");
+        BoatTutorialUI.Instance?.ShowInteractPrompt("crank on your left");
     }
 
     public void NotifyEnteredSail()
