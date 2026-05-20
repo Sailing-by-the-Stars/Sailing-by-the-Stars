@@ -25,6 +25,7 @@ public class FlatStarField : MonoBehaviour
 
     [SerializeField] List<Constelation> manualStars = new();
     [SerializeField] List<ManualTwinkler> twinklingStars = new();
+    [SerializeField] private float starColliderMult = 1.5f;
     [SerializeField] float minManualSize = 8;
     [SerializeField] float manualSizeMult = 1.5f;
     [SerializeField] float flatManualSizeAdd = 20;
@@ -301,7 +302,7 @@ public class FlatStarField : MonoBehaviour
                                 entryCheck.targetAngle = obj.targetAngle;
                                 twinkler.entryNumbers.Add(entryCheck);
                                 stargo.layer = LayerMask.NameToLayer("Constelation");
-                                stargo.GetComponent<SphereCollider>().radius = 1.5f;
+                                stargo.GetComponent<SphereCollider>().radius = starColliderMult;
                                 twinkling = true;
                                 continue;
                             }

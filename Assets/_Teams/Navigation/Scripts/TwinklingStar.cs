@@ -62,6 +62,7 @@ public class TwinklingStar : MonoBehaviour
     public AnimationCurve dimCurve;
     public float intensity = 1;
     public float twinkleTime = 1;
+    public float dimTime = 2;
     public float selectedTime = 5;
     public float selectedIntensity = 1;
     public float targetAngle = 1;
@@ -143,9 +144,9 @@ public class TwinklingStar : MonoBehaviour
             TutorialSequence.Instance.NextStep(2);
         }
 
-        Debug.Log($"star hit at angle: {hitAngle}");
+        //Debug.Log($"star hit at angle: {hitAngle}");
 
-        if ((hitAngle) >= targetAngle)
+        if ((hitAngle) >= targetAngle && (starState == StarState.selected || starState == StarState.highlighted))
         {
             currentTarget = -1;
             starState = StarState.dimmed;
@@ -154,8 +155,11 @@ public class TwinklingStar : MonoBehaviour
         }
         else
         {
-            currentTarget = targetAngle;
-            starState = StarState.highlighted;
+            if (starState == StarState.selected)
+            {
+                currentTarget = targetAngle;
+                starState = StarState.highlighted;
+            }
         }
     }
 
@@ -408,7 +412,7 @@ public class TwinklingStar : MonoBehaviour
         public void Enter(TwinklingStar star)
         {
             timer = 0;
-            animationLength = star.twinkleTime * 2;
+            animationLength = star.dimTime;
             star.twinkle = true;
             //star.StartCoroutine(Twinkle(star));
         }
