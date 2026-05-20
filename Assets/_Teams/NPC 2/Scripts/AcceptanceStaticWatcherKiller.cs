@@ -1,53 +1,90 @@
 using UnityEngine;
 using FMODUnity;
 
-/// Created by: Boas
-
-/// <summary>
-/// Destroys NPC when off screen.
-/// </summary>
 public class AcceptanceKiller : MonoBehaviour
 {
-    [SerializeField] private Renderer visibilityRenderer;
     [SerializeField] private EventReference destroySound;
-    
-    private float screenMargin = 0.15f;
+    [SerializeField] private GameObject targetToDestroy;
+    [SerializeField] private LayerMask occlusionMask;
+
+    private Camera cam;
     private bool hasBeenSeen = false;
+    private bool destroyed = false;
 
-    private void Update()
+    void Start()
     {
-        if (visibilityRenderer == null) return;
+        cam = Camera.main;
+    }
 
-        Vector3 viewportPos =
-            Camera.main.WorldToViewportPoint(
-                visibilityRenderer.transform.position
-            );
+    void Update()
+    {
+        if (destroyed) return;
 
-        bool visible =
-            viewportPos.z > 0 &&
-            viewportPos.x > -screenMargin &&
-            viewportPos.x < 1f + screenMargin &&
-            viewportPos.y > -screenMargin &&
-            viewportPos.y < 1f + screenMargin;
+        bool visible = IsVisibleToPlayer();
 
         if (visible)
         {
             hasBeenSeen = true;
-            return;
         }
 
         if (hasBeenSeen && !visible)
         {
-            PlayDestroySound();
-            Destroy(gameObject, 0.1f);
+            DestroyTarget();
         }
     }
 
-    private void PlayDestroySound()
+    bool IsVisibleToPlayer()
     {
+        Vector3 camPos = cam.transform.position;
+        Vector3 toObj = transform.position - camPos;
+
+        float dot = Vector3.Dot(cam.transform.forward, toObj.normalized);
+
+        if (dot < 0)
+        {
+            return false;
+        }
+
+        Vector3 viewPos = cam.WorldToViewportPoint(transform.position);
+
+        float margin = 0.1f;
+
+        if (viewPos.z <= 0)
+            return false;
+
+        if (viewPos.x < -margin || viewPos.x > 1 + margin ||
+            viewPos.y < -margin || viewPos.y > 1 + margin)
+        {
+            return false;
+        }
+
+        float dist = toObj.magnitude;
+
+        bool hitSomething = Physics.Raycast(camPos, toObj.normalized, out RaycastHit hit, dist, occlusionMask);
+
+        if (hitSomething)
+        {
+            if (hit.transform != transform && !hit.transform.IsChildOf(transform))
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    void DestroyTarget()
+    {
+        destroyed = true;
+
         if (!destroySound.IsNull)
         {
             RuntimeManager.PlayOneShot(destroySound, transform.position);
+        }
+
+        if (targetToDestroy != null)
+        {
+            Destroy(targetToDestroy);
         }
     }
 }
