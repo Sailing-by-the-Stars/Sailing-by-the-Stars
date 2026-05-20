@@ -14,35 +14,27 @@ public class DebugMenu : MonoBehaviour
     [Header("Debug Spawnables")]
     public Journal journalPrefab;
     public Astrolabe astrolabePrefab;
-    private InputSystem_Actions input;
     private bool isOpen;
     private Button journalBtn;
     private Button astrolabeBtn;
 
+    private PlayerControls controls;
+    private PlayerControls.DebugActions debugControls;
+
     private void Awake()
     {
-        input = new InputSystem_Actions();
+        controls = TempStateMachine.Instance.PlayerControls;
+        debugControls = controls.Debug;
     }
-
-    // private void OnEnable()
-    // {
-    //     input.UI.Enable();
-    //     input.UI.OpenTeleportMenu.performed += OnToggleMenu;
-    // }
-
-    // private void OnDisable()
-    // {
-    //     input.UI.OpenTeleportMenu.performed -= OnToggleMenu;
-    //     input.UI.Disable();
-    // }
-    private void Update()
+    private void OnEnable()
     {
-        if (Input.GetKeyDown(KeyCode.M))  
-        {
-            ToggleMenu();
-        }
+        debugControls.ToggleDebugMenu.performed += OnToggleMenu;
     }
 
+    private void OnDisable()
+    {
+        debugControls.ToggleDebugMenu.performed -= OnToggleMenu;
+    }
     private IEnumerator Start()
     {
         menuPanel.SetActive(false);
@@ -52,6 +44,8 @@ public class DebugMenu : MonoBehaviour
 
     private void OnToggleMenu(InputAction.CallbackContext ctx)
     {
+        if (DialogueSystem.Instance.isDialogueActive)
+            return;
         ToggleMenu();
     }
 
@@ -63,8 +57,7 @@ public class DebugMenu : MonoBehaviour
         if (isOpen)
             TeleportManager.Instance.GetTeleportPoints();
 
-        TempStateMachine.Instance.gameState =
-            isOpen ? GameState.Dialogue : GameState.Moving;
+        TempStateMachine.Instance.SetState(isOpen ? GameState.Dialogue : GameState.Moving);
     }
 
     private void GenerateButtons()
@@ -102,18 +95,20 @@ public class DebugMenu : MonoBehaviour
             else
                 Debug.LogWarning("No object with tag 'boat' found in scene.");
         });
+
         var resetTutorialBtn = Instantiate(buttonPrefab, container);
         resetTutorialBtn.GetComponentInChildren<TextMeshProUGUI>().text = "Reset Tutorials";
         resetTutorialBtn.onClick.AddListener(() =>
         {
             TutorialResetter.Instance.ResetAll();
         });
+
         journalBtn = Instantiate(buttonPrefab, container);
         journalBtn.GetComponentInChildren<TextMeshProUGUI>().text = "Give Journal";
         journalBtn.onClick.AddListener(() =>
         {
             StartCoroutine(GiveItemRoutine(journalPrefab));
-            journalBtn.gameObject.SetActive(false); 
+            journalBtn.gameObject.SetActive(false);
         });
 
         astrolabeBtn = Instantiate(buttonPrefab, container);
@@ -121,9 +116,10 @@ public class DebugMenu : MonoBehaviour
         astrolabeBtn.onClick.AddListener(() =>
         {
             StartCoroutine(GiveItemRoutine(astrolabePrefab));
-            astrolabeBtn.gameObject.SetActive(false); 
+            astrolabeBtn.gameObject.SetActive(false);
         });
     }
+
     IEnumerator GiveItemRoutine(ToolPickup itemPrefab)
     {
         var player = GameObject.FindGameObjectWithTag("Player");
