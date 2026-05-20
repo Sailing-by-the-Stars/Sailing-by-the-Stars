@@ -248,7 +248,8 @@ public class PShadowGridManager : MonoBehaviour
         if (pillarsToCheck.Any(pillar => !pillar.IsInCorrectPosition())) return;
         
         Debug.Log("PUZZLE SOLVED!");
-        PuzzleProgress.MarkComplete("anger");
+        // PuzzleProgress.MarkComplete("anger"); // TODO: move this to the pickup item that will be spawned when the puzzle is solved.
+        // It's disabled for now, as to not forget about it later on.
     }
 
     private struct MoveRequest
