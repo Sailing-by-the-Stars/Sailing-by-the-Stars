@@ -106,7 +106,7 @@ namespace _Teams.World_Design.Scripts.Checkpoints
                 }
                 if (boatController != null && anchorBoatOnRespawn)
                 {
-                    // boatController.DropAnchor();
+                    boatController.DropAnchor();
                 }
             
             

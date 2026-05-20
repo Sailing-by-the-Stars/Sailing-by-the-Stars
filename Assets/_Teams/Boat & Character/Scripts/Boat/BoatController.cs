@@ -335,8 +335,11 @@ public class BoatController : MonoBehaviour
 
     public void DropAnchor()
     {
-        anchorDropped = true;
-        rigidBody.linearDamping = .5f;
+        if (!anchorDropped)
+        {
+            anchorDropped = true;
+            rigidBody.linearDamping = .5f;
+        }
     }
 
     public void HaulAnchor()
