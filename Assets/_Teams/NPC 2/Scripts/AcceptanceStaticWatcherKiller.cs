@@ -1,4 +1,5 @@
 using UnityEngine;
+using FMODUnity;
 
 /// Created by: Boas
 
@@ -8,8 +9,9 @@ using UnityEngine;
 public class AcceptanceKiller : MonoBehaviour
 {
     [SerializeField] private Renderer visibilityRenderer;
+    [SerializeField] private EventReference destroySound;
+    
     private float screenMargin = 0.15f;
-
     private bool hasBeenSeen = false;
 
     private void Update()
@@ -36,7 +38,16 @@ public class AcceptanceKiller : MonoBehaviour
 
         if (hasBeenSeen && !visible)
         {
+            PlayDestroySound();
             Destroy(gameObject, 0.1f);
+        }
+    }
+
+    private void PlayDestroySound()
+    {
+        if (!destroySound.IsNull)
+        {
+            RuntimeManager.PlayOneShot(destroySound, transform.position);
         }
     }
 }
