@@ -5,155 +5,54 @@
 using System.Collections;
 using UnityEngine;
 using FMODUnity;
-using _Teams.World_Design.Scripts.Checkpoints;
 
 /// <summary>
 /// Controls the Bargaining grief event.
-/// Owns event state, timer countdown, checkpoint sequencing, entity spawning and despawning.
-///
-/// SETUP:
-///   Add this component to a GameObject in the scene
-///   Assign entity prefab (BargainingEntity component required, all renderers disabled)
+/// Spawns a single BargainingEntity instance for duration of the event and destroys when player leaves zone.
 ///   
-/// MODE: OrderedCheckpoints
-///   Add BargainingCheckpoint components to trigger collider GameObjects in sequence
-///      -- assign them to the checkpoints list in order
-///      -- tick isFinalCheckpoint on the last one
-///   Add BargainingZoneEffect alongside WorldEventZone on the entry trigger
-/// 
-/// MODE: StarEvents
-///     Subscribes to TwinklingStar event to trigger cooldown.
-///     Order of reaching the checkpoints does not matter.
-///     Event ends permanent with distance check (assign transform in inspector)
-///     
 /// NOTE: For now assumes player will be parented to boat when sailing in water. Use "Player" tag in event zone trigger
 ///       and do not place trigger in an an area where player will be outside the boat.
-///
-/// FLOW
-///   Entry zone triggered: entity spawns, timer starts immediately
-///   Entity spirals inward: visual pressure builds
-///   (OrderedCheckpoints) Checkpoint reached: entity despawned, timer paused, cooldown, entity respawns, timer resets
-///   (Ordered Checkpoints) Final checkpoint reached: event completed permanently
-///   (StarEvents) Star found: entity despawned, cooldown, entity respawns, timer resets
-///   (StarEvents) Event ends permanently by distance check.
-///   Timer reaches 0: kill effects, player teleported to last world respawn checkpoint, event resets
 /// </summary>
 
-public enum BargainingEventMode
-{
-    OrderedCheckpoints,
-    StarEvents
-}
 public class BargainingController : MonoBehaviour
 {
-    [Header("Mode Setup")]
-    [SerializeField] private BargainingEventMode eventMode;
-    [Tooltip("Ordered list of checkpoint for OrderedCheckpoints Mode" +
-         "Tick isFinalCheckpoint on the last one.")]
-    [SerializeField] private BargainingCheckpoint[] checkpoints;
-    [Tooltip("Transform to measure distance from for end condition in StarEvents mode")]
-    [SerializeField] private Transform[] endConditionTransforms;
-    [Tooltip("Distance threshold to end the event from transform when using distance end condition")]
-    [SerializeField] private float endConditionDistance = 30f;
-    [Tooltip("The parent zone; deactivated on event complete")]
-    [SerializeField] private WorldEventZone zone;
+    [Tooltip("The parent zone GameObject; deactivated on permanent event complete.")]
+    [SerializeField] private GameObject zone;
 
-    [Header("Entity")]
-    [Tooltip("Prefab with BargainingEntity component. Disable all renderers on the prefab.")]
+    [Header("Spawning")]
     [SerializeField] private GameObject entityPrefab;
-    [Tooltip("How much to increase the audio intensity when audio is active")]
-    [SerializeField] private float audioBoost = 0.2f;
-    [Tooltip("One-shot 2D sound played when the entity despawns.")]
-    [SerializeField] private EventReference despawnSound;
+    [Tooltip("Radius around the boat at which the entity appears.")]
+    [SerializeField, Min(0.1f)] private float spawnRadius = 10f;
+    [Tooltip("Excluded arc behind boat from spawning in degrees.")]
+    [SerializeField, Range(0f, 359f)] private float rearDeadzone = 0f;
+    [Tooltip("Delay in seconds before the entity first appears after entering the zone.")]
+    [SerializeField] private float firstSpawnDelay = 3f;
+    [Tooltip("Time in seconds before entity reappears after dissolving.")]
+    [SerializeField] private float reappearanceCooldown = 8f;
 
-    [Header("Timing")]
-    [Tooltip("How long the player has to reach a checkpoint." +
-        "Can be overridden per checkpoint (OrderedCheckpoint mode only)")]
-    [SerializeField] private float defaultTimerDuration = 120f;
-
-    [Tooltip("Default cooldown after checkpoint reached before entity returns. " +
-             "Can be overridden per checkpoint (OrderedCheckpoint mode only)")]
-    [SerializeField] private float defaultCooldownDuration = 30f;
-
+    [Header("Audio")]
+    [Tooltip("Sound played at entity position when it dissolves.")]
+    [SerializeField] private EventReference dissolveSound;
+    [Tooltip("Sound played at spawn position when entity reappears.")]
+    [SerializeField] private EventReference spawnSound;
+    [Tooltip("Sound played before reappearance.")]
+    [SerializeField] private EventReference approachingSound;
+    [Tooltip("How long before entity spawns the approaching sound should play")]
+    [SerializeField] private float approachSoundLeadTime = 2f;
 
     // State
     private bool eventCompleted = false;
     private bool eventActive = false;
-    private int currentCheckpointIndex = 0;
-    private float timerRemaining = 0f;
-    private float currentTimerDuration = 0f; // tracks active duration for audio intensity calculation
-    private BargainingEntity activeEntity;
-    private GameObject eventTarget;
-    private Coroutine cooldownRoutine;
+    private BargainingEntity activeEntity = null;
+    private GameObject eventTarget = null;
+    private Coroutine spawnRoutine = null;
 
-    // World checkpoint respawning
-    private CheckpointManager checkpointManager;
-
-    // audio
-    private SetBargainingTimer timerAudio;
-    private float TimerIntensity => eventActive ? 1f - Mathf.Clamp01(timerRemaining / currentTimerDuration) : 0f;
-
+    // TODO: confirm event final end condition if any
     public bool IsCompleted => eventCompleted;
     public bool IsActive => eventActive;
 
-    private void Start()
-    {
-        checkpointManager = FindFirstObjectByType<CheckpointManager>();
-        timerAudio = FindFirstObjectByType<SetBargainingTimer>();
-
-        if (eventMode == BargainingEventMode.StarEvents && endConditionTransforms == null)
-        {
-            Debug.LogWarning($"{gameObject.name}: StarEvents mode requires at least 1 endConditionTransforms to be assigned.");
-        }
-
-    }
-    private void OnEnable()
-    {
-        if (eventMode == BargainingEventMode.StarEvents)
-        {
-            TwinklingStar.OnStarFound += HandleStarFound;
-        }
-    }
-    private void OnDestroy()
-    {
-        if (eventMode == BargainingEventMode.StarEvents)
-        {
-            TwinklingStar.OnStarFound -= HandleStarFound;
-        }
-    }
-
-    private void Update()
-    {
-        if (!eventActive || eventCompleted)
-        {
-            return;
-        }
-        timerRemaining -= Time.deltaTime;
-        // mode specific distance check to endpoint
-        if (eventMode == BargainingEventMode.StarEvents)
-        {
-            CheckEndConditionDistance();
-        }
-
-        if (timerAudio != null)
-        {
-            float targetAudioIntensity = TimerIntensity;
-            if (TimerIntensity != 0f && audioBoost != 0f)
-            {
-                targetAudioIntensity = TimerIntensity + audioBoost;
-            }
-            timerAudio.SetIntensity(targetAudioIntensity);
-        }
-        // Trigger warning effects if desired here
-
-        if (timerRemaining <= 0f)
-        {
-            eventActive = false; // stop timer immediately to prevent multiple coroutine starts
-            HandleTimerFail();
-        }
-    }
     /// <summary>
-    /// Spawns entity and starts timer.
+    /// Called by the entry zone trigger.
     /// </summary>
     public void StartEvent(GameObject instigator)
     {
@@ -161,207 +60,181 @@ public class BargainingController : MonoBehaviour
         {
             return;
         }
-        // assumes boat controller script will be on the teleport target (player parented to boat)
         BoatController boat = instigator.GetComponentInParent<BoatController>();
+        // fallback to event trigger target
         eventTarget = boat != null ? boat.gameObject : instigator;
 
-        // Checkpoint mode specific logic
-        if (eventMode == BargainingEventMode.OrderedCheckpoints)
-        {
-            currentCheckpointIndex = 0;
-            ActivateCurrentCheckpoint();
-        }
-
-        timerRemaining = defaultTimerDuration;
-        currentTimerDuration = defaultTimerDuration;
-
-        SpawnEntity(defaultTimerDuration);
         eventActive = true;
-    }
-
-    /// <summary>
-    /// Applies checkpoint overrides and starts cooldown or completes event for final checkpoint.
-    /// </summary>
-    public void OnCheckpointReached(BargainingCheckpoint checkpoint)
-    {
-        if (eventMode != BargainingEventMode.OrderedCheckpoints)
-        {
-            return;
-        }
-
-        if (checkpoint.IsFinalCheckpoint)
-        {
-            CompleteEvent();
-            return;
-        }
-
-        float cooldown = checkpoint.CooldownOverride > 0f ? checkpoint.CooldownOverride : defaultCooldownDuration;
-        float timerDuration = checkpoint.TimerOverride > 0f ? checkpoint.TimerOverride : defaultTimerDuration;
-        
-        if (cooldownRoutine != null)
-        {
-            StopCoroutine(cooldownRoutine);
-        }
-        cooldownRoutine = StartCoroutine(CheckpointCooldownRoutine(cooldown, timerDuration));
+        spawnRoutine = StartCoroutine(FirstSpawnRoutine());
     }
     /// <summary>
-    /// Called when a star is found. Despawns entity and starts cooldown
+    /// Called when player exits the zone.
+    /// Cleans up and resets: does not permanently complete the event.
     /// </summary>
-    private void HandleStarFound()
+    public void EndEvent()
     {
-        if (!eventActive || eventMode != BargainingEventMode.StarEvents)
-        {
-            return;
-        }
-        if (cooldownRoutine != null)
-        {
-            StopCoroutine(cooldownRoutine);
-        }
-        cooldownRoutine = StartCoroutine(CheckpointCooldownRoutine(defaultCooldownDuration, defaultTimerDuration));
-    }
-    private void CheckEndConditionDistance()
-    {
-        if (endConditionTransforms == null || eventTarget == null)
+        if (!eventActive)
         {
             return;
         }
 
-        foreach (Transform target in endConditionTransforms)
+        eventActive = false;
+
+        if (spawnRoutine != null)
         {
-            if (target == null) continue;
-            if (Vector3.Distance(eventTarget.transform.position, target.position) <= endConditionDistance)
-            {
-                CompleteEvent();
-                return;
-            }
+            StopCoroutine(spawnRoutine);
+            spawnRoutine = null;
+        }
+
+        if (activeEntity != null)
+        {
+            activeEntity.OnDissolveComplete -= OnEntityDissolved;
+            activeEntity.Despawn();
+            activeEntity = null;
         }
     }
-    private void SpawnEntity(float timerDuration)
+    private IEnumerator FirstSpawnRoutine()
+    {
+        yield return new WaitForSeconds(firstSpawnDelay);
+        if (!eventActive || eventCompleted)
+        {
+            yield break;
+        }
+        SpawnEntity();
+        spawnRoutine = null;
+    }
+    private void SpawnEntity()
     {
         if (entityPrefab == null)
         {
-            Debug.LogWarning($"{gameObject.name} No entity prefab assigned.");
+            Debug.LogWarning($"{gameObject.name}: No entity prefab assigned.");
             return;
         }
-        
-        GameObject entityObj = Instantiate(entityPrefab, eventTarget.transform.position, Quaternion.identity);
+        if (eventTarget == null)
+        {
+            Debug.LogWarning($"{gameObject.name}: No event target set.");
+            return;
+        }
+
+        GameObject entityObj = Instantiate(entityPrefab);
         activeEntity = entityObj.GetComponent<BargainingEntity>();
 
         if (activeEntity == null)
         {
-            Debug.LogWarning($"{gameObject.name} Entity prefab has no BargainingEntity component.");
+            Debug.LogWarning($"{gameObject.name}: Entity prefab has no BargainingEntity component.");
+            Destroy(entityObj);
+            eventActive = false;
             return;
         }
 
-        activeEntity.Initialize(eventTarget, timerDuration);
+        Vector3 spawnPosition = GetSpawnPosition();
+        PlaySound(spawnSound, spawnPosition);
+
+        activeEntity.OnDissolveComplete += OnEntityDissolved;
+        activeEntity.Initialize(eventTarget, spawnPosition);
     }
-    private void DespawnEntity()
+    private void OnEntityDissolved()
     {
-        if (activeEntity == null)
+        if (!eventActive || eventCompleted)
         {
             return;
         }
-        if (!despawnSound.IsNull)
+
+        if (activeEntity != null)
         {
-            RuntimeManager.PlayOneShot(despawnSound);
+            PlaySound(dissolveSound, activeEntity.transform.position);
         }
-        activeEntity.Despawn();
-        activeEntity = null;
+
+        if (spawnRoutine != null)
+        {
+            StopCoroutine(spawnRoutine);
+            spawnRoutine = null;
+        }
+        spawnRoutine = StartCoroutine(ReappearanceRoutine());
     }
-    private void ActivateCurrentCheckpoint()
+    private IEnumerator ReappearanceRoutine()
     {
-        for (int i = 0; i < checkpoints.Length; i++)
+        if (!eventActive || eventCompleted)
         {
-            if (checkpoints[i] != null)
-            {
-                checkpoints[i].SetActive(i == currentCheckpointIndex);
-            }
+            yield break;
         }
+
+        float waitBeforeSound = reappearanceCooldown - approachSoundLeadTime;
+        if (waitBeforeSound > 0f)
+        {
+            yield return new WaitForSeconds(waitBeforeSound);
+        }
+
+        if (!eventActive || eventCompleted)
+        {
+            yield break;
+        }
+
+        PlaySound(approachingSound, eventTarget.transform.position);
+
+        yield return new WaitForSeconds(approachSoundLeadTime);
+
+        if (!eventActive || eventCompleted)
+        {
+            yield break;
+        }
+        if (activeEntity != null)
+        {
+            Vector3 newPosition = GetSpawnPosition();
+            PlaySound(spawnSound, newPosition);
+            activeEntity.Reappear(newPosition);
+        }
+
+        spawnRoutine = null;
     }
-    private IEnumerator CheckpointCooldownRoutine(float cooldown, float nextTimerDuration)
+    private Vector3 GetSpawnPosition()
     {
-        if (eventMode == BargainingEventMode.OrderedCheckpoints)
-        {
-            currentCheckpointIndex++;
-            ActivateCurrentCheckpoint();
-        }
+        // Spawn anywhere in the forward arc, excluding the rear deadzone
+        float halfArc = 180f - (rearDeadzone / 2f);
+        float randomAngle = Random.Range(-halfArc, halfArc);
+        float boatYaw = eventTarget.transform.eulerAngles.y;
+        float finalAngle = (boatYaw + randomAngle) * Mathf.Deg2Rad;
 
-        DespawnEntity();
-        eventActive = false; // pause timer during cooldown
-
-        if (timerAudio != null)
-        {
-            timerAudio.ResetIntensity();
-        }    
-
-        yield return new WaitForSeconds(cooldown);
-
-        timerRemaining = nextTimerDuration;
-        currentTimerDuration = nextTimerDuration;
-
-        SpawnEntity(nextTimerDuration);
-        eventActive = true;
+        Vector3 offset = new Vector3(Mathf.Sin(finalAngle), 0f, Mathf.Cos(finalAngle)) * spawnRadius;
+        return eventTarget.transform.position + offset;
     }
-    private void HandleTimerFail()
+    private void PlaySound(EventReference sound, Vector3 position)
     {
-        DespawnEntity();
-        if (timerAudio != null)
+        if (!sound.IsNull)
         {
-            timerAudio.ResetIntensity();
-        }
-
-        if (checkpointManager != null)
-        {
-            checkpointManager.GoToCheckpoint();
-        }
-        // reset event so it can trigger again
-        if (eventMode == BargainingEventMode.OrderedCheckpoints)
-        {
-            currentCheckpointIndex = 0;
-            ActivateCurrentCheckpoint();
+            RuntimeManager.PlayOneShot(sound, position);
         }
     }
     private void CompleteEvent()
     {
-        Debug.Log("Event ended");
         eventCompleted = true;
-        eventActive = false;
-        DespawnEntity();
+        EndEvent();
 
-        if (timerAudio != null)
-        {
-            timerAudio.ResetIntensity();
-        }
-
-        if (eventMode == BargainingEventMode.OrderedCheckpoints)
-        {
-            foreach (BargainingCheckpoint checkpoint in checkpoints)
-            {
-                if (checkpoint != null)
-                {
-                    checkpoint.SetActive(false);
-                }
-            }
-        }
         if (zone != null)
         {
-            zone.gameObject.SetActive(false);
+            zone.SetActive(false);
         }
     }
-
 #if UNITY_EDITOR
-    private void OnDrawGizmos()
+ private void OnDrawGizmos()
     {
-        if (eventMode != BargainingEventMode.StarEvents || endConditionTransforms == null) return;
+        Vector3 center = eventTarget != null ? eventTarget.transform.position : transform.position;
+        float yaw = eventTarget != null ? eventTarget.transform.eulerAngles.y : 0f;
 
-        foreach (Transform t in endConditionTransforms)
-        {
-            if (t == null) continue;
-            Gizmos.color = new Color(0f, 1f, 0f, 0.3f);
-            Gizmos.DrawSphere(t.position, endConditionDistance);
-            Gizmos.color = Color.green;
-            Gizmos.DrawWireSphere(t.position, endConditionDistance);
-        }
+        Gizmos.color = Color.magenta;
+        Gizmos.DrawWireSphere(center, spawnRadius);
+
+        // Draw rear deadzone edges
+        Gizmos.color = Color.red;
+        float leftAngle = (yaw + 180f - rearDeadzone / 2f) * Mathf.Deg2Rad;
+        float rightAngle = (yaw + 180f + rearDeadzone / 2f) * Mathf.Deg2Rad;
+        Gizmos.DrawLine(center, center + new Vector3(Mathf.Sin(leftAngle), 0f, Mathf.Cos(leftAngle)) * spawnRadius);
+        Gizmos.DrawLine(center, center + new Vector3(Mathf.Sin(rightAngle), 0f, Mathf.Cos(rightAngle)) * spawnRadius);
+    }
+    private void OnValidate()
+    {
+        approachSoundLeadTime = Mathf.Clamp(approachSoundLeadTime, 0f, reappearanceCooldown);
     }
 #endif
+
 }

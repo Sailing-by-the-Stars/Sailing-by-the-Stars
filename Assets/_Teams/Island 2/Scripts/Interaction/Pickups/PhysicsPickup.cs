@@ -8,6 +8,10 @@ public class PhysicsPickup : MonoBehaviour, IPickup
     [Header("Attachment Settings")]
     [SerializeField] private Vector3 pickupPositionOffset;
     
+    [Header("Despawn Effect")]
+    [Tooltip("Optional particle effect to spawn when this pickup is collected/destroyed.")]
+    [SerializeField] private GameObject despawnParticleEffect;
+
     private Rigidbody pickupRigidbody;
     private Collider pickupCollider;
 
@@ -33,6 +37,18 @@ public class PhysicsPickup : MonoBehaviour, IPickup
         SetPhysicsValue(true);
         
         GameEvents.ExecOnPickup(this);
+    }
+
+    public virtual void CollectAndDestroy()
+    {
+        SetPhysicsValue(true);
+        GameEvents.ExecOnPickup(this);
+        if (despawnParticleEffect)
+        {
+            GameObject go = Instantiate(despawnParticleEffect, transform.position, Quaternion.identity);
+            Destroy(go, 1f); // Destroy the particle effect after 1 second to clean up the scene
+        }
+        Destroy(gameObject);
     }
 
     public virtual void Drop(PickupController pickupController)

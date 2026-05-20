@@ -7,6 +7,8 @@ using static StarDataLoader;
 
 public class StarInfo : MonoBehaviour
 {
+    public Transform thisTransform;
+
     public float emissionMult;
     public UnityEngine.Color matColor;
 
@@ -24,7 +26,7 @@ public class StarInfo : MonoBehaviour
     public void Initialize()
     {
         initpos = transform.position;
-
+        thisTransform = transform;
 
         if (GetComponent<MeshRenderer>() == null)
         {

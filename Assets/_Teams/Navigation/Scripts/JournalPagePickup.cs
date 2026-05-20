@@ -2,21 +2,6 @@ using System;
 using Unity.VisualScripting;
 using UnityEngine;
 
-
-/*
- * To create a page pickup
- * - Create a new script and extend the class from this class, PagePickup
- * - Initialize a new Page object
- * - Initialize two SerializeField Textures: leftPage and rightPage
- * - in Start() assign page.leftPage and page.rightPage to the textures
- * initialized above respectively
- * - override the Grab() method and call base.Grab()
- * - In the overridden Grab() method,
- *  Add an if statement checking AddToJournal(page) is true,
- *  and then destroy the object
- * - Add the script to a new object and assign textures in the editor
- * Rever to the DebugPage prefab as an example
- */
 public class JournalPagePickup : MonoBehaviour, IPickup
 {
     private Journal journal;
@@ -72,15 +57,23 @@ public class JournalPagePickup : MonoBehaviour, IPickup
     }
 
     //Add page to the journal if the player has a journal
-    protected bool AddToJournal(Page page)
+    protected bool AddToJournal(SectionName sectionName, Page page)
     {
         if (journal.IsUnityNull()) 
         {
             Debug.LogWarning("there is no journal to add pages to!");
             return false;
         }
+
+        JournalSection section = journal.GetSection(sectionName);
         
-        journal.GetComponent<Journal>().AddPage(page, pageIDHack);
+        if (!section)
+        {
+            Debug.LogError($"couldn't find {sectionName} in the journal to add the page to!");
+            return false;
+        }
+        
+        section.AddPage(page, pageIDHack);
         
         return true;
     }

@@ -38,7 +38,7 @@ public class ItemPedestal : MonoBehaviour, IInteractable
     /// </summary>
     public string InteractMessage => IsPuzzleComplete()
         ? $"Press E to place {itemLabel}"
-        : $"Complete the {itemLabel} island first";
+        : "Complete all island puzzles first";
 
     /// <summary>
     /// Hide the prompt once the pedestal is already filled.
@@ -60,7 +60,9 @@ public class ItemPedestal : MonoBehaviour, IInteractable
             itemDisplayModel.SetActive(false);
     }
     
-    private bool IsPuzzleComplete() => PuzzleProgress.IsComplete(pageID);
+    private bool IsPuzzleComplete() => pedestalManager != null
+        ? pedestalManager.AreAllPuzzlesComplete()
+        : PuzzleProgress.IsComplete(pageID);
 
     private void Fill()
     {

@@ -57,6 +57,20 @@ public class AcceptanceIslandManager : MonoBehaviour
         else Debug.LogWarning($"[AcceptanceIslandManager] Child '{doorGlowChildName}' NOT found on '{doorObject.name}'.");
     }
 
+    /// <summary>
+    /// Returns true only when every pedestal's puzzle has been completed.
+    /// Used by ItemPedestal to gate interaction until all 3 puzzles are done.
+    /// </summary>
+    public bool AreAllPuzzlesComplete()
+    {
+        foreach (ItemPedestal p in pedestals)
+        {
+            if (p == null) continue;
+            if (!PuzzleProgress.IsComplete(p.pageID)) return false;
+        }
+        return true;
+    }
+
     public void OnPedestalFilled(ItemPedestal pedestal)
     {
         _filledCount++;
