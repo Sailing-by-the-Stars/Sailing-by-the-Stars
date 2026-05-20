@@ -40,7 +40,7 @@ public class BoatController : MonoBehaviour
     [SerializeField] private Vector3 apparentWind = Vector3.zero;
 
     [Header("Boat stats")]
-    [SerializeField] private float maxRudderDeflection = 20f;
+    [SerializeField] public float maxRudderDeflection = 20f;
     [SerializeField] private float maxMastAngle = 90f;
 
     [Header("Controls")]
@@ -318,7 +318,7 @@ public class BoatController : MonoBehaviour
         currentMastAngle = targetMastAngle;
     }
 
-    private float currentRudderAngle = 0f;
+    public float currentRudderAngle = 0f;
     
     private void RotateRudder()
     {

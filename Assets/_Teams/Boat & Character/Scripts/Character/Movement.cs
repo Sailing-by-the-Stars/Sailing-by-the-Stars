@@ -47,6 +47,11 @@ public class Movement : MonoBehaviour
 
     [SerializeField] string playerState = "Land";
 
+
+    [SerializeField] GameObject sailCrank;
+    [SerializeField] GameObject anchorCrank;
+
+
     // ADDED BY JANTINA
     [Header("Dock Transition")]
     private bool _transitioning = false;
@@ -367,13 +372,16 @@ public class Movement : MonoBehaviour
 
     void MoveSail()
     {
+        sailCrank.GetComponent<Animator>().SetBool("isCranking", false);
         Vector2 moveDirection = playerControls.BoatSail.Move.ReadValue<Vector2>();
         if (moveDirection.y < 0)
         {
+            sailCrank.GetComponent<Animator>().SetBool("isCranking", true);
             boatController.mastAxis.OnNegative();
             // Moving Down
         } else if (moveDirection.y > 0)
         {
+            sailCrank.GetComponent<Animator>().SetBool("isCranking", true);
             // Moving Up
             boatController.mastAxis.OnPositive();
         }
@@ -404,9 +412,15 @@ public class Movement : MonoBehaviour
             boatController.rudderAxis.OnPositive();
         }
         else
+        {
             boatController.rudderAxis.ResetKeys();
+        }
 
         animator.SetFloat("Movement", moveDirection.x);
+
+        var rudderPercentage = (boatController.currentRudderAngle + boatController.maxRudderDeflection) / (boatController.maxRudderDeflection * 2);
+
+        animator.SetFloat("RudderAngle", rudderPercentage);
 
         if (playerControls.BoatRudder.Leave.IsPressed())
         {
@@ -416,14 +430,17 @@ public class Movement : MonoBehaviour
 
     void MoveAnchor()
     {
+        anchorCrank.GetComponent<Animator>().SetBool("isCranking", false);
         Vector2 moveDirection = playerControls.BoatAnchor.Move.ReadValue<Vector2>();
         if (moveDirection.y < 0)
         {
+            anchorCrank.GetComponent<Animator>().SetBool("isCranking", true);
             // Moving down
             boatController.DropAnchor();
         }
         else if (moveDirection.y > 0)
         {
+            anchorCrank.GetComponent<Animator>().SetBool("isCranking", true);
             // Moving up
             boatController.HaulAnchor();
         }
@@ -432,6 +449,7 @@ public class Movement : MonoBehaviour
         {
             SwitchState("Land");
         }
+
     }
 
     void SwitchState(string newState)
