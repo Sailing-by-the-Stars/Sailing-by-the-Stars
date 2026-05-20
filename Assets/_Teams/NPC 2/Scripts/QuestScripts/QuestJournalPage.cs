@@ -142,7 +142,7 @@ public class QuestJournalPage : MonoBehaviour
         };
 
         // pageIDHack = -1 appends to the end (matches JournalPagePickup default behaviour)
-        journal.AddPage(questPage, -1);
+        //journal.AddPage(questPage, -1);
     }
 
     private void TryLogCompletedQuest(string completedQuestId, string completedQuestName)
