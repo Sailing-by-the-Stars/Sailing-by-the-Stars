@@ -21,6 +21,7 @@ namespace _Teams.World_Design.Scripts.Checkpoints
         [SerializeField] private Transform currentBoatResetPoint;
         
         private DeathEffect deathEffect;
+        private DrownEffect drownEffect;
         private Rigidbody boatRb;
         private BoatController boatController;
 
@@ -46,15 +47,50 @@ namespace _Teams.World_Design.Scripts.Checkpoints
             {
                 Debug.LogWarning("DeathEffect reference is missing in CheckpointManager. Attempting to find one in the scene.");
             }
+            drownEffect = FindFirstObjectByType<DrownEffect>();
+            if (drownEffect == null)
+            {
+                Debug.LogWarning("DrownEffect reference is missing in CheckpointManager. Attempting to find one in the scene.");
+            }
+
         }
 
-        public void GoToCheckpoint()
+        public void GoToCheckpointDeath()
         {
             if (currentCheckpoint == null)
             {
                 return;
             }
 
+            HandleCheckpointTeleport();
+
+            if (deathEffect)
+            {
+                drownEffect.PlayFadeOut();
+                // deathEffect.PlayDeathSequence();
+            }
+        }
+        
+        public void GoToCheckpointDrown()
+        {
+            if (currentCheckpoint == null)
+            {
+                return;
+            }
+            
+
+            HandleCheckpointTeleport();
+
+            if (drownEffect)
+            {
+                drownEffect.PlayFadeOut();
+            }
+
+        }
+
+
+        private void HandleCheckpointTeleport()
+        {
             if (playerResetObject != null
                 && currentPlayerResetPoint != null
                 && !IsPlayerInsideBoatResetObject())
@@ -63,7 +99,7 @@ namespace _Teams.World_Design.Scripts.Checkpoints
                 playerResetObject.position = currentPlayerResetPoint.position;
                 playerResetObject.rotation = currentPlayerResetPoint.rotation;
             }
-            
+
             if (boatResetObject != null && currentBoatResetPoint != null)
             {
                 // reset velocity and anchor
@@ -74,24 +110,19 @@ namespace _Teams.World_Design.Scripts.Checkpoints
                 }
                 if (boatController != null && anchorBoatOnRespawn)
                 {
-                    boatController.DropAnchor();
+                    // boatController.DropAnchor();
                 }
-
-
+            
+            
                 boatResetObject.position = currentBoatResetPoint.position;
                 boatResetObject.rotation = currentBoatResetPoint.rotation;
-            }
-
-            if (deathEffect != null)
-            {
-                deathEffect.PlayDeathSequence();
             }
         }
 
         private bool IsPlayerInsideBoatResetObject()
         {
             return playerResetObject.IsChildOf(boatResetObject);
-            
+
         }
 
         public void SetCheckpoint(Checkpoint checkpoint)
