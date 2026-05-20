@@ -50,7 +50,9 @@ public class Movement : MonoBehaviour
 
     [SerializeField] GameObject sailCrank;
     [SerializeField] GameObject anchorCrank;
-
+    [Header("Debug")]
+    [SerializeField] private bool overrideSprintMultiplier;
+    [SerializeField] private float overriddenSprintMultiplier = 10f;
 
     // ADDED BY JANTINA
     [Header("Dock Transition")]
@@ -201,6 +203,10 @@ public class Movement : MonoBehaviour
         //>
         }
         //<
+    }
+    public void SetSprintMultiplier(float multiplier)
+    {
+        sprintMultiplier = multiplier;
     }
 
     void RotateCamera()
