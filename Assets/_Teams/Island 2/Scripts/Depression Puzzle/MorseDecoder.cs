@@ -4,6 +4,12 @@ using UnityEngine;
 
 public class MorseDecoder : MonoBehaviour
 {
+    [Header("Dialoge hints")]
+    public List<ConditionalDialogue> dialogues;
+    [SerializeField] private int pressesBeforeHint = 5;
+    private int currentPresses = 0;
+
+    [Header("Puzzle reward")]
     [SerializeField] private GameObject rewardItem;
     
     [Header("Target")]
@@ -48,6 +54,8 @@ public class MorseDecoder : MonoBehaviour
         { "-.--", 'Y' },
         { "--..", 'Z' }
     };
+
+    private bool correctMorse = false;
 
     private string normalizedTarget;
     private int progressIndex;
@@ -140,7 +148,15 @@ public class MorseDecoder : MonoBehaviour
     }
 
     public void ResetProgress()
-    {
+    {   
+        currentPresses += 1;
+
+        if (currentPresses >= pressesBeforeHint)
+        {
+            StartDialogue();
+            currentPresses = 0;
+        }
+        
         ResetProgressInternal();
         OnMorseProgressUpdated?.Invoke("");
         OnMorseReset?.Invoke();
@@ -177,5 +193,35 @@ public class MorseDecoder : MonoBehaviour
             return string.Empty;
 
         return normalizedTarget.Substring(0, progressIndex);
+    }
+
+    private void StartDialogue()
+    {
+        for (int i = dialogues.Count - 1; i >= 0; i--)
+        {
+            var entry = dialogues[i];
+
+            bool valid = true;
+
+            if (entry.conditions != null && entry.conditions.Count > 0)
+            {
+                foreach (var cond in entry.conditions)
+                {
+                    if (!cond.Evaluate(PlayerState.Instance))
+                    {
+                        valid = false;
+                        break;
+                    }
+                }
+            }
+
+            if (valid)
+            {
+                DialogueSystem.Instance.StartDialogue(entry.dialogue, gameObject);
+                return;
+            }
+        }
+
+        Debug.LogWarning("No valid idle dialogue found for this area.");
     }
 }

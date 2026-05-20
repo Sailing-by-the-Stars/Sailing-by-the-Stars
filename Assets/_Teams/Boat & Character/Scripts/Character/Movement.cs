@@ -48,10 +48,9 @@ public class Movement : MonoBehaviour
     [SerializeField] string playerState = "Land";
 
 
-    [Header("Particle System")]
-    [SerializeField] private ParticleSystem boatFoam;
-    [SerializeField] private ParticleSystem sideFoamRight;
-    [SerializeField] private ParticleSystem sideFoamLeft;
+    [SerializeField] GameObject sailCrank;
+    [SerializeField] GameObject anchorCrank;
+
 
     // ADDED BY JANTINA
     [Header("Dock Transition")]
@@ -275,13 +274,6 @@ public class Movement : MonoBehaviour
 
         buoyancyController.enabled = true;
         boatController.enabled = true;
-
-        boatFoam.gameObject.SetActive(true);
-        sideFoamLeft.gameObject.SetActive(true);
-        sideFoamRight.gameObject.SetActive(true);
-        boatFoam.Play();
-        sideFoamRight.Play();
-        sideFoamLeft.Play();
     }
 
     public void ExitBoat()
@@ -294,15 +286,6 @@ public class Movement : MonoBehaviour
 
         buoyancyController.enabled = false;
         boatController.enabled = false;
-
-        boatFoam.gameObject.SetActive(false);
-        sideFoamLeft.gameObject.SetActive(false);
-        sideFoamRight.gameObject.SetActive(false);
-
-        boatFoam.Stop();
-        sideFoamLeft.Stop();
-        sideFoamRight.Stop();
-
     }
 
     // ADDED: Everything below up to Jump() is added by Jantina
@@ -389,13 +372,18 @@ public class Movement : MonoBehaviour
 
     void MoveSail()
     {
+        sailCrank.GetComponent<Animator>().SetBool("isCranking", false);
         Vector2 moveDirection = playerControls.BoatSail.Move.ReadValue<Vector2>();
         if (moveDirection.y < 0)
         {
+            sailCrank.GetComponent<Animator>().SetBool("isReverse", true);
+            sailCrank.GetComponent<Animator>().SetBool("isCranking", true);
             boatController.mastAxis.OnNegative();
             // Moving Down
         } else if (moveDirection.y > 0)
         {
+            sailCrank.GetComponent<Animator>().SetBool("isReverse", false);
+            sailCrank.GetComponent<Animator>().SetBool("isCranking", true);
             // Moving Up
             boatController.mastAxis.OnPositive();
         }
@@ -426,9 +414,15 @@ public class Movement : MonoBehaviour
             boatController.rudderAxis.OnPositive();
         }
         else
+        {
             boatController.rudderAxis.ResetKeys();
+        }
 
         animator.SetFloat("Movement", moveDirection.x);
+
+        var rudderPercentage = (boatController.currentRudderAngle + boatController.maxRudderDeflection) / (boatController.maxRudderDeflection * 2);
+
+        animator.SetFloat("RudderAngle", rudderPercentage);
 
         if (playerControls.BoatRudder.Leave.IsPressed())
         {
@@ -438,14 +432,19 @@ public class Movement : MonoBehaviour
 
     void MoveAnchor()
     {
+        anchorCrank.GetComponent<Animator>().SetBool("isCranking", false);
         Vector2 moveDirection = playerControls.BoatAnchor.Move.ReadValue<Vector2>();
         if (moveDirection.y < 0)
         {
+            anchorCrank.GetComponent<Animator>().SetBool("isReverse", true);
+            anchorCrank.GetComponent<Animator>().SetBool("isCranking", true);
             // Moving down
             boatController.DropAnchor();
         }
         else if (moveDirection.y > 0)
         {
+            anchorCrank.GetComponent<Animator>().SetBool("isReverse", false);
+            anchorCrank.GetComponent<Animator>().SetBool("isCranking", true);
             // Moving up
             boatController.HaulAnchor();
         }
@@ -454,6 +453,7 @@ public class Movement : MonoBehaviour
         {
             SwitchState("Land");
         }
+
     }
 
     void SwitchState(string newState)
