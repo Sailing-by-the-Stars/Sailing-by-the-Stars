@@ -2,21 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting;
-using UnityEditor.Rendering.HighDefinition;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
-using UnityEngine.UI;
-using static System.Net.Mime.MediaTypeNames;
-using static UnityEngine.Rendering.DebugUI;
-
-[Serializable]
-public class Page
-{
-    public Texture leftPage;
-    public Texture rightPage;
-}
 
 public class LegacyJournal : ToolPickup, AstroTutorialStep
 {

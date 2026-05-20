@@ -188,33 +188,115 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  dimCurve:
+  selectedCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
       time: 0
       value: 0
-      inSlope: 0
-      outSlope: 0
+      inSlope: -0.03655891
+      outSlope: -0.03655891
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0
+      outWeight: 0.07939914
+    - serializedVersion: 3
+      time: 0.20506921
+      value: 0.15083088
+      inSlope: 2.251284
+      outSlope: 2.251284
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.5
+      value: 1
+      inSlope: 0.000008546388
+      outSlope: 0.000008546388
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.083691
+    - serializedVersion: 3
+      time: 0.7371556
+      value: 0.21479042
+      inSlope: -2.6460829
+      outSlope: -2.6460829
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
     - serializedVersion: 3
       time: 1
+      value: 0
+      inSlope: -0
+      outSlope: -0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.10515022
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  dimCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
       value: 1
-      inSlope: 0
-      outSlope: 0
+      inSlope: 4.5456047
+      outSlope: 4.5456047
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
+      outWeight: 0.108528756
+    - serializedVersion: 3
+      time: 0.22527567
+      value: 1.2398211
+      inSlope: -4.0003214
+      outSlope: -4.0003214
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.1720491
+    - serializedVersion: 3
+      time: 0.44289282
+      value: 0.27238226
+      inSlope: -1.2567115
+      outSlope: -1.2567115
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.7306263
+      value: 0.8283342
+      inSlope: 2.7522357
+      outSlope: 2.7522357
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: -0.2
+      inSlope: -3.4959462
+      outSlope: -3.4959462
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.13054824
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
   intensity: 2.5
   twinkleTime: 1.5
+  dimTime: 2
+  selectedTime: 45
+  selectedIntensity: 0.7
   targetAngle: 0
+  initialColor: {r: 0, g: 0, b: 0, a: 0}
   initpos: {x: 0, y: 0, z: 0}
 --- !u!1 &8696826859174166867
 GameObject:
@@ -473,12 +555,13 @@ MonoBehaviour:
     targetAngle: 50
   - starID: 1203
     targetAngle: 65
-  - starID: 3323
+  - starID: 4069
     targetAngle: 50
   - starID: 4301
     targetAngle: 65
   - starID: 1570
     targetAngle: 55
+  starColliderMult: 2
   minManualSize: 10
   manualSizeMult: 1.1
   flatManualSizeAdd: 4
