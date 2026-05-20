@@ -1,20 +1,7 @@
-/*
- *  DockPoint.cs
- *
- *  SETUP PER DOCK:
- *    1. Add this component to each dock GameObject.
- *    2. Set requirementType and puzzleID (if needed) in the Inspector.
- *    3. Tag the boat's seat empty GameObject as "seatPosition".
- *    4. Tag the exit child of this prefab as "dockExit".
- *    5. Everything else is found automatically on Start.
- *
- *  Tags needed in project:
- *    "boat"         - already exists
- *    "seatPosition" - empty GO on the boat where the player sits
- *    "dockExit"     - child of this prefab where the player lands on disembark
- */
+// Created by Jantina
 
 using UnityEngine;
+using Assets._Teams.Island_1.Scripts.User_Interface;
 
 public class DockPoint : MonoBehaviour
 {
@@ -34,56 +21,75 @@ public class DockPoint : MonoBehaviour
     private DockInteractionUI dockUI;
     private Movement movement;
 
-    private void Start()
+    private void EnsureReferences()
     {
-        boat = GameObject.FindGameObjectWithTag("boat");
         if (boat == null)
-            Debug.LogError($"[DockPoint] No GameObject tagged 'boat' found.", this);
+            boat = GameObject.FindGameObjectWithTag("boat");
 
-        GameObject boardSpotObj = GameObject.FindGameObjectWithTag("seatPosition");
-        if (boardSpotObj != null)
-            playerBoardSpot = boardSpotObj.transform;
-        else
-            Debug.LogError($"[DockPoint] No GameObject tagged 'seatPosition' found.", this);
-
-        GameObject exitObj = null;
-        foreach (Transform child in GetComponentsInChildren<Transform>())
+        if (playerBoardSpot == null)
         {
-            if (child.CompareTag("dockExit"))
+            var boardSpotObj = GameObject.FindGameObjectWithTag("seatPosition");
+            if (boardSpotObj != null) playerBoardSpot = boardSpotObj.transform;
+        }
+
+        if (playerExitSpot == null)
+        {
+            foreach (Transform child in GetComponentsInChildren<Transform>())
             {
-                exitObj = child.gameObject;
-                break;
+                if (child.CompareTag("dockExit"))
+                {
+                    playerExitSpot = child;
+                    break;
+                }
             }
         }
-        if (exitObj != null)
-            playerExitSpot = exitObj.transform;
-        else
-            Debug.LogError($"[DockPoint] No child tagged 'dockExit' found on {gameObject.name}.", this);
 
-        dockUI = FindFirstObjectByType<DockInteractionUI>();
+        if (dockUI == null)
+        {
+            dockUI = FindFirstObjectByType<DockInteractionUI>(FindObjectsInactive.Include); 
+            if (dockUI != null)
+                Debug.Log("[DockPoint] DockInteractionUI found successfully.");
+        }
 
-        movement = FindFirstObjectByType<Movement>();
         if (movement == null)
-            Debug.LogError($"[DockPoint] No Movement component found in scene.", this);
+            movement = FindFirstObjectByType<Movement>(FindObjectsInactive.Include); 
+
+    }
+
+    private void Start()
+    {
+        EnsureReferences();
+
+        if (boat == null)          Debug.LogWarning($"[DockPoint] 'boat' tag not found yet on {gameObject.name}.", this);
+        if (playerBoardSpot == null) Debug.LogWarning($"[DockPoint] 'seatPosition' tag not found yet.", this);
+        if (playerExitSpot == null)  Debug.LogWarning($"[DockPoint] 'dockExit' child not found on {gameObject.name}.", this);
+        if (movement == null)        Debug.LogWarning($"[DockPoint] No Movement component found yet.", this);
     }
 
     public void UpdateUI(bool playerIsOnBoat, Vector3 playerPos, Vector3 boatPos)
     {
+        EnsureReferences();
         if (dockUI == null) return;
 
         bool playerNearDock = Vector3.Distance(playerPos, transform.position) <= interactionRange;
         bool boatNearDock   = Vector3.Distance(boatPos,   transform.position) <= boatDockRange;
 
         if (!playerIsOnBoat && playerNearDock && boatNearDock)
-            dockUI.ShowBoard(CanBoard());
+        {
+            if (CanBoard())
+                dockUI.ShowBoard(true,this);
+            else
+                dockUI.ShowBlockedReason(GetLockedReason(),this);
+        }
         else if (playerIsOnBoat && boatNearDock)
-            dockUI.ShowDisembark();
-        else
+            dockUI.ShowDisembark(this);
+        else if (dockUI.IsShowingForDock(this)) // ONLY hide if we're the one currently showing
             dockUI.Hide();
     }
 
     public void TryInteract(bool playerIsOnBoat, Vector3 playerPos, Vector3 boatPos)
     {
+        EnsureReferences();
         if (boat == null || movement == null) return;
 
         bool playerNearDock = Vector3.Distance(playerPos, transform.position) <= interactionRange;
@@ -104,7 +110,6 @@ public class DockPoint : MonoBehaviour
             Debug.Log($"[DockPoint] Boarding blocked at {gameObject.name}: {GetLockedReason()}");
             return;
         }
-
         movement.BoardBoat(playerBoardSpot);
     }
 
@@ -117,10 +122,10 @@ public class DockPoint : MonoBehaviour
     {
         switch (requirementType)
         {
-            case RequirementType.None:           return true;
-            case RequirementType.PuzzleID:       return PuzzleProgress.IsComplete(puzzleID);
-            case RequirementType.StartingItems:  return HasStartingItems();
-            default:                             return true;
+            case RequirementType.None:          return true;
+            case RequirementType.PuzzleID:      return PuzzleProgress.IsComplete(puzzleID);
+            case RequirementType.StartingItems: return HasStartingItems();
+            default:                            return true;
         }
     }
 
@@ -140,11 +145,11 @@ public class DockPoint : MonoBehaviour
                 return $"Complete the {puzzleID} puzzle first.";
             case RequirementType.StartingItems:
                 if (movement == null) return "Requirements not met.";
-                bool hasJ = movement.GetComponentInChildren<Journal>()   != null;
-                bool hasA = movement.GetComponentInChildren<Astrolabe>() != null;
-                if (!hasJ && !hasA) return "You need the Journal and Astrolabe.";
-                if (!hasJ)          return "You need the Journal.";
-                if (!hasA)          return "You need the Astrolabe.";
+                bool hasJournal   = movement.GetComponentInChildren<Journal>()   != null;
+                bool hasAstrolabe = movement.GetComponentInChildren<Astrolabe>() != null;
+                if (!hasJournal && !hasAstrolabe) return "You need the Journal and Astrolabe.";
+                if (!hasJournal)                  return "You need the Journal.";
+                if (!hasAstrolabe)                return "You need the Astrolabe.";
                 break;
         }
         return "Requirements not met.";

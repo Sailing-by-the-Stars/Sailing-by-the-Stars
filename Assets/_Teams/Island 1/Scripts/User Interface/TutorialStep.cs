@@ -40,5 +40,9 @@
         Completed,
 
         RotateAstrolabe,
+        // Added by Jantina — Boat tutorial steps
+        HaulAnchor,
+        SteerRudder,
+        AdjustSail,
     }
 }

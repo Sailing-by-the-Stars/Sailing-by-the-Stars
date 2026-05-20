@@ -50,13 +50,16 @@ public class Movement : MonoBehaviour
 
     [SerializeField] GameObject sailCrank;
     [SerializeField] GameObject anchorCrank;
-
+    [Header("Debug")]
+    [SerializeField] private bool overrideSprintMultiplier;
+    [SerializeField] private float overriddenSprintMultiplier = 10f;
 
     // ADDED BY JANTINA
     [Header("Dock Transition")]
     private bool _transitioning = false;
     private DockPoint[] _docks;
     private DockInteractionUI _dockUI;
+    private BoatTutorialManager boatTutorialManager;
 
     // private void Awake()
     // {
@@ -89,6 +92,7 @@ public class Movement : MonoBehaviour
         if (boat != null)
         {
             boatController = boat.GetComponent<BoatController>();
+            boatTutorialManager = boat.GetComponent<BoatTutorialManager>(); // Added by Jantina
             buoyancyController = boat.GetComponent<BuoyancyController>();
         }
  
@@ -200,6 +204,10 @@ public class Movement : MonoBehaviour
         }
         //<
     }
+    public void SetSprintMultiplier(float multiplier)
+    {
+        sprintMultiplier = multiplier;
+    }
 
     void RotateCamera()
     {
@@ -287,9 +295,27 @@ public class Movement : MonoBehaviour
         buoyancyController.enabled = false;
         boatController.enabled = false;
     }
+    
 
     // ADDED: Everything below up to Jump() is added by Jantina
+    public void TeleportPlayer(Vector3 position)
+    {
+        if (isOnBoat)
+        {
+            SwitchState("Land");
+            ExitBoat();
+            transform.SetParent(null);
+        }
 
+        if (rb != null)
+        {
+            rb.linearVelocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+            rb.position = position;
+        }
+
+        transform.position = position;
+    }
     public void BoardBoat(Transform boardSpot)
     {
         if (_transitioning) return;
@@ -311,6 +337,8 @@ public class Movement : MonoBehaviour
         transform.position = boardSpot.position;
         transform.rotation = boardSpot.rotation;
         EntersBoat();
+        Debug.Log($"[BoatTutorial] About to call OnPlayerBoarded. _boatTutorialManager={boatTutorialManager}");
+        boatTutorialManager?.OnPlayerBoarded();
         yield return null;
         if (_dockUI != null) yield return StartCoroutine(_dockUI.FadeIn());
         _transitioning = false;
@@ -321,7 +349,7 @@ public class Movement : MonoBehaviour
         _transitioning = true;
         if (boatController != null) boatController.DropAnchor();
         SwitchState("Land");
-
+        boatTutorialManager?.OnPlayerDisembarked();
         if (_dockUI != null) yield return StartCoroutine(_dockUI.FadeOut());
 
         ExitBoat();
@@ -380,12 +408,17 @@ public class Movement : MonoBehaviour
             sailCrank.GetComponent<Animator>().SetBool("isCranking", true);
             boatController.mastAxis.OnNegative();
             // Moving Down
+
+            // Added by Jantina — notify tutorial
+            boatTutorialManager?.NotifySailAdjusted();
         } else if (moveDirection.y > 0)
         {
             sailCrank.GetComponent<Animator>().SetBool("isReverse", false);
             sailCrank.GetComponent<Animator>().SetBool("isCranking", true);
             // Moving Up
             boatController.mastAxis.OnPositive();
+            // Added by Jantina — notify tutorial
+            boatTutorialManager?.NotifySailAdjusted();
         }
         else
             boatController.mastAxis.ResetKeys();
@@ -407,11 +440,15 @@ public class Movement : MonoBehaviour
         {
             // Moving Left
             boatController.rudderAxis.OnNegative();
+            // Added by Jantina — notify tutorial
+            boatTutorialManager?.NotifyRudderSteered();
         }
         else if (moveDirection.x > 0)
         {
             // Moving right
             boatController.rudderAxis.OnPositive();
+            // Added by Jantina — notify tutorial
+            boatTutorialManager?.NotifyRudderSteered();
         }
         else
         {
@@ -447,6 +484,9 @@ public class Movement : MonoBehaviour
             anchorCrank.GetComponent<Animator>().SetBool("isCranking", true);
             // Moving up
             boatController.HaulAnchor();
+            // Added by Jantina — notify tutorial
+            boatTutorialManager?.NotifyAnchorHauled();
+
         }
 
         if (playerControls.BoatAnchor.Leave.IsPressed())
@@ -461,6 +501,7 @@ public class Movement : MonoBehaviour
         switch (newState)
         {
             case "Land":
+            
                 playerControls.BoatSail.Disable();
                 playerControls.BoatRudder.Disable();
                 playerControls.Land.Enable();
@@ -471,10 +512,13 @@ public class Movement : MonoBehaviour
                 animator.SetBool("IsAnchor", false);
 
                 limitCamMovement = false;
-
+                if (playerState == "BoatAnchor") boatTutorialManager?.NotifyLeftAnchor();
+                    else if (playerState == "BoatRudder") boatTutorialManager?.NotifyLeftRudder();
+                    else if (playerState == "BoatSail")   boatTutorialManager?.NotifyLeftSail();
                 SetPlayerState(newState);
                 break;
             case "BoatSail":
+                boatTutorialManager?.NotifyEnteredSail(); // Added by Jantina
                 playerControls.BoatSail.Enable();
                 playerControls.BoatRudder.Disable();
                 playerControls.Land.Disable();
@@ -487,6 +531,7 @@ public class Movement : MonoBehaviour
                 SetPlayerState(newState);
                 break;
             case "BoatRudder":
+                boatTutorialManager?.NotifyEnteredRudder(); // Added by Jantina
                 playerControls.BoatSail.Disable();
                 playerControls.BoatRudder.Enable();
                 playerControls.Land.Disable();
@@ -499,6 +544,7 @@ public class Movement : MonoBehaviour
                 SetPlayerState(newState);
                 break;
             case "BoatAnchor":
+                boatTutorialManager?.NotifyEnteredAnchor(); // Added by Jantina
                 playerControls.BoatSail.Disable();
                 playerControls.BoatRudder.Disable();
                 playerControls.Land.Disable();

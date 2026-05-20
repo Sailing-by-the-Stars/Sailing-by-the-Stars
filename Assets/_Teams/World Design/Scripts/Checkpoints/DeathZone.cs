@@ -32,7 +32,7 @@ namespace _Teams.World_Design.Scripts.Checkpoints
                 return;
             }
 
-            checkpointManager.GoToCheckpoint();
+            checkpointManager.GoToCheckpointDeath();
             // Here should be reset to checkpoint code
             Debug.Log("Player Died");
         }
