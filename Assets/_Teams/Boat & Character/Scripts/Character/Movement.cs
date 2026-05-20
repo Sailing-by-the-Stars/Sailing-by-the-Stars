@@ -376,11 +376,13 @@ public class Movement : MonoBehaviour
         Vector2 moveDirection = playerControls.BoatSail.Move.ReadValue<Vector2>();
         if (moveDirection.y < 0)
         {
+            sailCrank.GetComponent<Animator>().SetBool("isReverse", true);
             sailCrank.GetComponent<Animator>().SetBool("isCranking", true);
             boatController.mastAxis.OnNegative();
             // Moving Down
         } else if (moveDirection.y > 0)
         {
+            sailCrank.GetComponent<Animator>().SetBool("isReverse", false);
             sailCrank.GetComponent<Animator>().SetBool("isCranking", true);
             // Moving Up
             boatController.mastAxis.OnPositive();
@@ -434,12 +436,14 @@ public class Movement : MonoBehaviour
         Vector2 moveDirection = playerControls.BoatAnchor.Move.ReadValue<Vector2>();
         if (moveDirection.y < 0)
         {
+            anchorCrank.GetComponent<Animator>().SetBool("isReverse", true);
             anchorCrank.GetComponent<Animator>().SetBool("isCranking", true);
             // Moving down
             boatController.DropAnchor();
         }
         else if (moveDirection.y > 0)
         {
+            anchorCrank.GetComponent<Animator>().SetBool("isReverse", false);
             anchorCrank.GetComponent<Animator>().SetBool("isCranking", true);
             // Moving up
             boatController.HaulAnchor();
