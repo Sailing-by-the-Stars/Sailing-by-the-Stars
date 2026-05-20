@@ -93,13 +93,16 @@ public class TeleportManager : MonoBehaviour
         if (teleportPoints.TryGetValue(name, out var target))
         {
             var movement = player.GetComponent<Movement>();
+            Vector3 destination = target.position + Vector3.up * 1.2f;
+
             if (movement != null)
             {
-                player.SetParent(null); // always unparent
-                movement.ExitBoat();
+                movement.TeleportPlayer(destination);
             }
-
-            player.position = target.position + Vector3.up * 1.2f;
+            else
+            {
+                player.position = destination;
+            }
         }
     }
 }

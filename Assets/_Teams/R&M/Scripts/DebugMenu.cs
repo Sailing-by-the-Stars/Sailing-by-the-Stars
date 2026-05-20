@@ -84,17 +84,17 @@ public class DebugMenu : MonoBehaviour
             });
         }
 
-        var spawnBtn = Instantiate(buttonPrefab, container);
-        spawnBtn.GetComponentInChildren<TextMeshProUGUI>().text = "Spawn Boat";
-        spawnBtn.onClick.AddListener(() =>
-        {
-            var boat = GameObject.FindGameObjectWithTag("boat");
-            Debug.Log($"[BoatFind] boat={boat}, active={boat?.activeSelf}, activeInHierarchy={boat?.activeInHierarchy}");
-            if (boat != null)
-                TeleportManager.Instance.TeleportObjectNextToPlayer(boat);
-            else
-                Debug.LogWarning("No object with tag 'boat' found in scene.");
-        });
+        // var spawnBtn = Instantiate(buttonPrefab, container);
+        // spawnBtn.GetComponentInChildren<TextMeshProUGUI>().text = "Spawn Boat";
+        // spawnBtn.onClick.AddListener(() =>
+        // {
+        //     var boat = GameObject.FindGameObjectWithTag("boat");
+        //     Debug.Log($"[BoatFind] boat={boat}, active={boat?.activeSelf}, activeInHierarchy={boat?.activeInHierarchy}");
+        //     if (boat != null)
+        //         TeleportManager.Instance.TeleportObjectNextToPlayer(boat);
+        //     else
+        //         Debug.LogWarning("No object with tag 'boat' found in scene.");
+        // });
 
         var resetTutorialBtn = Instantiate(buttonPrefab, container);
         resetTutorialBtn.GetComponentInChildren<TextMeshProUGUI>().text = "Reset Tutorials";
