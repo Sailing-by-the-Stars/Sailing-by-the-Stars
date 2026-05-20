@@ -698,12 +698,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b248f041c528664584953a977760db4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Movement
-  movementSpeed: 4
-  sprintMultiplier: 10
-  jumpStrength: 200
+  movementSpeed: 7
+  sprintMultiplier: 2
+  jumpStrength: 300
   mouseSensitivity: 10
-  minXRotation: -70
-  maxXRotation: 70
+  minYRotation: -90
+  maxYRotation: 90
   rb: {fileID: 8736095831419434310}
   InteractionRange: 2.9
   groundChecks:
@@ -720,6 +720,8 @@ MonoBehaviour:
   seatPosition: {fileID: 0}
   animator: {fileID: 4182459621082244727}
   playerState: Land
+  sailCrank: {fileID: 0}
+  anchorCrank: {fileID: 0}
 --- !u!136 &1658142731576847673
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -799,6 +801,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::InteractionController
   playerCamera: {fileID: 1656572733483448602}
   interactionText: {fileID: 0}
+  interactionBackground: {fileID: 0}
   interactionDistance: 5
 --- !u!114 &3201630360258636512
 MonoBehaviour:
