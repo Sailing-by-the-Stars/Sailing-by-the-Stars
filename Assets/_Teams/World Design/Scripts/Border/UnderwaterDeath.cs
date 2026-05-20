@@ -7,7 +7,7 @@ namespace _Teams.World_Design.Scripts.Border
     {
         
         [SerializeField] private GameObject player; 
-        [SerializeField] private float deathHeight = -10f; 
+        [SerializeField] private float deathHeight = -10f;
 
         [SerializeField] private CheckpointManager checkpointManager;
         
