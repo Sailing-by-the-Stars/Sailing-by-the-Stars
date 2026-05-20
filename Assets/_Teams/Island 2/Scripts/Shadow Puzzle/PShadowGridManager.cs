@@ -12,18 +12,6 @@ public class PShadowGridManager : MonoBehaviour
     
     [Tooltip("Keep this low aprox. around 0.08 - 0.25. Free to experiment though.")]
     [SerializeField] private float slidingTime = 0.15f;
-    
-    [Header("Reward References")]
-    [SerializeField] private GameObject rewardDistortionWall;
-    [SerializeField] private List<GameObject> rewardTorches;
-
-    [Header("Puzzle Hints")]
-    [SerializeField] private Dialogue buttonHint1;
-    [SerializeField] private Dialogue buttonHint2;
-    [SerializeField] private Dialogue buttonHint3;
-    [SerializeField] private Dialogue manWomanHint;
-    [SerializeField] private Dialogue braceletHint;
-    private int buttonPresses;
 
     private PShadowPillar[,] grid;
     private bool isMoving;
@@ -117,7 +105,6 @@ public class PShadowGridManager : MonoBehaviour
         if (isMoving) return;
         if (direction != -1 && direction != 1) return;
 
-        buttonPresses++;
         if (isRow)
         {
             if (index < 0 || index >= height) return;
@@ -251,67 +238,18 @@ public class PShadowGridManager : MonoBehaviour
         
         activeMoves = 0;
         isMoving = false;
-        
-        CheckHintRequirement();
+
+        CheckSolvedCondition();
     }
 
-    private void CheckHintRequirement()
-    {
-        int i = 0;
-        List<PShadowPillar> pillarsToCheck = grid.Cast<PShadowPillar>().Where(pillar => pillar).ToList();
-        foreach (var pillar in pillarsToCheck)
-        {
-            if (!pillar.isBracelet && pillar.IsInCorrectPosition() && manWomanHint)
-            {
-                DialogueSystem.Instance.StartDialogue(manWomanHint, gameObject);
-                manWomanHint = null;
-                continue;
-            } 
-            if (pillar.isBracelet && pillar.IsInCorrectPosition())
-            {
-                i++;
-            }
-            if (i >= 2 && braceletHint)
-            {
-                DialogueSystem.Instance.StartDialogue(braceletHint, gameObject);
-                braceletHint = null;
-            }
-        }
-        
-        if (CheckSolvedCondition()) return;
-        
-        if (buttonPresses >= 10 && buttonHint1)
-        {
-            DialogueSystem.Instance.StartDialogue(buttonHint1, gameObject);
-            buttonHint1 = null;
-        }
-        if (buttonPresses >= 20 && buttonHint2)
-        {
-            DialogueSystem.Instance.StartDialogue(buttonHint2, gameObject);
-            buttonHint2 = null;
-        }
-        if (buttonPresses >= 30 && buttonHint3)
-        {
-            DialogueSystem.Instance.StartDialogue(buttonHint3, gameObject);
-            buttonHint3 = null;
-        }
-    }
-
-    private bool CheckSolvedCondition()
+    private void CheckSolvedCondition()
     {
         List<PShadowPillar> pillarsToCheck = grid.Cast<PShadowPillar>().Where(pillar => pillar).ToList();
-        if (pillarsToCheck.Any(pillar => !pillar.IsInCorrectPosition())) return false;
-
-        rewardDistortionWall.SetActive(false);
-        foreach (GameObject torch in rewardTorches)
-        {
-            torch.GetComponentInChildren<Light>().enabled = true;
-        }
+        if (pillarsToCheck.Any(pillar => !pillar.IsInCorrectPosition())) return;
         
-        Debug.Log("ANGER PUZZLE SOLVED!");
-        PuzzleProgress.MarkComplete("anger");
-
-        return true;
+        Debug.Log("PUZZLE SOLVED!");
+        // PuzzleProgress.MarkComplete("anger"); // TODO: move this to the pickup item that will be spawned when the puzzle is solved.
+        // It's disabled for now, as to not forget about it later on.
     }
 
     private struct MoveRequest
