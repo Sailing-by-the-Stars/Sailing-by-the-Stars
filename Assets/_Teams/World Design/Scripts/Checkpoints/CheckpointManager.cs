@@ -77,18 +77,15 @@ namespace _Teams.World_Design.Scripts.Checkpoints
             {
                 return;
             }
-            
-            HandleCheckpointTeleport();
 
-            if (drownEffect)
+            if (drownEffect && drownEffect.coroutine == null)
             {
                 drownEffect.PlayFadeOut();
             }
-
         }
 
 
-        private void HandleCheckpointTeleport()
+        public void HandleCheckpointTeleport()
         {
             if (playerResetObject != null
                 && currentPlayerResetPoint != null
