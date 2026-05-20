@@ -2,10 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting;
-using UnityEditor.Rendering;
 using UnityEngine;
-using UnityEngine.InputSystem;
+using UnityEngine.Events;
 
 public enum SectionName
 {
@@ -14,6 +12,17 @@ public enum SectionName
     Lore,
     Quests,
 }
+
+
+[Serializable]
+public class Page
+{
+    public Texture leftPage;
+    public Texture rightPage;
+    [NonSerialized]
+    public int pageID = -1;
+}
+
 
 public class Journal : ToolPickup, AstroTutorialStep
 {
@@ -35,8 +44,10 @@ public class Journal : ToolPickup, AstroTutorialStep
 
     [SerializeField]
     List<JournalSection> Sections = new();
-    
-    int pageNr = 0;
+
+    public int curPageNr = 0;
+    [NonSerialized]
+    public int prevPageNumber = -1;
     int curSectionIndex = 0;
 
     List<Bookmark> bookmarks;
@@ -83,7 +94,7 @@ public class Journal : ToolPickup, AstroTutorialStep
 
         foreach (Bookmark bookmark in bookmarks)
         {
-            bookmark.GameObject().SetActive(false);
+            bookmark.gameObject.SetActive(false);
         }
         
         bookModel.SetActive(false);
@@ -124,9 +135,28 @@ public class Journal : ToolPickup, AstroTutorialStep
                     bookmark.UnHighlight();
                 }
             }
-
         }
+    }
 
+    public int getFullPageNR(Page page)
+    {
+        int extraPages = 0;
+        int fullPageID = 0;
+        foreach (JournalSection section in Sections)
+        {
+            foreach (Page sPage in section.pages)
+            {
+                if (sPage == page)
+                {
+                    fullPageID = extraPages + sPage.pageID;
+                    return fullPageID;
+                }
+            }
+
+            extraPages += section.nrOfPages;
+        }
+        Debug.LogError("couldn't find the page in the journal!");
+        return -1;
     }
 
 
@@ -186,7 +216,7 @@ public class Journal : ToolPickup, AstroTutorialStep
                 section.lastPageNr = maxSectionNr;
                 section.firstPageNr = section.lastPageNr - section.nrOfPages;
 
-                if (maxSectionNr >= pageNr && section.firstPageNr <= pageNr)
+                if (maxSectionNr >= curPageNr && section.firstPageNr <= curPageNr)
                 {
                     curSection = section;
                     curSectionIndex = i;
@@ -199,7 +229,7 @@ public class Journal : ToolPickup, AstroTutorialStep
             
             if (curSection == null)
             {
-                Debug.LogError($"the pageNr {pageNr} is somehow out of range!");
+                Debug.LogError($"the pageNr {curPageNr} is somehow out of range!");
                 return;
             }
             
@@ -208,14 +238,14 @@ public class Journal : ToolPickup, AstroTutorialStep
             // in the sections loop above would case OpenSection() to be run every frame
             if (playerControls.Journal.PreviousPage.triggered)
             {
-                pageNr -= 1;
+                curPageNr -= 1;
                 
-                if (pageNr < 0)
+                if (curPageNr < 0)
                 {
-                    pageNr = 0;
+                    curPageNr = 0;
                 }
                 
-                if (pageNr < curSection.firstPageNr)
+                if (curPageNr < curSection.firstPageNr)
                 {
                     if (curSectionIndex > 0)
                     {
@@ -230,15 +260,15 @@ public class Journal : ToolPickup, AstroTutorialStep
 
             if (playerControls.Journal.NextPage.triggered)
             {
-                pageNr += 1;
+                curPageNr += 1;
                 
-                if (pageNr > totalNrOfPages - 1)
+                if (curPageNr > totalNrOfPages - 1)
                 {
-                    pageNr = totalNrOfPages - 1;
+                    curPageNr = totalNrOfPages - 1;
                     Debug.Log("hit the end of the journal!");
                 }
                 
-                if (pageNr > curSection.lastPageNr - 1)
+                if (curPageNr > curSection.lastPageNr - 1)
                 {
                     if (curSectionIndex < Sections.Count - 1)
                     {
@@ -251,7 +281,12 @@ public class Journal : ToolPickup, AstroTutorialStep
                 }
             }
 
-            Sections[curSectionIndex].OpenPage(pageNr - curSection.firstPageNr);
+
+            if(prevPageNumber != curPageNr)
+            {
+                Sections[curSectionIndex].OpenPage(curPageNr - curSection.firstPageNr);
+                prevPageNumber = curPageNr;
+            }
         }
 
     }
@@ -276,6 +311,7 @@ public class Journal : ToolPickup, AstroTutorialStep
         {
             if (playerControls.Journal.Open.triggered)
             {
+                prevPageNumber = -1;
                 if (bookOpened)
                 {
                     bookOpened = false;
@@ -284,7 +320,7 @@ public class Journal : ToolPickup, AstroTutorialStep
                     bookModel.SetActive(false);
                     foreach (Bookmark bookmark in bookmarks)
                     {
-                        bookmark.GameObject().SetActive(false);
+                        bookmark.gameObject.SetActive(false);
                     }
                     
                     Sections[curSectionIndex].CloseSection();
@@ -311,7 +347,7 @@ public class Journal : ToolPickup, AstroTutorialStep
                     bookModel.SetActive(true);
                     foreach (Bookmark bookmark in bookmarks)
                     {
-                        bookmark.GameObject().SetActive(true);
+                        bookmark.gameObject.SetActive(true);
                     }
                     
                     Sections[curSectionIndex].OpenSection();
@@ -370,11 +406,11 @@ public class Journal : ToolPickup, AstroTutorialStep
 
                 if (maxPageNr)
                 {
-                    pageNr = section.lastPageNr - 1;
+                    curPageNr = section.lastPageNr - 1;
                 }
                 else
                 {
-                    pageNr = section.firstPageNr;
+                    curPageNr = section.firstPageNr;
                 }
                 
                 OpenBookmark(sectionName);

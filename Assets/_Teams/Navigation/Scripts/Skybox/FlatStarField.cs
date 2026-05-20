@@ -245,6 +245,7 @@ public class FlatStarField : MonoBehaviour
             Constelation starConstelation = null;
 
             bool isManualStar = false;
+            TwinklingStar twinkler = null;
 
             foreach (Constelation manualStar in manualStars)
             {
@@ -277,22 +278,32 @@ public class FlatStarField : MonoBehaviour
                         TwinklingStar template = transform.parent.GetComponent<TwinklingStar>();
                         bool twinkling = false;
 
+                        int i = 0;
                         foreach (var obj in twinklingStars)
                         {
+                            i++;
+
                             if (id == obj.starID)
                             {
-                                TwinklingStar twinkler = stargo.AddComponent<TwinklingStar>();
-
-                                twinkler.targetAngle = obj.targetAngle;
+                                if (twinkler == null)
+                                {
+                                    twinkler = stargo.AddComponent<TwinklingStar>();
+                                }
 
                                 twinkler.twinkleCurve = template.twinkleCurve;
+                                twinkler.selectedCurve = template.selectedCurve;
                                 twinkler.dimCurve = template.dimCurve;
                                 twinkler.intensity = template.intensity;
                                 twinkler.twinkleTime = template.twinkleTime;
+
+                                EntryCheck entryCheck = new();
+                                entryCheck.entryNumber = i;
+                                entryCheck.targetAngle = obj.targetAngle;
+                                twinkler.entryNumbers.Add(entryCheck);
                                 stargo.layer = LayerMask.NameToLayer("Constelation");
                                 stargo.GetComponent<SphereCollider>().radius = 1.5f;
                                 twinkling = true;
-                                break;
+                                continue;
                             }
                         }
 
@@ -397,17 +408,21 @@ public class FlatStarField : MonoBehaviour
             StarInfo starInfo = stargo.AddComponent<StarInfo>();
 
 #if UNITY_EDITOR
-            if(isManualStar && starConstelation != null)
+            Color tempColor;
+
+            if (isManualStar && starConstelation != null)
             {
                 starInfo.matColor = starConstelation.debugColor;
-                starInfo.emissionColor = starConstelation.debugColor * intensityMul * starSize;
+                tempColor = starConstelation.debugColor * intensityMul * starSize;
+                starInfo.emissionColor = tempColor;
                 starInfo.emissionMult = intensityMul * starSize;
+
             }
             else
             {
 
                 starInfo.matColor = star.colour;
-                Color tempColor = star.colour * intensityMul * starSize;
+                tempColor = star.colour * intensityMul * starSize;
 
                 tempColor = BoostChroma(tempColor, chromaBoost);
 
@@ -424,8 +439,12 @@ public class FlatStarField : MonoBehaviour
             starInfo.emissionColor = tempColor;
             starInfo.emissionMult = intensityMul * starSize;
 #endif
+            if(twinkler != null)
+            {
+                twinkler.initialColor = tempColor;
+            }
 
-                meshRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+            meshRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
             meshRenderer.receiveShadows = false;
             meshRenderer.motionVectorGenerationMode = MotionVectorGenerationMode.Camera;
 
