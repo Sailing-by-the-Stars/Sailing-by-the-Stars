@@ -1,3 +1,4 @@
+using Assets._Teams.Island_1.Scripts.User_Interface;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -29,8 +30,8 @@ public class Journal : ToolPickup, AstroTutorialStep
     PlayerControls playerControls;
     GameState prevState;
 
-    [NonSerialized]
-    public TutorialSequence currentSequence;
+    //[NonSerialized]
+    public TutorialSequence currentSequence = null;
     [NonSerialized]
     public int currentTutorialStep = -1;
 
@@ -70,7 +71,11 @@ public class Journal : ToolPickup, AstroTutorialStep
     
     //Animation stuff
     private Quaternion initalRot;
-    
+
+
+    [SerializeField]
+    int tutorialStep = 0;
+
     private void OnEnable()
     {
         playerControls = TempStateMachine.Instance.PlayerControls;
@@ -81,10 +86,20 @@ public class Journal : ToolPickup, AstroTutorialStep
 
     }
 
+    public void EnableControl(int nr)
+    {
+        if (nr > tutorialStep)
+        {
+            tutorialStep = nr;
+        }
+    }
+
 
     public override void Grab(PickupController pickupController)
     {
         base.Grab(pickupController);
+
+        EnableControl(0);
 
         isEquipped = true;
 
@@ -238,6 +253,12 @@ public class Journal : ToolPickup, AstroTutorialStep
             // in the sections loop above would case OpenSection() to be run every frame
             if (playerControls.Journal.PreviousPage.triggered)
             {
+                if (currentSequence != null && tutorialStep == 1)
+                {
+                    ExitStep();
+                    currentSequence = null;
+                }
+
                 curPageNr -= 1;
                 
                 if (curPageNr < 0)
@@ -260,6 +281,12 @@ public class Journal : ToolPickup, AstroTutorialStep
 
             if (playerControls.Journal.NextPage.triggered)
             {
+                if (currentSequence != null && tutorialStep == 1)
+                {
+                    ExitStep();
+                    currentSequence = null;
+                }
+
                 curPageNr += 1;
                 
                 if (curPageNr > totalNrOfPages - 1)
@@ -309,8 +336,15 @@ public class Journal : ToolPickup, AstroTutorialStep
     {
         if (isEquipped)
         {
-            if (playerControls.Journal.Open.triggered)
+            if (playerControls.Journal.Open.triggered && (tutorialStep != 1 || currentSequence == null))
             {
+                EnableControl(tutorialStep);
+
+                if(currentSequence != null && tutorialStep == 0)
+                {
+                    ExitStep();
+                }
+
                 prevPageNumber = -1;
                 if (bookOpened)
                 {
@@ -489,8 +523,16 @@ public class Journal : ToolPickup, AstroTutorialStep
             Debug.LogError("this tutorialDialogue object is already in a different sequence!!");
             return;
         }
+
+
         currentSequence = sequence;
         currentTutorialStep = sequence.index;
+
+        if(currentTutorialStep == 8)
+        {
+            EnableControl(1);
+        }
+
     }
 
     public void ExitStep()
@@ -502,7 +544,6 @@ public class Journal : ToolPickup, AstroTutorialStep
         }
 
         currentSequence.FinishStep(currentTutorialStep);
-        currentSequence = null;
     }
 
 }

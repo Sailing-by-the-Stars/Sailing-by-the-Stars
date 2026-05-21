@@ -8,7 +8,7 @@ public class astroDialogue
 {
     public string text = "";
     public bool waitAtLineEnd = false;
-    public bool waitBeforeLineEnd = false;
+    public bool waitForTutorial = false;
     public int lineToGoToNext = -1;
     public UnityEvent startOfLine;
     public UnityEvent endOfLine;
@@ -21,6 +21,7 @@ public class AstroDialogue : MonoBehaviour
 
     public bool inDialogue;
     public float textSpeed;
+    public float waitTillNextline = 1;
 
     [SerializeField] 
     protected int index = 0;
@@ -31,7 +32,9 @@ public class AstroDialogue : MonoBehaviour
     public UnityEvent enterDialogue;
     public UnityEvent exitDialogue;
 
-    [SerializeField] protected List<astroDialogue> dialogue = new();
+    public bool waitFlag = false;
+
+    public List<astroDialogue> dialogue = new();
 
     protected virtual void Start()
     {
@@ -47,21 +50,28 @@ public class AstroDialogue : MonoBehaviour
             {
                 if (!inTyping)
                 {
-                    if (dialogue[index].waitAtLineEnd == false)
+                    if (index < dialogue.Count)
                     {
-                        if (NextLine())
+
+                        if (dialogue[index].waitForTutorial == true)
                         {
+
+
+                            WaitFlag();
                             return;
                         }
-                    }
 
-                    if (!dialogue[index].waitBeforeLineEnd)
-                    {
-                        TurnOffTextBoxes();
+                        if (dialogue[index].waitAtLineEnd == true)
+                        {
+                            if (NextLine())
+                            {
+                                return;
+                            }
+                        }
                     }
                     else
                     {
-                        WaitFlag();
+                        endDialogue();
                     }
                 }
                 else
@@ -77,7 +87,7 @@ public class AstroDialogue : MonoBehaviour
 
     public virtual void WaitFlag()
     {
-
+        waitFlag = true;
     }
 
     protected virtual void SetText(string text)
@@ -161,6 +171,8 @@ public class AstroDialogue : MonoBehaviour
 
     protected virtual bool NextLine(int Dindex = -1)
     {
+        waitFlag = false;
+
         if (Dindex >= 0)
         {
             index = Dindex;
@@ -177,6 +189,7 @@ public class AstroDialogue : MonoBehaviour
             return true;
         }
 
+        //endDialogue();
         return false;
     }
 
@@ -185,6 +198,10 @@ public class AstroDialogue : MonoBehaviour
         if (indexOfLine >= 0)
         {
             dialogue[indexOfLine].endOfLine.Invoke();
+        }
+        if (dialogue[indexOfLine].waitForTutorial && dialogue[indexOfLine].waitAtLineEnd == false)
+        {
+            WaitFlag();
         }
     }
 
@@ -202,5 +219,11 @@ public class AstroDialogue : MonoBehaviour
         }
         inTyping = false;
         endOfLine(indexOfLine);
+
+        if (dialogue[indexOfLine].waitAtLineEnd == false && dialogue[indexOfLine].waitForTutorial == false)
+        {
+            yield return new WaitForSeconds(waitTillNextline);
+            NextLine(dialogue[indexOfLine].lineToGoToNext);
+        }
     }
 }

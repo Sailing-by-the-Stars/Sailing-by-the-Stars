@@ -297,6 +297,8 @@ public class FlatStarField : MonoBehaviour
                                 twinkler.intensity = template.intensity;
                                 twinkler.twinkleTime = template.twinkleTime;
 
+                                twinkler.tutorialStar = obj.tutorialStar;
+
                                 EntryCheck entryCheck = new();
                                 entryCheck.entryNumber = i;
                                 entryCheck.targetAngle = obj.targetAngle;

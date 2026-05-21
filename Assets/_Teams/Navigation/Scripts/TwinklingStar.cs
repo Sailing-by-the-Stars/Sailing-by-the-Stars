@@ -66,6 +66,7 @@ public class TwinklingStar : MonoBehaviour
     public float selectedTime = 5;
     public float selectedIntensity = 1;
     public float targetAngle = 1;
+    public bool tutorialStar = false;
     public static float currentTarget;
 
     public static event Action OnStarFound;
@@ -115,6 +116,11 @@ public class TwinklingStar : MonoBehaviour
     {
         currentTarget = -1;
         initpos = transform.position;
+
+        if (tutorialStar)
+        {
+            starState = StarState.dimmed;
+        }
     }
 
     // Update is called once per frame
@@ -126,7 +132,7 @@ public class TwinklingStar : MonoBehaviour
         }
     }
 
-    public void Hit(float hitAngle)
+    public virtual void Hit(float hitAngle)
     {
         if(starState == StarState.dimmed)
         {
@@ -136,12 +142,6 @@ public class TwinklingStar : MonoBehaviour
         if (hitAngle < 5)
         {
             return;
-        }
-
-
-        if (!TutorialSequence.finishedTutorial && TutorialSequence.startedTutorial && TutorialSequence.Instance.index == 1)
-        {
-            TutorialSequence.Instance.NextStep(2);
         }
 
         //Debug.Log($"star hit at angle: {hitAngle}");
@@ -321,7 +321,7 @@ public class TwinklingStar : MonoBehaviour
 
         public void Enter(TwinklingStar star)
         {
-            timer = 1;
+            timer = 1f;
             animationLength = star.selectedTime;
             star.twinkle = true;
         }
@@ -339,7 +339,7 @@ public class TwinklingStar : MonoBehaviour
 
                 //Find current position on the animation curve
                 float curveOutput = 0;
-                if (timer <= 1 && timer >= 0)
+                if (timer < 1 && timer >= 0)
                 {
                     curveOutput = star.selectedCurve.Evaluate(timer);
                 }

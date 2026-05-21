@@ -50,12 +50,14 @@ public class NavigationSection : JournalSection
 
         openedNavPage?.Invoke(navPages[pageNr].OpenedPages);
 
+        /*
         string result = "opened NavPages: ";
         foreach (var item in navPages[pageNr].OpenedPages)
         {
             result += item.ToString() + ", ";
         }
         Debug.Log(result);
+        */
     }
 
     public void AddPage(NavPage navPage, int pageID)

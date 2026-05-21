@@ -28,7 +28,7 @@ namespace _Teams.World_Design.Scripts.Border
         // Update is called once per frame
         void Update()
         {
-            Debug.Log(player.transform.position);
+            //Debug.Log(player.transform.position);
             if(player.transform.position.y < deathHeight)
             {
                 checkpointManager.GoToCheckpointDrown();

@@ -796,7 +796,6 @@ Transform:
   - {fileID: 4155939541036007025}
   - {fileID: 1373125654670633279}
   - {fileID: 488948075084160180}
-  - {fileID: 2212950260954365880}
   - {fileID: 393076668537115334}
   - {fileID: 1085182293733845623}
   - {fileID: 4454410332374841199}
@@ -1559,7 +1558,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 471642289975700523, guid: f849efe2576952443a81b8239f353f52, type: 3}
       propertyPath: stepsToTrigger.Array.size
-      value: 3
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 471642289975700523, guid: f849efe2576952443a81b8239f353f52, type: 3}
       propertyPath: 'stepsToTrigger.Array.data[0]'
@@ -2469,6 +2468,10 @@ PrefabInstance:
     - target: {fileID: 3438084603677602977, guid: f849efe2576952443a81b8239f353f52, type: 3}
       propertyPath: m_Name
       value: Astrolabe Tutorial Trigger
+      objectReference: {fileID: 0}
+    - target: {fileID: 3438084603677602977, guid: f849efe2576952443a81b8239f353f52, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -6030,83 +6033,81 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8611007112339374439, guid: 3c5a1360ca4cc1241b85d169fb05c5ad, type: 3}
+      propertyPath: 'Sections.Array.data[0]'
+      value: 
+      objectReference: {fileID: 6758929392243930131}
+    - target: {fileID: 8611007112339374439, guid: 3c5a1360ca4cc1241b85d169fb05c5ad, type: 3}
+      propertyPath: 'Sections.Array.data[1]'
+      value: 
+      objectReference: {fileID: 4945228513583253772}
+    - target: {fileID: 8611007112339374439, guid: 3c5a1360ca4cc1241b85d169fb05c5ad, type: 3}
+      propertyPath: 'Sections.Array.data[2]'
+      value: 
+      objectReference: {fileID: 8683131903336673556}
+    - target: {fileID: 8611007112339374439, guid: 3c5a1360ca4cc1241b85d169fb05c5ad, type: 3}
+      propertyPath: 'Sections.Array.data[3]'
+      value: 
+      objectReference: {fileID: 318704488438064217}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3c5a1360ca4cc1241b85d169fb05c5ad, type: 3}
+--- !u!114 &318704488438064217 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7658005935543705100, guid: 3c5a1360ca4cc1241b85d169fb05c5ad, type: 3}
+  m_PrefabInstance: {fileID: 7938429801323706965}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca72145ac60a4884ea1a47839aa9a012, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AstrolabeInstructionsSection
 --- !u!4 &4454410332374841199 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6051651805166570810, guid: 3c5a1360ca4cc1241b85d169fb05c5ad, type: 3}
   m_PrefabInstance: {fileID: 7938429801323706965}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &4945228513583253772 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3065276763908436825, guid: 3c5a1360ca4cc1241b85d169fb05c5ad, type: 3}
+  m_PrefabInstance: {fileID: 7938429801323706965}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb050841cce6fb54c8992af2d81e6b73, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LoreSection
+--- !u!114 &6758929392243930131 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3739814670767443526, guid: 3c5a1360ca4cc1241b85d169fb05c5ad, type: 3}
+  m_PrefabInstance: {fileID: 7938429801323706965}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a6245210d67d2e4684836f2e51b78b8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NavigationSection
 --- !u!1 &7719803974577345328 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 362741016971897189, guid: 3c5a1360ca4cc1241b85d169fb05c5ad, type: 3}
   m_PrefabInstance: {fileID: 7938429801323706965}
   m_PrefabAsset: {fileID: 0}
---- !u!1001 &8031237197388024568
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 4623731682099826885}
-    m_Modifications:
-    - target: {fileID: 8196926425484064064, guid: 79a91158a7f731c488ebeb917cb44060, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 151.68
-      objectReference: {fileID: 0}
-    - target: {fileID: 8196926425484064064, guid: 79a91158a7f731c488ebeb917cb44060, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 8.98
-      objectReference: {fileID: 0}
-    - target: {fileID: 8196926425484064064, guid: 79a91158a7f731c488ebeb917cb44060, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 30.37
-      objectReference: {fileID: 0}
-    - target: {fileID: 8196926425484064064, guid: 79a91158a7f731c488ebeb917cb44060, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.7819361
-      objectReference: {fileID: 0}
-    - target: {fileID: 8196926425484064064, guid: 79a91158a7f731c488ebeb917cb44060, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8196926425484064064, guid: 79a91158a7f731c488ebeb917cb44060, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8196926425484064064, guid: 79a91158a7f731c488ebeb917cb44060, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0.6233586
-      objectReference: {fileID: 0}
-    - target: {fileID: 8196926425484064064, guid: 79a91158a7f731c488ebeb917cb44060, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8196926425484064064, guid: 79a91158a7f731c488ebeb917cb44060, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8196926425484064064, guid: 79a91158a7f731c488ebeb917cb44060, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 77.124
-      objectReference: {fileID: 0}
-    - target: {fileID: 9202524314098089220, guid: 79a91158a7f731c488ebeb917cb44060, type: 3}
-      propertyPath: m_Name
-      value: astrolabe
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 79a91158a7f731c488ebeb917cb44060, type: 3}
---- !u!4 &2212950260954365880 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 8196926425484064064, guid: 79a91158a7f731c488ebeb917cb44060, type: 3}
-  m_PrefabInstance: {fileID: 8031237197388024568}
+--- !u!114 &8683131903336673556 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1633216417702103873, guid: 3c5a1360ca4cc1241b85d169fb05c5ad, type: 3}
+  m_PrefabInstance: {fileID: 7938429801323706965}
   m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 626c226e175e4c449a5c86b0839c062a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::QuestSection
 --- !u!1001 &8265608013848924944
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -15,7 +15,7 @@ public class Bookmark : MonoBehaviour, IPointerClickHandler
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        transform.parent.parent.parent.parent.GetComponent<Journal>().OpenSection(sectionName);
+        transform.GetComponentInParent<Journal>().OpenSection(sectionName);
     }
 
     public void Highlight()

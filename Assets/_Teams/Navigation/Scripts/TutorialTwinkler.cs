@@ -1,15 +1,15 @@
 using UnityEngine;
 
-public class TutorialHitbox : MonoBehaviour, AstroTutorialStep
+public class TutorialTwinkler : TwinklingStar, AstroTutorialStep
 {
-    bool waitingForPlayer = false;
-
-    [SerializeField] bool playerIsIn = false;
-
-
     public TutorialSequence currentSequence;
 
     public int currentTutorialStep = -1;
+
+
+    private void Start()
+    {
+    }
 
     public void EnterStep(TutorialSequence sequence)
     {
@@ -21,11 +21,8 @@ public class TutorialHitbox : MonoBehaviour, AstroTutorialStep
         currentSequence = sequence;
         currentTutorialStep = sequence.index;
 
-        waitingForPlayer = true;
-        if (waitingForPlayer && playerIsIn)
-        {
-            ExitStep();
-        }
+        GetComponent<Renderer>().enabled = true;
+        starState = StarState.selected;
     }
 
     public void ExitStep()
@@ -41,25 +38,23 @@ public class TutorialHitbox : MonoBehaviour, AstroTutorialStep
         Destroy(gameObject);
     }
 
-    private void OnTriggerEnter(Collider other)
+    public override void Hit(float hitAngle)
     {
-        if (other.CompareTag("Player"))
+        if (!currentSequence)
         {
-            playerIsIn = true;
+            return;
         }
 
-
-        if (waitingForPlayer && playerIsIn)
+        if (starState == StarState.dimmed)
         {
-            ExitStep();
+            return;
         }
-    }
 
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag("Player"))
+        if (hitAngle < 5)
         {
-            playerIsIn = false;
+            return;
         }
+
+        ExitStep();
     }
 }

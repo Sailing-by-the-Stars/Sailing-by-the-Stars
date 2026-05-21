@@ -50,7 +50,7 @@ public class TempStateMachine : MonoBehaviour
                 PlayerControls.Looking.Enable(); 
                 PlayerControls.Interaction.Enable();
                 PlayerControls.Journal.Enable(); 
-                PlayerControls.Astrolabe.Enable();
+                PlayerControls.Astrolabe.Open.Enable();
                 SetCursorVisibility(false);
                 break;
 
@@ -63,7 +63,7 @@ public class TempStateMachine : MonoBehaviour
                 PlayerControls.Land.Enable();
                 PlayerControls.Looking.Enable();
                 PlayerControls.Journal.Enable();
-                PlayerControls.Astrolabe.Enable();
+                PlayerControls.Astrolabe.Open.Enable();
                 SetCursorVisibility(false);
                 break;
 
@@ -76,7 +76,6 @@ public class TempStateMachine : MonoBehaviour
             case GameState.Astrolabe:
                 PlayerControls.Land.Enable();
                 PlayerControls.Looking.Enable();
-                PlayerControls.Astrolabe.Enable();
                 SetCursorVisibility(false);
                 break;
 
