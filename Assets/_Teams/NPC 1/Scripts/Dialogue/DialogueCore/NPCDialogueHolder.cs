@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using FMODUnity;
 
 [System.Serializable]
 public class ConditionalDialogue
@@ -14,6 +15,9 @@ public class ConditionalDialogue
 public class NPCDialogueHolder : MonoBehaviour, IInteractable
 {
     public List<ConditionalDialogue> dialogues;
+
+    [Header("Voice")]
+    public EventReference dialogueVoice;
 
     [HideInInspector]
     public bool hasInteractedBefore = false;

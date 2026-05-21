@@ -3,8 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
-using static StarDataLoader;
-using static UnityEngine.Rendering.DebugUI;
 
 public enum StarState
 {
@@ -20,6 +18,14 @@ public interface IStarState
     void Enter(TwinklingStar star);
     void Tick(TwinklingStar star);
     void Exit(TwinklingStar star);
+}
+
+
+public class EntryCheck
+{
+    public int entryNumber = -1;
+    public int targetAngle = 0;
+    public bool beenChecked = false;
 }
 
 
@@ -52,30 +58,68 @@ public class TwinklingStar : MonoBehaviour
     };
 
     public AnimationCurve twinkleCurve;
+    public AnimationCurve selectedCurve;
     public AnimationCurve dimCurve;
     public float intensity = 1;
     public float twinkleTime = 1;
+    public float dimTime = 2;
+    public float selectedTime = 5;
+    public float selectedIntensity = 1;
     public float targetAngle = 1;
+    public bool tutorialStar = false;
     public static float currentTarget;
 
     public static event Action OnStarFound;
 
+    public List<EntryCheck> entryNumbers = new();
 
-    private Color initialEmissionColor;
+
+    public Color initialColor;
     private bool twinkle;
     public Vector3 initpos;
+
+
+    private void OnEnable()
+    {
+        NavigationSection.openedNavPage += OpenJournalPage;
+    }
+
+    private void OnDisable()
+    {
+        NavigationSection.openedNavPage -= OpenJournalPage;
+    }
+
+
+    void OpenJournalPage(List<int> pageNrs)
+    {
+        foreach (EntryCheck entryCheck in entryNumbers)
+        {
+            if (entryCheck.beenChecked)
+            {
+                continue;
+            }
+
+            if (pageNrs.Contains(entryCheck.entryNumber))
+            {
+                entryCheck.beenChecked = true;
+                targetAngle = entryCheck.targetAngle;
+                if (starState != StarState.highlighted)
+                {
+                    starState = StarState.selected;
+                }
+            }
+        }
+    }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         currentTarget = -1;
         initpos = transform.position;
-        //Set the emission of the star before making changes
 
-        if (GetComponent<Renderer>())
+        if (tutorialStar)
         {
-            initialEmissionColor = GetComponent<Renderer>().material.GetColor("_EmissiveColor");
-            //UpdateColor(intensity);
+            starState = StarState.dimmed;
         }
     }
 
@@ -88,7 +132,7 @@ public class TwinklingStar : MonoBehaviour
         }
     }
 
-    public void Hit(float hitAngle)
+    public virtual void Hit(float hitAngle)
     {
         if(starState == StarState.dimmed)
         {
@@ -100,15 +144,9 @@ public class TwinklingStar : MonoBehaviour
             return;
         }
 
+        //Debug.Log($"star hit at angle: {hitAngle}");
 
-        if (!TutorialSequence.finishedTutorial && TutorialSequence.startedTutorial && TutorialSequence.Instance.index == 1)
-        {
-            TutorialSequence.Instance.NextStep(2);
-        }
-
-        Debug.Log($"star hit at angle: {hitAngle}");
-
-        if ((hitAngle) >= targetAngle)
+        if ((hitAngle) >= targetAngle && (starState == StarState.selected || starState == StarState.highlighted))
         {
             currentTarget = -1;
             starState = StarState.dimmed;
@@ -117,8 +155,11 @@ public class TwinklingStar : MonoBehaviour
         }
         else
         {
-            currentTarget = targetAngle;
-            starState = StarState.highlighted;
+            if (starState == StarState.selected)
+            {
+                currentTarget = targetAngle;
+                starState = StarState.highlighted;
+            }
         }
     }
 
@@ -163,7 +204,7 @@ public class TwinklingStar : MonoBehaviour
     }
     public void UpdateColor(float intensity)
     {
-        UpdateColor(Color.white, intensity);
+        UpdateColor(initialColor, intensity);
     }
     public void UpdateColor()
     {
@@ -261,7 +302,7 @@ public class TwinklingStar : MonoBehaviour
                 float T = timer / animationLength;
                 float curveOutput = star.twinkleCurve.Evaluate(T);
 
-                star.UpdateColor(Color.cyan, star.intensity * (curveOutput + 1));
+                star.UpdateColor(star.initialColor, star.intensity * (curveOutput));
             }
         }
 
@@ -275,19 +316,44 @@ public class TwinklingStar : MonoBehaviour
 
     public class SelectedState : IStarState
     {
+        float timer = 1;
+        float animationLength = 1;
+
         public void Enter(TwinklingStar star)
         {
-            star.StartCoroutine(Brighten(star));
+            timer = 1f;
+            animationLength = star.selectedTime;
+            star.twinkle = true;
         }
 
         public void Tick(TwinklingStar star)
         {
+            if (star.twinkle)
+            {
+                timer += Time.deltaTime;
 
+                if (timer > animationLength)
+                {
+                    timer -= animationLength;
+                }
+
+                //Find current position on the animation curve
+                float curveOutput = 0;
+                if (timer < 1 && timer >= 0)
+                {
+                    curveOutput = star.selectedCurve.Evaluate(timer);
+                }
+
+
+                star.UpdateColor(star.initialColor, star.intensity * (curveOutput * star.selectedIntensity));
+            }
         }
 
         public void Exit(TwinklingStar star)
         {
-            star.StartCoroutine(Dim(star));
+            star.twinkle = false;
+            //star.StopCoroutine(Twinkle(star));
+            star.UpdateColor();
         }
         
         private IEnumerator Brighten(TwinklingStar star)
@@ -307,7 +373,7 @@ public class TwinklingStar : MonoBehaviour
                 float animationMultiplier = curveOutput + 1;
                 float intensityMultiplier = animationMultiplier * animationMultiplier;
 
-                star.UpdateColor(intensityMultiplier * star.intensity);
+                star.UpdateColor(star.initialColor, intensityMultiplier * star.intensity);
 
                 yield return new WaitForEndOfFrame();
             }
@@ -330,7 +396,7 @@ public class TwinklingStar : MonoBehaviour
                 float animationMultiplier = curveOutput + 1;
                 float intensityMultiplier = animationMultiplier * animationMultiplier;
 
-                star.UpdateColor(intensityMultiplier * star.intensity);
+                star.UpdateColor(star.initialColor, intensityMultiplier * star.intensity);
 
                 yield return new WaitForEndOfFrame();
             }
@@ -346,7 +412,7 @@ public class TwinklingStar : MonoBehaviour
         public void Enter(TwinklingStar star)
         {
             timer = 0;
-            animationLength = star.twinkleTime;
+            animationLength = star.dimTime;
             star.twinkle = true;
             //star.StartCoroutine(Twinkle(star));
         }
@@ -365,7 +431,7 @@ public class TwinklingStar : MonoBehaviour
 
                 //Find current position on the animation curve
                 float T = timer / animationLength;
-                float curveOutput = star.dimCurve.Evaluate(1- T);
+                float curveOutput = star.dimCurve.Evaluate(T);
 
                 star.UpdateColor(star.intensity * curveOutput);
             }
@@ -386,5 +452,4 @@ public class TwinklingStar : MonoBehaviour
     {
         OnStarFound?.Invoke();
     }
-
 }

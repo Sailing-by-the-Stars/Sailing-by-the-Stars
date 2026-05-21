@@ -19,6 +19,8 @@ public class TutorialDialogue : AstroDialogue, AstroTutorialStep
 
     public void EnterStep(TutorialSequence sequence)
     {
+        waitFlag = false;
+
         if (currentSequence != null && currentSequence != sequence)
         {
             Debug.LogWarning("this tutorialDialogue object is already in a different sequence!!");
@@ -39,6 +41,10 @@ public class TutorialDialogue : AstroDialogue, AstroTutorialStep
 
     public override void WaitFlag()
     {
+        if (waitFlag)
+        {
+            return;
+        }
         base.WaitFlag();
 
         if (!currentSequence)
@@ -46,6 +52,8 @@ public class TutorialDialogue : AstroDialogue, AstroTutorialStep
             Debug.LogWarning("tried waiting on a tutorial while none was assigned!");
             return;
         }
+
+        //currentSequence.FinishStep(currentTutorialStep);
 
         currentSequence.finishStep += Finish;
 
@@ -68,6 +76,7 @@ public class TutorialDialogue : AstroDialogue, AstroTutorialStep
         }
 
         currentSequence.FinishStep(currentTutorialStep);
+        //Debug.LogError("gaaaaaaaaah");
     }
 
     void TryGoNextline(int Dindex)

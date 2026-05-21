@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6484132954058731941}
-  - component: {fileID: -281367453631433654}
+  - component: {fileID: 5553032684126425751}
   m_Layer: 0
   m_Name: NavigationSection
   m_TagString: Untagged
@@ -32,7 +32,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &-281367453631433654
+--- !u!114 &5553032684126425751
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -41,13 +41,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 2614454316811492863}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ca72145ac60a4884ea1a47839aa9a012, type: 3}
+  m_Script: {fileID: 11500000, guid: 2a6245210d67d2e4684836f2e51b78b8, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AstrolabeInstructionsSection
+  m_EditorClassIdentifier: Assembly-CSharp::NavigationSection
   parentJournal: {fileID: 0}
-  pages: []
-  nrOfPages: 0
+  pages:
+  - leftPage: {fileID: 2800000, guid: 7ebd0c7ba3ce0bb418d153d12c803d9c, type: 3}
+    rightPage: {fileID: 2800000, guid: 7cb2b1b4aa9474e49a46561f8ded3741, type: 3}
+  nrOfPages: 1
   sectionName: 1
   currentPageNr: 0
   firstPageNr: 0
-  maxSectionNr: 0
+  lastPageNr: 0

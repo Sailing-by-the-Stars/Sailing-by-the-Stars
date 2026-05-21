@@ -66,4 +66,19 @@ public class StarInfo : MonoBehaviour
 
         renderer.SetPropertyBlock(_mpb);
     }
+
+    private void OnDestroy()
+    {
+        FlatStarField flatStarField = thisTransform.GetComponentInParent<FlatStarField>();
+        if (flatStarField != null)
+        {
+            flatStarField.starObjects.Remove(gameObject);
+        }
+        GlobeShape globeShape = thisTransform.GetComponentInParent<GlobeShape>();
+        if (globeShape != null)
+        {
+            globeShape.relatedMiniStars.Remove(this);
+            globeShape.InitializeMiniStars();
+        }
+    }
 }

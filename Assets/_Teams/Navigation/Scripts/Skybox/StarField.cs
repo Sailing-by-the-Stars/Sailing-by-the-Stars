@@ -18,7 +18,8 @@ public class Constelation
 public class ManualTwinkler
 {
     public int starID;
-    public int targetAngle; 
+    public int targetAngle;
+    public bool tutorialStar = false;
 }
 
 

@@ -7,8 +7,7 @@ public abstract class JournalSection : MonoBehaviour
 {
     public Journal parentJournal;
 
-    [SerializeField]
-    List<Page> pages = new();
+    public List<Page> pages = new();
     
     public int nrOfPages;
     
@@ -33,6 +32,22 @@ public abstract class JournalSection : MonoBehaviour
 
     public virtual void OpenPage(int pageNr)
     {
+        if (pageNr > pages.Count - 1)
+        {
+            Debug.LogError($"tried opening a page that is out of range for this section! {pageNr}");
+            parentJournal.leftPageQ.enabled = false;
+            parentJournal.rightPageQ.enabled = false;
+            return;
+        }
+
+        if (pages[pageNr] == null)
+        {
+            //Debug.LogWarning("tried opening empty page!");
+            parentJournal.leftPageQ.enabled = false;
+            parentJournal.rightPageQ.enabled = false;
+            return;
+        }
+
         if (pages[pageNr].leftPage)
         {
             parentJournal.leftPageQ.enabled = true;
@@ -65,21 +80,46 @@ public abstract class JournalSection : MonoBehaviour
 
     }
 
-    public void AddPage(Page page, int pageID)
+    public virtual void AddPage(Page page, int pageID)
     {
-        if(pageID >= 0 && pages.Count - 1 >= pageID)
+        if (pageID == -1)
         {
-            pages[pageID] = page;
-        }
-        else
-        {
-            Debug.LogWarning($"had to fall back! {pageID}");
             pages.Add(page);
+            nrOfPages = pages.Count;
+            return;
         }
-        
-        nrOfPages++;
 
+        if (pageID < -1)
+        {
+            Debug.LogError($"Invalid page index: {pageID}");
+            return;
+        }
+
+        int extraPages = 0;
+        while (pages.Count <= pageID)
+        {
+            pages.Add(null);
+            extraPages++;
+        }
+
+        if (pages[pageID] != null)
+        {
+            Debug.LogWarning($"Overwriting page at index {pageID}");
+        }
+
+        pages[pageID] = page;
+
+        page.pageID = pageID;
+
+        nrOfPages = pages.Count;
+
+        if(parentJournal.curPageNr > parentJournal.getFullPageNR(page) - extraPages)
+        {
+            parentJournal.curPageNr += extraPages;
+            parentJournal.prevPageNumber = parentJournal.curPageNr;
+        }
     }
+
     void FixScaling(Texture tex, Transform trans)
     {
         if (parentJournal.maxPageWidth == 0f || parentJournal.maxPageHeight == 0f)

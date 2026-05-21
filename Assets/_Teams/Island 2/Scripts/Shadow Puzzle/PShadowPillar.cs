@@ -11,6 +11,8 @@ public class PShadowPillar : MonoBehaviour
     public Vector2Int startPosition;
     [Tooltip("Where this Pillar needs to be on the grid in order to be considered in the correct position.")]
     [SerializeField] private Vector2Int correctPosition;
+    public bool isBracelet = true;
+    
     [HideInInspector] public Vector2Int gridPos;
 
     private Coroutine moveRoutine;
