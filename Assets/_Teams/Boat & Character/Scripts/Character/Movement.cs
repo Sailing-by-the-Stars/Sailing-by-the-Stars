@@ -54,6 +54,8 @@ public class Movement : MonoBehaviour
     [SerializeField] private bool overrideSprintMultiplier;
     [SerializeField] private float overriddenSprintMultiplier = 10f;
 
+    TempStateMachine stateMachine;
+
     // ADDED BY JANTINA
     [Header("Dock Transition")]
     private bool _transitioning = false;
@@ -83,6 +85,7 @@ public class Movement : MonoBehaviour
     void Start()
     {
         playerControls = TempStateMachine.Instance.PlayerControls;
+        stateMachine = TempStateMachine.Instance;
  
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
@@ -501,11 +504,8 @@ public class Movement : MonoBehaviour
         switch (newState)
         {
             case "Land":
-            
-                playerControls.BoatSail.Disable();
-                playerControls.BoatRudder.Disable();
-                playerControls.Land.Enable();
-                playerControls.BoatAnchor.Disable();
+
+                stateMachine.SetState(GameState.Moving);
 
                 animator.SetBool("IsRudder", false);
                 animator.SetBool("IsSail", false);
@@ -519,10 +519,8 @@ public class Movement : MonoBehaviour
                 break;
             case "BoatSail":
                 boatTutorialManager?.NotifyEnteredSail(); // Added by Jantina
-                playerControls.BoatSail.Enable();
-                playerControls.BoatRudder.Disable();
-                playerControls.Land.Disable();
-                playerControls.BoatAnchor.Disable();
+
+                stateMachine.SetState(GameState.Sail);
 
                 animator.SetBool("IsSail", true);
 
@@ -532,10 +530,8 @@ public class Movement : MonoBehaviour
                 break;
             case "BoatRudder":
                 boatTutorialManager?.NotifyEnteredRudder(); // Added by Jantina
-                playerControls.BoatSail.Disable();
-                playerControls.BoatRudder.Enable();
-                playerControls.Land.Disable();
-                playerControls.BoatAnchor.Disable();
+
+                stateMachine.SetState(GameState.Rudder);
 
                 animator.SetBool("IsRudder", true);
 
@@ -545,10 +541,8 @@ public class Movement : MonoBehaviour
                 break;
             case "BoatAnchor":
                 boatTutorialManager?.NotifyEnteredAnchor(); // Added by Jantina
-                playerControls.BoatSail.Disable();
-                playerControls.BoatRudder.Disable();
-                playerControls.Land.Disable();
-                playerControls.BoatAnchor.Enable();
+
+                stateMachine.SetState(GameState.Anchor);
 
                 animator.SetBool("IsAnchor", true);
 

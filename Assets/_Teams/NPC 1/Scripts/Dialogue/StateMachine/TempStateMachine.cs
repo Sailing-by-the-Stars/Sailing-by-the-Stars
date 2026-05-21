@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public enum GameState { Moving, Dialogue, Sailing, Journal, Astrolabe}
+public enum GameState { Moving, Dialogue, Sailing, Journal, Astrolabe, Anchor, Sail, Rudder}
 
 public class TempStateMachine : MonoBehaviour
 {
@@ -76,6 +76,22 @@ public class TempStateMachine : MonoBehaviour
             case GameState.Astrolabe:
                 PlayerControls.Land.Enable();
                 PlayerControls.Looking.Enable();
+                SetCursorVisibility(false);
+                break;
+
+            case GameState.Sail:
+                PlayerControls.Looking.Enable();
+                PlayerControls.BoatSail.Enable();
+                SetCursorVisibility(false);
+                break;
+            case GameState.Anchor:
+                PlayerControls.Looking.Enable();
+                PlayerControls.BoatAnchor.Enable();
+                SetCursorVisibility(false);
+                break;
+            case GameState.Rudder:
+                PlayerControls.Looking.Enable();
+                PlayerControls.BoatRudder.Enable();
                 SetCursorVisibility(false);
                 break;
 
