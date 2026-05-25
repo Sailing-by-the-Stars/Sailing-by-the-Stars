@@ -19,6 +19,7 @@ GameObject:
   - component: {fileID: 6665984415962931736}
   - component: {fileID: 976671272355510536}
   - component: {fileID: 3787609097355903977}
+  - component: {fileID: 2074887463001047828}
   m_Layer: 0
   m_Name: AudioManager
   m_TagString: Untagged
@@ -255,3 +256,34 @@ MonoBehaviour:
       Data3: 883642755
       Data4: -391209367
     Path: event:/event_OutOfBounds
+--- !u!114 &2074887463001047828
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5406605107057671251}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: FMODUnity::FMODUnity.StudioEventEmitter
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: -1239814376
+      Data2: 1215025229
+      Data3: 1404180659
+      Data4: 940698059
+    Path: event:/Music/mus_Intro
+  Event: 
+  EventPlayTrigger: 1
+  EventStopTrigger: 2
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  NonRigidbodyVelocity: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 20
