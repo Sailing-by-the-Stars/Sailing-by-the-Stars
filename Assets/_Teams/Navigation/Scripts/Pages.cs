@@ -3,8 +3,9 @@ using UnityEngine;
 public class Pages : JournalPagePickup
 {
     [SerializeField]
+    SectionName sectionName;
+    [SerializeField]
     Page page;
-
 
     public override void Grab(PickupController pickupController)
     {
@@ -15,7 +16,7 @@ public class Pages : JournalPagePickup
 
         base.Grab(pickupController);
 
-        if (AddToJournal(page))
+        if (AddToJournal(sectionName, page))
         {
             Destroy(gameObject);
         }

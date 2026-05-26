@@ -2,242 +2,301 @@
  * Created by Christina Pence
  * Contributed to by:
  */
+using FMOD.Studio;
+using FMODUnity;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering.HighDefinition;
-using System.Collections;
 
 /// <summary>
-/// Circling entity for the Bargaining grief event.
-/// Spawns on the orbit radius, enters at an angle from above or below,
-/// then spirals inward until reaching minimum radius and orbits indefinitely.
-/// Despawned externally by BargainingController on checkpoint or timer fail.
+/// Entity for the Bargaining grief event.
 ///
 /// HEIGHT MODES:
 ///   followWaterSurface = true: entity rides water surface height
 ///   followWaterSurface = false: entity stays at fixed world Y (eyeball, aerial)
-///
-/// SETUP:
-///   Disable all renderers on the prefab in the inspector.
-///   Entity enables them at start of entry so player sees it arrive.
 /// </summary>
 public class BargainingEntity : MonoBehaviour
 {
-    [Header("Orbit")]
-    [Tooltip("Starting orbit radius when entity first appears.")]
-    [SerializeField] private float orbitRadiusStart = 20f;
-    [Tooltip("Minimum orbit radius (entity remains at this distance until timer ends).")]
-    [SerializeField] private float orbitRadiusMin = 8f;
-    [Tooltip("Total movement speed when circling in world units per second.")]
-    [SerializeField] private float circleSpeed = 3f;
-    [Tooltip("How quickly the orbit center follows the boat. " +
-             "Lower values mean the entity lags further behind when the boat moves.")]
-    [SerializeField] private float centerCorrectionSpeed = 0.5f;
-    [Tooltip("How quickly the entity corrects back to its target radius " +
-             "when the boat moves and pulls the orbit center.")]
-    [SerializeField] private float radiusCorrectionSpeed = 3f;
-    [Tooltip("Entity reaches minimum radius this many times faster than the timer duration. " +
-        "(accounts for delay following boat and entry time or increases pressure)")]
-    [SerializeField] private float closeInSpeedFactor = 1.5f; 
+    [Header("Gaze Detection")]
+    [Tooltip("Camera used to detect whether the player is looking at this entity. Falls back to Camera.main.")]
+    [SerializeField] private Camera playerCamera;
+    [Tooltip("How close to screen center counts as looking at the entity.")]
+    [SerializeField, Range(0.01f, 0.5f)] private float gazeCenterTolerance = 0.15f;
+    [Tooltip("How many seconds of continuous looking to fully dissolve the entity.")]
+    [SerializeField, Min(0.01f)] private float gazeDissolveTime = 2.5f;
+    [Tooltip("If true, looking away recovers dissolve progress over gazeRecoverTime. " +
+         "If false, progress holds until the player looks again.")]
+    [SerializeField] private bool gazeRecoveryEnabled = true;
+    [Tooltip("How many seconds of looking away to fully recover from current dissolve progress if recovery is enabled.")]
+    [SerializeField, Min(0.01f)] private float gazeRecoverTime = 2.5f;
+
 
     [Header("Height")]
     [Tooltip("If true, entity rides water surface height + heightOffset. " +
-             "If false, entity stays at a fixed world Y position = heightOffset.")]
+             "If false, entity stays at a fixed world Y = heightOffset.")]
     [SerializeField] private bool followWaterSurface = true;
     [Tooltip("Height above water surface (followWaterSurface = true) " +
-             "or fixed world Y orbit height (followWaterSurface = false).")]
+             "or fixed world Y (followWaterSurface = false).")]
     [SerializeField] private float heightOffset = 0f;
 
-    [Header("Entry")]
-    [Tooltip("Distance below (water mode) or above (aerial mode) orbit height " +
-             "where the entity starts its entry approach.")]
-    [SerializeField] private float entryDistance = 20f;
-    [Tooltip("Speed of entry movement in world units per second.")]
-    [SerializeField] private float entrySpeed = 6f;
+    [Header("Audio")]
+    [Tooltip("Shared audio data containing whisper voice lines.")]
+    [SerializeField] private BargainingWhispers whispersAudio;
+    [Tooltip("Minimum pause between whisper lines in seconds.")]
+    [SerializeField] private float whisperPauseMin = 3f;
+    [Tooltip("Maximum pause between whisper lines in seconds.")]
+    [SerializeField] private float whisperPauseMax = 5f;
+    [SerializeField] private float whisperVolume = 1f;
+    [Tooltip("Delay in seconds before the first whisper plays after the entity appears.")]
+    [SerializeField] private float firstWhisperDelay = 2f;
+    /// <summary>
+    /// Fired after audo fade and full gaze progress reaches 1 for entity.
+    /// </summary>
+    public event System.Action OnDissolveComplete;
 
     private GameObject boat;
     private WaterSurface waterSurface;
-    private Vector3 orbitCenter;
-    private float currentOrbitRadius;
-    private float activeCloseInSpeed;
-    private float fullySurfacedYHeight;
-    private Coroutine stateRoutine;
-    private Renderer[] entityRenderers;
+    private Vector3 boatLocalOffset;
+    private float gazeProgress = 0f;
+    private bool visible = false;
 
-    private const float floatingPointThreshold = 0.01f;
+    // Audio
+    private Coroutine whisperRoutine;
+    private EventInstance currentWhisperInstance;
+
+    // Rendering
+    private Renderer[] entityRenderers;
+    private Dictionary<Renderer, Color> baseColors = new();
+    private MaterialPropertyBlock propertyBlock;
+    private static readonly int BaseColorID = Shader.PropertyToID("_BaseColor");
+    private Light[] entityLights;
 
     private void Awake()
     {
+        waterSurface = FindFirstObjectByType<WaterSurface>();
         entityRenderers = GetComponentsInChildren<Renderer>();
+        propertyBlock = new MaterialPropertyBlock();
+        entityLights = GetComponentsInChildren<Light>();
+
         foreach (Renderer r in entityRenderers)
         {
-            r.enabled = false;
+            if (r != null && r.sharedMaterial != null && r.sharedMaterial.HasProperty(BaseColorID))
+            {
+                baseColors[r] = r.sharedMaterial.GetColor(BaseColorID);
+            }
         }
+        SetRenderersEnabled(false);
     }
     /// <summary>
-    /// Spawns entity on the orbit radius and starts the entry and spiral sequence.
+    /// Positions entity and triggers first appearance.
     /// </summary>
-    public void Initialize(GameObject boatObject, float timerDuration)
+    public void Initialize(GameObject boatObject, Vector3 spawnPosition)
     {
         boat = boatObject;
-        waterSurface = FindFirstObjectByType<WaterSurface>();
-        orbitCenter = new Vector3(boat.transform.position.x, 0f, boat.transform.position.z);
-        currentOrbitRadius = orbitRadiusStart;
-
-        // calculate close in speed from timer duration so visual pressure
-        // tracks with the time the player has
-        float totalRadialDistance = orbitRadiusStart - orbitRadiusMin;
-        activeCloseInSpeed = (totalRadialDistance / timerDuration) * closeInSpeedFactor;
-
-        // spawn at random angle on orbit radius so entity never appears directly in front
-        float angle = Random.Range(0f, 360f);
-        Vector3 offset = new Vector3(Mathf.Cos(angle * Mathf.Deg2Rad),
-                                     0f,
-                                     Mathf.Sin(angle * Mathf.Deg2Rad)) * currentOrbitRadius;
-
-        fullySurfacedYHeight = GetSurfaceY(orbitCenter + offset);
-
-        // orbit center Y matches entity movement plane to keep rotation planar
-        orbitCenter.y = fullySurfacedYHeight;
-
-        // position below or above orbit height depending on entry mode
-        float startY = followWaterSurface ? fullySurfacedYHeight - entryDistance : fullySurfacedYHeight + entryDistance;
-
-        transform.position = new Vector3(orbitCenter.x + offset.x, startY, orbitCenter.z + offset.z);
-
-        stateRoutine = StartCoroutine(OrbitingRoutine());
+        playerCamera = playerCamera != null ? playerCamera : Camera.main;
+        Appear(spawnPosition);
     }
-
     /// <summary>
-    /// Stops orbit and destroys entity.
+    /// Moves entity to a new position and makes it visible again.
+    /// </summary>
+    public void Reappear(Vector3 newPosition)
+    {
+        Appear(newPosition);
+    }
+    /// <summary>
+    /// Fades out audio and destroys the entity.
+    /// Called only when player leaves the event zone.
     /// </summary>
     public void Despawn()
     {
-        if (stateRoutine != null)
-        {
-            StopCoroutine(stateRoutine);
-            stateRoutine = null;
-        }
+        visible = false;
+        StopWhispers();
         Destroy(gameObject);
     }
-    // TODO: use to trigger warning effects or remove
-    public bool AtMinimumRadius => currentOrbitRadius <= orbitRadiusMin + floatingPointThreshold;
-
-    private IEnumerator OrbitingRoutine()
+    private void Update()
     {
-        // sample at orbit center for consistent height across all entity positions
-        fullySurfacedYHeight = GetSurfaceY(orbitCenter);
+        if (!visible || boat == null)
+        {
+            return;
+        }
+        UpdatePosition();
+        FaceBoat();
+        UpdateGaze();
+    }
+    private void Appear(Vector3 position)
+    {
+        SetRenderersEnabled(false);
+        transform.position = new Vector3(position.x, GetSurfaceY(position), position.z);
+        // Store XZ offset in boat local space so entity follows boat rotation
+        Vector3 offset = boat.transform.InverseTransformPoint(transform.position);
+        boatLocalOffset = new Vector3(offset.x, 0f, offset.z);
 
+        gazeProgress = 0f;
+        visible = true;
+
+        ApplyDissolveVisual(0f);
+        FaceBoat();
+        SetRenderersEnabled(true);
+
+        StopWhispers();
+        whisperRoutine = StartCoroutine(WhisperRoutine());
+    }
+    private void Hide()
+    {
+        visible = false;
+        SetRenderersEnabled(false);
+        StopWhispers();
+        OnDissolveComplete?.Invoke();
+    }
+    private void UpdatePosition()
+    {
+        Vector3 targetPos = boat.transform.TransformPoint(new Vector3(boatLocalOffset.x, 0f, boatLocalOffset.z));
+        transform.position = new Vector3(targetPos.x, GetSurfaceY(targetPos), targetPos.z);
+    }
+    private void FaceBoat()
+    {
+        Vector3 direction = boat.transform.position - transform.position;
+        direction.y = 0f;
+        if (direction.sqrMagnitude < 0.0001f)
+        {
+            return;
+        }
+        transform.rotation = Quaternion.LookRotation(direction.normalized, Vector3.up);
+    }
+    private void UpdateGaze()
+    {
+        if (IsInCenterView())
+        {
+            gazeProgress = Mathf.MoveTowards(gazeProgress, 1f, (1f / gazeDissolveTime) * Time.deltaTime);
+        }
+        else
+        {
+            if(gazeRecoveryEnabled)
+            {
+                gazeProgress = Mathf.MoveTowards(gazeProgress, 0f, (1f / gazeRecoverTime) * Time.deltaTime);
+            }
+        }
+
+        ApplyDissolveVisual(gazeProgress);
+
+        if (visible && gazeProgress >= 1f)
+        {
+            Hide();
+        }
+    }
+    private bool IsInCenterView()
+    {
+        if (playerCamera == null)
+        {
+            return false;
+        }
+        Vector3 viewportPoint = playerCamera.WorldToViewportPoint(transform.position);
+        if (viewportPoint.z <= 0f)
+        {
+            return false;
+        }
+
+        float dx = Mathf.Abs(viewportPoint.x - 0.5f);
+        float dy = Mathf.Abs(viewportPoint.y - 0.5f);
+
+        return dx <= gazeCenterTolerance && dy <= gazeCenterTolerance;
+    }
+    // TODO: Confirm with new asset
+    // REQUIRES: surface type = transparent
+    private void ApplyDissolveVisual(float progress)
+    {
+        float alpha = 1f - progress;
         foreach (Renderer r in entityRenderers)
         {
-            r.enabled = true;
-        }
-
-        // face along the orbit tangent before beginning entry
-        Vector3 tangent = Vector3.Cross(Vector3.up, (transform.position - orbitCenter).normalized);
-        if (tangent != Vector3.zero)
-        {
-            transform.rotation = Quaternion.LookRotation(tangent);
-        }
-
-        // Entry phase: approach orbit height while already orbiting horizontally
-        float entryY = fullySurfacedYHeight;
-        float startY = transform.position.y;
-        float elapsed = 0f;
-        float duration = Mathf.Max(Mathf.Abs(entryY - startY) / entrySpeed, 0.01f);
-
-        while (elapsed < duration)
-        {
-            elapsed += Time.deltaTime;
-            float t = Mathf.SmoothStep(0f, 1f, Mathf.Clamp01(elapsed / duration));
-
-            UpdateOrbit(0f);
-
-            float currentY = Mathf.Lerp(startY, entryY, t);
-            transform.position = new Vector3(transform.position.x,
-                                             currentY,
-                                             transform.position.z);
-
-            yield return null;
-        }
-
-        // Phase 2: spiral inward until minimum radius reached
-        while (currentOrbitRadius > orbitRadiusMin + floatingPointThreshold)
-        {
-            fullySurfacedYHeight = GetSurfaceY(orbitCenter);
-            UpdateOrbit(activeCloseInSpeed);
-            transform.position = new Vector3(transform.position.x,
-                                             fullySurfacedYHeight,
-                                             transform.position.z);
-            yield return null;
-        }
-
-        // Orbit at minimum radius until Despawn is called
-        while (true)
-        {
-            fullySurfacedYHeight = GetSurfaceY(orbitCenter);
-            UpdateOrbit(0f);
-            transform.position = new Vector3(transform.position.x,
-                                             fullySurfacedYHeight,
-                                             transform.position.z);
-            yield return null;
+            if (r == null || !baseColors.TryGetValue(r, out Color c))
+            {
+                continue;
+            }
+            r.GetPropertyBlock(propertyBlock);
+            c.a = alpha;
+            propertyBlock.SetColor(BaseColorID, c);
+            r.SetPropertyBlock(propertyBlock);
         }
     }
-    private float UpdateOrbit(float radialSpeed)
+    private void SetRenderersEnabled(bool state)
     {
-        // orbit center Y tracks surface height to keep rotation planar
-        orbitCenter = Vector3.Lerp(orbitCenter,
-                                   new Vector3(boat.transform.position.x,
-                                               fullySurfacedYHeight,
-                                               boat.transform.position.z),
-                                   centerCorrectionSpeed * Time.deltaTime);
-
-        currentOrbitRadius = Mathf.Max(orbitRadiusMin, currentOrbitRadius - radialSpeed * Time.deltaTime);
-
-        // tangential speed is derived from total speed minus radial component
-        // keeps total movement speed constant as entity spirals in
-        float tangentialSpeed = Mathf.Sqrt(Mathf.Max(0f, circleSpeed * circleSpeed - radialSpeed * radialSpeed));
-
-        float angularSpeed = (tangentialSpeed / currentOrbitRadius) * Mathf.Rad2Deg;
-        RotateAroundOrbit(angularSpeed);
-        CorrectRadius();
-
-        return tangentialSpeed;
-    }
-    private void RotateAroundOrbit(float angularSpeed)
-    {
-        transform.RotateAround(orbitCenter, Vector3.up, angularSpeed * Time.deltaTime);
-        transform.rotation = Quaternion.LookRotation(Vector3.Cross(Vector3.up, 
-                                                                   transform.position - orbitCenter).normalized);
-    }
-
-    /// <summary>
-    /// Gradually corrects entity back to target radius when the boat moves
-    /// and pulls the orbit center away from the entity's current position.
-    /// </summary>
-    private void CorrectRadius()
-    {
-        Vector3 toEntity = transform.position - orbitCenter;
-        toEntity.y = 0f;
-        float actualRadius = toEntity.magnitude;
-
-        if (Mathf.Abs(actualRadius - currentOrbitRadius) > floatingPointThreshold)
+        foreach (Renderer r in entityRenderers)
         {
-            float correctedRadius = Mathf.Lerp(actualRadius,
-                                               currentOrbitRadius,
-                                               radiusCorrectionSpeed * Time.deltaTime);
-            Vector3 corrected = orbitCenter + toEntity.normalized * correctedRadius;
-            transform.position = new Vector3(corrected.x, transform.position.y, corrected.z);
+            if (r != null)
+            {
+                r.enabled = state;
+            }
+        }
+        foreach (Light l in entityLights)
+        {
+            if (l != null)
+            {
+                l.enabled = state;
+            }
         }
     }
+    private IEnumerator WhisperRoutine()
+    {
+        yield return new WaitForSeconds(firstWhisperDelay);
+        if (!visible)
+        {
+            yield break;
+        }
+        if (whispersAudio == null || whispersAudio.whisperLines == null || whispersAudio.whisperLines.Length == 0)
+        {
+            Debug.Log($"{gameObject.name}: No whisper lines assigned");
+            yield break;
+        }
 
+        while (visible)
+        {
+            ReleaseWhisperInstance();
+
+            EventReference line = whispersAudio.whisperLines[Random.Range(0, whispersAudio.whisperLines.Length)];
+            if (!line.IsNull)
+            {
+                currentWhisperInstance = RuntimeManager.CreateInstance(line);
+                RuntimeManager.AttachInstanceToGameObject(currentWhisperInstance, gameObject);
+                currentWhisperInstance.setVolume(whisperVolume);
+                currentWhisperInstance.start();
+
+                // wait for line to finish before pausing
+                currentWhisperInstance.getDescription(out EventDescription description);
+                description.getLength(out int lengthMs);
+                yield return new WaitForSeconds(lengthMs / 1000f);
+            }
+            if (!visible)
+            {
+                yield break;
+            }
+            float pause = Random.Range(whisperPauseMin, whisperPauseMax);
+            yield return new WaitForSeconds(pause);
+        }
+    }
+    private void StopWhispers()
+    {
+        if (whisperRoutine != null)
+        {
+            StopCoroutine(whisperRoutine);
+            whisperRoutine = null;
+        }
+        ReleaseWhisperInstance();
+    }
+
+    private void ReleaseWhisperInstance()
+    {
+        if (!currentWhisperInstance.isValid())
+        {
+            return;
+        }
+        currentWhisperInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+        currentWhisperInstance.release();
+        currentWhisperInstance.clearHandle();
+    }
     private float GetSurfaceY(Vector3 position)
     {
-        if (!followWaterSurface)
-        {
-            return heightOffset;
-        }
-
-        if (waterSurface == null)
+        if (!followWaterSurface || waterSurface == null)
         {
             return heightOffset;
         }
@@ -250,19 +309,18 @@ public class BargainingEntity : MonoBehaviour
         };
 
         return waterSurface.ProjectPointOnWaterSurface(searchParams, out WaterSearchResult result)
-               ? result.projectedPositionWS.y + heightOffset
-               : heightOffset;
+            ? result.projectedPositionWS.y + heightOffset
+            : heightOffset;
     }
-
+    private void OnDestroy()
+    {
+        ReleaseWhisperInstance();
+    }
+#if UNITY_EDITOR
     private void OnDrawGizmos()
     {
-        if (boat == null)
-        {
-            return;
-        }
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(orbitCenter, currentOrbitRadius);
-        Gizmos.color = Color.cyan;
-        Gizmos.DrawWireSphere(transform.position, 1f);
+        Gizmos.DrawWireSphere(transform.position, 0.5f);
     }
+#endif
 }

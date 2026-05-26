@@ -1,124 +1,97 @@
+using Assets._Teams.Island_1.Scripts.User_Interface;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.InputSystem;
-using UnityEngine.UI;
-using static System.Net.Mime.MediaTypeNames;
-using static UnityEngine.Rendering.DebugUI;
+using UnityEngine.Events;
+
+public enum SectionName
+{
+    AstrolabeInstructions,
+    Navigation,
+    Lore,
+    Quests,
+}
+
 
 [Serializable]
 public class Page
 {
     public Texture leftPage;
     public Texture rightPage;
+    [NonSerialized]
+    public int pageID = -1;
 }
+
 
 public class Journal : ToolPickup, AstroTutorialStep
 {
     PlayerControls playerControls;
-
     GameState prevState;
 
-
-    [NonSerialized]
-    public TutorialSequence currentSequence;
+    //[NonSerialized]
+    public TutorialSequence currentSequence = null;
     [NonSerialized]
     public int currentTutorialStep = -1;
 
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     private bool isEquipped;
-    private bool bookVisible;
     private bool bookOpened;
+
+    private GameObject bookModel;
+    
+    public float maxPageWidth = 0f;
+    public float maxPageHeight = 0f;
+
+    [SerializeField]
+    List<JournalSection> Sections = new();
+
+    public int curPageNr = 0;
+    [NonSerialized]
+    public int prevPageNumber = -1;
+    int curSectionIndex = 0;
+
+    List<Bookmark> bookmarks;
+    
+    private Camera cam;
+    private float initialFOV;
+    private float zoomFOV = 35;
+    private float animationTime = 0.75f;
+
+    private AnimationCurve animationCurve;
+    public static bool zoomedIn;
+
+    private Coroutine zoomCoroutine;
+    
+    [HideInInspector]  
+    public MeshRenderer leftPageQ;
+
+    [HideInInspector]
+    public MeshRenderer rightPageQ;
+    
+    //Animation stuff
     private Quaternion initalRot;
 
-    MeshRenderer leftPageQ;
-    MeshRenderer rightPageQ;
-
-
-    private float maxPageWidth = 0f;
-    private float maxPageHeight = 0f;
 
     [SerializeField]
-    List<Page> pages = new();
-    [SerializeField]
-    int pageNr = 0;
-    float bookangle = 0;
-    [SerializeField]
-    float angelPerSecond = 0;
-    
-    [SerializeField]
-    int sectionOnePageNr;
-    
-    [SerializeField]
-    int sectionTwoPageNr;
-    
-    [SerializeField]
-    int sectionThreePageNr;
-    
-    [SerializeField]
-    int sectionFourPageNr;
-
-    [SerializeField]
-    int sectionFivePageNr;
-    
-    [SerializeField]
-    int sectionSixPageNr;
-    
-    [SerializeField]
-    int sectionSevenPageNr;
-    
-    [SerializeField]
-    int sectionEightPageNr;
-
-    [SerializeField]
-    int sectionNinePageNr;
-    
-    SkinnedMeshRenderer bookRenderer;
-
-    private Transform bookmarkTransform;
-    List<int> sectionPageNrs = new List<int>();
-
+    int tutorialStep = 0;
 
     private void OnEnable()
     {
         playerControls = TempStateMachine.Instance.PlayerControls;
-
-        playerControls.Journal.BookmarkPage.performed += OpenBookmark;
     }
 
     private void OnDisable()
     {
-        playerControls.Journal.BookmarkPage.performed -= OpenBookmark;
+
     }
 
-    public void OpenBookmark(InputAction.CallbackContext ctx)
+    public void EnableControl(int nr)
     {
-        int numKeyValue; 
-
-        int.TryParse(ctx.control.name, out numKeyValue);
-
-        if(numKeyValue - 1 < 0)
+        if (nr > tutorialStep)
         {
-            return;
+            tutorialStep = nr;
         }
-
-        if (bookOpened)
-        {
-                if (sectionPageNrs[numKeyValue - 1] <= pages.Count - 1)
-                {
-                    pageNr = sectionOnePageNr;
-
-                    for (int i = 0; i < bookmarkTransform.childCount; i++)
-                    {
-                        bookmarkTransform.GetChild(i).GetComponent<Renderer>().material.color = Color.white;
-                    }
-
-                    bookmarkTransform.GetChild(numKeyValue - 1).GetComponent<Renderer>().material.color = Color.green;
-                }
-        }
-
     }
 
 
@@ -126,247 +99,97 @@ public class Journal : ToolPickup, AstroTutorialStep
     {
         base.Grab(pickupController);
 
+        EnableControl(0);
+
         isEquipped = true;
-        
+
         //Disable collider to hide interact text
         GetComponent<BoxCollider>().enabled = false;
-        bookVisible = false;
-        bookangle = 101;
         bookOpened = false;
 
-        transform.GetChild(1).gameObject.SetActive(false);
-
+        foreach (Bookmark bookmark in bookmarks)
+        {
+            bookmark.gameObject.SetActive(false);
+        }
+        
+        bookModel.SetActive(false);
+        
+        
+        ///animation stuff:
+        // bookangle = 101;
         initalRot = Quaternion.Euler(90, 90, 90);
         transform.localRotation = initalRot;
-    }
 
-    public void EnterStep(TutorialSequence sequence)
-    {
-        if (currentSequence != null && currentSequence != sequence)
+        //Set up values for zoom
+        cam = GetComponentInParent<Camera>();
+
+        initialFOV = cam.fieldOfView;
+
+        animationCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
+
+        zoomedIn = false;
+        if (zoomCoroutine == null)
         {
-            Debug.LogError("this tutorialDialogue object is already in a different sequence!!");
-            return;
+            zoomCoroutine = StartCoroutine(ZoomOut(animationTime - Time.deltaTime));
         }
-        currentSequence = sequence;
-        currentTutorialStep = sequence.index;
     }
 
-    public void ExitStep()
+
+    public void OpenBookmark(SectionName sectionName, bool maxPage = false)
     {
-        if (!currentSequence)
+        if (bookOpened)
         {
-            Debug.LogError("tried continueing a tutorial while none was assigned!");
-            return;
-        }
-
-        currentSequence.FinishStep(currentTutorialStep);
-        currentSequence = null;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        if (isEquipped)
-        {
-            if (playerControls.Journal.PreviousPage.triggered && bookVisible && bookOpened)
+            foreach (Bookmark bookmark in bookmarks)
             {
-                pageNr -= 1;
-            }
-
-            if (playerControls.Journal.NextPage.triggered && bookVisible && bookOpened)
-            {
-                pageNr += 1;
-            }
-
-            
-
-            if (pageNr < 0)
-            {
-                pageNr = 0;
-            }
-            if (pageNr > pages.Count - 1)
-            {
-                pageNr = pages.Count - 1;
-            }
-
-
-            if (pages[pageNr].leftPage)
-            {
-                leftPageQ.enabled = true;
-
-                FixScaling(pages[pageNr].leftPage, leftPageQ.transform);
-
-                leftPageQ.sharedMaterial.mainTexture = pages[pageNr].leftPage;
-            }
-            else
-            {
-                leftPageQ.enabled = false;
-            }
-
-
-            if (pages[pageNr].rightPage)
-            {
-                rightPageQ.enabled = true;
-
-                FixScaling(pages[pageNr].rightPage, rightPageQ.transform);
-                rightPageQ.sharedMaterial.mainTexture = pages[pageNr].rightPage;
-            }
-            else
-            {
-                rightPageQ.enabled = false;
-            }
-
-
-            if (playerControls.Journal.Open.triggered)
-            {
-                if (bookVisible)
-                { 
-                    bookVisible = false;
-                    bookOpened = false;
-
-                    TempStateMachine.Instance.SetState(prevState);
+                if (bookmark.sectionName == sectionName)
+                {
+                    bookmark.Highlight();
                 }
                 else
                 {
-                    if (TempStateMachine.Instance.gameState == GameState.Astrolabe)
-                    {
-                        return;
-                    }
-
-                    transform.GetChild(1).gameObject.SetActive(true);
-                    bookVisible = true;
-                    bookOpened = true;
-                    bookangle = 100;
-
-                    if(TutorialSequence.startedTutorial && TutorialSequence.Instance.index == 0)
-                    {
-                        TutorialSequence.Instance.NextStep(1);
-                    }
-
-                    prevState = TempStateMachine.Instance.gameState;
-                    TempStateMachine.Instance.SetState(GameState.Journal);
+                    bookmark.UnHighlight();
                 }
             }
+        }
+    }
 
-            if (bookOpened)
+    public int getFullPageNR(Page page)
+    {
+        int extraPages = 0;
+        int fullPageID = 0;
+        foreach (JournalSection section in Sections)
+        {
+            foreach (Page sPage in section.pages)
             {
-                bookangle -= angelPerSecond * Time.deltaTime;
-                if (bookangle < 0)
+                if (sPage == page)
                 {
-                    bookangle = 0;
-
-                    //Show bookmarks
-                    for (int i = 0; i < bookmarkTransform.childCount; i++)
-                    {
-                        bookmarkTransform.GetChild(i).gameObject.SetActive(true);
-                    }
-                }
-                else
-                {
-                    leftPageQ.enabled = false;
-                    rightPageQ.enabled = false;
-                }
-
-            }
-            else
-            {
-                leftPageQ.enabled = false;
-                rightPageQ.enabled = false;
-
-                bookangle += angelPerSecond * Time.deltaTime;
-                if (bookangle > 100)
-                {
-                    bookangle = 100;
-                    transform.GetChild(1).gameObject.SetActive(false);
-                }
-
-                //Hide bookmarks and reset section selection
-                for (int i = 0; i < bookmarkTransform.childCount; i++)
-                {
-                    bookmarkTransform.GetChild(i).gameObject.SetActive(false);
-                    bookmarkTransform.GetChild(i).GetComponent<Renderer>().material.color = Color.white;
+                    fullPageID = extraPages + sPage.pageID;
+                    return fullPageID;
                 }
             }
+
+            extraPages += section.nrOfPages;
         }
-        else
-        {
-            leftPageQ.enabled = false;
-            rightPageQ.enabled = false;
-            bookangle = 100;
-        }
+        Debug.LogError("couldn't find the page in the journal!");
+        return -1;
     }
 
-
-    private void SetItemByKeyValue(UnityEngine.InputSystem.InputAction.CallbackContext ctx)
-    {
-
-        int numKeyValue; // the number key value we want from this keypress
-
-        int.TryParse(ctx.control.name, out numKeyValue);
-        // Warning! If ctx.control.name can't parse as an int, numKeyValue will be 0
-
-        Debug.Log("int value of keypress is: " + numKeyValue);
-
-        // Now do something with the key value ...
-
-    }
-
-    void FixScaling(Texture tex, Transform trans)
-    {
-        if (maxPageWidth == 0f || maxPageHeight == 0f)
-        {
-            maxPageWidth = trans.localScale.x;
-            maxPageHeight = trans.localScale.y;
-        }
-
-        float texWidth = tex.width;
-        float texHeight = tex.height;
-
-        float texRatio = texWidth / texHeight;
-        float maxRatio = maxPageWidth / maxPageHeight;
-
-        float newWidth;
-        float newHeight;
-
-        if (texRatio > maxRatio)
-        {
-            newWidth = maxPageWidth;
-            newHeight = maxPageWidth / texRatio;
-        }
-        else
-        {
-            newHeight = maxPageHeight;
-            newWidth = maxPageHeight * texRatio;
-        }
-
-        trans.localScale = new Vector2(newWidth, newHeight);
-    }
-
-
-
-    public void AddPage(Page page)
-    {
-        pages.Add(page);
-    }
-
-    public void AddPage(Page page, int pageID)
-    {
-        if(pageID >= 0 && pages.Count - 1 >= pageID)
-        {
-            pages[pageID] = page;
-        }
-        else
-        {
-            Debug.LogWarning($"had to fall back! {pageID}");
-            pages.Add(page);
-        }
-
-    }
 
     void Start()
     {
-        List<MeshRenderer> images = GetComponentsInChildren<MeshRenderer>().ToList();
+        bookModel = transform.GetChild(1).gameObject;
+        bookmarks = new();
+        foreach (Bookmark bookmark in GetComponentsInChildren<Bookmark>())
+        {
+            bookmarks.Add(bookmark);
+        }
 
+        foreach (JournalSection section in Sections)
+        {
+            section.parentJournal = this;
+        }
+        
+        List<MeshRenderer> images = GetComponentsInChildren<MeshRenderer>().ToList();
         foreach (MeshRenderer image in images)
         {
             if (image.name == "leftPage")
@@ -379,21 +202,348 @@ public class Journal : ToolPickup, AstroTutorialStep
                 rightPageQ = image;
             }
         }
-
-        bookRenderer = GetComponentInChildren<SkinnedMeshRenderer>();
         
         leftPageQ.enabled = false;
         rightPageQ.enabled = false;
-
-        bookmarkTransform = transform.GetChild(0).GetChild(0).GetChild(2);
-        sectionPageNrs.Add(sectionOnePageNr);
-        sectionPageNrs.Add(sectionTwoPageNr);
-        sectionPageNrs.Add(sectionThreePageNr);
-        sectionPageNrs.Add(sectionFourPageNr);
-        sectionPageNrs.Add(sectionFivePageNr);
-        sectionPageNrs.Add(sectionSixPageNr);
-        sectionPageNrs.Add(sectionSevenPageNr);
-        sectionPageNrs.Add(sectionEightPageNr);
-        sectionPageNrs.Add(sectionNinePageNr);
     }
+
+
+    void Update()
+    {
+        HandlePageTurn();
+        ToggleJournal();
+        ToggleZoom();
+    }
+
+    void HandlePageTurn()
+    {
+        if (bookOpened)
+        { 
+            int maxSectionNr = 0;
+            JournalSection curSection = null;
+            curSectionIndex = 0;
+            int totalNrOfPages = 0;
+
+            int i = 0;
+            foreach (JournalSection section in Sections)
+            {
+                maxSectionNr += section.nrOfPages;
+                section.lastPageNr = maxSectionNr;
+                section.firstPageNr = section.lastPageNr - section.nrOfPages;
+
+                if (maxSectionNr >= curPageNr && section.firstPageNr <= curPageNr)
+                {
+                    curSection = section;
+                    curSectionIndex = i;
+                }
+                
+                i++;
+                totalNrOfPages += section.nrOfPages;
+            }
+            
+            
+            if (curSection == null)
+            {
+                Debug.LogError($"the pageNr {curPageNr} is somehow out of range!");
+                return;
+            }
+            
+            // Only run OpenSection() when the pageNr goes in or our out of a section
+            // Doing this while checking if the page number is in the bounds of a section
+            // in the sections loop above would case OpenSection() to be run every frame
+            if (playerControls.Journal.PreviousPage.triggered)
+            {
+                if (currentSequence != null && tutorialStep == 1)
+                {
+                    ExitStep();
+                    currentSequence = null;
+                }
+
+                curPageNr -= 1;
+                
+                if (curPageNr < 0)
+                {
+                    curPageNr = 0;
+                }
+                
+                if (curPageNr < curSection.firstPageNr)
+                {
+                    if (curSectionIndex > 0)
+                    {
+                        OpenSection(Sections[curSectionIndex - 1].sectionName, true);
+                        return;
+                    }
+                
+                    Debug.LogError("tried going to a section below 0!");
+                    return;
+                }
+            }
+
+            if (playerControls.Journal.NextPage.triggered)
+            {
+                if (currentSequence != null && tutorialStep == 1)
+                {
+                    ExitStep();
+                    currentSequence = null;
+                }
+
+                curPageNr += 1;
+                
+                if (curPageNr > totalNrOfPages - 1)
+                {
+                    curPageNr = totalNrOfPages - 1;
+                    Debug.Log("hit the end of the journal!");
+                }
+                
+                if (curPageNr > curSection.lastPageNr - 1)
+                {
+                    if (curSectionIndex < Sections.Count - 1)
+                    {
+                        OpenSection(Sections[curSectionIndex + 1].sectionName);
+                        return;
+                    }
+                
+                    Debug.LogError($"tried going to a section above {Sections.Count}!");
+                    return;
+                }
+            }
+
+
+            if(prevPageNumber != curPageNr)
+            {
+                Sections[curSectionIndex].OpenPage(curPageNr - curSection.firstPageNr);
+                prevPageNumber = curPageNr;
+            }
+        }
+
+    }
+
+    public JournalSection GetSection(SectionName sectionName)
+    {
+        foreach (var section in Sections)
+        {
+            if (section.sectionName == sectionName)
+            {
+                return section;
+            }
+        }
+        
+        Debug.LogError($"couldn't find {sectionName} in the journal!");
+        return null;
+    }
+
+    private void ToggleJournal()
+    {
+        if (isEquipped)
+        {
+            if (playerControls.Journal.Open.triggered && (tutorialStep != 1 || currentSequence == null))
+            {
+                EnableControl(tutorialStep);
+
+                if(currentSequence != null && tutorialStep == 0)
+                {
+                    ExitStep();
+                }
+
+                prevPageNumber = -1;
+                if (bookOpened)
+                {
+                    bookOpened = false;
+                    leftPageQ.enabled = false;
+                    rightPageQ.enabled = false;
+                    bookModel.SetActive(false);
+                    foreach (Bookmark bookmark in bookmarks)
+                    {
+                        bookmark.gameObject.SetActive(false);
+                    }
+                    
+                    Sections[curSectionIndex].CloseSection();
+                    
+                    TempStateMachine.Instance.SetState(prevState);
+                    
+                    if (zoomedIn)
+                    {
+                        zoomedIn = false;
+                        if (zoomCoroutine == null)
+                        {
+                            zoomCoroutine = StartCoroutine(ZoomOut());
+                        }
+                    }
+                }
+                else
+                {
+                    if (TempStateMachine.Instance.gameState == GameState.Astrolabe)
+                    {
+                        return;
+                    }
+                    
+                    bookOpened = true;
+                    bookModel.SetActive(true);
+                    foreach (Bookmark bookmark in bookmarks)
+                    {
+                        bookmark.gameObject.SetActive(true);
+                    }
+                    
+                    Sections[curSectionIndex].OpenSection();
+                    
+                    prevState = TempStateMachine.Instance.gameState;
+                    TempStateMachine.Instance.SetState(GameState.Journal);
+                }
+            }
+        }
+
+    }
+
+    private void ToggleZoom()
+    {
+        if (playerControls.Journal.Zoom.triggered)
+        {
+            if (bookOpened)
+            {
+                if (zoomedIn)
+                {
+                    zoomedIn = false;
+                    if (zoomCoroutine == null)
+                    {
+                        zoomCoroutine = StartCoroutine(ZoomOut());
+                    }
+                }
+                else
+                {
+                    zoomedIn = true;
+                    if (zoomCoroutine == null)
+                    {
+                        zoomCoroutine = StartCoroutine(ZoomIn());
+                    }
+                }
+            }
+        }
+    }
+    
+    public void OpenSection(SectionName sectionName, bool maxPageNr = false)
+    {
+        if (sectionName == Sections[curSectionIndex].sectionName)
+        {
+            Debug.LogWarning("that section was already opened!");
+            return;
+        }
+
+        Sections[curSectionIndex].CloseSection();
+
+        int i = 0;
+        foreach (var section in Sections)
+        {
+            if (section.sectionName == sectionName)
+            {
+                section.OpenSection();
+                curSectionIndex = i;
+
+                if (maxPageNr)
+                {
+                    curPageNr = section.lastPageNr - 1;
+                }
+                else
+                {
+                    curPageNr = section.firstPageNr;
+                }
+                
+                OpenBookmark(sectionName);
+                return;
+            }
+            i++;
+        }
+
+        
+        Debug.LogError("couldn't find the section to open!");
+    }
+
+
+    private IEnumerator ZoomIn(float timer = 0)
+    {
+        if (timer == 0)
+        {
+            timer = animationTime;
+        }
+
+        while (timer > 0)
+        {
+            timer -= Time.deltaTime;
+
+            if (zoomedIn == false)
+            {
+                zoomCoroutine = StartCoroutine(ZoomOut(timer));
+                yield break;
+            }
+
+            float T = timer / animationTime;
+            float curveOutput = animationCurve.Evaluate(T);
+
+            cam.fieldOfView = zoomFOV + curveOutput * (initialFOV - zoomFOV);
+
+            yield return new WaitForEndOfFrame();
+        }
+
+        zoomCoroutine = null;
+    }
+
+    private IEnumerator ZoomOut(float timer = 0)
+    {
+        if (timer == 0)
+        {
+            timer = 0;
+        }
+
+        while (timer < animationTime)
+        {
+            timer += Time.deltaTime;
+
+            if (zoomedIn == true)
+            {
+                zoomCoroutine = StartCoroutine(ZoomIn(timer));
+                yield break;
+            }
+
+            float T = timer / animationTime;
+            float curveOutput = animationCurve.Evaluate(T);
+
+            cam.fieldOfView = zoomFOV + curveOutput * (initialFOV - zoomFOV);
+
+            yield return new WaitForEndOfFrame();
+        }
+
+        zoomCoroutine = null;
+    }
+
+
+
+    public void EnterStep(TutorialSequence sequence)
+    {
+        if (currentSequence != null && currentSequence != sequence)
+        {
+            Debug.LogError("this tutorialDialogue object is already in a different sequence!!");
+            return;
+        }
+
+
+        currentSequence = sequence;
+        currentTutorialStep = sequence.index;
+
+        if(currentTutorialStep == 8)
+        {
+            EnableControl(1);
+        }
+
+    }
+
+    public void ExitStep()
+    {
+        if (!currentSequence)
+        {
+            Debug.LogError("tried continueing a tutorial while none was assigned!");
+            return;
+        }
+
+        currentSequence.FinishStep(currentTutorialStep);
+    }
+
 }

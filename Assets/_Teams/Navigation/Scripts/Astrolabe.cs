@@ -5,6 +5,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class Astrolabe : ToolPickup, AstroTutorialStep
@@ -16,6 +17,8 @@ public class Astrolabe : ToolPickup, AstroTutorialStep
     public TutorialSequence currentSequence;
     [NonSerialized]
     public int currentTutorialStep = -1;
+    //[NonSerialized]
+    public List<int> completedSteps = new();
 
     private Camera cam;
     
@@ -44,6 +47,9 @@ public class Astrolabe : ToolPickup, AstroTutorialStep
     private Coroutine zoomCoroutine;
     private Coroutine turnCoroutine;
 
+    [SerializeField]
+    int tutorialStep = 0;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
     void Start()
@@ -70,7 +76,57 @@ public class Astrolabe : ToolPickup, AstroTutorialStep
         currentSequence = sequence;
         currentTutorialStep = sequence.index;
 
+        if (tutorialStep == 0)
+        {
+            playerControls.Astrolabe.Open.Disable();
+            playerControls.Astrolabe.Rotate.Disable();
+            playerControls.Astrolabe.ChangeAngle.Disable();
+        }
+    }
 
+    public void EnableControl(int nr)
+    {
+        if (nr > tutorialStep)
+        {
+            tutorialStep = nr;
+        }
+
+
+        if (nr == 1)
+        {
+            playerControls.Astrolabe.Disable();
+            playerControls.Astrolabe.Open.Enable();
+        }
+        else if (nr == 2)
+        {
+            playerControls.Astrolabe.Disable();
+            playerControls.Astrolabe.Open.Enable();
+            playerControls.Astrolabe.Rotate.Enable();
+        } else if (nr == 3)
+        {
+            playerControls.Astrolabe.Disable();
+            playerControls.Astrolabe.Open.Enable();
+            playerControls.Astrolabe.ChangeAngle.Enable();
+        }
+        else if (nr == 4)
+        {
+            playerControls.Astrolabe.Disable();
+            playerControls.Astrolabe.Open.Enable();
+            playerControls.Astrolabe.Rotate.Enable();
+        }
+        else if (nr == 5)
+        {
+            playerControls.Astrolabe.Disable();
+            playerControls.Astrolabe.Open.Enable();
+        }
+        else if (nr == 6)
+        {
+            playerControls.Astrolabe.Enable();
+        }
+        else
+        {
+            playerControls.Astrolabe.Enable();
+        }
     }
 
     public void ExitStep()
@@ -81,15 +137,29 @@ public class Astrolabe : ToolPickup, AstroTutorialStep
             return;
         }
 
+        if (tutorialStep >= 0)
+        {
+            if (completedSteps.Contains(tutorialStep))
+            {
+                return;
+            }
+            else
+            {
+                completedSteps.Add(tutorialStep);
+            }
+        }
+
         currentSequence.FinishStep(currentTutorialStep);
-        currentSequence = null;
     }
 
     public override void Grab(PickupController pickupController)
     {
         base.Grab(pickupController);
 
-        GameEvents.ExecOnPickup(this); // Needed for the tutorial popup ui, just make sure to call this when the Astrolable is picked up
+        //GameEvents.ExecOnPickup(this); // Needed for the tutorial popup ui, just make sure to call this when the Astrolable is picked up
+
+        EnableControl(0);
+        TutorialSequence.Instance.NextStep(0);
 
         isEquipped = true;
         
@@ -133,7 +203,7 @@ public class Astrolabe : ToolPickup, AstroTutorialStep
         {
             zoomCoroutine = StartCoroutine(ZoomOut(animationTime - Time.deltaTime));
         }
-        sideView = false;
+        sideView = true;
     }
 
     // Update is called once per frame
@@ -152,10 +222,19 @@ public class Astrolabe : ToolPickup, AstroTutorialStep
             if (sideView)
             {
                 forward = transform.parent.right;
+                if(tutorialStep >= 2 && playerControls.Astrolabe.ChangeAngle.enabled)
+                {
+                    playerControls.Astrolabe.Rotate.Enable();
+                }
             }
             else
             {
                 forward = transform.parent.forward;
+
+                if (tutorialStep == 3 && playerControls.Astrolabe.ChangeAngle.enabled)
+                {
+                    playerControls.Astrolabe.Rotate.Disable();
+                }
             }
 
             forward.y = 0f; // remove vertical tilt
@@ -164,6 +243,11 @@ public class Astrolabe : ToolPickup, AstroTutorialStep
             //
             if (playerControls.Astrolabe.Rotate.triggered && visible)
             {
+                if (currentSequence != null && (tutorialStep == 2 || tutorialStep == 4))
+                {
+                    ExitStep();
+                }
+
                 if (zoomedIn)
                 {
                     if (sideView)
@@ -211,8 +295,8 @@ public class Astrolabe : ToolPickup, AstroTutorialStep
             }*/
 
             if (playerControls.Astrolabe.Open.triggered)
-            {
-                if (currentSequence != null)
+            { 
+                if (currentSequence != null && tutorialStep == 1)
                 {
                     ExitStep();
                 }
@@ -265,6 +349,7 @@ public class Astrolabe : ToolPickup, AstroTutorialStep
 
                     prevState = TempStateMachine.Instance.gameState;
                     TempStateMachine.Instance.SetState(GameState.Astrolabe);
+                    EnableControl(tutorialStep);
                     zoomedIn = true;
                     if (zoomCoroutine == null)
                     {
@@ -297,11 +382,30 @@ public class Astrolabe : ToolPickup, AstroTutorialStep
             if (zoomedIn)
             {
 
-                int scroll = (int) playerControls.Astrolabe.ChangeAngle.ReadValue<Vector2>().y;
+                int scroll = (int)playerControls.Astrolabe.ChangeAngle.ReadValue<Vector2>().y;
 
-                if (scroll != 0f && !sideView)
+                if (scroll != 0 && !sideView)
                 {
-                    pointer.Rotate(new Vector3(scroll, 0, 0));
+                    // Current rotation
+                    float currentX = pointer.localEulerAngles.x;
+
+                    // Convert 0-360 into -180 to 180
+                    if (currentX > 180f)
+                        currentX -= 360f;
+
+                    // Add scroll input
+                    currentX += scroll;
+
+                    // Clamp between -90 and 0
+                    currentX = Mathf.Clamp(currentX, -90f, 0f);
+
+                    // Apply rotation
+                    pointer.localRotation = Quaternion.Euler(currentX, 0f, 0f);
+
+                    if (currentSequence != null && tutorialStep == 3)
+                    {
+                        ExitStep();
+                    }
                 }
 
                 /*

@@ -137,12 +137,13 @@ public class QuestJournalPage : MonoBehaviour
     {
         Page questPage = new Page
         {
-            leftPage  = activeQuestRT,
-            rightPage = completedQuestRT
+            leftPage = activeQuestRT,
+            rightPage = completedQuestRT,
+            pageID = -1
         };
 
         // pageIDHack = -1 appends to the end (matches JournalPagePickup default behaviour)
-        journal.AddPage(questPage, -1);
+        journal.GetSection(SectionName.Quests).AddPage(questPage, -1);
     }
 
     private void TryLogCompletedQuest(string completedQuestId, string completedQuestName)

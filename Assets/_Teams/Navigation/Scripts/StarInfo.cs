@@ -7,6 +7,8 @@ using static StarDataLoader;
 
 public class StarInfo : MonoBehaviour
 {
+    public Transform thisTransform;
+
     public float emissionMult;
     public UnityEngine.Color matColor;
 
@@ -24,7 +26,7 @@ public class StarInfo : MonoBehaviour
     public void Initialize()
     {
         initpos = transform.position;
-
+        thisTransform = transform;
 
         if (GetComponent<MeshRenderer>() == null)
         {
@@ -63,5 +65,20 @@ public class StarInfo : MonoBehaviour
         }
 
         renderer.SetPropertyBlock(_mpb);
+    }
+
+    private void OnDestroy()
+    {
+        FlatStarField flatStarField = thisTransform.GetComponentInParent<FlatStarField>();
+        if (flatStarField != null)
+        {
+            flatStarField.starObjects.Remove(gameObject);
+        }
+        GlobeShape globeShape = thisTransform.GetComponentInParent<GlobeShape>();
+        if (globeShape != null)
+        {
+            globeShape.relatedMiniStars.Remove(this);
+            globeShape.InitializeMiniStars();
+        }
     }
 }
