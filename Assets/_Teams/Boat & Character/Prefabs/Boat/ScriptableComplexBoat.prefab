@@ -1747,8 +1747,15 @@ MonoBehaviour:
   sidedriftCorrectionStrength: 250
   lightIntensity: 1393.47
   lightIntensityMultiplier: 3
-  useLocalWindSpeed: 0
+  useLocalWindSpeed: 1
   enableWindForces: 1
+  simpleModeEnabled: 1
+  maxSimpleSpeed: 8
+  simpleThrottleAccel: 2
+  simpleThrottleDecay: 0.3
+  simpleTurnTorque: 2
+  simpleForwardAcceleration: 6
+  simpleLinearDrag: 0.6
   forwardSpeed: 0
   apparentWindSpeed: 0
   sideSlipSpeed: 0
@@ -1769,6 +1776,7 @@ MonoBehaviour:
   mastPivot: {fileID: 9149714384611208506}
   rudderPivot: {fileID: 3239789559681058309}
   flagPivot: {fileID: 6437941740075985467}
+  currentRudderAngle: 0
 --- !u!114 &105991467372227707
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2092,11 +2100,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BoatHighlighter
   partType: 0
-  outlineMaterial: {fileID: 2100000, guid: 077230c5742b81d419de399085ec6ad3, type: 2}
-  outlineScale: 1.04
+  highlightColor: {r: 1, g: 0.6, b: 0, a: 1}
   pulseSpeed: 2
-  minScale: 1.03
-  maxScale: 1.06
+  minIntensity: 0
+  maxIntensity: 4
 --- !u!1 &4653343466755146676 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7798076198548098058, guid: 7418104f4fe1b6546b3cf0e994313a3b, type: 3}
@@ -2115,11 +2122,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BoatHighlighter
   partType: 1
-  outlineMaterial: {fileID: 2100000, guid: 077230c5742b81d419de399085ec6ad3, type: 2}
-  outlineScale: 1.04
+  highlightColor: {r: 1, g: 0.6, b: 0, a: 1}
   pulseSpeed: 2
-  minScale: 1.03
-  maxScale: 1.06
+  minIntensity: 0
+  maxIntensity: 4
 --- !u!1 &5888123683072530512 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 9015496775530338286, guid: 7418104f4fe1b6546b3cf0e994313a3b, type: 3}
@@ -2138,11 +2144,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BoatHighlighter
   partType: 2
-  outlineMaterial: {fileID: 2100000, guid: 077230c5742b81d419de399085ec6ad3, type: 2}
-  outlineScale: 1.04
+  highlightColor: {r: 1, g: 0.6, b: 0, a: 1}
   pulseSpeed: 2
-  minScale: 1.03
-  maxScale: 1.06
+  minIntensity: 0
+  maxIntensity: 4
 --- !u!4 &6995186737847860085 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5600312451364156619, guid: 7418104f4fe1b6546b3cf0e994313a3b, type: 3}

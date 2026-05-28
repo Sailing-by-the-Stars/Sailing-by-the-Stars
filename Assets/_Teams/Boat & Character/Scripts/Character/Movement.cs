@@ -164,6 +164,9 @@ public class Movement : MonoBehaviour
             case "BoatAnchor":
                 MoveAnchor();
                 break;
+            case "BoatSimple": // Added by Jantina for Simple Boat Movement
+                MoveSimpleBoat();
+                break;
             default:
                 print("Wrong player state initialized.");
                 break;        
@@ -172,6 +175,7 @@ public class Movement : MonoBehaviour
 
     void Interact()
     {
+        if (boatController != null && boatController.IsSimpleModeEnabled && isOnBoat) return;
         RaycastHit hit;
         if (Physics.Raycast(cam.transform.position, cam.transform.forward, out hit, InteractionRange))
         {
@@ -311,9 +315,14 @@ public class Movement : MonoBehaviour
     {
         if (rb != null) Destroy(rb);
         isOnBoat = true;
-
         buoyancyController.enabled = true;
         boatController.enabled = true;
+
+        if (boatController.IsSimpleModeEnabled) // Added by Jantina
+        {
+            SwitchState("BoatSimple");
+            boatController.HaulAnchor();
+        }
     }
 
     public void ExitBoat()
@@ -323,7 +332,7 @@ public class Movement : MonoBehaviour
         rb.freezeRotation = true;
 
         isOnBoat = false;
-
+        boatController.DropAnchor();
         buoyancyController.enabled = false;
         boatController.enabled = false;
     }
@@ -584,6 +593,11 @@ public class Movement : MonoBehaviour
 
                 SetPlayerState(newState);
                 break;
+            case "BoatSimple":
+                stateMachine.SetState(GameState.Sailing); 
+                limitCamMovement = false;
+                SetPlayerState("BoatSimple");
+                break;
             default:
                 print("Wrong player state initialized.");
                 break;
@@ -593,5 +607,35 @@ public class Movement : MonoBehaviour
     void SetPlayerState(string state)
     {
         playerState = state;
+    }
+
+
+    // Added by Jantina for Simple Boat Movement
+    void MoveSimpleBoat()
+    {
+        Vector2 input = playerControls.Land.Move.ReadValue<Vector2>();
+
+        boatController.SetSimpleTurnInput(input.x);
+
+        if (Mathf.Abs(input.x) > 0.1f)
+        {
+            boatTutorialManager?.NotifyRudderSteered();
+        }
+        float throttle =
+            input.y > 0.1f ? 1f : 0f;
+
+        boatController.SetSimpleThrottleInput(throttle);
+
+        if (throttle > 0f)
+        {
+            boatTutorialManager?.NotifyThrottleUsed();
+        }
+    }
+    public void ToggleBoatMode(bool simpleMode)
+    {
+        boatController.SetSimpleMode(simpleMode);
+
+        if (!simpleMode && playerState == "BoatSimple")
+            SwitchState("Land");
     }
 }
