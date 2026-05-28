@@ -370,6 +370,8 @@ public class DialogueUIManager : MonoBehaviour
         dialogueText.text = "";
         dialogueText.ForceMeshUpdate();
 
+        bool playedVoice = false;
+
         for (int i = 0; i < fullText.Length; i++)
         {
             // Handle tags (including pause)
@@ -404,16 +406,18 @@ public class DialogueUIManager : MonoBehaviour
             dialogueText.ForceMeshUpdate();
             ApplyShake();
 
-            if (!char.IsWhiteSpace(fullText[i]) &&
+            if (!playedVoice &&
+                !char.IsWhiteSpace(fullText[i]) &&
                 !char.IsPunctuation(fullText[i]))
             {
+                playedVoice = true;
+
                 var npcVoice = DialogueSystem.Instance.CurrentVoice;
 
                 if (!npcVoice.IsNull)
                 {
                     RuntimeManager.PlayOneShot(npcVoice);
                 }
-
                 else if (!defaultDialogueTypeSound.IsNull)
                 {
                     RuntimeManager.PlayOneShot(defaultDialogueTypeSound);
