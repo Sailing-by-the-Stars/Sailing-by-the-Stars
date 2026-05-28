@@ -5095,35 +5095,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2260963879813665151, guid: 15b5fd4a575e4a74a8646cd332c473fd, type: 3}
-      propertyPath: m_text
-      value: "CREDITS\n\nPRODUCT OWNER\nAlexandra Chelaru\n\nART\r\nRokas (Art Lead)\r\nKaro
-        Tran (Scrum Master & Senior Artist)\r\nAnastasia Lukanova (Scrum Master &
-        Junior Artist)\r\nElin Graafland (Senior Artist)\r\nRafaella Nikolaou (Senior
-        Artist)\r\nRenardo (Senior Artist)\r\nYoana Terzieva (Senior Artist)\r\nSaule
-        Juce (Junior Artist)\r\nYke Kroon (Junior Artist)\r\nSem Jager (Sound Designer/Composer)\r\n\r\nDESIGN\r\nNiels
-        Andela (Lead Designer & Marketer)\r\nIasmin Mambet (Lead Designer)\r\nHelena
-        De Melo (Scrum Master & Senior Designer)\r\nTycho de Krou (Scrum Master Senior
-        Designer)\r\nMarsha Zeldenrust (Senior Designer)\r\nYuki Bolt (Senior Designer)\r\nChristoph
-        J. Brogle \n(Junior Designer, Release Manager & Marketer)\r\nKarel Bruijn
-        (Junior Designer)\r\nNefeli Chrysostomou (Junior Designer)\r\nOzan Nail (Junior
-        Designer)\r\nVictor Holman (Junior Designer)\r\nSofia Avakian (UX/UI Designer)\r\n\r\nVERSION
-        CONTROL & DEVELOPMENT\r\nJantina Mulder (Lead Developer & Scrum Master)\r\nJoost
-        Wolters (Lead Developer)\r\nTimofei Arefev (Scrum Master & Junior Developer)\r\nAlonso
-        C\xE1ceres Garcia (Senior Developer)\r\nEduard Ciofu (Senior Developer)\r\nJardi
-        Wester (Senior Developer)\r\nJohan (Senior Developer)\r\nSander Kleine (Semi-Senior
-        Developer)\r\nAlice Tel (Junior Developer)\r\nArch Promchan (Junior Developer)\r\nBoas
-        Idema (Junior Developer)\r\nChristina Pence (Junior Developer)\r\nJo\xEBl
-        Misiedjan (Junior Developer)\r\nNikolay Minins (Junior Developer\r\nTies
-        Medemblik (Junior Developer)\r\nVasilis Vlachos (Junior Developer)"
-      objectReference: {fileID: 0}
+    - target: {fileID: 4583325679249688824, guid: 15b5fd4a575e4a74a8646cd332c473fd, type: 3}
+      propertyPath: creditsManager
+      value: 
+      objectReference: {fileID: 4555067730262359438}
     - target: {fileID: 8761299779996640118, guid: 15b5fd4a575e4a74a8646cd332c473fd, type: 3}
       propertyPath: m_Name
       value: end door low
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 2102882013359509546, guid: 15b5fd4a575e4a74a8646cd332c473fd, type: 3}
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 1445549634625883744, guid: 15b5fd4a575e4a74a8646cd332c473fd, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2797326196197595785}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 15b5fd4a575e4a74a8646cd332c473fd, type: 3}
 --- !u!1 &4207437549651489789 stripped
@@ -6325,6 +6311,92 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4125813739856631843, guid: 54f2981d9820ffa4fbe19440f5f5b550, type: 3}
   m_PrefabInstance: {fileID: 8309711762072090746}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &8472975167719158045
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 6339430174977154795}
+    m_Modifications:
+    - target: {fileID: 102634128045335970, guid: 2f34acaabd7f2584fb6dda975ca79c25, type: 3}
+      propertyPath: m_text
+      value: "\n \n\n\n\nART\n\n\n\n\n\n\n\n\n\n\n\n\nDESIGN\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nVERSION
+        CONTROL\nAND DEVELOPMENT\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"
+      objectReference: {fileID: 0}
+    - target: {fileID: 3935781620346034170, guid: 2f34acaabd7f2584fb6dda975ca79c25, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 1150
+      objectReference: {fileID: 0}
+    - target: {fileID: 5377535391353719955, guid: 2f34acaabd7f2584fb6dda975ca79c25, type: 3}
+      propertyPath: endHoldDuration
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5756944527549172869, guid: 2f34acaabd7f2584fb6dda975ca79c25, type: 3}
+      propertyPath: m_Name
+      value: Credits
+      objectReference: {fileID: 0}
+    - target: {fileID: 5999946301223709588, guid: 2f34acaabd7f2584fb6dda975ca79c25, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5999946301223709588, guid: 2f34acaabd7f2584fb6dda975ca79c25, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5999946301223709588, guid: 2f34acaabd7f2584fb6dda975ca79c25, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5999946301223709588, guid: 2f34acaabd7f2584fb6dda975ca79c25, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5999946301223709588, guid: 2f34acaabd7f2584fb6dda975ca79c25, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5999946301223709588, guid: 2f34acaabd7f2584fb6dda975ca79c25, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5999946301223709588, guid: 2f34acaabd7f2584fb6dda975ca79c25, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5999946301223709588, guid: 2f34acaabd7f2584fb6dda975ca79c25, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5999946301223709588, guid: 2f34acaabd7f2584fb6dda975ca79c25, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5999946301223709588, guid: 2f34acaabd7f2584fb6dda975ca79c25, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 2f34acaabd7f2584fb6dda975ca79c25, type: 3}
+--- !u!4 &2797326196197595785 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5999946301223709588, guid: 2f34acaabd7f2584fb6dda975ca79c25, type: 3}
+  m_PrefabInstance: {fileID: 8472975167719158045}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &4555067730262359438 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5377535391353719955, guid: 2f34acaabd7f2584fb6dda975ca79c25, type: 3}
+  m_PrefabInstance: {fileID: 8472975167719158045}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d54cdb8e008ab044afb2d2535f28710, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CreditsManager
 --- !u!1001 &8507643071161527880
 PrefabInstance:
   m_ObjectHideFlags: 0
