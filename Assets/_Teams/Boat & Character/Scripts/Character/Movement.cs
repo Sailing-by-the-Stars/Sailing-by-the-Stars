@@ -487,14 +487,14 @@ public class Movement : MonoBehaviour
             // Moving Left
             boatController.rudderAxis.OnNegative();
             // Added by Jantina — notify tutorial
-            boatTutorialManager?.NotifyRudderSteered();
+            boatTutorialManager?.NotifyRudderSteeredComplex();
         }
         else if (moveDirection.x > 0)
         {
             // Moving right
             boatController.rudderAxis.OnPositive();
             // Added by Jantina — notify tutorial
-            boatTutorialManager?.NotifyRudderSteered();
+            boatTutorialManager?.NotifyRudderSteeredComplex();
         }
         else
         {

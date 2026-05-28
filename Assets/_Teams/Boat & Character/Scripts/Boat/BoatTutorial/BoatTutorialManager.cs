@@ -6,17 +6,15 @@ using System.Collections;
 public class BoatTutorialManager : MonoBehaviour
 {
     public enum SubStep { Approach, Action, Leave }
-
     private TutorialStep _currentMajorStep = TutorialStep.None;
-    private SubStep      _currentSubStep;
-    private bool         _tutorialActive = false;
-
+    private SubStep _currentSubStep;
+    private bool _tutorialActive = false;
     private BoatHighlighter anchorHighlighter;
     private BoatHighlighter rudderHighlighter;
     private BoatHighlighter sailHighlighter;
-
     private BoatController _boatController;
     private DockInteractionUI _dockUI;
+    private int _simpleTutorialStep = 0;
 
     private void Awake()
     {
@@ -158,10 +156,13 @@ public class BoatTutorialManager : MonoBehaviour
     public bool IsTutorialActive => _tutorialActive;
     private void StartSimpleTutorial()
     {
-        _currentMajorStep = TutorialStep.HaulAnchor;
+        _simpleTutorialStep = 0;
+
         _dockUI?.Suppress(true);
+
         TutorialManager.Instance?.gameObject.SetActive(false);
-        BoatTutorialUI.Instance?.ShowSimpleTurn();
+
+        BoatTutorialUI.Instance?.ShowSimpleThrottle();
     }
 
     public void NotifyRudderSteered()
@@ -169,24 +170,38 @@ public class BoatTutorialManager : MonoBehaviour
         if (!_boatController.IsSimpleModeEnabled)
             return;
 
-        if (_currentMajorStep != TutorialStep.HaulAnchor)
-            return;
-
-        _currentMajorStep = TutorialStep.SteerRudder;
-
-        BoatTutorialUI.Instance?.ShowSimpleThrottle();
-    }
-
-    public void NotifyThrottleUsed()
-    {
-        if (!_boatController.IsSimpleModeEnabled)
-            return;
-
-        if (_currentMajorStep != TutorialStep.SteerRudder)
+        if (_simpleTutorialStep != 1)
             return;
 
         Debug.Log("Simple tutorial completed");
 
         CompleteTutorial();
+    }
+    public void NotifyRudderSteeredComplex()
+    {
+        if (_boatController.IsSimpleModeEnabled)
+            return;
+
+        if (_currentMajorStep != TutorialStep.SteerRudder)
+            return;
+
+        if (_currentSubStep != SubStep.Action)
+            return;
+
+        _currentSubStep = SubStep.Leave;
+
+        BoatTutorialUI.Instance?.ShowLeavePrompt();
+    }
+    public void NotifyThrottleUsed()
+    {
+        if (!_boatController.IsSimpleModeEnabled)
+            return;
+
+        if (_simpleTutorialStep != 0)
+            return;
+
+        _simpleTutorialStep = 1;
+
+        BoatTutorialUI.Instance?.ShowSimpleTurn();
     }
 }
