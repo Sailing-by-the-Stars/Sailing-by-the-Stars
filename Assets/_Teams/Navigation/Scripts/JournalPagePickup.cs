@@ -1,25 +1,9 @@
 using System;
-using Unity.VisualScripting;
 using UnityEngine;
 
-
-/*
- * To create a page pickup
- * - Create a new script and extend the class from this class, PagePickup
- * - Initialize a new Page object
- * - Initialize two SerializeField Textures: leftPage and rightPage
- * - in Start() assign page.leftPage and page.rightPage to the textures
- * initialized above respectively
- * - override the Grab() method and call base.Grab()
- * - In the overridden Grab() method,
- *  Add an if statement checking AddToJournal(page) is true,
- *  and then destroy the object
- * - Add the script to a new object and assign textures in the editor
- * Rever to the DebugPage prefab as an example
- */
 public class JournalPagePickup : MonoBehaviour, IPickup
 {
-    private Journal journal;
+    protected Journal journal = null;
 
     [SerializeField]
     protected int pageIDHack = -1;
@@ -36,10 +20,9 @@ public class JournalPagePickup : MonoBehaviour, IPickup
 
     public virtual void Grab(PickupController pickupController)
     {
-        if (!pickupController.transform
+        if (pickupController.transform
                 .Find("Main Camera")
-                .Find("journal")
-                .IsUnityNull())
+                .Find("journal"))
         {
             journal = pickupController.transform
                 .Find("Main Camera")
@@ -47,10 +30,10 @@ public class JournalPagePickup : MonoBehaviour, IPickup
                 .GetComponent<Journal>();
         }
 
-        if (!pickupController.transform
+        if (pickupController.transform
                 .Find("Main Camera")
                 .Find("journal(Clone)")
-                .IsUnityNull() && journal.IsUnityNull())
+                && journal == null)
         {
                 journal = pickupController.transform
                 .Find("Main Camera")
@@ -72,15 +55,45 @@ public class JournalPagePickup : MonoBehaviour, IPickup
     }
 
     //Add page to the journal if the player has a journal
-    protected bool AddToJournal(Page page)
+    protected bool AddToJournal(SectionName sectionName, Page page)
     {
-        if (journal.IsUnityNull()) 
+        if (journal == null) 
         {
             Debug.LogWarning("there is no journal to add pages to!");
             return false;
         }
+
+        JournalSection section = journal.GetSection(sectionName);
         
-        journal.GetComponent<Journal>().AddPage(page, pageIDHack);
+        if (!section)
+        {
+            Debug.LogError($"couldn't find {sectionName} in the journal to add the page to!");
+            return false;
+        }
+
+
+
+        if (page.rightPage != null && pageIDHack == -1)
+        {
+            foreach(Page tPage in section.pages)
+            {
+                if (tPage == null)
+                {
+                    continue;
+                }
+                if (tPage.leftPage == page.leftPage)
+                {
+                    pageIDHack = tPage.pageID;
+                }
+            }
+
+            if(pageIDHack == -1)
+            {
+                Debug.LogWarning("failed to find corrosponding left page!!");
+            }
+        }
+        
+        section.AddPage(page, pageIDHack);
         
         return true;
     }

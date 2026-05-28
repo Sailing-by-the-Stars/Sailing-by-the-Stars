@@ -11,6 +11,11 @@ public class SequenceEntry
     public bool continueAfterEntry = true;
     public int nextEntry = -1;
     public int dialogueEntry = -1;
+
+#if UNITY_EDITOR
+    public string dialogueEntryText;
+#endif
+
     public bool clickForDialogue = false;
 }
 
@@ -58,9 +63,10 @@ public class TutorialSequence : MonoBehaviour
 
         if (index != stepIndex)
         {
-            Debug.LogWarning("tried finishing the wrong step!!");
+            //Debug.LogWarning("tried finishing the wrong step!!");
             return;
         }
+
         if (EventOrder[index].sequenceEnter.GetPersistentEventCount() > currentStepFinishes)
         {
             Debug.Log($"waiting for {EventOrder[index].sequenceEnter.GetPersistentEventCount() - currentStepFinishes} more events to finish before the next step");
@@ -106,4 +112,19 @@ public class TutorialSequence : MonoBehaviour
         currentStepFinishes = 0;
         EventOrder[index].sequenceEnter.Invoke(this);
     }
+
+#if UNITY_EDITOR
+    private void OnValidate()
+    {
+        TutorialDialogue tutorialDialogue = GetComponent<TutorialDialogue>();
+
+        foreach (var step in EventOrder)
+        {
+            if(step.dialogueEntry >= 0 && tutorialDialogue && tutorialDialogue.dialogue.Count > step.dialogueEntry)
+            {
+                step.dialogueEntryText = tutorialDialogue.dialogue[step.dialogueEntry].text;
+            }
+        }
+    }
+#endif
 }

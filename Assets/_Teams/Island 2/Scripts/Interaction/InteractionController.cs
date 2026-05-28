@@ -1,6 +1,7 @@
-﻿using TMPro;
+﻿using System.Text.RegularExpressions;
+using TMPro;
 using UnityEngine;
-using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 /** Interaction System Documentation - How to Use:
  *
@@ -16,6 +17,7 @@ public class InteractionController : MonoBehaviour
     [Header("Interaction References & Settings")]
     [SerializeField] private Camera playerCamera;
     [SerializeField] private TextMeshProUGUI interactionText;
+    [SerializeField] private Image interactionBackground;
     [SerializeField] private float interactionDistance = 5f;
 
     private RaycastHit currentHit;
@@ -23,11 +25,12 @@ public class InteractionController : MonoBehaviour
     private IInteractable currentTargetedInteractable;
     public Transform CurrentHitTransform => currentHit.collider ? currentHit.collider.transform : null;
 
-    PlayerControls playerControls;
+    private PlayerControls playerControls;
 
     private void Start()
     {
         playerControls = TempStateMachine.Instance.PlayerControls;
+        interactionBackground = interactionText.GetComponentInParent<Image>();
     }
 
     private void Update()
@@ -54,18 +57,22 @@ public class InteractionController : MonoBehaviour
     {
         if (currentTargetedInteractable == null || DialogueSystem.Instance.isDialogueActive)
         {
+            interactionBackground.enabled = false;
             interactionText.text = string.Empty;
             return;
         }
 
-        interactionText.text = currentTargetedInteractable.InteractMessage;
+        interactionBackground.enabled = true;
+        // Note: For some reason you can't save tags (<color></color>) in interfaces, they just get dropped,
+        // so it's necessary to add the tags back here. Yay, Unity!
+        string richText = Regex.Replace(currentTargetedInteractable.InteractMessage, @"\bE\b", "<color=#F0E37D>E</color>");
+        interactionText.text = richText;
     }
 
     private void CheckForInteractionInput()
     {
         if (currentTargetedInteractable == null || DialogueSystem.Instance.isDialogueActive) return;
-
-        // TODO: replace hardcoded key press with Input Actions
+        
         var key = playerControls.Interaction.Pickup;
 
         if (key.WasPerformedThisFrame())
