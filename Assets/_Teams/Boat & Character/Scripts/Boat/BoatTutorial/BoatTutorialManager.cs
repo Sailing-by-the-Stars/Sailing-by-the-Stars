@@ -15,6 +15,7 @@ public class BoatTutorialManager : MonoBehaviour
     private BoatController _boatController;
     private DockInteractionUI _dockUI;
     private int _simpleTutorialStep = 0;
+    bool tutorialComplete = false;
 
     private void Awake()
     {
@@ -42,11 +43,13 @@ public class BoatTutorialManager : MonoBehaviour
         _tutorialActive = true;
         TutorialManager.Instance?.gameObject.SetActive(false);
         _dockUI?.Suppress(true);
-
-        if (_boatController.IsSimpleModeEnabled)
-            StartSimpleTutorial();
-        else
-            StartAnchorApproach();
+        if (!tutorialComplete)
+        {
+            if (_boatController.IsSimpleModeEnabled)
+                StartSimpleTutorial();
+            else
+                StartAnchorApproach();
+        }
     }
 
 
@@ -150,12 +153,14 @@ public class BoatTutorialManager : MonoBehaviour
         _tutorialActive   = false;
         BoatTutorialUI.Instance?.Hide();
         _dockUI?.Suppress(false);  
+        tutorialComplete = true;
         TutorialManager.Instance?.gameObject.SetActive(true);
     }
 
     public bool IsTutorialActive => _tutorialActive;
     private void StartSimpleTutorial()
     {
+
         _simpleTutorialStep = 0;
 
         _dockUI?.Suppress(true);

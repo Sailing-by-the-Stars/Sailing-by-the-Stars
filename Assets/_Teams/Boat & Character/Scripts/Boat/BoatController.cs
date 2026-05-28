@@ -550,4 +550,16 @@ public class BoatController : MonoBehaviour
         _simpleThrottleInput = Mathf.Clamp01(value);
     }
     public bool IsSimpleModeEnabled => simpleModeEnabled;
+    public void HardStop()
+    {
+        if (rigidBody == null) return;
+
+        rigidBody.linearVelocity = Vector3.zero;
+        rigidBody.angularVelocity = Vector3.zero;
+
+        simpleThrottle = 0f;
+        _simpleThrottleInput = 0f;
+        _simpleTurnInput = 0f;
+        forwardSpeed = 0f;
+    }
 }

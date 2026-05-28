@@ -317,8 +317,17 @@ public class Movement : MonoBehaviour
         isOnBoat = true;
         buoyancyController.enabled = true;
         boatController.enabled = true;
+        // Added by Jantina
+        var boatRb = boatController.GetComponent<Rigidbody>();
+        if (boatRb != null)
+        {
+            boatRb.linearVelocity = Vector3.zero;
+            boatRb.angularVelocity = Vector3.zero;
+        }
 
-        if (boatController.IsSimpleModeEnabled) // Added by Jantina
+        boatController.SetSimpleThrottleInput(0f);
+
+        if (boatController.IsSimpleModeEnabled)
         {
             SwitchState("BoatSimple");
             boatController.HaulAnchor();
@@ -331,8 +340,24 @@ public class Movement : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
 
+        if (boatController != null)
+        {
+            var boatRb = boatController.GetComponent<Rigidbody>();
+            if (boatRb != null)
+            {
+                boatRb.linearVelocity = Vector3.zero;
+                boatRb.angularVelocity = Vector3.zero;
+            }
+
+            boatController.DropAnchor();
+        }
+        boatController.SetSimpleThrottleInput(0f);
         isOnBoat = false;
         boatController.DropAnchor();
+        if (boatController != null)
+        {
+            boatController.HardStop();
+        }
         buoyancyController.enabled = false;
         boatController.enabled = false;
     }

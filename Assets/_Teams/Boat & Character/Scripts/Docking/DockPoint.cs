@@ -150,7 +150,7 @@ public class DockPoint : MonoBehaviour
         switch (requirementType)
         {
             case RequirementType.PuzzleID:
-                return $"Complete the {puzzleID} puzzle first.";
+                return $"You should explore the island more";
             case RequirementType.StartingItems:
                 if (movement == null) return "Requirements not met.";
                 bool hasJournal   = movement.GetComponentInChildren<Journal>()   != null;
