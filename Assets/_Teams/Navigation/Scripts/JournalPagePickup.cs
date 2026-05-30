@@ -9,9 +9,18 @@ public class JournalPagePickup : MonoBehaviour, IPickup
     protected int pageIDHack = -1;
     [SerializeField]
     protected bool leftOnly = false;
-
+    
+    PagePickupSound pickupSound;
+    ShowJournalUpdateNotif notif;
+    
     public virtual string InteractMessage => "Press E to pickup";
 
+    void Awake()
+    {
+        pickupSound = FindFirstObjectByType<PagePickupSound>();
+        notif = FindFirstObjectByType<ShowJournalUpdateNotif>(FindObjectsInactive.Include);
+    }
+    
     public void Interact(InteractionController interactionController)
     {
         var pickupController = interactionController.GetComponent<PickupController>();
@@ -28,6 +37,25 @@ public class JournalPagePickup : MonoBehaviour, IPickup
                 .Find("Main Camera")
                 .Find("journal")
                 .GetComponent<Journal>();
+            
+            if (pickupSound != null) 
+            {
+                pickupSound.PlaySound();
+            }
+            else
+            {
+                Debug.LogWarning("couldn't find page pickup sound! make sure it's added to the AudioManager");
+            }
+
+            if (notif != null)
+            {
+                notif.Show();
+            }
+            else
+            {
+                Debug.LogWarning("couldnt't find page pickup notification! make sure it's added to Canvas[The Big One]");
+            }
+
         }
 
         if (pickupController.transform
@@ -39,9 +67,27 @@ public class JournalPagePickup : MonoBehaviour, IPickup
                 .Find("Main Camera")
                 .Find("journal(Clone)")
                 .GetComponent<Journal>();
+                
+            if (pickupSound != null) 
+            {
+                pickupSound.PlaySound();
+            }
+            else
+            {
+                Debug.LogWarning("couldn't find page pickup sound! make sure it's added to the AudioManager");
+            }
+
+            if (notif != null)
+            {
+                notif.Show();
+            }
+            else
+            {
+                Debug.LogWarning("couldnt't find page pickup notification! make sure it's added to Canvas[The Big One]");
+            }
         }
     }
-
+    
     public void Drop(PickupController pickupController)
     {
     }
