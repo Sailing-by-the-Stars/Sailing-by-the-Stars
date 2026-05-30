@@ -935,6 +935,11 @@ Transform:
   - {fileID: 1232968826}
   m_Father: {fileID: 190591031}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &226897768 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5795584435581056426, guid: b6d81394640966a4d9eddec62111776c, type: 3}
+  m_PrefabInstance: {fileID: 814207020}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &237361988
 GameObject:
   m_ObjectHideFlags: 0
@@ -2054,7 +2059,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: TPManager
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 5543801497583760516, guid: e6f02434bcf99e74d8f056e0678e19b5, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -2856,13 +2862,13 @@ PrefabInstance:
     m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 6736058736273579916, guid: b6d81394640966a4d9eddec62111776c, type: 3}
-      insertIndex: -1
+      insertIndex: 7
       addedObject: {fileID: 217773228}
     - targetCorrespondingSourceObject: {fileID: 6736058736273579916, guid: b6d81394640966a4d9eddec62111776c, type: 3}
-      insertIndex: -1
+      insertIndex: 8
       addedObject: {fileID: 440486021}
     - targetCorrespondingSourceObject: {fileID: 6736058736273579916, guid: b6d81394640966a4d9eddec62111776c, type: 3}
-      insertIndex: -1
+      insertIndex: 9
       addedObject: {fileID: 1922654824}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b6d81394640966a4d9eddec62111776c, type: 3}
@@ -4041,6 +4047,25 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: acca64d47d9ad5b4c891c50e56aeb431, type: 3}
+--- !u!1 &1176587764 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4851351111004812512, guid: b30d005f72aa7d6439261a13e13f2c23, type: 3}
+  m_PrefabInstance: {fileID: 7420044604117170416}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1176587769
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1176587764}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea1d725e30e0a0641af01f648d71bd8f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ItemDialogueTrigger
+  dialogue: {fileID: 11400000, guid: 87d4a56b4555409448394a8ef8284e25, type: 2}
+  onlyTriggerOnce: 1
 --- !u!1001 &1180070917
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4947,6 +4972,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 4289322369862204314, guid: 2bca4eabfcdde6949b5e11e926281700, type: 3}
+      propertyPath: attenuationObject
+      value: 
+      objectReference: {fileID: 226897768}
     - target: {fileID: 7396955086683503908, guid: 2bca4eabfcdde6949b5e11e926281700, type: 3}
       propertyPath: boat
       value: 
@@ -6129,7 +6158,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4851351111004812512, guid: b30d005f72aa7d6439261a13e13f2c23, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1176587769}
   m_SourcePrefab: {fileID: 100100000, guid: b30d005f72aa7d6439261a13e13f2c23, type: 3}
 --- !u!4 &7420044604117170417 stripped
 Transform:
