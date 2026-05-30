@@ -8,6 +8,7 @@ using UnityEngine.InputSystem.LowLevel;
 //edited by: Jardi (the sprint working, hacky though it is)
 //edited by: Vasilis (particle system on enter and exit boat)
 //edited by: Jantina (dock boarding/disembarking via DockPoint)
+//edited by: Alonso (ambience music)
 public class Movement : MonoBehaviour
 {
     [Header("Movement Settings")]
@@ -71,6 +72,9 @@ public class Movement : MonoBehaviour
     private DockInteractionUI _dockUI;
     private BoatTutorialManager boatTutorialManager;
 
+    //ADDED BY ALONSO
+    private SetAmbienceMusicSail ambienceMusic;
+
     // private void Awake()
     // {
     //     playerControls = new PlayerControls();
@@ -110,6 +114,9 @@ public class Movement : MonoBehaviour
         // ADDED BY JANTINA
         _docks = FindObjectsByType<DockPoint>(FindObjectsSortMode.None);
         _dockUI = FindFirstObjectByType<DockInteractionUI>();
+
+        //ADDED BY ALONSO
+        ambienceMusic = transform.GetChild(5).GetComponent<SetAmbienceMusicSail>();
     }
 
     private void Update()
@@ -312,6 +319,8 @@ public class Movement : MonoBehaviour
         if (rb != null) Destroy(rb);
         isOnBoat = true;
 
+        ambienceMusic?.SetAmbMusic(3); //ADDED BY ALONSO
+
         buoyancyController.enabled = true;
         boatController.enabled = true;
     }
@@ -323,6 +332,8 @@ public class Movement : MonoBehaviour
         rb.freezeRotation = true;
 
         isOnBoat = false;
+
+        ambienceMusic?.ResetAmbMusic(); //ADDED BY ALONSO
 
         buoyancyController.enabled = false;
         boatController.enabled = false;
