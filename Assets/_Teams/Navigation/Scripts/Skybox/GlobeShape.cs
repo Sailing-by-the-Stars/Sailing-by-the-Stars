@@ -355,7 +355,10 @@ public class GlobeShape : MonoBehaviour
 
         targetpos.y -= offsetY;
 
-        transform.position = targetpos;
+        if (Vector3.Distance(transform.position, targetpos) > 5f)
+        {
+            transform.position = targetpos;
+        }
 
         if (GetComponent<MeshRenderer>() == null || GetComponent<MeshRenderer>().enabled == false)
         {

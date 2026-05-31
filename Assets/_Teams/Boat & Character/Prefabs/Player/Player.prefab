@@ -699,7 +699,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Movement
   movementSpeed: 7
-  sprintMultiplier: 2
+  sprintMultiplier: 1
   jumpStrength: 300
   mouseSensitivity: 10
   minYRotation: -89
@@ -716,12 +716,17 @@ MonoBehaviour:
   - {fileID: 9200459682292742140}
   - {fileID: 3455857168049401703}
   - {fileID: 7942480987911482429}
+  groundCheckRadius: 0.3
+  groundCheckDistance: 0.2
+  maxSlope: 45
   boat: {fileID: 0}
   seatPosition: {fileID: 0}
   animator: {fileID: 4182459621082244727}
   playerState: Land
   sailCrank: {fileID: 0}
   anchorCrank: {fileID: 0}
+  overrideSprintMultiplier: 0
+  overriddenSprintMultiplier: 10
 --- !u!136 &1658142731576847673
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -802,7 +807,7 @@ MonoBehaviour:
   playerCamera: {fileID: 1656572733483448602}
   interactionText: {fileID: 0}
   interactionBackground: {fileID: 0}
-  interactionDistance: 5
+  interactionDistance: 7
 --- !u!114 &3201630360258636512
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -883,6 +888,7 @@ GameObject:
   - component: {fileID: 8399012855573861907}
   - component: {fileID: 3644698604077259406}
   - component: {fileID: 7858908173477958156}
+  - component: {fileID: 1887396342739544154}
   m_Layer: 3
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -939,7 +945,7 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.01
-  far clip plane: 5100
+  far clip plane: 2600
   field of view: 60
   orthographic: 0
   orthographic size: 5
@@ -1133,6 +1139,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: FMODUnity::FMODUnity.StudioListener
   nonRigidbodyVelocity: 0
   attenuationObject: {fileID: 0}
+--- !u!114 &1887396342739544154
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2008432602510907173}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c49b4cc203aa6414fae5c798d1d0e7d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.EventSystems.PhysicsRaycaster
+  m_EventMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_MaxRayIntersections: 0
 --- !u!1 &2040792862361976090
 GameObject:
   m_ObjectHideFlags: 0
@@ -2259,7 +2281,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &7099742333733594905
 Transform:
   m_ObjectHideFlags: 0
@@ -2387,7 +2409,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6266473675676155004
 Transform:
   m_ObjectHideFlags: 0

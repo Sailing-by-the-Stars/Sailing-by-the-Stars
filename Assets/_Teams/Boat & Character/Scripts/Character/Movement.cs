@@ -1,4 +1,5 @@
 using System.Collections;           // ADDED: needed for coroutines
+using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.InputSystem.LowLevel;
 
@@ -7,6 +8,7 @@ using UnityEngine.InputSystem.LowLevel;
 //edited by: Jardi (the sprint working, hacky though it is)
 //edited by: Vasilis (particle system on enter and exit boat)
 //edited by: Jantina (dock boarding/disembarking via DockPoint)
+//edited by: Alonso (ambience music)
 public class Movement : MonoBehaviour
 {
     [Header("Movement Settings")]
@@ -25,6 +27,13 @@ public class Movement : MonoBehaviour
     [SerializeField] float InteractionRange = 1.0f;
 
     [SerializeField] Transform[] groundChecks;
+    //things added by jardi
+    //>
+    [SerializeField] float groundCheckRadius = 0.3f;
+    [SerializeField] float groundCheckDistance = 0.2f;
+    RaycastHit groundHit;
+    [SerializeField] float maxSlope = 45;
+    //<
     bool isGrounded = false;
     bool isOnBoat = false;
 
@@ -62,6 +71,9 @@ public class Movement : MonoBehaviour
     private DockPoint[] _docks;
     private DockInteractionUI _dockUI;
     private BoatTutorialManager boatTutorialManager;
+
+    //ADDED BY ALONSO
+    private SetAmbienceMusicSail ambienceMusic;
 
     // private void Awake()
     // {
@@ -102,6 +114,9 @@ public class Movement : MonoBehaviour
         // ADDED BY JANTINA
         _docks = FindObjectsByType<DockPoint>(FindObjectsSortMode.None);
         _dockUI = FindFirstObjectByType<DockInteractionUI>();
+
+        //ADDED BY ALONSO
+        ambienceMusic = transform.GetChild(5).GetComponent<SetAmbienceMusicSail>();
     }
 
     private void Update()
@@ -186,25 +201,46 @@ public class Movement : MonoBehaviour
         }
     }
 
+
     void MovePlayer()
     {
-        Vector2 moveDirection = playerControls.Land.Move.ReadValue<Vector2>();
-        
-        //replace everything in the //'s with your own code
-        //this is just so we can test even if the ship doesn't work
+        //this is all changed, the phasing through the terrain was anoying the shit out of me
+        // - Jardi 
         //>
+        Vector2 input = playerControls.Land.Move.ReadValue<Vector2>();
+
+        float speed = movementSpeed;
+
         if (playerControls.Land.Sprint.IsPressed())
         {
-            rb.MovePosition(rb.position + rb.transform.forward * moveDirection.y * movementSpeed * sprintMultiplier * Time.deltaTime);
-            rb.MovePosition(rb.position + rb.transform.right * moveDirection.x * movementSpeed * sprintMultiplier * Time.deltaTime);
+            speed *= sprintMultiplier;
         }
-        else
+
+        Vector3 move = transform.forward * input.y + transform.right * input.x;
+
+        if (move.sqrMagnitude > 1f)
         {
-        //<
-        rb.MovePosition(rb.position + rb.transform.forward * moveDirection.y * movementSpeed * Time.deltaTime);
-        rb.MovePosition(rb.position + rb.transform.right * moveDirection.x * movementSpeed * Time.deltaTime);
-        //>
+            move.Normalize();
         }
+
+        if (isGrounded)
+        {
+            move = Vector3.ProjectOnPlane(move, groundHit.normal).normalized;
+            float slopeAngle =Vector3.Angle(groundHit.normal, Vector3.up);
+
+            if (slopeAngle > maxSlope)
+            {
+                Vector3 slopeDirection = Vector3.ProjectOnPlane(Vector3.down, groundHit.normal).normalized;
+                float dot = Vector3.Dot(move, slopeDirection);
+
+                if (dot < 0)
+                {
+                    move -= slopeDirection * dot;
+                }
+            }
+        }
+
+        rb.MovePosition(rb.position + move * speed * Time.fixedDeltaTime);
         //<
     }
     public void SetSprintMultiplier(float multiplier)
@@ -283,6 +319,8 @@ public class Movement : MonoBehaviour
         if (rb != null) Destroy(rb);
         isOnBoat = true;
 
+        ambienceMusic?.SetAmbMusic(3); //ADDED BY ALONSO
+
         buoyancyController.enabled = true;
         boatController.enabled = true;
     }
@@ -294,6 +332,8 @@ public class Movement : MonoBehaviour
         rb.freezeRotation = true;
 
         isOnBoat = false;
+
+        ambienceMusic?.ResetAmbMusic(); //ADDED BY ALONSO
 
         buoyancyController.enabled = false;
         boatController.enabled = false;
@@ -372,33 +412,38 @@ public class Movement : MonoBehaviour
         {
             if (playerControls.Land.Jump.triggered)
             {
-                print("Jumped");
+                //print("Jumped");
                 rb.AddForce(new Vector3(0, jumpStrength, 0));
             }
         }
     }
 
+
+    
+
     void IsGrounded()
     {
-        /*RaycastHit hit;
-        if(Physics.Raycast(transform.position, -Vector3.up, out hit, gameObject.GetComponent<SphereCollider>().bounds.extents.y + 0.1f))
-        {
-            print(hit);
-            return true;
-        }*/
+        //mostly changed to not phase through the terrain
+        //>
         isGrounded = false;
+
+        CapsuleCollider capsule = GetComponent<CapsuleCollider>();
+
+        float castDistance = capsule.bounds.extents.y + groundCheckDistance;
 
         for (int i = 0; i < groundChecks.Length; i++)
         {
             RaycastHit hit;
-            if (Physics.Raycast(groundChecks[i].position, -Vector3.up, out hit, gameObject.GetComponent<CapsuleCollider>().bounds.extents.y + 0.1f))
+
+            if (Physics.SphereCast(groundChecks[i].position, groundCheckRadius, Vector3.down, out hit, castDistance))
             {
-                //print(hit);
                 isGrounded = true;
+                groundHit = hit;
+
                 return;
             }
         }
-        isGrounded = false;
+        //<
     }
 
     void MoveSail()
