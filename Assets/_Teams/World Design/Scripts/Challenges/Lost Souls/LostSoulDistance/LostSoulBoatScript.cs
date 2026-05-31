@@ -13,7 +13,8 @@ namespace _Teams.World_Design.Scripts.Challenges.Lost_Souls
         [SerializeField] private float moveSpeed = 2f;
         
         [Header("Lifetime Settings")]
-        [SerializeField] private float timeUntilFade = 15f;
+        [SerializeField] private float timeUntilFadeMin = 10f;
+        [SerializeField] private float timeUntilFadeMax = 15f;
         [SerializeField] private float fadeDuration = 3f;
         
         [Header("Opacity Distance Fading")]
@@ -23,7 +24,12 @@ namespace _Teams.World_Design.Scripts.Challenges.Lost_Souls
         [SerializeField] private float minFadeOpacity = 0.0001f;
 
         [Header("Debug")]
+#pragma warning disable 0414
         [SerializeField] private float distanceToPlayer;
+        [SerializeField] private float currentFadeInTime;
+        [SerializeField] private float currentFadeOutTime;
+        [SerializeField] private float currentTimeUntilFade;
+#pragma warning restore 0414
 
         [Header("Lights")]
         [Tooltip("List of lights to fade in/out with the boat")]
@@ -88,10 +94,13 @@ namespace _Teams.World_Design.Scripts.Challenges.Lost_Souls
             }
 
             SetOriginalRenderer();
-            currentOpacity = maxOpacity;
+            currentOpacity = GetOpacityForCurrentPlayerDistance();
             UpdateOpacity(currentOpacity);
             
-            Invoke(nameof(StartFadeAndDelete), timeUntilFade);
+            float randomFadeTime = Random.Range(timeUntilFadeMin, timeUntilFadeMax);
+            currentTimeUntilFade = randomFadeTime;
+            Invoke(nameof(StartFadeAndDelete), randomFadeTime);
+            
 
             StartFadeIn();
         }
@@ -131,12 +140,20 @@ namespace _Teams.World_Design.Scripts.Challenges.Lost_Souls
         {
             isFadingOut = true;
             float elapsedTime = 0f;
-            float startOpacity = currentOpacity;
+            currentFadeOutTime = 0f;
 
             while (elapsedTime < fadeDuration)
             {
                 elapsedTime += Time.deltaTime;
-                currentOpacity = Mathf.Lerp(startOpacity, 0f, elapsedTime / fadeDuration);
+                currentFadeOutTime = elapsedTime;
+                float targetOpacity = GetOpacityForCurrentPlayerDistance();
+
+                currentOpacity = Mathf.Lerp(targetOpacity, 0f, elapsedTime / fadeDuration);
+                if(targetOpacity < currentOpacity)
+                {
+                    currentOpacity = targetOpacity;
+                }
+                
                 UpdateOpacity(currentOpacity);
                 yield return null;
             }
@@ -154,16 +171,49 @@ namespace _Teams.World_Design.Scripts.Challenges.Lost_Souls
         {
             isFadingOut = true; 
             float elapsedTime = 0f;
+            currentFadeInTime = 0f;
 
             while (elapsedTime < fadeDuration)
             {
                 elapsedTime += Time.deltaTime;
-                currentOpacity = Mathf.Lerp(0, maxOpacity, elapsedTime / fadeDuration);
+                currentFadeInTime = elapsedTime;
+                float targetOpacity = GetOpacityForCurrentPlayerDistance();
+                currentOpacity = Mathf.Lerp(0f, targetOpacity, elapsedTime / fadeDuration);
+                
+                if(targetOpacity < currentOpacity)
+                {
+                    currentOpacity = targetOpacity;
+                }
+                
                 UpdateOpacity(currentOpacity);
                 yield return null;
             }
+
+            currentOpacity = GetOpacityForCurrentPlayerDistance();
+            UpdateOpacity(currentOpacity);
             
             isFadingOut = false; 
+        }
+
+        private float GetOpacityForCurrentPlayerDistance()
+        {
+            if (playerTransform == null)
+            {
+                return maxOpacity;
+            }
+
+            float distance = Vector3.Distance(transform.position, playerTransform.position);
+            distanceToPlayer = distance;
+
+            if (distance < fadeStartRange)
+            {
+                float range = fadeStartRange - fadeEndRange;
+                float currentVal = distance - fadeEndRange;
+                float normalized = Mathf.Clamp01(currentVal / range);
+                return normalized * maxOpacity;
+            }
+
+            return maxOpacity;
         }
 
         private void UpdateOpacity(float opacity)
@@ -202,6 +252,21 @@ namespace _Teams.World_Design.Scripts.Challenges.Lost_Souls
                         kvp.Key.intensity = kvp.Value * normalizedOpacity;
                     }
                 }
+            }
+        }
+
+        private void OnDrawGizmosSelected()
+        {
+            if (fadeStartRange > 0f)
+            {
+                Gizmos.color = Color.yellow;
+                Gizmos.DrawWireSphere(transform.position, fadeStartRange);
+            }
+
+            if (fadeEndRange > 0f)
+            {
+                Gizmos.color = Color.red;
+                Gizmos.DrawWireSphere(transform.position, fadeEndRange);
             }
         }
 
