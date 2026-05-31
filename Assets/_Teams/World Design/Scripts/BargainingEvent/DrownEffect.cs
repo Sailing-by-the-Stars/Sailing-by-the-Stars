@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using _Teams.World_Design.Scripts.Checkpoints;
 
 /// <summary>
 /// Code by Alonso
@@ -8,8 +9,22 @@ using System.Collections;
 public class DrownEffect : MonoBehaviour
 {
     private ScreenEffects effects;
-    private Coroutine coroutine;
+    public Coroutine coroutine;
+    
+    [SerializeField] private CheckpointManager checkpointManager;
 
+    private void Awake()
+    {
+        if (checkpointManager == null)
+        {
+            checkpointManager = FindFirstObjectByType<CheckpointManager>();
+            if (checkpointManager == null)
+            {
+                Debug.LogWarning($"{nameof(Checkpoint)} could not find a {nameof(CheckpointManager)} in the scene.", this);
+            }
+        }
+    }
+    
     private void Start()
     {
         effects = FindFirstObjectByType<ScreenEffects>();
@@ -17,9 +32,6 @@ public class DrownEffect : MonoBehaviour
 
     public void PlayFadeOut()
     {
-        if (coroutine != null)
-            StopCoroutine(coroutine);
-
         coroutine = StartCoroutine(FadeSequence());
     }
 
@@ -27,8 +39,10 @@ public class DrownEffect : MonoBehaviour
     {
         if (effects == null) yield break;
 
-        effects.Vignette(Color.black, 1f, 2f);
+        effects.Vignette(Color.black, 1f, 2.5f);
 
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(1f);
+        checkpointManager.HandleCheckpointTeleport();
+        coroutine = null;
     }
 }

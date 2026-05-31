@@ -26,13 +26,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7240356299034682762}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.027760854, y: 0.7065616, z: -0.027760854, w: 0.7065616}
+  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0.0375, y: 0, z: -0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.9475852, y: 0.9475852, z: -0.98232}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5552154629608056312}
-  m_LocalEulerAnglesHint: {x: 0, y: 90, z: -4.5}
+  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!33 &5108336135509724357
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -40,7 +40,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7240356299034682762}
-  m_Mesh: {fileID: -7164070919846196203, guid: ee7e8af3fadab364eac6ef1c79ff71d5, type: 3}
+  m_Mesh: {fileID: 4143613149224947854, guid: 73de83e474d92fc44913d4d1ed36bd14, type: 3}
 --- !u!23 &6966790544087180581
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -66,7 +66,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 4dd5411faeaf8ab4eb9a67eb3e13d705, type: 2}
+  - {fileID: 2100000, guid: f8e09020bcb11e8459092f9d532d83bc, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -130,7 +130,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8130899844300205691}
-  m_Mesh: {fileID: 1289477851091893687, guid: ee7e8af3fadab364eac6ef1c79ff71d5, type: 3}
+  m_Mesh: {fileID: 9104556557536654033, guid: 73de83e474d92fc44913d4d1ed36bd14, type: 3}
 --- !u!23 &2696176281340634221
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -156,7 +156,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 7284b442201610442be6af3c6c1f79b0, type: 2}
+  - {fileID: 2100000, guid: 537127b0a287c9c4ab460aadf5762933, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -228,7 +228,7 @@ MonoBehaviour:
   layerMask:
     serializedVersion: 2
     m_Bits: 1024
-  tolerance: 5
+  tolerance: 1
 --- !u!1 &9202524314098089220
 GameObject:
   m_ObjectHideFlags: 0
@@ -276,7 +276,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd7397cb244d2c949a47ec08f67bd1f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Astrolabe
-  pickupPositionOffset: {x: 0.038, y: -0.005, z: 1.498}
+  pickupPositionOffset: {x: 0.051, y: -0.005, z: 1.498}
   pointerAngle: 0
 --- !u!65 &7558120476687763388
 BoxCollider:

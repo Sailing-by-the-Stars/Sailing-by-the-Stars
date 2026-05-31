@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // Programmer: Boas
+// Edited by: Arch
 
 public class QuestManager : MonoBehaviour
 {
@@ -11,6 +12,9 @@ public class QuestManager : MonoBehaviour
 
     private List<QuestProgress> activeQuests = new();
     public IReadOnlyList<QuestProgress> ActiveQuests => activeQuests;
+
+    // QuestUI kept as a field so existing scene references do not break,
+    // but it is now a no-op (see QuestUI.cs)
     private QuestUI questUI;
 
     private void Awake()
@@ -26,32 +30,31 @@ public class QuestManager : MonoBehaviour
         playerState = FindFirstObjectByType<PlayerState>();
 
         if (questUI == null)
-        {
             questUI = FindFirstObjectByType<QuestUI>();
-        }
     }
 
     /// <summary>
-    /// Adds a quest to the active quest list.
+    /// Adds a quest to the active quest list and updates the journal page.
     /// </summary>
     public void StartQuest(Quest quest)
     {
         activeQuests.Add(new QuestProgress(quest));
 
-        questUI.UpdateQuestUI();
+        PushToJournal();
     }
 
     /// <summary>
-    /// Registers when quest objective item has been collected and calls quest UI update. Also removes quests when completed
+    /// Registers when a quest objective item has been collected.
+    /// Removes completed quests and updates the journal page.
     /// </summary>
     public void RegisterItemCollected(int itemID)
     {
         bool updated = false;
         List<QuestProgress> completedQuests = new();
 
-        foreach (var quest in activeQuests)
+        foreach (QuestProgress quest in activeQuests)
         {
-            foreach (var obj in quest.Objectives)
+            foreach (QuestObjective obj in quest.Objectives)
             {
                 if (obj.ObjectiveID == itemID)
                 {
@@ -69,14 +72,34 @@ public class QuestManager : MonoBehaviour
 
         if (updated)
         {
-            foreach (var quest in completedQuests)
+            foreach (QuestProgress quest in completedQuests)
             {
+                // Notify journal page: pass the GUID string and display name
+                // so the completed page can show the quest name
+                if (QuestJournalPage.Instance != null)
+                {
+                    QuestJournalPage.Instance.UpdateDisplay(
+                        activeQuests,
+                        quest.QuestID,
+                        quest.Quest.QuestName
+                    );
+                }
+
                 quest.Quest.InvokeCompleted();
             }
 
             activeQuests.RemoveAll(q => q.IsCompleted);
 
-            questUI.UpdateQuestUI();
+            // Final refresh after completed quests are removed from the active list
+            PushToJournal();
         }
     }
+
+    private void PushToJournal()
+    {
+        if (QuestJournalPage.Instance != null)
+            QuestJournalPage.Instance.UpdateDisplay(activeQuests);
+    }
+    
 }
+ 

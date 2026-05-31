@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.Burst;
@@ -20,8 +21,10 @@ public class GlobeShape : MonoBehaviour
     List<int> triangles = new();
     Mesh myMesh;
     MeshFilter meshFilter;
-    List<StarInfo> relatedMiniStars = new();
-    List<List<StarInfo>> dividedMiniStars = new();
+    [NonSerialized]
+    public List<StarInfo> relatedMiniStars = new();
+    [NonSerialized]
+    public List<List<StarInfo>> dividedMiniStars = new();
     int Iterator;
 
     private NativeArray<Vector3> initPositions;
@@ -69,7 +72,7 @@ public class GlobeShape : MonoBehaviour
     }
 
 
-    void InitializeMiniStars()
+    public void InitializeMiniStars()
     {
         int divisions = operationDivisions;
 
@@ -352,7 +355,10 @@ public class GlobeShape : MonoBehaviour
 
         targetpos.y -= offsetY;
 
-        transform.position = targetpos;
+        if (Vector3.Distance(transform.position, targetpos) > 5f)
+        {
+            transform.position = targetpos;
+        }
 
         if (GetComponent<MeshRenderer>() == null || GetComponent<MeshRenderer>().enabled == false)
         {
