@@ -30,6 +30,9 @@ public class Journal : ToolPickup, AstroTutorialStep
     PlayerControls playerControls;
     GameState prevState;
 
+    [SerializeField] private GameObject meshToHighlight;
+    public override GameObject ShouldHighlight(InteractionController interactionController) => meshToHighlight;
+
     //[NonSerialized]
     public TutorialSequence currentSequence = null;
     [NonSerialized]
@@ -93,7 +96,6 @@ public class Journal : ToolPickup, AstroTutorialStep
             tutorialStep = nr;
         }
     }
-
 
     public override void Grab(PickupController pickupController)
     {

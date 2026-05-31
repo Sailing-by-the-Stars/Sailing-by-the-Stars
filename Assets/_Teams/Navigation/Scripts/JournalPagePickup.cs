@@ -11,6 +11,7 @@ public class JournalPagePickup : MonoBehaviour, IPickup
     protected bool leftOnly = false;
 
     public virtual string InteractMessage => "Press E to pickup";
+    public virtual GameObject ShouldHighlight(InteractionController interactionController) => gameObject;
 
     public void Interact(InteractionController interactionController)
     {
