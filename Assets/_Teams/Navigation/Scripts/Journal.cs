@@ -30,6 +30,9 @@ public class Journal : ToolPickup, AstroTutorialStep
     PlayerControls playerControls;
     GameState prevState;
 
+    [SerializeField] private GameObject meshToHighlight;
+    public override GameObject ShouldHighlight(InteractionController interactionController) => meshToHighlight;
+
     //[NonSerialized]
     public TutorialSequence currentSequence = null;
     [NonSerialized]
@@ -55,7 +58,7 @@ public class Journal : ToolPickup, AstroTutorialStep
     
     private Camera cam;
     private float initialFOV;
-    private float zoomFOV = 35;
+    private float zoomFOV = 30;
     private float animationTime = 0.75f;
 
     private AnimationCurve animationCurve;
@@ -76,6 +79,15 @@ public class Journal : ToolPickup, AstroTutorialStep
     [SerializeField]
     int tutorialStep = 0;
 
+    JournalOpenSound openSound;
+    JournalCloseSound closeSound;
+
+    private void Awake()
+    {
+        openSound = FindFirstObjectByType<JournalOpenSound>();
+        closeSound = FindFirstObjectByType<JournalCloseSound>();
+    }
+
     private void OnEnable()
     {
         playerControls = TempStateMachine.Instance.PlayerControls;
@@ -93,7 +105,6 @@ public class Journal : ToolPickup, AstroTutorialStep
             tutorialStep = nr;
         }
     }
-
 
     public override void Grab(PickupController pickupController)
     {
@@ -137,18 +148,15 @@ public class Journal : ToolPickup, AstroTutorialStep
 
     public void OpenBookmark(SectionName sectionName, bool maxPage = false)
     {
-        if (bookOpened)
+        foreach (Bookmark bookmark in bookmarks)
         {
-            foreach (Bookmark bookmark in bookmarks)
+            if (bookmark.sectionName == sectionName)
             {
-                if (bookmark.sectionName == sectionName)
-                {
-                    bookmark.Highlight();
-                }
-                else
-                {
-                    bookmark.UnHighlight();
-                }
+                bookmark.Highlight();
+            }
+            else
+            {
+                bookmark.UnHighlight();
             }
         }
     }
@@ -223,7 +231,7 @@ public class Journal : ToolPickup, AstroTutorialStep
             JournalSection curSection = null;
             curSectionIndex = 0;
             int totalNrOfPages = 0;
-
+            
             int i = 0;
             foreach (JournalSection section in Sections)
             {
@@ -240,7 +248,6 @@ public class Journal : ToolPickup, AstroTutorialStep
                 i++;
                 totalNrOfPages += section.nrOfPages;
             }
-            
             
             if (curSection == null)
             {
@@ -348,6 +355,14 @@ public class Journal : ToolPickup, AstroTutorialStep
                 prevPageNumber = -1;
                 if (bookOpened)
                 {
+                    if (openSound != null)
+                    {
+                        closeSound.PlaySound();
+                    }
+                    else
+                    {
+                        Debug.LogWarning("couldn't find journal open sound! make sure it's added to the AudioManager");
+                    }
                     bookOpened = false;
                     leftPageQ.enabled = false;
                     rightPageQ.enabled = false;
@@ -383,11 +398,39 @@ public class Journal : ToolPickup, AstroTutorialStep
                     {
                         bookmark.gameObject.SetActive(true);
                     }
+            
+                    //Update section for if a new page is picked up in a different section
+                    int maxSectionNr = 0;
+                    curSectionIndex = 0;
+            
+                    int i = 0;
+                    foreach (JournalSection section in Sections)
+                    {
+                        maxSectionNr += section.nrOfPages;
+                        section.lastPageNr = maxSectionNr;
+                        section.firstPageNr = section.lastPageNr - section.nrOfPages;
+
+                        if (maxSectionNr >= curPageNr && section.firstPageNr <= curPageNr)
+                        {
+                            curSectionIndex = i;
+                        }
+                
+                        i++;
+                    }
                     
                     Sections[curSectionIndex].OpenSection();
                     
                     prevState = TempStateMachine.Instance.gameState;
                     TempStateMachine.Instance.SetState(GameState.Journal);
+
+                    if (closeSound != null)
+                    {
+                        openSound.PlaySound();
+                    }
+                    else
+                    {
+                        Debug.LogWarning("couldn't find journal close sound! make sure it's added to the AudioManager");
+                    }
                 }
             }
         }

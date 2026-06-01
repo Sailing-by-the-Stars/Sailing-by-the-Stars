@@ -95,6 +95,8 @@ public class NavigationSection : JournalSection
                 }
             }
         }
+        
+        OpenSection();
 
         pages[pageID] = navPage.page;
         navPages[pageID] = navPage;
@@ -103,10 +105,25 @@ public class NavigationSection : JournalSection
 
         nrOfPages = pages.Count;
 
-        if (parentJournal.curPageNr > parentJournal.getFullPageNR(navPage.page) - extraPages)
+        int newPageNr = parentJournal.getFullPageNR(navPage.page);
+
+        if (parentJournal.curPageNr > newPageNr - extraPages)
         {
             parentJournal.curPageNr += extraPages;
             parentJournal.prevPageNumber = parentJournal.curPageNr;
+        }
+        
+        if (parentJournal.curPageNr >= newPageNr)
+        {
+            //Jump back to the new page
+            parentJournal.curPageNr -= parentJournal.curPageNr - newPageNr;
+            parentJournal.prevPageNumber = parentJournal.curPageNr - 1; 
+        } 
+        else if (parentJournal.curPageNr < newPageNr)
+        {
+            //Jump forward to the new page
+            parentJournal.curPageNr += parentJournal.curPageNr + newPageNr;
+            parentJournal.prevPageNumber = parentJournal.curPageNr - 1; 
         }
     }
 }

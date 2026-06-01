@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
+using static TMPro.SpriteAssetUtilities.TexturePacker_JsonArray;
 
 public enum StarState
 {
@@ -77,6 +78,9 @@ public class TwinklingStar : MonoBehaviour
     public Color initialColor;
     private bool twinkle;
     public Vector3 initpos;
+
+    public int frameCount = 12;
+    public float animationFPS = 12f;
 
 
     private void OnEnable()
@@ -175,7 +179,7 @@ public class TwinklingStar : MonoBehaviour
 
 
     private MaterialPropertyBlock _mpb;
-    public void UpdateColor(Material material, Color color, float intensity)
+    public void UpdateColor(Material material, Color color, float intensity, float frame = 0)
     {
         if (_mpb == null)
             _mpb = new MaterialPropertyBlock();
@@ -189,6 +193,14 @@ public class TwinklingStar : MonoBehaviour
             
             _mpb.SetColor(Shader.PropertyToID("_Color"), color);
             _mpb.SetColor(Shader.PropertyToID("_EmissiveColor"), color * intensityMul);
+        }else if (material.shader.name == "Shader Graphs/animated stars")
+        {
+            float intensityMul = Mathf.Pow(2.0f, intensity);
+
+            _mpb.SetColor(Shader.PropertyToID("_Color"), color);
+            _mpb.SetColor(Shader.PropertyToID("_EmissiveColor"), color * intensityMul);
+
+            _mpb.SetFloat(Shader.PropertyToID("_FrameIndex"), frame);
         }
         else
         {
@@ -198,17 +210,17 @@ public class TwinklingStar : MonoBehaviour
 
         GetComponent<Renderer>().SetPropertyBlock(_mpb);
     }
-    public void UpdateColor(Color color, float intensity)
+    public void UpdateColor(Color color, float intensity, float frame = 0)
     {
-        UpdateColor(GetComponent<Renderer>().material, color, intensity);
+        UpdateColor(GetComponent<Renderer>().material, color, intensity, frame);
     }
-    public void UpdateColor(float intensity)
+    public void UpdateColor(float intensity, float frame = 0)
     {
-        UpdateColor(initialColor, intensity);
+        UpdateColor(initialColor, intensity, frame);
     }
-    public void UpdateColor()
+    public void UpdateColor(float frame = 0)
     {
-        UpdateColor(intensity);
+        UpdateColor(intensity, frame);
     }
 
 
@@ -328,34 +340,34 @@ public class TwinklingStar : MonoBehaviour
 
         public void Tick(TwinklingStar star)
         {
-            if (star.twinkle)
+            if (!star.twinkle)
+                return;
+
+            timer += Time.deltaTime;
+
+            if (timer > animationLength)
+                timer -= animationLength;
+
+            float curveOutput = 0;
+
+            int frame = 0;
+
+            if (timer >= 0 && timer < 1f)
             {
-                timer += Time.deltaTime;
-
-                if (timer > animationLength)
-                {
-                    timer -= animationLength;
-                }
-
-                //Find current position on the animation curve
-                float curveOutput = 0;
-                if (timer < 1 && timer >= 0)
-                {
-                    curveOutput = star.selectedCurve.Evaluate(timer);
-                }
-
-
-                star.UpdateColor(star.initialColor, star.intensity * (curveOutput * star.selectedIntensity));
+                curveOutput = star.selectedCurve.Evaluate(timer);
+                frame = Mathf.FloorToInt((timer / animationLength) * star.frameCount);
+                frame = Mathf.Clamp(frame, 0, star.frameCount - 1);
             }
+
+            star.UpdateColor(star.intensity * (curveOutput * star.selectedIntensity), frame);
         }
 
         public void Exit(TwinklingStar star)
         {
             star.twinkle = false;
-            //star.StopCoroutine(Twinkle(star));
-            star.UpdateColor();
+            star.UpdateColor(0);
         }
-        
+
         private IEnumerator Brighten(TwinklingStar star)
         {
             float timer = 0;
