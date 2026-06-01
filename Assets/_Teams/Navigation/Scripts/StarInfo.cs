@@ -58,11 +58,6 @@ public class StarInfo : MonoBehaviour
             _mpb.SetColor(Shader.PropertyToID("_Color"), matColor);
             _mpb.SetColor(Shader.PropertyToID("_EmissiveColor"), emissionColor);
         }
-        else if (material.shader.name == "Shader Graphs/animated stars")
-        {
-            _mpb.SetColor(Shader.PropertyToID("_Color"), matColor);
-            _mpb.SetColor(Shader.PropertyToID("_EmissiveColor"), emissionColor);
-        }
         else
         {
             Debug.LogError($"wrong shader: '{material.shader.name}'");

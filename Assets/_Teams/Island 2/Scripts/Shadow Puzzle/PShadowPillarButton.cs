@@ -30,9 +30,6 @@ public class PShadowPillarButton : MonoBehaviour, IInteractable
     
     [SerializeField] private string objectInteractMessage = "Press E to Push Pillar(s)";
     public string InteractMessage => objectInteractMessage;
-    
-    [SerializeField] protected GameObject meshToHighlight;
-    public virtual GameObject ShouldHighlight(InteractionController interactionController) => meshToHighlight ? meshToHighlight : gameObject;
 
     private void Awake()
     {

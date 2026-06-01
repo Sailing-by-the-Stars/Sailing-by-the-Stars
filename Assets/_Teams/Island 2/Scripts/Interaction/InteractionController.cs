@@ -43,51 +43,14 @@ public class InteractionController : MonoBehaviour
     private void UpdateCurrentInteractable()
     {
         var ray = playerCamera.ViewportPointToRay(new Vector2(0.5f, 0.5f));
-        IInteractable newTarget = null;
-
-        if (Physics.Raycast(ray, out currentHit, interactionDistance, ~0, QueryTriggerInteraction.Ignore))
-        {
-            var interactableTargeted = currentHit.collider?.GetComponentInParent<IInteractable>();
-            
-            if (interactableTargeted != null && interactableTargeted.ShouldShowMessage(this))
-            {
-                newTarget = interactableTargeted;
-            }
-        }
-
-        if (!ReferenceEquals(newTarget, currentTargetedInteractable))
-        {
-            if (currentTargetedInteractable != null)
-            {
-                var highlightable = currentTargetedInteractable.ShouldHighlight(this);
-                if (highlightable)
-                {
-                    SetLayerRecursively(highlightable, "Default");
-                }
-            }
-
-            if (newTarget != null)
-            {
-                var highlightable = newTarget.ShouldHighlight(this);
-                if (highlightable)
-                {
-                    SetLayerRecursively(highlightable, "Selection");
-                }
-            }
-            
-            currentTargetedInteractable = newTarget;
-        }
         
+        Physics.Raycast(ray, out currentHit, interactionDistance, ~0, QueryTriggerInteraction.Ignore);
         Debug.DrawRay(ray.origin, ray.direction * interactionDistance, Color.green);
-    }
-
-    private void SetLayerRecursively(GameObject obj, string layerName)
-    {
-        obj.layer = LayerMask.NameToLayer(layerName);
-        foreach (Transform child in obj.transform)
-        {
-            SetLayerRecursively(child.gameObject, layerName);
-        }
+        
+        var interactableTargeted = currentHit.collider?.GetComponentInParent<IInteractable>();
+        currentTargetedInteractable = interactableTargeted != null &&
+                                      interactableTargeted.ShouldShowMessage(this)
+                                      ? interactableTargeted : null;
     }
 
     private void UpdateInteractionText()

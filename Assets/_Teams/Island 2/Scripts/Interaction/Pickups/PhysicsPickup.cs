@@ -11,11 +11,6 @@ public class PhysicsPickup : MonoBehaviour, IPickup
     [Header("Despawn Effect")]
     [Tooltip("Optional particle effect to spawn when this pickup is collected/destroyed.")]
     [SerializeField] private GameObject despawnParticleEffect;
-    
-    [Header("Highlight")]
-    [Tooltip("Change if prefab has children and only a specific child needs to be highlighted.")]
-    [SerializeField] protected GameObject meshToHighlight;
-    public virtual GameObject ShouldHighlight(InteractionController interactionController) => meshToHighlight ? meshToHighlight : gameObject;
 
     private Rigidbody pickupRigidbody;
     private Collider pickupCollider;
@@ -26,7 +21,6 @@ public class PhysicsPickup : MonoBehaviour, IPickup
     {
         pickupRigidbody = GetComponent<Rigidbody>();
         pickupCollider = GetComponent<Collider>();
-        meshToHighlight = gameObject;
     }
 
     public void Interact(InteractionController interactionController)

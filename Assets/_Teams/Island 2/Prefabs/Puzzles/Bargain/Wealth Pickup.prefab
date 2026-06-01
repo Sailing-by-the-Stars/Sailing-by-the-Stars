@@ -28,8 +28,8 @@ Transform:
   m_GameObject: {fileID: 8454156646992659631}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 75.203, y: 17.076, z: 65.589}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -1.429, y: 0.976, z: 8.78409}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 4646130001614449154}
@@ -54,8 +54,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.2, y: 0.20882797, z: 0.2}
-  m_Center: {x: 0, y: 0.09225464, z: 0}
+  m_Size: {x: 0.4, y: 0.4, z: 0.4}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &5798887972636853849
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -96,8 +96,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BargainItem
   pickupPositionOffset: {x: 0, y: 0, z: 0}
-  despawnParticleEffect: {fileID: 0}
-  meshToHighlight: {fileID: 0}
   weight: 4
 --- !u!1001 &5183898136338157033
 PrefabInstance:
