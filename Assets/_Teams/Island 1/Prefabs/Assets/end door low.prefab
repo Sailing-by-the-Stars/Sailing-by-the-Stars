@@ -32,7 +32,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5186459199215659434}
-  - {fileID: 5568763363613908809}
+  - {fileID: 112064253756913467}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &1680798971203078029
@@ -218,8 +218,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 220b8ce772432c94f9a67b29d204cbd4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DoorEndTrigger
-  creditsManager: {fileID: 9108523680131565674}
---- !u!1001 &2165157857143633117
+  creditsManager: {fileID: 0}
+--- !u!1001 &5965640611580648623
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -233,15 +233,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5999946301223709588, guid: 2f34acaabd7f2584fb6dda975ca79c25, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.07584506
+      value: -21.862022
       objectReference: {fileID: 0}
     - target: {fileID: 5999946301223709588, guid: 2f34acaabd7f2584fb6dda975ca79c25, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2.5248108
+      value: 90.86473
       objectReference: {fileID: 0}
     - target: {fileID: 5999946301223709588, guid: 2f34acaabd7f2584fb6dda975ca79c25, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.06000581
+      value: 472.81305
       objectReference: {fileID: 0}
     - target: {fileID: 5999946301223709588, guid: 2f34acaabd7f2584fb6dda975ca79c25, type: 3}
       propertyPath: m_LocalRotation.w
@@ -276,19 +276,8 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2f34acaabd7f2584fb6dda975ca79c25, type: 3}
---- !u!4 &5568763363613908809 stripped
+--- !u!4 &112064253756913467 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5999946301223709588, guid: 2f34acaabd7f2584fb6dda975ca79c25, type: 3}
-  m_PrefabInstance: {fileID: 2165157857143633117}
+  m_PrefabInstance: {fileID: 5965640611580648623}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &9108523680131565674 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6947881726136351927, guid: 2f34acaabd7f2584fb6dda975ca79c25, type: 3}
-  m_PrefabInstance: {fileID: 2165157857143633117}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2d54cdb8e008ab044afb2d2535f28710, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CreditsManager
