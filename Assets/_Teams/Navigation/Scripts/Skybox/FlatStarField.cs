@@ -12,8 +12,6 @@ public class FlatStarField : MonoBehaviour
     [SerializeField]
     Material starMat;
     [SerializeField]
-    Material twinklerMat;
-    [SerializeField]
     int starFieldScale = 400;
     [SerializeField] private AnimationCurve brightnessCurve;
     [Range(0, 100)]
@@ -30,14 +28,9 @@ public class FlatStarField : MonoBehaviour
     [SerializeField] private float starColliderMult = 1.5f;
     [SerializeField] float minManualSize = 8;
     [SerializeField] float manualSizeMult = 1.5f;
-    [SerializeField] float twinklerSizeMult = 3f;
     [SerializeField] float flatManualSizeAdd = 20;
 
     [SerializeField] Mesh manualStarMesh;
-
-
-    [SerializeField]
-    bool debugColors = false;
 
     [ContextMenu("fix my shit plz")]
     void fixiiiiiiit()
@@ -276,7 +269,11 @@ public class FlatStarField : MonoBehaviour
                     else
                     {
 
-                        
+                        stargo = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+
+#if !UNITY_EDITOR
+                        stargo.GetComponent<MeshFilter>().mesh = manualStarMesh;
+#endif
 
 
                         TwinklingStar template = transform.parent.GetComponent<TwinklingStar>();
@@ -289,13 +286,6 @@ public class FlatStarField : MonoBehaviour
 
                             if (id == obj.starID)
                             {
-                                if(stargo == null)
-                                {
-                                    stargo = GameObject.CreatePrimitive(PrimitiveType.Quad);
-                                    Destroy(stargo.GetComponent<MeshCollider>());
-                                    stargo.AddComponent<SphereCollider>();
-                                }
-
                                 if (twinkler == null)
                                 {
                                     twinkler = stargo.AddComponent<TwinklingStar>();
@@ -318,15 +308,6 @@ public class FlatStarField : MonoBehaviour
                                 twinkling = true;
                                 continue;
                             }
-                        }
-
-                        if (stargo == null)
-                        {
-                            stargo = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-
-#if !UNITY_EDITOR
-                        stargo.GetComponent<MeshFilter>().mesh = manualStarMesh;
-#endif
                         }
 
                         Collider collider = stargo.GetComponent<Collider>();
@@ -391,14 +372,7 @@ public class FlatStarField : MonoBehaviour
             //>
             MeshRenderer meshRenderer = stargo.GetComponent<MeshRenderer>();
 
-            if (twinkler != null)
-            {
-                meshRenderer.material = twinklerMat;
-            }
-            else
-            {
-                meshRenderer.material = starMat;
-            }
+            meshRenderer.material = starMat;
             Material material = meshRenderer.sharedMaterial;
 
             float sizeM = Mathf.Lerp(0, 1, star.size);
@@ -414,11 +388,6 @@ public class FlatStarField : MonoBehaviour
             if (isManualStar)
             {
                 starSize *= manualSizeMult;
-                if(twinkler != null)
-                {
-                    starSize *= twinklerSizeMult;
-                }
-
                 starSize += flatManualSizeAdd;
 
                 if (starSize < minManualSize)
@@ -441,38 +410,20 @@ public class FlatStarField : MonoBehaviour
             intensityMul = (half)MathF.Pow(2.0f, emissionMult);
             StarInfo starInfo = stargo.AddComponent<StarInfo>();
 
-
-#if !UNITY_EDITOR
-            debugColors = false;
-#endif
+#if UNITY_EDITOR
             Color tempColor;
 
-            if (debugColors)
+            if (isManualStar && starConstelation != null)
             {
-                
-
-                if (isManualStar && starConstelation != null)
-                {
-                    starInfo.matColor = starConstelation.debugColor;
-                    tempColor = starConstelation.debugColor * intensityMul * starSize;
-                    starInfo.emissionColor = tempColor;
-                    starInfo.emissionMult = intensityMul * starSize;
-
-                }
-                else
-                {
-                    starInfo.matColor = star.colour;
-                    tempColor = star.colour * intensityMul * starSize;
-
-                    tempColor = BoostChroma(tempColor, chromaBoost);
-
-                    starInfo.emissionColor = tempColor;
-                    starInfo.emissionMult = intensityMul * starSize;
-                }
+                starInfo.matColor = starConstelation.debugColor;
+                tempColor = starConstelation.debugColor * intensityMul * starSize;
+                starInfo.emissionColor = tempColor;
+                starInfo.emissionMult = intensityMul * starSize;
 
             }
             else
             {
+
                 starInfo.matColor = star.colour;
                 tempColor = star.colour * intensityMul * starSize;
 
@@ -483,6 +434,14 @@ public class FlatStarField : MonoBehaviour
             }
 
 
+#else
+            Color tempColor = star.colour * intensityMul * starSize;
+
+            tempColor = BoostChroma(tempColor, chromaBoost);
+
+            starInfo.emissionColor = tempColor;
+            starInfo.emissionMult = intensityMul * starSize;
+#endif
             if(twinkler != null)
             {
                 twinkler.initialColor = tempColor;

@@ -119,8 +119,16 @@ public class Altar : MonoBehaviour, IInteractable
 
     private void OpenRewardCompartment()
     {
-        if (!rewardDoor || !ritualCompleted) return;
-        
+        if (!rewardDoor || !ritualCompleted)
+        {   
+            if (pedestalsFull) {
+                StartDialogue();
+                pedestalsFull = false;
+            }
+
+            return;
+        }
+    
         Debug.Log("Bargain Completed.");
         PuzzleProgress.MarkComplete("bargaining");
         
@@ -130,13 +138,11 @@ public class Altar : MonoBehaviour, IInteractable
 
     private void IsOrderCorrect()
     {
-        pedestalsFull = pedestals.All(pedestal => pedestal.storedPickup);
+        pedestalsFull = pedestals.All(pedestal => pedestal.storedPickup != null);
 
         Debug.Log("Item placed on pedestal");
-        if (pedestalsFull && pedestals.All(pedestal => pedestal.storedPickup.weight == pedestal.index))
+        if (pedestals.All(pedestal => pedestal.storedPickup && pedestal.storedPickup.weight == pedestal.index))
             CompleteRitual();
-        else if (pedestalsFull)
-            StartDialogue();
     }
 
     private void OnDestroy()
