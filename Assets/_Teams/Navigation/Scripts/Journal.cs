@@ -229,7 +229,7 @@ public class Journal : ToolPickup, AstroTutorialStep
             JournalSection curSection = null;
             curSectionIndex = 0;
             int totalNrOfPages = 0;
-
+            
             int i = 0;
             foreach (JournalSection section in Sections)
             {
@@ -246,7 +246,6 @@ public class Journal : ToolPickup, AstroTutorialStep
                 i++;
                 totalNrOfPages += section.nrOfPages;
             }
-            
             
             if (curSection == null)
             {
@@ -344,14 +343,6 @@ public class Journal : ToolPickup, AstroTutorialStep
         {
             if (playerControls.Journal.Open.triggered && (tutorialStep != 1 || currentSequence == null))
             {
-                if (openSound != null)
-                {
-                    openSound.PlaySound();
-                }
-                else
-                {
-                    Debug.LogWarning("couldn't find journal open sound! make sure it's added to the AudioManager");
-                }
                 EnableControl(tutorialStep);
 
                 if(currentSequence != null && tutorialStep == 0)
@@ -362,6 +353,14 @@ public class Journal : ToolPickup, AstroTutorialStep
                 prevPageNumber = -1;
                 if (bookOpened)
                 {
+                    if (openSound != null)
+                    {
+                        closeSound.PlaySound();
+                    }
+                    else
+                    {
+                        Debug.LogWarning("couldn't find journal open sound! make sure it's added to the AudioManager");
+                    }
                     bookOpened = false;
                     leftPageQ.enabled = false;
                     rightPageQ.enabled = false;
@@ -424,7 +423,7 @@ public class Journal : ToolPickup, AstroTutorialStep
 
                     if (closeSound != null)
                     {
-                        closeSound.PlaySound();
+                        openSound.PlaySound();
                     }
                     else
                     {
