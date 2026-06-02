@@ -109,7 +109,7 @@ public class Journal : ToolPickup, AstroTutorialStep
         base.Grab(pickupController);
 
         EnableControl(0);
-        TutorialSequence.Instance.NextStep(0);
+        //TutorialSequence.Instance.NextStep(0);
 
         isEquipped = true;
 
@@ -212,9 +212,17 @@ public class Journal : ToolPickup, AstroTutorialStep
         
         leftPageQ.enabled = false;
         rightPageQ.enabled = false;
-        
+
         //Throws object not found error but works...
-        gameObject.GetComponentInChildren<Canvas>().enabled = false;
+        if (gameObject.GetComponentInChildren<Canvas>())
+        {
+            gameObject.GetComponentInChildren<Canvas>().enabled = false;
+
+        }
+        else
+        {
+            Debug.LogWarning("journal has no canvas?");
+        }
     }
 
 

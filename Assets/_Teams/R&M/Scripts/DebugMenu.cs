@@ -96,6 +96,18 @@ public class DebugMenu : MonoBehaviour
             }
         });
 
+        var jesusButton = Instantiate(buttonPrefab, container);
+        jesusButton.GetComponentInChildren<TextMeshProUGUI>().text = "Walk On Water";
+        jesusButton.onClick.AddListener(() =>
+        {
+            var obj = FindFirstObjectByType<JesusDebugCube>();
+
+            if (obj != null)
+            {
+                obj.Toggle();
+            }
+        });
+
         var resetTutorialBtn = Instantiate(buttonPrefab, container);
         resetTutorialBtn.GetComponentInChildren<TextMeshProUGUI>().text = "Reset Tutorials";
         resetTutorialBtn.onClick.AddListener(() =>

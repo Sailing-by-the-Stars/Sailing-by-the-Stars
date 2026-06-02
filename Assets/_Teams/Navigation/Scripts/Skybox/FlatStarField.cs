@@ -3,8 +3,52 @@ using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
 
+
+[Serializable]
+public class Constelation
+{
+    public string name = "";
+    public List<int> starIDs = new();
+    public GameObject starPrefab;
+    public Color debugColor = Color.violet;
+    public Color finalColor = Color.violet;
+    public float sizeMult = 1;
+}
+
+[Serializable]
+public class ManualTwinkler
+{
+    public int starID;
+    public int targetAngle;
+    public bool tutorialStar = false;
+}
+
 public class FlatStarField : MonoBehaviour
 {
+    [Header("color things")]
+    [SerializeField] int colorSeed = 0;
+    [SerializeField] List<Color> availableColors = new();
+    [SerializeField] private float emissionMult = 2;
+    [SerializeField] private float chromaBoost = 3;
+    [SerializeField] bool manualColor = true;
+
+    [Header("size things")]
+
+    [Header("general size")]
+    [Range(0, 100)]
+    [SerializeField] private float starSizeMax = 5f;
+
+    [Header("manual stars")]
+    [SerializeField] float minManualSize = 8;
+    [SerializeField] float manualSizeMult = 1.5f;
+    [SerializeField] float flatManualSizeAdd = 20;
+
+    [Header("twinkler sizes")]
+    [SerializeField] float twinklerSizeMult = 3f;
+    [SerializeField] float twinklerEmissionMult = 0.8f;
+
+
+    [Header("star field things")]
     [SerializeField]
     StarPositionType starPositionType;
 
@@ -16,10 +60,6 @@ public class FlatStarField : MonoBehaviour
     [SerializeField]
     int starFieldScale = 400;
     [SerializeField] private AnimationCurve brightnessCurve;
-    [Range(0, 100)]
-    [SerializeField] private float starSizeMax = 5f;
-    [SerializeField] private float emissionMult = 2;
-    [SerializeField] private float chromaBoost = 3;
 
 
     private List<StarDataLoader.Star> stars;
@@ -28,13 +68,11 @@ public class FlatStarField : MonoBehaviour
     [SerializeField] List<Constelation> manualStars = new();
     [SerializeField] List<ManualTwinkler> twinklingStars = new();
     [SerializeField] private float starColliderMult = 1.5f;
-    [SerializeField] float minManualSize = 8;
-    [SerializeField] float manualSizeMult = 1.5f;
-    [SerializeField] float twinklerSizeMult = 3f;
-    [SerializeField] float twinklerEmissionMult = 0.8f;
-    [SerializeField] float flatManualSizeAdd = 20;
 
     [SerializeField] Mesh manualStarMesh;
+
+
+    
 
 
     [SerializeField]
@@ -45,13 +83,12 @@ public class FlatStarField : MonoBehaviour
     {
         manualStars.Clear();
 
-        UnityEngine.Random.InitState(1);
+        
         //int I = 0;
         foreach ((string, int[]) ints in constellations)
         {
             Constelation New = new();
 
-            New.debugColor = Color.HSVToRGB(UnityEngine.Random.value, 1f, 1f);
             New.name = ints.Item1;
             foreach (int i in ints.Item2)
             {
@@ -61,6 +98,28 @@ public class FlatStarField : MonoBehaviour
             }
 
             manualStars.Add(New);
+        }
+
+        FixColors();
+    }
+
+
+    [ContextMenu("randomizeColors")]
+    void FixColors()
+    {
+        if (availableColors.Count <= 0)
+        {
+            Debug.LogError("no available colors set!!!!");
+            return;
+        }
+
+        UnityEngine.Random.InitState(colorSeed);
+
+        foreach (var constelation in manualStars)
+        {
+            constelation.finalColor = availableColors[
+                UnityEngine.Random.Range(0, availableColors.Count)
+            ];
         }
     }
 
@@ -495,13 +554,28 @@ public class FlatStarField : MonoBehaviour
             }
             else
             {
-                starInfo.matColor = star.colour;
-                tempColor = star.colour * intensityMul * starSize;
+                if (manualColor && starConstelation != null && starConstelation.finalColor != null)
+                {
+                    starInfo.matColor = starConstelation.finalColor;
+                    tempColor = starConstelation.finalColor * intensityMul * starSize;
+                    starInfo.emissionColor = tempColor;
+                    starInfo.emissionMult = intensityMul * starSize;
+                }
+                else
+                {
+                    if (manualColor && starConstelation != null)
+                    {
+                        Debug.LogError($"had to fall back to automatic colors for the constilation {starConstelation.name}!!");
+                    }
 
-                tempColor = BoostChroma(tempColor, chromaBoost);
+                        starInfo.matColor = star.colour;
+                    tempColor = star.colour * intensityMul * starSize;
 
-                starInfo.emissionColor = tempColor;
-                starInfo.emissionMult = intensityMul * starSize;
+                    tempColor = BoostChroma(tempColor, chromaBoost);
+
+                    starInfo.emissionColor = tempColor;
+                    starInfo.emissionMult = intensityMul * starSize;
+                }
             }
 
 

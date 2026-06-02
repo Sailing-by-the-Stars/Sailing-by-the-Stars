@@ -124,8 +124,8 @@ public class TutorialResetter : MonoBehaviour
             manager.EnqueueStep(TutorialStep.Move);
         }
 
-        TutorialSequence.finishedTutorial = false;
-        TutorialSequence.startedTutorial = false;
+        TutorialSequence.Instance.finishedTutorial = false;
+        TutorialSequence.Instance.startedTutorial = false;
 
         yield return null;
 
