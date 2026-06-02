@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.VFX;
 
 public class PShadowGridManager : MonoBehaviour
 {
@@ -306,6 +307,7 @@ public class PShadowGridManager : MonoBehaviour
         foreach (GameObject torch in rewardTorches)
         {
             torch.GetComponentInChildren<Light>().enabled = true;
+            torch.GetComponentInChildren<VisualEffect>().enabled = true;
         }
         
         Debug.Log("ANGER PUZZLE SOLVED!");
