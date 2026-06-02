@@ -55,8 +55,8 @@ public class AstroDialogue : MonoBehaviour
                     inTyping = false;
                     return;
                 }
-
-
+            
+            
                 if (index < dialogue.Count)
                 {
                     if (dialogue[index].waitForTutorial == true)
@@ -64,7 +64,7 @@ public class AstroDialogue : MonoBehaviour
                         WaitFlag();
                         return;
                     }
-
+            
                     if (dialogue[index].waitAtLineEnd == true)
                     {
                         if (NextLine())
@@ -235,7 +235,7 @@ public class AstroDialogue : MonoBehaviour
             {
                 inTyping = false;
             }
-            return null;
+            yield return null;
         }
 
         endOfLine(indexOfLine);
@@ -246,6 +246,6 @@ public class AstroDialogue : MonoBehaviour
         }
         inTyping = false;
 
-        return null;
+        yield return null;
     }
 }

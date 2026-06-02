@@ -4,6 +4,10 @@ using UnityEngine.EventSystems;
 
 public class Bookmark : MonoBehaviour, IPointerClickHandler
 {
+    
+    public TutorialSequence currentSequence = null;
+    [NonSerialized]
+    public int currentTutorialStep = -1;
     public SectionName sectionName;
     Vector3 startPos;
     bool selected = false;
@@ -20,6 +24,11 @@ public class Bookmark : MonoBehaviour, IPointerClickHandler
 
     public void Highlight()
     {
+        if(currentSequence != null && currentTutorialStep == 5)
+        {
+            ExitStep();
+        }
+        
         if (!selected)
         {
             transform.Translate(0, 0.025f, 0);
@@ -31,5 +40,34 @@ public class Bookmark : MonoBehaviour, IPointerClickHandler
     {
         transform.localPosition = startPos;
         selected = false;
+    }
+    
+    public void EnterStep(TutorialSequence sequence)
+    {
+        if (currentSequence != null && currentSequence != sequence)
+        {
+            Debug.LogError("this tutorialDialogue object is already in a different sequence!!");
+            return;
+        }
+        
+        currentSequence = sequence;
+        currentTutorialStep = sequence.index;
+        
+        if(currentTutorialStep == 8)
+        {
+            // Unimplemented
+            // EnableControl(1);
+        }
+    }
+    
+    public void ExitStep()
+    {
+        if (!currentSequence)
+        {
+            Debug.LogError("tried continueing a tutorial while none was assigned!");
+            return;
+        }
+
+        currentSequence.FinishStep(currentTutorialStep);
     }
 }

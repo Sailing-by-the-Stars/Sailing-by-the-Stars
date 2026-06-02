@@ -109,6 +109,7 @@ public class Journal : ToolPickup, AstroTutorialStep
         base.Grab(pickupController);
 
         EnableControl(0);
+        TutorialSequence.Instance.NextStep(0);
 
         isEquipped = true;
 
@@ -211,6 +212,9 @@ public class Journal : ToolPickup, AstroTutorialStep
         
         leftPageQ.enabled = false;
         rightPageQ.enabled = false;
+        
+        //Throws object not found error but works...
+        gameObject.GetComponentInChildren<Canvas>().enabled = false;
     }
 
 
@@ -258,7 +262,7 @@ public class Journal : ToolPickup, AstroTutorialStep
             // in the sections loop above would case OpenSection() to be run every frame
             if (playerControls.Journal.PreviousPage.triggered)
             {
-                if (currentSequence != null && tutorialStep == 1)
+                if (currentSequence != null && currentTutorialStep == 1)
                 {
                     ExitStep();
                     currentSequence = null;
@@ -286,7 +290,7 @@ public class Journal : ToolPickup, AstroTutorialStep
 
             if (playerControls.Journal.NextPage.triggered)
             {
-                if (currentSequence != null && tutorialStep == 1)
+                if (currentSequence != null && currentTutorialStep == 1)
                 {
                     ExitStep();
                     currentSequence = null;
@@ -341,18 +345,23 @@ public class Journal : ToolPickup, AstroTutorialStep
     {
         if (isEquipped)
         {
-            if (playerControls.Journal.Open.triggered && (tutorialStep != 1 || currentSequence == null))
+            if (playerControls.Journal.Open.triggered && (currentTutorialStep != 1 || currentSequence == null))
             {
-                EnableControl(tutorialStep);
-
-                if(currentSequence != null && tutorialStep == 0)
+                EnableControl(currentTutorialStep);
+                
+                if(currentSequence != null && currentTutorialStep == 0)
                 {
                     ExitStep();
-                }
+                }   
 
                 prevPageNumber = -1;
                 if (bookOpened)
                 {
+                    if(currentSequence != null && currentTutorialStep == 6)
+                    {
+                        ExitStep();
+                    }
+                    
                     if (openSound != null)
                     {
                         closeSound.PlaySound();
@@ -365,6 +374,7 @@ public class Journal : ToolPickup, AstroTutorialStep
                     leftPageQ.enabled = false;
                     rightPageQ.enabled = false;
                     bookModel.SetActive(false);
+                    gameObject.GetComponentInChildren<Canvas>().enabled = false;
                     foreach (Bookmark bookmark in bookmarks)
                     {
                         bookmark.gameObject.SetActive(false);
@@ -396,7 +406,12 @@ public class Journal : ToolPickup, AstroTutorialStep
                     {
                         bookmark.gameObject.SetActive(true);
                     }
-            
+
+                    if (currentTutorialStep != 1)
+                    {
+                        gameObject.GetComponentInChildren<Canvas>().enabled = true;
+                    }
+                    
                     //Update section for if a new page is picked up in a different section
                     int maxSectionNr = 0;
                     curSectionIndex = 0;
@@ -443,6 +458,11 @@ public class Journal : ToolPickup, AstroTutorialStep
             {
                 if (zoomedIn)
                 {
+                    if(currentSequence != null && currentTutorialStep == 4)
+                    {
+                        ExitStep();
+                    }
+                    
                     zoomedIn = false;
                     if (zoomCoroutine == null)
                     {
@@ -451,6 +471,11 @@ public class Journal : ToolPickup, AstroTutorialStep
                 }
                 else
                 {
+                    if(currentSequence != null && currentTutorialStep == 3)
+                    {
+                        ExitStep();
+                    }
+                    
                     zoomedIn = true;
                     if (zoomCoroutine == null)
                     {
@@ -564,16 +589,14 @@ public class Journal : ToolPickup, AstroTutorialStep
             Debug.LogError("this tutorialDialogue object is already in a different sequence!!");
             return;
         }
-
-
+        
         currentSequence = sequence;
         currentTutorialStep = sequence.index;
-
+        
         if(currentTutorialStep == 8)
         {
             EnableControl(1);
         }
-
     }
 
     public void ExitStep()

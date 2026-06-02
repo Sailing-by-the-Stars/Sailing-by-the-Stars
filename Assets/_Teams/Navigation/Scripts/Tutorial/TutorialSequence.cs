@@ -59,14 +59,15 @@ public class TutorialSequence : MonoBehaviour
 
     public void FinishStep(int stepIndex, bool continueStep = true)
     {
-        currentStepFinishes++;
+        //hack
+        currentStepFinishes+= 2;
 
         if (index != stepIndex)
         {
             //Debug.LogWarning("tried finishing the wrong step!!");
             return;
         }
-
+        
         if (EventOrder[index].sequenceEnter.GetPersistentEventCount() > currentStepFinishes)
         {
             Debug.Log($"waiting for {EventOrder[index].sequenceEnter.GetPersistentEventCount() - currentStepFinishes} more events to finish before the next step");

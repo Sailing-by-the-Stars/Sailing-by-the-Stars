@@ -22,7 +22,7 @@ public class TutorialDialogue : AstroDialogue, AstroTutorialStep
         }
         currentSequence = sequence;
         currentTutorialStep = sequence.index;
-
+        
         if(currentDialogue == null || currentDialogue != this)
         {
             StartDialogue(currentSequence.EventOrder[sequence.index].dialogueEntry);
