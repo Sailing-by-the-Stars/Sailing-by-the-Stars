@@ -21,7 +21,7 @@ MonoBehaviour:
     m_Value: 1
   colorFilter:
     m_OverrideState: 1
-    m_Value: {r: 1, g: 0.8503675, b: 0.7122642, a: 1}
+    m_Value: {r: 1, g: 0.83597827, b: 0.68490565, a: 1}
   hueShift:
     m_OverrideState: 0
     m_Value: 0
@@ -52,7 +52,7 @@ MonoBehaviour:
     m_Value: 1
   fixedExposure:
     m_OverrideState: 1
-    m_Value: -1.2149534
+    m_Value: -1.3
   compensation:
     m_OverrideState: 1
     m_Value: 0
@@ -193,19 +193,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.RenderPipelines.HighDefinition.Runtime::UnityEngine.Rendering.HighDefinition.ScreenSpaceAmbientOcclusion
   active: 1
   quality:
-    m_OverrideState: 0
-    m_Value: 1
+    m_OverrideState: 1
+    m_Value: 2
   rayTracing:
     m_OverrideState: 0
     m_Value: 0
   intensity:
     m_OverrideState: 1
-    m_Value: 4
+    m_Value: 1.5
   directLightingStrength:
     m_OverrideState: 0
     m_Value: 0
   radius:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: 2
   spatialBilateralAggressiveness:
     m_OverrideState: 0
@@ -234,32 +234,32 @@ MonoBehaviour:
     m_OverrideState: 0
     m_Value: 1
   m_StepCount:
-    m_OverrideState: 0
-    m_Value: 6
+    m_OverrideState: 1
+    m_Value: 16
   m_FullResolution:
-    m_OverrideState: 0
-    m_Value: 0
+    m_OverrideState: 1
+    m_Value: 1
   m_MaximumRadiusInPixels:
-    m_OverrideState: 0
-    m_Value: 40
+    m_OverrideState: 1
+    m_Value: 80
   m_BilateralUpsample:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: 1
   m_DirectionCount:
-    m_OverrideState: 0
-    m_Value: 2
+    m_OverrideState: 1
+    m_Value: 4
   m_RayLength:
-    m_OverrideState: 0
-    m_Value: 3
+    m_OverrideState: 1
+    m_Value: 20
   m_SampleCount:
-    m_OverrideState: 0
-    m_Value: 2
+    m_OverrideState: 1
+    m_Value: 8
   m_Denoise:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: 1
   m_DenoiserRadius:
-    m_OverrideState: 0
-    m_Value: 0.5
+    m_OverrideState: 1
+    m_Value: 0.65
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -293,7 +293,7 @@ MonoBehaviour:
   active: 1
   shadows:
     m_OverrideState: 1
-    m_Value: {x: 1, y: 0.98466665, z: 0.96, w: 0}
+    m_Value: {x: 0.8628696, y: 1, z: 0.86306345, w: 0}
   midtones:
     m_OverrideState: 1
     m_Value: {x: 1, y: 0.99, z: 0.88, w: 0}
@@ -326,7 +326,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.RenderPipelines.HighDefinition.Runtime::UnityEngine.Rendering.HighDefinition.Fog
   active: 1
   quality:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: 3
   enabled:
     m_OverrideState: 1
@@ -336,9 +336,9 @@ MonoBehaviour:
     m_Value: 0
   color:
     m_OverrideState: 1
-    m_Value: {r: 0.09104664, g: 0.33948258, b: 0.5849056, a: 1}
+    m_Value: {r: 0.066037595, g: 0.54043114, b: 1, a: 1}
   tint:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: {r: 1, g: 1, b: 1, a: 1}
   maxFogDistance:
     m_OverrideState: 0
@@ -354,25 +354,25 @@ MonoBehaviour:
     m_Value: 1000
   baseHeight:
     m_OverrideState: 1
-    m_Value: 30
+    m_Value: 20
   maximumHeight:
     m_OverrideState: 1
     m_Value: 300
   meanFreePath:
     m_OverrideState: 1
-    m_Value: 300
+    m_Value: 200
   enableVolumetricFog:
-    m_OverrideState: 1
-    m_Value: 1
+    m_OverrideState: 0
+    m_Value: 0
   albedo:
     m_OverrideState: 1
-    m_Value: {r: 0.7216981, g: 0.95335525, b: 1, a: 1}
+    m_Value: {r: 0, g: 1, b: 0.97603965, a: 1}
   globalLightProbeDimmer:
     m_OverrideState: 0
     m_Value: 1
   depthExtent:
-    m_OverrideState: 1
-    m_Value: 50
+    m_OverrideState: 0
+    m_Value: 14.38
   denoisingMode:
     m_OverrideState: 0
     m_Value: 2
@@ -386,7 +386,7 @@ MonoBehaviour:
     m_OverrideState: 0
     m_Value: 0
   m_FogControlMode:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: 0
   screenResolutionPercentage:
     m_OverrideState: 0
@@ -395,10 +395,10 @@ MonoBehaviour:
     m_OverrideState: 0
     m_Value: 64
   m_VolumetricFogBudget:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: 0.5
   m_ResolutionDepthRatio:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: 0.5
   directionalLightsOnly:
     m_OverrideState: 0
