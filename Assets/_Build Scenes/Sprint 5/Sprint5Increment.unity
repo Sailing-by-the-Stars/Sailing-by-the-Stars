@@ -1201,9 +1201,9 @@ RectTransform:
   - {fileID: 1003137471}
   m_Father: {fileID: 2441526712881846603}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 414}
+  m_AnchorMin: {x: 0.5, y: 1}
+  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: 0, y: -126}
   m_SizeDelta: {x: 1020, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &365376119
@@ -38687,9 +38687,9 @@ RectTransform:
   - {fileID: 414210381}
   m_Father: {fileID: 2441526712881846603}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 414}
+  m_AnchorMin: {x: 0.5, y: 1}
+  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: 0, y: -126}
   m_SizeDelta: {x: 1020, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &559508626
@@ -41311,9 +41311,9 @@ RectTransform:
   - {fileID: 275088171}
   m_Father: {fileID: 2441526712881846603}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 414}
+  m_AnchorMin: {x: 0.5, y: 1}
+  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: 0, y: -126}
   m_SizeDelta: {x: 1020, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1130534443
@@ -42004,9 +42004,9 @@ RectTransform:
   - {fileID: 1863991467}
   m_Father: {fileID: 2441526712881846603}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 414}
+  m_AnchorMin: {x: 0.5, y: 1}
+  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: 0, y: -126}
   m_SizeDelta: {x: 1020, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1337216335
@@ -43051,9 +43051,9 @@ RectTransform:
   - {fileID: 1290437588}
   m_Father: {fileID: 2441526712881846603}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 414}
+  m_AnchorMin: {x: 0.5, y: 1}
+  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: 0, y: -126}
   m_SizeDelta: {x: 1020, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1635826513
@@ -43868,9 +43868,9 @@ RectTransform:
   - {fileID: 122440979}
   m_Father: {fileID: 2441526712881846603}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 414}
+  m_AnchorMin: {x: 0.5, y: 1}
+  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: 0, y: -126}
   m_SizeDelta: {x: 1020, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1989554342
@@ -44678,7 +44678,7 @@ MonoBehaviour:
   waitFlag: 0
   dialogue:
   - text: You picked up a <color=#F0E37D>Astrolabe</color>
-    lineUI: []
+    manualUI: []
     waitAtLineEnd: 1
     waitForTutorial: 0
     timeTillEndOfline: 1
@@ -44690,7 +44690,7 @@ MonoBehaviour:
       m_PersistentCalls:
         m_Calls: []
   - text: 
-    lineUI:
+    manualUI:
     - {fileID: 1989554340}
     waitAtLineEnd: 0
     waitForTutorial: 1
@@ -44715,7 +44715,7 @@ MonoBehaviour:
       m_PersistentCalls:
         m_Calls: []
   - text: The astrolabe is a tool to help <color=#F0E37D>navigate the stars</color>
-    lineUI: []
+    manualUI: []
     waitAtLineEnd: 1
     waitForTutorial: 0
     timeTillEndOfline: 1
@@ -44727,7 +44727,7 @@ MonoBehaviour:
       m_PersistentCalls:
         m_Calls: []
   - text: The Mater is used to read the angle of the ruler
-    lineUI: []
+    manualUI: []
     waitAtLineEnd: 1
     waitForTutorial: 0
     timeTillEndOfline: 1
@@ -44739,7 +44739,7 @@ MonoBehaviour:
       m_PersistentCalls:
         m_Calls: []
   - text: The pointer will rotate as you use the ruler in the back of the astrolabe
-    lineUI: []
+    manualUI: []
     waitAtLineEnd: 0
     waitForTutorial: 1
     timeTillEndOfline: 1
@@ -44751,7 +44751,7 @@ MonoBehaviour:
       m_PersistentCalls:
         m_Calls: []
   - text: 
-    lineUI:
+    manualUI:
     - {fileID: 1635826511}
     waitAtLineEnd: 0
     waitForTutorial: 1
@@ -44776,7 +44776,7 @@ MonoBehaviour:
       m_PersistentCalls:
         m_Calls: []
   - text: 
-    lineUI:
+    manualUI:
     - {fileID: 559508624}
     waitAtLineEnd: 0
     waitForTutorial: 1
@@ -44801,7 +44801,7 @@ MonoBehaviour:
       m_PersistentCalls:
         m_Calls: []
   - text: Aim the astrolabe to the stars
-    lineUI: []
+    manualUI: []
     waitAtLineEnd: 0
     waitForTutorial: 1
     timeTillEndOfline: 1
@@ -44813,7 +44813,7 @@ MonoBehaviour:
       m_PersistentCalls:
         m_Calls: []
   - text: Find the shinning star (Polaris) and align the ruler with it
-    lineUI: []
+    manualUI: []
     waitAtLineEnd: 1
     waitForTutorial: 0
     timeTillEndOfline: 1
@@ -44825,7 +44825,7 @@ MonoBehaviour:
       m_PersistentCalls:
         m_Calls: []
   - text: 
-    lineUI:
+    manualUI:
     - {fileID: 1130534441}
     waitAtLineEnd: 1
     waitForTutorial: 1
@@ -44851,7 +44851,7 @@ MonoBehaviour:
         m_Calls: []
   - text: Look at the numbers in the Mater, the star is currently at 33 degrees from
       the horizon
-    lineUI: []
+    manualUI: []
     waitAtLineEnd: 1
     waitForTutorial: 1
     timeTillEndOfline: 1
@@ -44863,7 +44863,7 @@ MonoBehaviour:
       m_PersistentCalls:
         m_Calls: []
   - text: 
-    lineUI:
+    manualUI:
     - {fileID: 365376117}
     waitAtLineEnd: 1
     waitForTutorial: 1
@@ -44888,7 +44888,7 @@ MonoBehaviour:
       m_PersistentCalls:
         m_Calls: []
   - text: Before you get on the boat, try to find the star you will be following
-    lineUI: []
+    manualUI: []
     waitAtLineEnd: 1
     waitForTutorial: 1
     timeTillEndOfline: 1
@@ -44913,7 +44913,7 @@ MonoBehaviour:
           m_CallState: 2
   - text: The Journal contains a <color=#F0E37D>celestial guide</color> to help with
       identifying constellations
-    lineUI: []
+    manualUI: []
     waitAtLineEnd: 1
     waitForTutorial: 1
     timeTillEndOfline: 1
@@ -44937,7 +44937,7 @@ MonoBehaviour:
             m_BoolArgument: 0
           m_CallState: 2
   - text: You have also collected a note with the directions to the next Island
-    lineUI: []
+    manualUI: []
     waitAtLineEnd: 1
     waitForTutorial: 1
     timeTillEndOfline: 1
@@ -44961,7 +44961,7 @@ MonoBehaviour:
             m_BoolArgument: 0
           m_CallState: 2
   - text: 'Find the following star in the sky and align your Astrolabe with it '
-    lineUI: []
+    manualUI: []
     waitAtLineEnd: 1
     waitForTutorial: 1
     timeTillEndOfline: 1
@@ -44986,7 +44986,7 @@ MonoBehaviour:
           m_CallState: 2
   - text: Once the star is found it will continue to glow brighter until you reach
       the angle inscribed
-    lineUI: []
+    manualUI: []
     waitAtLineEnd: 1
     waitForTutorial: 1
     timeTillEndOfline: 1
@@ -45010,7 +45010,7 @@ MonoBehaviour:
             m_BoolArgument: 0
           m_CallState: 2
   - text: Once you have found the star, board the boat and continue your adventure
-    lineUI: []
+    manualUI: []
     waitAtLineEnd: 1
     waitForTutorial: 1
     timeTillEndOfline: 1
@@ -46436,9 +46436,9 @@ RectTransform:
   - {fileID: 1131936114264521544}
   m_Father: {fileID: 2441526712881846603}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 414}
+  m_AnchorMin: {x: 0.5, y: 1}
+  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: 0, y: -126}
   m_SizeDelta: {x: 1020, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &8479802746937060837

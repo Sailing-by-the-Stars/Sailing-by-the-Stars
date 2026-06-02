@@ -8,7 +8,7 @@ public class TutorialDialogue : AstroDialogue, AstroTutorialStep
 
     protected override void Start()
     {
-        
+        base.Start();
     }
 
     public void EnterStep(TutorialSequence sequence)

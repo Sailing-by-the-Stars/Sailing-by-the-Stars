@@ -7,7 +7,7 @@ using UnityEngine.Events;
 public class astroDialogue
 {
     public string text = "";
-    public List<GameObject> lineUI = new();
+    public List<GameObject> manualUI = new();
     public bool waitAtLineEnd = false;
     public bool waitForTutorial = false;
     public float timeTillEndOfline = 2.5f;
@@ -39,6 +39,8 @@ public class AstroDialogue : MonoBehaviour
     protected virtual void Start()
     {
         TurnOffTextBoxes();
+
+
     }
 
 
@@ -102,7 +104,7 @@ public class AstroDialogue : MonoBehaviour
 
         foreach (astroDialogue aDialogue in dialogue)
         {
-            foreach (GameObject obj in aDialogue.lineUI)
+            foreach (GameObject obj in aDialogue.manualUI)
             {
                 obj.SetActive(false);
             }
@@ -197,7 +199,7 @@ public class AstroDialogue : MonoBehaviour
 
     protected virtual void endOfLine(int indexOfLine = -1)
     {
-        foreach (GameObject obj in dialogue[indexOfLine].lineUI)
+        foreach (GameObject obj in dialogue[indexOfLine].manualUI)
         {
             obj.SetActive(false);
         }
@@ -218,7 +220,7 @@ public class AstroDialogue : MonoBehaviour
         float T = 0;
 
         inTyping = true;
-        foreach (GameObject obj in lineToShow.lineUI)
+        foreach (GameObject obj in lineToShow.manualUI)
         {
             obj.SetActive(true);
         }
