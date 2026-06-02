@@ -31,6 +31,7 @@ public class FlatStarField : MonoBehaviour
     [SerializeField] float minManualSize = 8;
     [SerializeField] float manualSizeMult = 1.5f;
     [SerializeField] float twinklerSizeMult = 3f;
+    [SerializeField] float twinklerEmissionMult = 0.8f;
     [SerializeField] float flatManualSizeAdd = 20;
 
     [SerializeField] Mesh manualStarMesh;
@@ -77,7 +78,7 @@ public class FlatStarField : MonoBehaviour
 
     ("Orion", //D
      new int[] { 1948, 1903, 1852, 2004, 1713, 2061, 1790, 1907, 2124,
-                 2199, 2135, 2047, 2159, 1543, 1544, 1570, 1552, 1567 }),
+                 2199, 2135, 2047, 2159, 1543, 1544, 1570, 1552, 1567, 1601 }),
 
     ("Ursa Minor", //D
      new int[] { 424, 6789, 6322, 5903, 6116, 5735, 5563 }),
@@ -254,6 +255,7 @@ public class FlatStarField : MonoBehaviour
 
             bool isManualStar = false;
             TwinklingStar twinkler = null;
+            bool fullyManual = false;
 
             foreach (Constelation manualStar in manualStars)
             {
@@ -272,13 +274,10 @@ public class FlatStarField : MonoBehaviour
                     if (manualStar.starPrefab)
                     {
                         stargo = Instantiate(manualStar.starPrefab);
+                        fullyManual = true;
                     }
                     else
                     {
-
-                        
-
-
                         TwinklingStar template = transform.parent.GetComponent<TwinklingStar>();
                         bool twinkling = false;
 
@@ -292,7 +291,11 @@ public class FlatStarField : MonoBehaviour
                                 if(stargo == null)
                                 {
                                     stargo = GameObject.CreatePrimitive(PrimitiveType.Quad);
-                                    Destroy(stargo.GetComponent<MeshCollider>());
+#if UNITY_EDITOR
+                                    DestroyImmediate(stargo.GetComponent<MeshCollider>());
+#else
+                Destroy(stargo.GetComponent<MeshCollider>());
+#endif
                                     stargo.AddComponent<SphereCollider>();
                                 }
 
@@ -384,7 +387,11 @@ public class FlatStarField : MonoBehaviour
             stargo.transform.localPosition = star.position * starFieldScale;
             stargo.transform.rotation = transform.rotation;
 
-            stargo.transform.Rotate(90, 0, 0);
+
+            if (!fullyManual)
+            {
+                stargo.transform.Rotate(90, 0, 0);
+            }
             //<
 
             //get necisairy values
@@ -408,38 +415,53 @@ public class FlatStarField : MonoBehaviour
 
             //set the stars size
             //>
-            Vector3 size = new Vector3(starSize, starSize, starSize);
-            stargo.transform.localScale = size;
-
-            if (isManualStar)
+            if (!fullyManual)
             {
-                starSize *= manualSizeMult;
-                if(twinkler != null)
-                {
-                    starSize *= twinklerSizeMult;
-                }
+                Vector3 size = new Vector3(starSize, starSize, starSize);
+                stargo.transform.localScale = size;
 
-                starSize += flatManualSizeAdd;
-
-                if (starSize < minManualSize)
+                if (isManualStar)
                 {
-                    Vector3 newsize = new Vector3(minManualSize, minManualSize, minManualSize);
-                    stargo.transform.localScale = newsize;
-                }
-                else
-                {
-                    Vector3 newsize = new Vector3(starSize, starSize, starSize);
-                    stargo.transform.localScale = newsize;
-                }
+                    starSize *= manualSizeMult;
+                    if(twinkler != null)
+                    {
+                        starSize *= twinklerSizeMult;
+                    }
 
+                    starSize += flatManualSizeAdd;
+
+                    if (starSize < minManualSize)
+                    {
+                        Vector3 newsize = new Vector3(minManualSize, minManualSize, minManualSize);
+                        stargo.transform.localScale = newsize;
+                    }
+                    else
+                    {
+                        Vector3 newsize = new Vector3(starSize, starSize, starSize);
+                        stargo.transform.localScale = newsize;
+                    }
+
+
+                    if (twinkler != null)
+                    {
+                        starSize /= twinklerSizeMult;
+                        starSize *= twinklerEmissionMult;
+                    }
+                }
             }
+
             //<
 
             //set the references on the star
             //>
             half intensityMul;
             intensityMul = (half)MathF.Pow(2.0f, emissionMult);
-            StarInfo starInfo = stargo.AddComponent<StarInfo>();
+
+            StarInfo starInfo = GetComponent<StarInfo>();
+            if (starInfo == null)
+            {
+                starInfo = stargo.AddComponent<StarInfo>();
+            }
 
 
 #if !UNITY_EDITOR
@@ -499,6 +521,12 @@ public class FlatStarField : MonoBehaviour
 
 
             starObjects.Add(stargo);
+
+
+            foreach (StarInfo childStar in starInfo.GetComponentsInChildren<StarInfo>())
+            {
+                childStar.Initialize(starInfo);
+            }
         }
 
         GetComponentInParent<GlobeShape>().enabled = true;
@@ -515,6 +543,9 @@ public class FlatStarField : MonoBehaviour
                 Destroy(o);
 #endif
         }
+
+
+
 
         starObjects = new();
     }

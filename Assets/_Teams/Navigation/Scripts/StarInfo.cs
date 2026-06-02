@@ -25,14 +25,22 @@ public class StarInfo : MonoBehaviour
 
     public void Initialize()
     {
-        initpos = transform.position;
         thisTransform = transform;
+        initpos = thisTransform.position;
 
         if (GetComponent<MeshRenderer>() == null)
         {
             return;
         }
         Initialize(GetComponent<MeshRenderer>());
+    }
+
+    public void Initialize(StarInfo baseStar)
+    {
+        emissionMult = baseStar.emissionMult;
+        matColor = baseStar.matColor;
+        emissionColor = baseStar.emissionColor;
+        Initialize();
     }
 
 

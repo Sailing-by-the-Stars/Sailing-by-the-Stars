@@ -21,8 +21,8 @@ public class SequenceEntry
 
 public class TutorialSequence : MonoBehaviour
 {
-    public static bool finishedTutorial = false;
-    public static bool startedTutorial = false;
+    public bool finishedTutorial = false;
+    public bool startedTutorial = false;
     public static TutorialSequence Instance;
 
     private void Awake()
@@ -41,7 +41,7 @@ public class TutorialSequence : MonoBehaviour
 
     [SerializeField]
     bool startOnStart = false;
-    public List<SequenceEntry> EventOrder;
+    public List<SequenceEntry> EventOrder = new();
     public int index = 0;
 
     private int currentStepFinishes = 0;

@@ -7,8 +7,10 @@ using UnityEngine.Events;
 public class astroDialogue
 {
     public string text = "";
+    public List<GameObject> lineUI = new();
     public bool waitAtLineEnd = false;
     public bool waitForTutorial = false;
+    public float timeTillEndOfline = 2.5f;
     public int lineToGoToNext = -1;
     public UnityEvent startOfLine;
     public UnityEvent endOfLine;
@@ -21,12 +23,10 @@ public class AstroDialogue : MonoBehaviour
 
     public bool inDialogue;
     public float textSpeed;
-    public float waitTillNextline = 1;
 
     [SerializeField] 
     protected int index = 0;
 
-    private string line;
     private bool inTyping;
 
     public UnityEvent enterDialogue;
@@ -48,38 +48,32 @@ public class AstroDialogue : MonoBehaviour
         {
             if (Input.GetMouseButtonDown(0))
             {
-                if (!inTyping)
+                if(inTyping)
                 {
-                    if (index < dialogue.Count)
+                    inTyping = false;
+                    return;
+                }
+
+
+                if (index < dialogue.Count)
+                {
+                    if (dialogue[index].waitForTutorial == true)
                     {
+                        WaitFlag();
+                        return;
+                    }
 
-                        if (dialogue[index].waitForTutorial == true)
+                    if (dialogue[index].waitAtLineEnd == true)
+                    {
+                        if (NextLine())
                         {
-
-
-                            WaitFlag();
                             return;
                         }
-
-                        if (dialogue[index].waitAtLineEnd == true)
-                        {
-                            if (NextLine())
-                            {
-                                return;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        endDialogue();
                     }
                 }
                 else
                 {
-                    StopAllCoroutines();
-                    endOfLine(index);
-                    inTyping = false;
-                    SetText(dialogue[index].text);
+                    endDialogue();
                 }
             }
         }
@@ -104,6 +98,14 @@ public class AstroDialogue : MonoBehaviour
         foreach (DialogueTextBox textBox in DialogueTextBox.dialogueTextBoxes)
         {
             textBox.TurnOff();
+        }
+
+        foreach (astroDialogue aDialogue in dialogue)
+        {
+            foreach (GameObject obj in aDialogue.lineUI)
+            {
+                obj.SetActive(false);
+            }
         }
     }
 
@@ -134,7 +136,7 @@ public class AstroDialogue : MonoBehaviour
         enterDialogue.Invoke();
         inDialogue = true;
         index = Dindex;
-        typeLine(Dindex);
+        showLine(Dindex);
     }
 
     public virtual void endDialogue()
@@ -154,14 +156,14 @@ public class AstroDialogue : MonoBehaviour
         inDialogue = false;
     }
 
-    public virtual void typeLine(int indexOfLine)
+    public virtual void showLine(int indexOfLine)
     {
         if (indexOfLine >= 0)
         {
             dialogue[indexOfLine].startOfLine.Invoke();
             StopAllCoroutines();
             index = indexOfLine;
-            StartCoroutine(typeOutLine(dialogue[indexOfLine].text, indexOfLine));
+            StartCoroutine(typeOutLine(dialogue[indexOfLine], indexOfLine));
         }
         else
         {
@@ -185,7 +187,7 @@ public class AstroDialogue : MonoBehaviour
 
         if(Dindex < dialogue.Count)
         {
-            typeLine(Dindex);
+            showLine(Dindex);
             return true;
         }
 
@@ -195,6 +197,11 @@ public class AstroDialogue : MonoBehaviour
 
     protected virtual void endOfLine(int indexOfLine = -1)
     {
+        foreach (GameObject obj in dialogue[indexOfLine].lineUI)
+        {
+            obj.SetActive(false);
+        }
+
         if (indexOfLine >= 0)
         {
             dialogue[indexOfLine].endOfLine.Invoke();
@@ -206,24 +213,37 @@ public class AstroDialogue : MonoBehaviour
     }
 
 
-    protected virtual IEnumerator typeOutLine(string lineToType, int indexOfLine = -1)
+    protected virtual IEnumerator typeOutLine(astroDialogue lineToShow, int indexOfLine = -1)
     {
+        float T = 0;
+
         inTyping = true;
-        SetText(string.Empty);
-        line = string.Empty;
-        foreach (char character in lineToType.ToCharArray())
+        foreach (GameObject obj in lineToShow.lineUI)
         {
-            line += character;
-            SetText(line);
-            yield return new WaitForSeconds(textSpeed);
+            obj.SetActive(true);
         }
-        inTyping = false;
+            
+        SetText(lineToShow.text);
+        
+        while (inTyping)
+        {
+            T += Time.deltaTime;
+
+            if(lineToShow.timeTillEndOfline < T)
+            {
+                inTyping = false;
+            }
+            return null;
+        }
+
         endOfLine(indexOfLine);
 
         if (dialogue[indexOfLine].waitAtLineEnd == false && dialogue[indexOfLine].waitForTutorial == false)
         {
-            yield return new WaitForSeconds(waitTillNextline);
             NextLine(dialogue[indexOfLine].lineToGoToNext);
         }
+        inTyping = false;
+
+        return null;
     }
 }
