@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 5804466675530256229}
   - component: {fileID: 6436083347719907682}
   - component: {fileID: 5317251967206337478}
+  - component: {fileID: 4466036499482900741}
   m_Layer: 0
   m_Name: Career
   m_TagString: Untagged
@@ -96,7 +97,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BargainItem
   pickupPositionOffset: {x: 0, y: 0, z: 0}
+  despawnParticleEffect: {fileID: 0}
   weight: 1
+--- !u!114 &4466036499482900741
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3136491682458603764}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea1d725e30e0a0641af01f648d71bd8f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ItemDialogueTrigger
+  dialogue: {fileID: 11400000, guid: 59cc3d640b124c44594a76b343bd54d7, type: 2}
+  onlyTriggerOnce: 1
 --- !u!1001 &1801834812907741745
 PrefabInstance:
   m_ObjectHideFlags: 0

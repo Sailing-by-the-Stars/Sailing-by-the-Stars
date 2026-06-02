@@ -15,6 +15,8 @@ MonoBehaviour:
   hasName: 1
   npcName: Axel
   talkingSpeed: 0.95
+  autoAdvance: 1
+  secondsPerCharacter: 0.03
   nodes:
   - rid: 141452603536965721
   - rid: 141452603536965722
@@ -26,8 +28,8 @@ MonoBehaviour:
     - rid: 141452603536965721
       type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
       data:
-        nodeID: Idle_Bargaining_Puzzle
-        text: Those are my things! <pause=0.5>Why are they here...?
+        nodeID: Idle_Bargaining_Puzzle_P1
+        text: Those are all my things! Why are they here?
         nextNodeID: Idle_Bargaining_Puzzle_P2
     - rid: 141452603536965722
       type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}

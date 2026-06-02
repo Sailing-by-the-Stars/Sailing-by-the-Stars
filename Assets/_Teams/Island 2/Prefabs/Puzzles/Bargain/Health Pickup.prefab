@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2479656425395408323}
   - component: {fileID: 3941670982306216220}
   - component: {fileID: 1136971772930214563}
+  - component: {fileID: 6186199237463756563}
   m_Layer: 0
   m_Name: Health Pickup
   m_TagString: Untagged
@@ -96,7 +97,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BargainItem
   pickupPositionOffset: {x: 0, y: 0, z: 0}
+  despawnParticleEffect: {fileID: 0}
   weight: 5
+--- !u!114 &6186199237463756563
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 219715531350275402}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea1d725e30e0a0641af01f648d71bd8f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ItemDialogueTrigger
+  dialogue: {fileID: 11400000, guid: 1e0363aef0105644dab91fddbb2e8b5e, type: 2}
+  onlyTriggerOnce: 1
 --- !u!1001 &8778592776559957212
 PrefabInstance:
   m_ObjectHideFlags: 0

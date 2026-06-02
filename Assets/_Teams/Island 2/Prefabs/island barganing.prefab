@@ -7302,6 +7302,7 @@ GameObject:
   - component: {fileID: 622978199903812129}
   - component: {fileID: 6565601430535826630}
   - component: {fileID: 1955294140806296299}
+  - component: {fileID: 6485844147195330023}
   m_Layer: 0
   m_Name: PickupCube (1)
   m_TagString: Untagged
@@ -7389,6 +7390,20 @@ MonoBehaviour:
   despawnParticleEffect: {fileID: 8939933673016840900, guid: 290cbbf981d99d2438fd1f9e4023067d, type: 3}
   itemID: 1
   puzzleProgressID: bargaining
+--- !u!114 &6485844147195330023
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8988884532818600439}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea1d725e30e0a0641af01f648d71bd8f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ItemDialogueTrigger
+  dialogue: {fileID: 11400000, guid: 0158351eccd80b445864fa3247aea9da, type: 2}
+  onlyTriggerOnce: 1
 --- !u!1 &9031707058747734315
 GameObject:
   m_ObjectHideFlags: 0

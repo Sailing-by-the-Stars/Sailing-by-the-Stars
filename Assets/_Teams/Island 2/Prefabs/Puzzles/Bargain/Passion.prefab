@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 7934938227079380308}
   - component: {fileID: 6812248552419990533}
   - component: {fileID: 3039831849902976954}
+  - component: {fileID: 762233243183219007}
   m_Layer: 0
   m_Name: Passion
   m_TagString: Untagged
@@ -96,7 +97,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BargainItem
   pickupPositionOffset: {x: 0, y: 0, z: 0}
+  despawnParticleEffect: {fileID: 0}
   weight: 2
+--- !u!114 &762233243183219007
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2335766301379244073}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea1d725e30e0a0641af01f648d71bd8f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ItemDialogueTrigger
+  dialogue: {fileID: 11400000, guid: 87d4a56b4555409448394a8ef8284e25, type: 2}
+  onlyTriggerOnce: 1
 --- !u!1001 &5990289164428259325
 PrefabInstance:
   m_ObjectHideFlags: 0
