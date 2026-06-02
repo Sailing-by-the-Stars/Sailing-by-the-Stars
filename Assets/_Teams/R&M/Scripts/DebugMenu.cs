@@ -84,7 +84,8 @@ public class DebugMenu : MonoBehaviour
             });
         }
 
-        var speedBtn = Instantiate(buttonPrefab, container);
+        // Legs have been cut due to jank ~Joost
+        /*var speedBtn = Instantiate(buttonPrefab, container);
         speedBtn.GetComponentInChildren<TextMeshProUGUI>().text = "SPEEEEEDYYY SPRINT";
         speedBtn.onClick.AddListener(() =>
         {
@@ -94,7 +95,7 @@ public class DebugMenu : MonoBehaviour
             {
                 movement.SetSprintMultiplier(10f);
             }
-        });
+        });*/
 
         var resetTutorialBtn = Instantiate(buttonPrefab, container);
         resetTutorialBtn.GetComponentInChildren<TextMeshProUGUI>().text = "Reset Tutorials";

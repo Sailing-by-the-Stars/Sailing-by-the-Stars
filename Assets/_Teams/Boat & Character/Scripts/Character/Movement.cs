@@ -116,7 +116,7 @@ public class Movement : MonoBehaviour
     {
         if (!isOnBoat)
         {
-            Jump();
+            //Jump();
             IsGrounded();
 
             if (isGrounded)
@@ -208,10 +208,11 @@ public class Movement : MonoBehaviour
 
         float speed = movementSpeed;
 
-        if (playerControls.Land.Sprint.IsPressed())
+        // Legs have been cut due to jank ~Joost
+        /*if (playerControls.Land.Sprint.IsPressed())
         {
             speed *= sprintMultiplier;
-        }
+        }*/
 
         Vector3 move = transform.forward * input.y + transform.right * input.x;
 
@@ -240,10 +241,12 @@ public class Movement : MonoBehaviour
         rb.MovePosition(rb.position + move * speed * Time.fixedDeltaTime);
         //<
     }
+    // Legs have been cut due to jank ~Joost
+    /*
     public void SetSprintMultiplier(float multiplier)
     {
         sprintMultiplier = multiplier;
-    }
+    }*/
 
     void RotateCamera()
     {
@@ -429,7 +432,9 @@ public class Movement : MonoBehaviour
 
     // END ADDED BY JANTINA
 
-    void Jump()
+
+    // Legs have been cut due to jank ~Joost
+    /*void Jump()
     {
         if (isGrounded)
         {
@@ -439,7 +444,7 @@ public class Movement : MonoBehaviour
                 rb.AddForce(new Vector3(0, jumpStrength, 0));
             }
         }
-    }
+    }*/
 
 
     
