@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 
@@ -20,13 +22,32 @@ public class MainMenuController : MonoBehaviour
     [Header("Fade Settings")]
     [SerializeField] private float fadeDuration = 0.25f;
 
+    [Header("Blur Settings")]
+    [SerializeField] private Image menuBackgroundImage;
+    [SerializeField] private bool enableBlurEffect = true;
+
+    [Header("Pause Menu")]
+    [SerializeField] private GameObject menuRoot;
+    [SerializeField] private string gameSceneName = "MainGame";
+
+    private bool _isPaused = false;
     private Dictionary<int, Coroutine> _fadeCoroutines = new Dictionary<int, Coroutine>();
 
     private int _currentHoveredIndex = -1;
     private Dictionary<int, Coroutine> _shiftCoroutines = new Dictionary<int, Coroutine>();
+    private UIBlurEffect _blurEffect;
 
     private void Start()
     {
+        if (enableBlurEffect && menuBackgroundImage != null)
+        {
+            _blurEffect = menuBackgroundImage.GetComponent<UIBlurEffect>();
+            if (_blurEffect == null)
+            {
+                _blurEffect = menuBackgroundImage.gameObject.AddComponent<UIBlurEffect>();
+            }
+        }
+
         for (int i = 0; i < menuButtons.Count; i++)
         {
             var entry = menuButtons[i];
@@ -58,6 +79,58 @@ public class MainMenuController : MonoBehaviour
         }
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (_isPaused) CloseMenu();
+            else OpenMenu();
+        }
+    }
+
+    public void OpenMenu()
+    {
+        _isPaused = true;
+        Time.timeScale = 0f;
+        if (menuRoot != null) menuRoot.SetActive(true);
+        TempStateMachine.Instance.SetState(_isPaused ? GameState.Dialogue : GameState.Moving);
+    }
+
+    public void CloseMenu()
+    {
+        _isPaused = false;
+        Time.timeScale = 1f;
+        if (menuRoot != null) menuRoot.SetActive(false);
+        TempStateMachine.Instance.SetState(_isPaused ? GameState.Dialogue : GameState.Moving);
+    }
+
+    public void OnReturnToGame()
+    {
+        CloseMenu();
+    }
+
+    public void OnRestart()
+    {
+        Time.timeScale = 1f;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    public void OnLoadLastCheckpoint()
+    {
+        // Hook up your checkpoint system here
+        Debug.Log("Load last checkpoint – not yet implemented");
+        CloseMenu();
+    }
+
+    public void OnQuit()
+    {
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+        Application.Quit();
+#endif
+    }
+
     public void OnButtonHoverEnter(int index)
     {
         if (_currentHoveredIndex == index) return;
@@ -76,6 +149,12 @@ public class MainMenuController : MonoBehaviour
 
         // Fade background in via script
         StartFade(index, 1f);
+
+        // Enable blur effect on first hover
+        if (_blurEffect != null)
+        {
+            _blurEffect.EnableBlur();
+        }
 
         for (int i = 0; i < menuButtons.Count; i++)
         {
@@ -103,6 +182,12 @@ public class MainMenuController : MonoBehaviour
 
         // Fade background out via script
         StartFade(index, 0f);
+
+        // Disable blur effect when hovering exits
+        if (_blurEffect != null)
+        {
+            _blurEffect.DisableBlur();
+        }
 
         for (int i = 0; i < menuButtons.Count; i++)
             StartShift(i, menuButtons[i].originalAnchoredPosition);
