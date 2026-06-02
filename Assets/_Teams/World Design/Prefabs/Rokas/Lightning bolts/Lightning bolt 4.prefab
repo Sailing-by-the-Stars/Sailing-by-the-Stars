@@ -9,16 +9,28 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 1d3dc43dc18e8124c8aca84fd57a17a6, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 1d3dc43dc18e8124c8aca84fd57a17a6, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 1d3dc43dc18e8124c8aca84fd57a17a6, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 1d3dc43dc18e8124c8aca84fd57a17a6, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 219.1665
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 1d3dc43dc18e8124c8aca84fd57a17a6, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.050515793
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 1d3dc43dc18e8124c8aca84fd57a17a6, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -1596.8107
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 1d3dc43dc18e8124c8aca84fd57a17a6, type: 3}
       propertyPath: m_LocalRotation.w
@@ -48,6 +60,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 1d3dc43dc18e8124c8aca84fd57a17a6, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: -7511558181221131132, guid: 1d3dc43dc18e8124c8aca84fd57a17a6, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
@@ -59,5 +75,66 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 1d3dc43dc18e8124c8aca84fd57a17a6, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -3977337385050789185}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 1d3dc43dc18e8124c8aca84fd57a17a6, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3658981596309703916}
   m_SourcePrefab: {fileID: 100100000, guid: 1d3dc43dc18e8124c8aca84fd57a17a6, type: 3}
+--- !u!1 &5699243475813429673 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 1d3dc43dc18e8124c8aca84fd57a17a6, type: 3}
+  m_PrefabInstance: {fileID: 4888286238200515832}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &-3977337385050789185
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5699243475813429673}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: FMODUnity::FMODUnity.StudioEventEmitter
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: -2023030739
+      Data2: 1211429254
+      Data3: 52692110
+      Data4: -1398106780
+    Path: event:/event_Weather_ThunderStrikeSingle
+  Event: 
+  EventPlayTrigger: 1
+  EventStopTrigger: 2
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  NonRigidbodyVelocity: 0
+  Params:
+  - Name: ThunderStrike_EQ
+    Value: 1
+  - Name: ThunderStrike_ReverbDryness
+    Value: 1
+  - Name: ThunderStrike_Volume
+    Value: 1
+  OverrideAttenuation: 1
+  OverrideMinDistance: 1000
+  OverrideMaxDistance: 3000
+--- !u!114 &3658981596309703916
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5699243475813429673}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a717a6eba8740e5a8fc51adf966d9b8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::_Teams.World_Design.Scripts.ZoneEffects.Environmental.WeatherEvents.Thunder.ThunderObject
+  despawnDelaySeconds: 2
