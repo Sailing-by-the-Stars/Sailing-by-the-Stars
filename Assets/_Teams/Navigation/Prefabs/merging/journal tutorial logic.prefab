@@ -1,0 +1,299 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &6545059568244161301
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5545044775136506961}
+  - component: {fileID: 7657829503789003602}
+  - component: {fileID: 639258006829147059}
+  m_Layer: 0
+  m_Name: journal tutorial logic
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5545044775136506961
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6545059568244161301}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -1.50661, y: -0.227, z: 532.6607}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7657829503789003602
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6545059568244161301}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b6804c1ccb4f62345969add970751114, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  inDialogue: 0
+  textSpeed: 0.02
+  waitTillNextline: 1
+  index: 0
+  enterDialogue:
+    m_PersistentCalls:
+      m_Calls: []
+  exitDialogue:
+    m_PersistentCalls:
+      m_Calls: []
+  waitFlag: 0
+  dialogue:
+  - text: "Press \u201CJ\u201D to open your journal  "
+    waitAtLineEnd: 0
+    waitForTutorial: 1
+    lineToGoToNext: -1
+    startOfLine:
+      m_PersistentCalls:
+        m_Calls: []
+    endOfLine:
+      m_PersistentCalls:
+        m_Calls: []
+  - text: "Use \u201CE\u201D and \u201CQ\u201D to navigate the pages"
+    waitAtLineEnd: 0
+    waitForTutorial: 1
+    lineToGoToNext: -1
+    startOfLine:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 0}
+          m_TargetAssemblyTypeName: Journal, Assembly-CSharp
+          m_MethodName: EnableControl
+          m_Mode: 3
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 1
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    endOfLine:
+      m_PersistentCalls:
+        m_Calls: []
+  - text: "Use \u201CZ\u201D to zoom in"
+    waitAtLineEnd: 1
+    waitForTutorial: 0
+    lineToGoToNext: -1
+    startOfLine:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 0}
+          m_TargetAssemblyTypeName: Journal, Assembly-CSharp
+          m_MethodName: EnableControl
+          m_Mode: 3
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 2
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    endOfLine:
+      m_PersistentCalls:
+        m_Calls: []
+  - text: 'Directions you find to other islands will be kept in the journal '
+    waitAtLineEnd: 1
+    waitForTutorial: 0
+    lineToGoToNext: -1
+    startOfLine:
+      m_PersistentCalls:
+        m_Calls: []
+    endOfLine:
+      m_PersistentCalls:
+        m_Calls: []
+  - text: 'Find the described star in the sky and align your Astrolabe with it '
+    waitAtLineEnd: 1
+    waitForTutorial: 0
+    lineToGoToNext: -1
+    startOfLine:
+      m_PersistentCalls:
+        m_Calls: []
+    endOfLine:
+      m_PersistentCalls:
+        m_Calls: []
+  - text: 'Use the Celestial Map, as well as other constellations, to find the star
+      you are looking for '
+    waitAtLineEnd: 0
+    waitForTutorial: 1
+    lineToGoToNext: -1
+    startOfLine:
+      m_PersistentCalls:
+        m_Calls: []
+    endOfLine:
+      m_PersistentCalls:
+        m_Calls: []
+  - text: You have found the star! Move towards it till you're at the correct angle
+    waitAtLineEnd: 1
+    waitForTutorial: 0
+    lineToGoToNext: -1
+    startOfLine:
+      m_PersistentCalls:
+        m_Calls: []
+    endOfLine:
+      m_PersistentCalls:
+        m_Calls: []
+  - text: 'Board the boat and follow the instruction in the journal to reach the
+      next island. Good luck! '
+    waitAtLineEnd: 1
+    waitForTutorial: 0
+    lineToGoToNext: -1
+    startOfLine:
+      m_PersistentCalls:
+        m_Calls: []
+    endOfLine:
+      m_PersistentCalls:
+        m_Calls: []
+  currentSequence: {fileID: 0}
+  currentTutorialStep: -1
+--- !u!114 &639258006829147059
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6545059568244161301}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: edc2044ac247257428e06925ca5a1c20, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  startOnStart: 0
+  EventOrder:
+  - sequenceEnter:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 7657829503789003602}
+          m_TargetAssemblyTypeName: TutorialDialogue, Assembly-CSharp
+          m_MethodName: EnterStep
+          m_Mode: 0
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+        - m_Target: {fileID: 0}
+          m_TargetAssemblyTypeName: Journal, Assembly-CSharp
+          m_MethodName: EnterStep
+          m_Mode: 0
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    continueAfterEntry: 1
+    nextEntry: -1
+    dialogueEntry: 0
+    dialogueEntryText: "Press \u201CJ\u201D to open your journal  "
+    clickForDialogue: 0
+  - sequenceEnter:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 7657829503789003602}
+          m_TargetAssemblyTypeName: TutorialDialogue, Assembly-CSharp
+          m_MethodName: EnterStep
+          m_Mode: 0
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+        - m_Target: {fileID: 0}
+          m_TargetAssemblyTypeName: Journal, Assembly-CSharp
+          m_MethodName: EnterStep
+          m_Mode: 0
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    continueAfterEntry: 1
+    nextEntry: -1
+    dialogueEntry: 1
+    dialogueEntryText: "Use \u201CE\u201D and \u201CQ\u201D to navigate the pages"
+    clickForDialogue: 0
+  - sequenceEnter:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 7657829503789003602}
+          m_TargetAssemblyTypeName: TutorialDialogue, Assembly-CSharp
+          m_MethodName: EnterStep
+          m_Mode: 0
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+        - m_Target: {fileID: 0}
+          m_TargetAssemblyTypeName: TutorialTwinkler, Assembly-CSharp
+          m_MethodName: EnterStep
+          m_Mode: 0
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    continueAfterEntry: 1
+    nextEntry: -1
+    dialogueEntry: 2
+    dialogueEntryText: "Use \u201CZ\u201D to zoom in"
+    clickForDialogue: 0
+  - sequenceEnter:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 7657829503789003602}
+          m_TargetAssemblyTypeName: TutorialDialogue, Assembly-CSharp
+          m_MethodName: EnterStep
+          m_Mode: 0
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    continueAfterEntry: 1
+    nextEntry: -1
+    dialogueEntry: 6
+    dialogueEntryText: You have found the star! Move towards it till you're at the
+      correct angle
+    clickForDialogue: 0
+  index: 0

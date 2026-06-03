@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a27b1591cf442e34da26ab4a98de3513, type: 3}
+  m_Name: BraceletGrab
+  m_EditorClassIdentifier: Assembly-CSharp::Dialogue
+  hasName: 1
+  npcName: Axel
+  talkingSpeed: 0.95
+  autoAdvance: 1
+  secondsPerCharacter: 0.03
+  nodes:
+  - rid: 2145329768866250757
+  hasItemID: 0
+  itemID: 0
+  references:
+    version: 2
+    RefIds:
+    - rid: 2145329768866250757
+      type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: Bracelet_Grab
+        text: Oh...this is definitely the real deal...
+        nextNodeID: 

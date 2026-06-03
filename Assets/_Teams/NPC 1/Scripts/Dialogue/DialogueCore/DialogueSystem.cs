@@ -1,23 +1,19 @@
 using UnityEngine;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using FMODUnity;
-
 // Created by Jantina
 
 public class DialogueSystem : MonoBehaviour
 {
     [Header("Dialogue References")]
-
-    [Tooltip("The dialogue asset currently being processed.")]
     [SerializeField] private Dialogue currentDialogue;
-
-    [Tooltip("Handles all dialogue UI such as text, choices and typewriter effects.")]
     [SerializeField] private DialogueUIManager uiManager;
-    
-    public EventReference CurrentVoice { get; private set; }
 
+    public EventReference CurrentVoice { get; private set; }
     public static DialogueSystem Instance;
+
     private Dictionary<string, DialogueNode> nodeLookup;
 
     [HideInInspector] public DialogueNode currentNode;
@@ -29,12 +25,13 @@ public class DialogueSystem : MonoBehaviour
     private PlayerControls controls;
     private PlayerControls.DialogueActions dialogueControls;
 
+    private Queue<(Dialogue dialogue, GameObject sender)> dialogueQueue = new();
+    private Coroutine autoAdvanceCoroutine;
+
     private void Awake()
     {
         Instance = this;
-
         uiManager = FindFirstObjectByType<DialogueUIManager>();
-
         controls = TempStateMachine.Instance.PlayerControls;
         dialogueControls = controls.Dialogue;
     }
@@ -42,10 +39,8 @@ public class DialogueSystem : MonoBehaviour
     private void Start()
     {
         dialogueControls.Advance.performed += OnAdvancePerformed;
-
         dialogueControls.Choice1.performed += OnChoice1Performed;
         dialogueControls.Choice2.performed += OnChoice2Performed;
-
         dialogueControls.FastForward.performed += OnFastForwardStarted;
         dialogueControls.FastForward.canceled += OnFastForwardCanceled;
     }
@@ -53,24 +48,21 @@ public class DialogueSystem : MonoBehaviour
     private void OnDisable()
     {
         dialogueControls.Advance.performed -= OnAdvancePerformed;
-
         dialogueControls.Choice1.performed -= OnChoice1Performed;
         dialogueControls.Choice2.performed -= OnChoice2Performed;
-
         dialogueControls.FastForward.performed -= OnFastForwardStarted;
         dialogueControls.FastForward.canceled -= OnFastForwardCanceled;
     }
+
     private void OnChoice1Performed(UnityEngine.InputSystem.InputAction.CallbackContext ctx)
     {
         if (!isDialogueActive) return;
-
         uiManager.TriggerChoice1();
     }
 
     private void OnChoice2Performed(UnityEngine.InputSystem.InputAction.CallbackContext ctx)
     {
         if (!isDialogueActive) return;
-
         uiManager.TriggerChoice2();
     }
 
@@ -83,8 +75,10 @@ public class DialogueSystem : MonoBehaviour
     {
         uiManager.SetFastForward(false);
     }
+
     private void OnAdvancePerformed(UnityEngine.InputSystem.InputAction.CallbackContext ctx)
     {
+        if (currentDialogue != null && currentDialogue.autoAdvance) return;
         if (!waitingForPlayerInput) return;
 
         if (uiManager.TypewriterRunning)
@@ -95,14 +89,11 @@ public class DialogueSystem : MonoBehaviour
         }
 
         if (!lineFullyRevealed) return;
-
-        if (currentNode is ChoiceNode)
-            return;
+        if (currentNode is ChoiceNode) return;
 
         if (currentNode is ConditionalNode condNodeClick)
         {
             bool allPass = true;
-
             foreach (var condition in condNodeClick.conditions)
             {
                 if (!condition.Evaluate(PlayerState.Instance))
@@ -115,9 +106,7 @@ public class DialogueSystem : MonoBehaviour
             string nextID = allPass ? condNodeClick.trueNodeID : condNodeClick.falseNodeID;
 
             if (string.IsNullOrEmpty(nextID))
-            {
                 EndDialogue();
-            }
             else if (!nodeLookup.TryGetValue(nextID, out currentNode))
             {
                 Debug.LogWarning($"Node '{nextID}' not found. Ending dialogue.");
@@ -128,7 +117,6 @@ public class DialogueSystem : MonoBehaviour
                 waitingForPlayerInput = false;
                 ProcessNode();
             }
-
             return;
         }
 
@@ -136,38 +124,43 @@ public class DialogueSystem : MonoBehaviour
         string nextIDNormal = GetNextNodeIDForCurrentNode();
         AdvanceNode(nextIDNormal);
     }
-    
+
     private void BuildNodeLookup()
     {
         nodeLookup = new Dictionary<string, DialogueNode>();
-
         foreach (var node in currentDialogue.nodes)
-        {
             if (node != null && !string.IsNullOrEmpty(node.nodeID))
                 nodeLookup[node.nodeID] = node;
+    }
+
+    public void QueueDialogue(Dialogue dialogue, GameObject sender)
+    {
+        if (dialogue == null) return;
+
+        if (isDialogueActive)
+        {
+            dialogueQueue.Enqueue((dialogue, sender));
+        }
+        else
+        {
+            StartDialogue(dialogue, sender);
         }
     }
 
     public void StartDialogue(Dialogue dialogue, GameObject sender)
     {
         if (dialogue == null || uiManager == null) return;
-        TempStateMachine.Instance.SetState(GameState.Dialogue);
+
+        if (!dialogue.autoAdvance)
+            TempStateMachine.Instance.SetState(GameState.Dialogue);
+
         sendingObject = sender;
         currentDialogue = dialogue;
 
         var npc = sender.GetComponent<NPCDialogueHolder>();
-
-        if (npc != null)
-        {
-            CurrentVoice = npc.dialogueVoice;
-        }
-        else
-        {
-            CurrentVoice = default;
-        }
+        CurrentVoice = npc != null ? npc.dialogueVoice : default;
 
         BuildNodeLookup();
-
         isDialogueActive = true;
 
         if (currentDialogue.hasItemID)
@@ -188,7 +181,6 @@ public class DialogueSystem : MonoBehaviour
         }
 
         string npcName = currentDialogue.hasName ? currentDialogue.npcName : "";
-
         currentLineNode = null;
         lineFullyRevealed = false;
         waitingForPlayerInput = true;
@@ -204,74 +196,62 @@ public class DialogueSystem : MonoBehaviour
         {
             waitingForPlayerInput = true;
             currentLineNode = new DialogueLineNode { text = choiceNode.text };
-
             uiManager.ShowChoiceNode(choiceNode, npcName, OnChoiceSelected, speed);
         }
         else if (currentNode is ConditionalNode condNode)
         {
             currentLineNode = new DialogueLineNode { text = condNode.text };
-
             lineFullyRevealed = false;
             waitingForPlayerInput = true;
-
-            uiManager.ShowDialogueNode(
-                currentLineNode,
-                currentDialogue.hasName ? currentDialogue.npcName : "",
-                speed,
-                OnTypewriterComplete
-            );
+            uiManager.ShowDialogueNode(currentLineNode, npcName, speed, OnTypewriterComplete);
         }
         else if (currentNode is StartQuestNode questNode)
         {
             if (questNode.questToStart != null)
-            {
                 QuestManager.Instance.StartQuest(questNode.questToStart);
-            }
+
             currentLineNode = new DialogueLineNode { text = questNode.text };
             lineFullyRevealed = false;
             waitingForPlayerInput = true;
-
-            uiManager.ShowDialogueNode(
-                currentLineNode,
-                currentDialogue.hasName ? currentDialogue.npcName : "",
-                speed,
-                OnTypewriterComplete
-            );
+            uiManager.ShowDialogueNode(currentLineNode, npcName, speed, OnTypewriterComplete);
         }
         else if (currentNode is EventNode eventNode)
         {
             if (!string.IsNullOrEmpty(eventNode.eventID))
-            {
                 FindFirstObjectByType<EventManager>()?.TriggerEvent(eventNode.eventID);
-            }
 
             currentLineNode = new DialogueLineNode { text = eventNode.text };
-
-            uiManager.ShowDialogueNode(
-                currentLineNode,
-                currentDialogue.hasName ? currentDialogue.npcName : "",
-                speed,
-                OnTypewriterComplete
-            );
+            uiManager.ShowDialogueNode(currentLineNode, npcName, speed, OnTypewriterComplete);
         }
     }
 
     private void OnTypewriterComplete()
     {
         lineFullyRevealed = true;
+
+        if (currentDialogue != null && currentDialogue.autoAdvance)
+        {
+            if (autoAdvanceCoroutine != null) StopCoroutine(autoAdvanceCoroutine);
+            autoAdvanceCoroutine = StartCoroutine(AutoAdvanceAfterDelay());
+        }
+    }
+
+    private IEnumerator AutoAdvanceAfterDelay()
+    {
+        int visibleChars = uiManager.GetVisibleCharCount();
+        float delay = visibleChars * currentDialogue.secondsPerCharacter;
+        yield return new WaitForSeconds(delay);
+        autoAdvanceCoroutine = null;
+
+        string nextID = GetNextNodeIDForCurrentNode();
+        AdvanceNode(nextID);
     }
 
     private string GetNextNodeIDForCurrentNode()
     {
-        if (currentNode is DialogueLineNode lineNode)
-            return lineNode.nextNodeID;
-
-        if (currentNode is EventNode eventNode)
-            return eventNode.nextNodeID;
-
-        if (currentNode is StartQuestNode questNode)
-            return questNode.nextNodeID;
-
+        if (currentNode is DialogueLineNode lineNode) return lineNode.nextNodeID;
+        if (currentNode is EventNode eventNode) return eventNode.nextNodeID;
+        if (currentNode is StartQuestNode questNode) return questNode.nextNodeID;
         return null;
     }
 
@@ -319,16 +299,32 @@ public class DialogueSystem : MonoBehaviour
 
     void EndDialogue()
     {
+        if (autoAdvanceCoroutine != null)
+        {
+            StopCoroutine(autoAdvanceCoroutine);
+            autoAdvanceCoroutine = null;
+        }
+
         uiManager.EndDialogue();
 
         if (currentDialogue != null)
-        {
             PlayerState.Instance.MarkDialogueComplete(currentDialogue);
-        }
+
         var npc = sendingObject?.GetComponent<NPCDialogueHolder>();
-        if (npc != null)
-            npc.EndConversation();
-        TempStateMachine.Instance.SetState(GameState.Moving);
+        if (npc != null) npc.EndConversation();
+
+        if (currentDialogue != null && !currentDialogue.autoAdvance)
+            TempStateMachine.Instance.SetState(GameState.Moving);
+
         currentNode = null;
+        if (dialogueQueue.Count > 0)
+        {
+            var next = dialogueQueue.Dequeue();
+            StartDialogue(next.dialogue, next.sender);
+        }
+        else
+        {
+            isDialogueActive = false;
+        }
     }
 }

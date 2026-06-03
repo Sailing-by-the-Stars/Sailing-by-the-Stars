@@ -92,36 +92,36 @@ public class Astrolabe : ToolPickup, AstroTutorialStep
         }
 
 
+        playerControls.Astrolabe.Disable();
+
         if (nr == 1)
         {
-            playerControls.Astrolabe.Disable();
             playerControls.Astrolabe.Open.Enable();
         }
         else if (nr == 2)
         {
-            playerControls.Astrolabe.Disable();
-            playerControls.Astrolabe.Open.Enable();
-            playerControls.Astrolabe.Rotate.Enable();
-        } else if (nr == 3)
-        {
-            playerControls.Astrolabe.Disable();
             playerControls.Astrolabe.Open.Enable();
             playerControls.Astrolabe.ChangeAngle.Enable();
+        } else if (nr == 3)
+        {
+            playerControls.Astrolabe.Open.Enable();
+            playerControls.Astrolabe.Rotate.Enable();
         }
         else if (nr == 4)
         {
-            playerControls.Astrolabe.Disable();
             playerControls.Astrolabe.Open.Enable();
             playerControls.Astrolabe.Rotate.Enable();
         }
         else if (nr == 5)
         {
-            playerControls.Astrolabe.Disable();
             playerControls.Astrolabe.Open.Enable();
         }
         else if (nr == 6)
         {
             playerControls.Astrolabe.Enable();
+        }
+        else if (nr == 7)
+        {
         }
         else
         {
@@ -159,7 +159,7 @@ public class Astrolabe : ToolPickup, AstroTutorialStep
         //GameEvents.ExecOnPickup(this); // Needed for the tutorial popup ui, just make sure to call this when the Astrolable is picked up
 
         EnableControl(0);
-        TutorialSequence.Instance.NextStep(0);
+        AstrolabeTutorialSeq.AstroInstance.NextStep(0);
 
         isEquipped = true;
         
@@ -203,7 +203,7 @@ public class Astrolabe : ToolPickup, AstroTutorialStep
         {
             zoomCoroutine = StartCoroutine(ZoomOut(animationTime - Time.deltaTime));
         }
-        sideView = true;
+        sideView = false;
     }
 
     // Update is called once per frame

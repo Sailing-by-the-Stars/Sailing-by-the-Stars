@@ -1,0 +1,162 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a27b1591cf442e34da26ab4a98de3513, type: 3}
+  m_Name: Child DIalogue
+  m_EditorClassIdentifier: Assembly-CSharp::Dialogue
+  hasName: 1
+  npcName: Astronaut kid
+  talkingSpeed: 0.95
+  nodes:
+  - rid: 164572784810786889
+  - rid: 164572784810786890
+  - rid: 164572784810786891
+  - rid: 164572784810786892
+  - rid: 164572784810786893
+  - rid: 164572784810786894
+  - rid: 164572784810786895
+  - rid: 164572784810786896
+  - rid: 164572784810786897
+  - rid: 164572784810786898
+  - rid: 164572784810786899
+  - rid: 164572784810786900
+  - rid: 164572784810786901
+  - rid: 164572784810786902
+  - rid: 164572784810786903
+  hasItemID: 0
+  itemID: 0
+  references:
+    version: 2
+    RefIds:
+    - rid: 164572784810786889
+      type: {class: ChoiceNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: 1
+        text: Hiya mister, how are you! I saw you using that thing earlier to look
+          at the stars. What does it do??
+        choices:
+        - choiceText: "It\u2019s an astrolabe, it helps me find my way."
+          nextNodeID: 2
+        - choiceText: "It\u2019s an astrolabe, it shows me the way."
+          nextNodeID: 2
+    - rid: 164572784810786890
+      type: {class: ChoiceNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: 2
+        text: "That\u2019s so cool! How awesome of the stars to make sure you don\u2019t
+          get lost!\r\n"
+        choices:
+        - choiceText: "You really love space don\u2019t you kid\r\n"
+          nextNodeID: 3
+        - choiceText: Why are you so interested in the stars?
+          nextNodeID: 3
+    - rid: 164572784810786891
+      type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: 3
+        text: I just LOVE space, it's so cool!
+        nextNodeID: 4
+    - rid: 164572784810786892
+      type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: 4
+        text: I want to be an astronaut when I grow up!
+        nextNodeID: 5
+    - rid: 164572784810786893
+      type: {class: ChoiceNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: 5
+        text: What about you mister do you like space?
+        choices:
+        - choiceText: Yeah I like space, \n I actually do research on it
+          nextNodeID: 6
+        - choiceText: ' I research things to do with space so yeah, \n I guess you
+            could say I like it.'
+          nextNodeID: 6
+    - rid: 164572784810786894
+      type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: 6
+        text: 'Wow! your job is learning about space?? '
+        nextNodeID: 7
+    - rid: 164572784810786895
+      type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: 7
+        text: 'That sounds awesome, maybe I can do that too when I grow up
+
+'
+        nextNodeID: 8
+    - rid: 164572784810786896
+      type: {class: ChoiceNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: 8
+        text: What kind of research do you do?
+        choices:
+        - choiceText: ' It''s nothing special really, \n sadly I couldn''t finish
+            my research
+
+'
+          nextNodeID: 9
+        - choiceText: Sadly i couldn't finish it, but its quiete difficult. \n So
+            I dont think you would understand
+          nextNodeID: 9
+    - rid: 164572784810786897
+      type: {class: ChoiceNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: 9
+        text: Oh no! Maybe I could finish your work when I grow up!
+        choices:
+        - choiceText: 'You know kid,  You would be perfect. \n You remind me a lot
+            of myself. '
+          nextNodeID: 10
+        - choiceText: "Kid, I see my younger self in you. I think you would \\n be
+            just the right person to finish my work.  \n"
+          nextNodeID: 10
+    - rid: 164572784810786898
+      type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: 10
+        text: Thank you mister! I really enjoyed talking to you.
+        nextNodeID: 11
+    - rid: 164572784810786899
+      type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: 11
+        text: 'Thanks to you, I want to become a researcher and be just like you
+          when I grow up!
+
+'
+        nextNodeID: 12
+    - rid: 164572784810786900
+      type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: 12
+        text: I have a gift for you!
+        nextNodeID: 13
+    - rid: 164572784810786901
+      type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: 13
+        text: ' Since we both like space and I really like you.'
+        nextNodeID: 14
+    - rid: 164572784810786902
+      type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: 14
+        text: You can have this astronaut helmet!
+        nextNodeID: 15
+    - rid: 164572784810786903
+      type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: 15
+        text: Enjoy mister!
+        nextNodeID: 

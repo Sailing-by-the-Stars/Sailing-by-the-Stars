@@ -84,7 +84,8 @@ public class DebugMenu : MonoBehaviour
             });
         }
 
-        var speedBtn = Instantiate(buttonPrefab, container);
+        // Legs have been cut due to jank ~Joost
+        /*var speedBtn = Instantiate(buttonPrefab, container);
         speedBtn.GetComponentInChildren<TextMeshProUGUI>().text = "SPEEEEEDYYY SPRINT";
         speedBtn.onClick.AddListener(() =>
         {
@@ -93,6 +94,18 @@ public class DebugMenu : MonoBehaviour
             if (movement != null)
             {
                 movement.SetSprintMultiplier(10f);
+            }
+        });*/
+
+        var jesusButton = Instantiate(buttonPrefab, container);
+        jesusButton.GetComponentInChildren<TextMeshProUGUI>().text = "Walk On Water";
+        jesusButton.onClick.AddListener(() =>
+        {
+            var obj = FindFirstObjectByType<JesusDebugCube>();
+
+            if (obj != null)
+            {
+                obj.Toggle();
             }
         });
 
