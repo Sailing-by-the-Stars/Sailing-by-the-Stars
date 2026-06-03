@@ -314,6 +314,7 @@ public class PShadowGridManager : MonoBehaviour
         List<PShadowPillar> pillarsToCheck = grid.Cast<PShadowPillar>().Where(pillar => pillar).ToList();
         if (pillarsToCheck.Any(pillar => !pillar.IsInCorrectPosition())) return false;
         
+        
         foreach (GameObject torch in rewardTorches)
         {
             torch.GetComponentInChildren<Light>().enabled = true;
@@ -322,6 +323,7 @@ public class PShadowGridManager : MonoBehaviour
         
         Debug.Log("ANGER PUZZLE SOLVED!");
         PuzzleProgress.MarkComplete("anger");
+        if (rewardWall) rewardWall.GetComponent<RewardWallAudio>().StartAudio();
 
         return true;
     }
