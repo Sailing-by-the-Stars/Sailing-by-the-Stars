@@ -60,15 +60,15 @@ namespace _Teams.World_Design.Scripts.ZoneEffects.Environmental.WeatherEvents.Th
         private Bounds ResolveBounds()
         {
             GameObject targetObject = boundsObject != null ? boundsObject : gameObject;
+            
+            if (targetObject.TryGetComponent(out Collider objectCollider))
+            {
+                return objectCollider.bounds;
+            }
 
             if (targetObject.TryGetComponent(out Renderer objectRenderer))
             {
                 return objectRenderer.bounds;
-            }
-
-            if (targetObject.TryGetComponent(out Collider objectCollider))
-            {
-                return objectCollider.bounds;
             }
 
             return new Bounds(targetObject.transform.position, Vector3.zero);
