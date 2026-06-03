@@ -9,7 +9,7 @@ using UnityEngine.UI;
 public class MainMenuController : MonoBehaviour
 {
     [Header("Menu Buttons (Top to Bottom order)")]
-    public List<MenuButtonEntry> menuButtons = new List<MenuButtonEntry>();
+    public List<MenuButtonEntry> menuButtons = new();
 
     [Header("Shift Settings")]
     [SerializeField] private float shiftAmount = 15f;
@@ -81,7 +81,8 @@ public class MainMenuController : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if ((TempStateMachine.Instance.gameState != GameState.Dialogue && TempStateMachine.Instance.gameState != GameState.Journal) && 
+            (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.Tab)))
         {
             if (_isPaused) CloseMenu();
             else OpenMenu();
@@ -113,6 +114,14 @@ public class MainMenuController : MonoBehaviour
     {
         Time.timeScale = 1f;
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    // This shouldn't be necessary, but Unity...
+    public void OnDeveloperTools()
+    {
+        _isPaused = false;
+        Time.timeScale = 1f;
+        if (menuRoot != null) menuRoot.SetActive(false);
     }
 
     public void OnLoadLastCheckpoint()
