@@ -1,5 +1,7 @@
 using System;
 using System.Collections;
+using FMOD.Studio;
+using FMODUnity;
 using UnityEngine;
 
 public class PShadowPillarButton : MonoBehaviour, IInteractable
@@ -27,6 +29,11 @@ public class PShadowPillarButton : MonoBehaviour, IInteractable
     private Vector3 pressedLocalPos;
     private Coroutine animRoutine;
     private bool isPressed;
+    
+    [SerializeField] private EventReference buttonPressEvent;
+    [SerializeField] private float volume = 0.5f;
+
+    private EventInstance buttonPressInstance;
     
     [SerializeField] private string objectInteractMessage = "Press E to Push Pillar(s)";
     public string InteractMessage => objectInteractMessage;
@@ -69,6 +76,7 @@ public class PShadowPillarButton : MonoBehaviour, IInteractable
         if (isPressed) return;
 
         isPressed = true;
+        PlayAudio();
 
         if (animRoutine != null)
             StopCoroutine(animRoutine);
@@ -78,6 +86,18 @@ public class PShadowPillarButton : MonoBehaviour, IInteractable
             // Optional tiny hold so it feels tactile
             StartCoroutine(ReturnAfterDelay(0.03f));
         }));
+    }
+    
+    private void PlayAudio()
+    {
+        if (!buttonPressInstance.isValid())
+        {
+            buttonPressInstance = RuntimeManager.CreateInstance(buttonPressEvent);
+            buttonPressInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+        }
+
+        buttonPressInstance.setVolume(volume);
+        buttonPressInstance.start();
     }
 
     private IEnumerator ReturnAfterDelay(float delay)
