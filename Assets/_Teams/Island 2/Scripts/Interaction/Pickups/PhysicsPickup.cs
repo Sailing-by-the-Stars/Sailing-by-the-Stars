@@ -8,6 +8,7 @@ public class PhysicsPickup : MonoBehaviour, IPickup
 {
     [Header("Attachment Settings")]
     [SerializeField] private Vector3 pickupPositionOffset;
+    [SerializeField] private Vector3 pickupRotationOffset;
     
     [Header("Despawn Effect")]
     [Tooltip("Optional particle effect to spawn when this pickup is collected/destroyed.")]
@@ -77,7 +78,7 @@ public class PhysicsPickup : MonoBehaviour, IPickup
         
         transform.parent = newParent;
         transform.localPosition = pickupPositionOffset;
-        transform.localRotation = Quaternion.identity;
+        transform.localRotation = Quaternion.Euler(pickupRotationOffset);
         
         // All this fancy stuff just because Unity by default changes the scale of an object to match it to its new parent...
         Vector3 parentScale = newParent.lossyScale;
