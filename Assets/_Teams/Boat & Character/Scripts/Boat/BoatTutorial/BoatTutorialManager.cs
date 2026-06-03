@@ -6,20 +6,20 @@ using System.Collections;
 public class BoatTutorialManager : MonoBehaviour
 {
     public enum SubStep { Approach, Action, Leave }
-
     private TutorialStep _currentMajorStep = TutorialStep.None;
-    private SubStep      _currentSubStep;
-    private bool         _tutorialActive = false;
-
+    private SubStep _currentSubStep;
+    private bool _tutorialActive = false;
     private BoatHighlighter anchorHighlighter;
     private BoatHighlighter rudderHighlighter;
     private BoatHighlighter sailHighlighter;
-
-    // Cached so we can suppress/restore the dock UI while tutorial runs
+    private BoatController _boatController;
     private DockInteractionUI _dockUI;
+    private int _simpleTutorialStep = 0;
+    bool tutorialComplete = false;
 
     private void Awake()
     {
+        _boatController = GetComponent<BoatController>();
         foreach (var h in transform.root.GetComponentsInChildren<BoatHighlighter>())
         {
             switch (h.partType)
@@ -43,7 +43,13 @@ public class BoatTutorialManager : MonoBehaviour
         _tutorialActive = true;
         TutorialManager.Instance?.gameObject.SetActive(false);
         _dockUI?.Suppress(true);
-        StartAnchorApproach();
+        if (!tutorialComplete)
+        {
+            if (_boatController.IsSimpleModeEnabled)
+                StartSimpleTutorial();
+            else
+                StartAnchorApproach();
+        }
     }
 
 
@@ -91,13 +97,6 @@ public class BoatTutorialManager : MonoBehaviour
         _currentSubStep = SubStep.Action;
         rudderHighlighter?.Unhighlight();
         BoatTutorialUI.Instance?.ShowSteerRudder();
-    }
-
-    public void NotifyRudderSteered()
-    {
-        if (_currentMajorStep != TutorialStep.SteerRudder || _currentSubStep != SubStep.Action) return;
-        _currentSubStep = SubStep.Leave;
-        BoatTutorialUI.Instance?.ShowLeavePrompt();
     }
 
     public void NotifyLeftRudder()
@@ -154,8 +153,60 @@ public class BoatTutorialManager : MonoBehaviour
         _tutorialActive   = false;
         BoatTutorialUI.Instance?.Hide();
         _dockUI?.Suppress(false);  
+        tutorialComplete = true;
         TutorialManager.Instance?.gameObject.SetActive(true);
     }
 
     public bool IsTutorialActive => _tutorialActive;
+    private void StartSimpleTutorial()
+    {
+
+        _simpleTutorialStep = 0;
+
+        _dockUI?.Suppress(true);
+
+        TutorialManager.Instance?.gameObject.SetActive(false);
+
+        BoatTutorialUI.Instance?.ShowSimpleThrottle();
+    }
+
+    public void NotifyRudderSteered()
+    {
+        if (!_boatController.IsSimpleModeEnabled)
+            return;
+
+        if (_simpleTutorialStep != 1)
+            return;
+
+        Debug.Log("Simple tutorial completed");
+
+        CompleteTutorial();
+    }
+    public void NotifyRudderSteeredComplex()
+    {
+        if (_boatController.IsSimpleModeEnabled)
+            return;
+
+        if (_currentMajorStep != TutorialStep.SteerRudder)
+            return;
+
+        if (_currentSubStep != SubStep.Action)
+            return;
+
+        _currentSubStep = SubStep.Leave;
+
+        BoatTutorialUI.Instance?.ShowLeavePrompt();
+    }
+    public void NotifyThrottleUsed()
+    {
+        if (!_boatController.IsSimpleModeEnabled)
+            return;
+
+        if (_simpleTutorialStep != 0)
+            return;
+
+        _simpleTutorialStep = 1;
+
+        BoatTutorialUI.Instance?.ShowSimpleTurn();
+    }
 }

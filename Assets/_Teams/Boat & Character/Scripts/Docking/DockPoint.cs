@@ -11,8 +11,11 @@ public class DockPoint : MonoBehaviour
     [SerializeField] private RequirementType requirementType = RequirementType.None;
     [SerializeField] private string puzzleID = "";
 
-    [Header("Detection")]
-    [SerializeField] private float interactionRange = 3f;
+    [Header("Detection — Player Dock Box")]
+    [SerializeField] private float dockWidth  = 4f;  
+    [SerializeField] private float dockLength = 6f;   
+
+    [Header("Detection — Boat Range")]
     [SerializeField] private float boatDockRange = 8f;
 
     private GameObject boat;
@@ -46,24 +49,29 @@ public class DockPoint : MonoBehaviour
 
         if (dockUI == null)
         {
-            dockUI = FindFirstObjectByType<DockInteractionUI>(FindObjectsInactive.Include); 
+            dockUI = FindFirstObjectByType<DockInteractionUI>(FindObjectsInactive.Include);
             if (dockUI != null)
                 Debug.Log("[DockPoint] DockInteractionUI found successfully.");
         }
 
         if (movement == null)
-            movement = FindFirstObjectByType<Movement>(FindObjectsInactive.Include); 
-
+            movement = FindFirstObjectByType<Movement>(FindObjectsInactive.Include);
     }
 
     private void Start()
     {
         EnsureReferences();
 
-        if (boat == null)          Debug.LogWarning($"[DockPoint] 'boat' tag not found yet on {gameObject.name}.", this);
+        if (boat == null)            Debug.LogWarning($"[DockPoint] 'boat' tag not found yet on {gameObject.name}.", this);
         if (playerBoardSpot == null) Debug.LogWarning($"[DockPoint] 'seatPosition' tag not found yet.", this);
         if (playerExitSpot == null)  Debug.LogWarning($"[DockPoint] 'dockExit' child not found on {gameObject.name}.", this);
         if (movement == null)        Debug.LogWarning($"[DockPoint] No Movement component found yet.", this);
+    }
+    private bool IsInsideDockBox(Vector3 worldPos)
+    {
+        Vector3 local = transform.InverseTransformPoint(worldPos);
+        return Mathf.Abs(local.x) <= dockWidth  * 0.5f
+            && Mathf.Abs(local.z) <= dockLength * 0.5f;
     }
 
     public void UpdateUI(bool playerIsOnBoat, Vector3 playerPos, Vector3 boatPos)
@@ -71,19 +79,19 @@ public class DockPoint : MonoBehaviour
         EnsureReferences();
         if (dockUI == null) return;
 
-        bool playerNearDock = Vector3.Distance(playerPos, transform.position) <= interactionRange;
-        bool boatNearDock   = Vector3.Distance(boatPos,   transform.position) <= boatDockRange;
+        bool playerNearDock = IsInsideDockBox(playerPos);
+        bool boatNearDock   = Vector3.Distance(boatPos, transform.position) <= boatDockRange;
 
         if (!playerIsOnBoat && playerNearDock && boatNearDock)
         {
             if (CanBoard())
-                dockUI.ShowBoard(true,this);
+                dockUI.ShowBoard(true, this);
             else
-                dockUI.ShowBlockedReason(GetLockedReason(),this);
+                dockUI.ShowBlockedReason(GetLockedReason(), this);
         }
         else if (playerIsOnBoat && boatNearDock)
             dockUI.ShowDisembark(this);
-        else if (dockUI.IsShowingForDock(this)) // ONLY hide if we're the one currently showing
+        else if (dockUI.IsShowingForDock(this))
             dockUI.Hide();
     }
 
@@ -92,8 +100,8 @@ public class DockPoint : MonoBehaviour
         EnsureReferences();
         if (boat == null || movement == null) return;
 
-        bool playerNearDock = Vector3.Distance(playerPos, transform.position) <= interactionRange;
-        bool boatNearDock   = Vector3.Distance(boatPos,   transform.position) <= boatDockRange;
+        bool playerNearDock = IsInsideDockBox(playerPos);
+        bool boatNearDock   = Vector3.Distance(boatPos, transform.position) <= boatDockRange;
 
         if (!boatNearDock) return;
 
@@ -142,7 +150,7 @@ public class DockPoint : MonoBehaviour
         switch (requirementType)
         {
             case RequirementType.PuzzleID:
-                return $"Complete the {puzzleID} puzzle first.";
+                return $"You should explore the island more";
             case RequirementType.StartingItems:
                 if (movement == null) return "Requirements not met.";
                 bool hasJournal   = movement.GetComponentInChildren<Journal>()   != null;
@@ -158,7 +166,12 @@ public class DockPoint : MonoBehaviour
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.cyan;
-        Gizmos.DrawWireSphere(transform.position, interactionRange);
+        Matrix4x4 oldMatrix = Gizmos.matrix;
+        Gizmos.matrix = Matrix4x4.TRS(transform.position, transform.rotation, Vector3.one);
+        Gizmos.DrawWireCube(Vector3.zero, new Vector3(dockWidth, 0.1f, dockLength));
+        Gizmos.matrix = oldMatrix;
+
+        
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, boatDockRange);
     }

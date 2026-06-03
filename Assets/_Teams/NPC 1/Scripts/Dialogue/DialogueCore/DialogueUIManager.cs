@@ -58,9 +58,7 @@ public class DialogueUIManager : MonoBehaviour
     [Header("Audio")]
     [SerializeField] private EventReference defaultDialogueTypeSound;
 
-    /// <summary>
-    /// Returns true if the typewriter effect is currently running.
-    /// </summary>
+
     public bool TypewriterRunning => typewriterCoroutine != null;
 
     private void Awake()
@@ -137,9 +135,7 @@ public class DialogueUIManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Displays a dialogue line node with typewriter effect.
-    /// </summary>
+ 
     public void ShowDialogueNode(DialogueLineNode node, string npcName, float typingSpeed, Action typewriterCallback)
     {
         currentShakeData = null;
@@ -184,9 +180,7 @@ public class DialogueUIManager : MonoBehaviour
         typewriterCoroutine = StartCoroutine(TypewriterEffect(currentFullText, typingSpeed));
     }
 
-    /// <summary>
-    /// Displays a choice node with typewriter effect, then activates choice buttons when done.
-    /// </summary>
+
     public void ShowChoiceNode(ChoiceNode choiceNode, string npcName, Action<string> onChoiceSelected, float typingSpeed)
     {
         if (npcName == "" )
@@ -223,9 +217,6 @@ public class DialogueUIManager : MonoBehaviour
         typewriterCoroutine = StartCoroutine(TypewriterEffect(currentFullText, typingSpeed));
     }
 
-    /// <summary>
-    /// Activates choice buttons and assigns click events for player selection.
-    /// </summary>
     private void SetupChoiceButtons(ChoiceNode choiceNode, Action<string> onChoiceSelected)
     {
         choiceButton1.gameObject.SetActive(false);
@@ -257,7 +248,7 @@ public class DialogueUIManager : MonoBehaviour
         shakeData = new List<ShakeData>();
         hasAngry = false;
         var result = new System.Text.StringBuilder();
-        int visibleCharCount = 0; // track only visible (non-tag) characters
+        int visibleCharCount = 0;
 
         int i = 0;
 
@@ -267,16 +258,7 @@ public class DialogueUIManager : MonoBehaviour
 
             if (StartsWith("<angry>")) { hasAngry = true; i += 7; continue; }
             if (StartsWith("</angry>")) { i += 8; continue; }
-            if (StartsWith("<pause="))
-            {
-                int end = input.IndexOf('>', i);
-                if (end != -1)
-                {
-                    result.Append(input.Substring(i, end - i + 1)); // pass through as-is for typewriter
-                    i = end + 1;
-                    continue; // no visible chars added
-                }
-            }
+
             if (StartsWith("<shake>"))
             {
                 int startIndex = visibleCharCount;
@@ -285,19 +267,14 @@ public class DialogueUIManager : MonoBehaviour
                 if (end == -1) { Debug.LogWarning("Missing </shake> tag"); break; }
 
                 string rawContent = input.Substring(i, end - i);
-
-                // Process the inner content so <red> etc. get converted too
                 bool innerAngry;
-                List<ShakeData> innerShakes; // discard — nested shake not supported
+                List<ShakeData> innerShakes;
                 string processedContent = ProcessText(rawContent, out innerShakes, out innerAngry);
                 if (innerAngry) hasAngry = true;
 
-                // Count only visible characters in the processed content
                 int visibleInContent = CountVisibleChars(processedContent);
-
                 result.Append(processedContent);
                 visibleCharCount += visibleInContent;
-
                 shakeData.Add(new ShakeData { startIndex = startIndex, length = visibleInContent });
                 i = end + 8;
                 continue;
@@ -310,10 +287,21 @@ public class DialogueUIManager : MonoBehaviour
                 if (StartsWith(openTag))  { result.Append($"<color={kvp.Value}>"); i += openTag.Length; matchedColor = true; break; }
                 if (StartsWith(closeTag)) { result.Append("</color>"); i += closeTag.Length; matchedColor = true; break; }
             }
-            if (matchedColor) continue; // color tags add no visible chars, don't increment
+            if (matchedColor) continue;
+
+            if (input[i] == '<')
+            {
+                int end = input.IndexOf('>', i);
+                if (end != -1)
+                {
+                    result.Append(input, i, end - i + 1); 
+                    i = end + 1;
+                    continue;
+                }
+            }
 
             result.Append(input[i]);
-            visibleCharCount++; // normal visible character
+            visibleCharCount++;
             i++;
         }
 
@@ -328,7 +316,7 @@ public class DialogueUIManager : MonoBehaviour
             if (processedText[i] == '<')
             {
                 int end = processedText.IndexOf('>', i);
-                if (end != -1) { i = end + 1; continue; } // skip tag
+                if (end != -1) { i = end + 1; continue; } 
             }
             count++;
             i++;
@@ -362,17 +350,17 @@ public class DialogueUIManager : MonoBehaviour
         vignetteCoroutine = null;
     }
 
-    /// <summary>
-    /// Coroutine for typing out dialogue character by character.
-    /// </summary>
+    
     private IEnumerator TypewriterEffect(string fullText, float speed)
     {
         dialogueText.text = "";
         dialogueText.ForceMeshUpdate();
 
+        bool playedVoice = false;
+
         for (int i = 0; i < fullText.Length; i++)
         {
-            // Handle tags (including pause)
+            
             if (fullText[i] == '<')
             {
                 int endIndex = fullText.IndexOf('>', i);
@@ -380,20 +368,20 @@ public class DialogueUIManager : MonoBehaviour
                 {
                     string tag = fullText.Substring(i + 1, endIndex - i - 1);
 
-                    // Handle pause tag
+                
                     if (tag.StartsWith("pause="))
                     {
                         string value = tag.Replace("pause=", "");
                         if (float.TryParse(value, out float pauseTime))
                         {
+                            if (dialogueText.text.Length == 0)
+                                dialogueText.text += "\u200B";
                             yield return new WaitForSeconds(pauseTime);
                         }
-
                         i = endIndex;
                         continue;
                     }
 
-                    // Append rich text tags (color etc.)
                     dialogueText.text += fullText.Substring(i, endIndex - i + 1);
                     i = endIndex;
                     continue;
@@ -404,16 +392,18 @@ public class DialogueUIManager : MonoBehaviour
             dialogueText.ForceMeshUpdate();
             ApplyShake();
 
-            if (!char.IsWhiteSpace(fullText[i]) &&
+            if (!playedVoice &&
+                !char.IsWhiteSpace(fullText[i]) &&
                 !char.IsPunctuation(fullText[i]))
             {
+                playedVoice = true;
+
                 var npcVoice = DialogueSystem.Instance.CurrentVoice;
 
                 if (!npcVoice.IsNull)
                 {
                     RuntimeManager.PlayOneShot(npcVoice);
                 }
-
                 else if (!defaultDialogueTypeSound.IsNull)
                 {
                     RuntimeManager.PlayOneShot(defaultDialogueTypeSound);
@@ -467,6 +457,10 @@ public class DialogueUIManager : MonoBehaviour
             dialogueText.UpdateGeometry(textInfo.meshInfo[i].mesh, i);
         }
     }
+    public int GetVisibleCharCount()
+    {
+        return CountVisibleChars(dialogueText.text);
+    }
     private string StripPauseTags(string input)
     {
         var result = new System.Text.StringBuilder();
@@ -491,9 +485,7 @@ public class DialogueUIManager : MonoBehaviour
         return result.ToString();
     }
 
-    /// <summary>
-    /// Skips the typewriter effect and instantly shows the full dialogue text.
-    /// </summary>
+
     public void SkipTypewriter()
     {
         if (typewriterCoroutine != null)
@@ -505,9 +497,7 @@ public class DialogueUIManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Ends the dialogue and hides all UI elements.
-    /// </summary>
+
     public void EndDialogue()
     {
         dialogueText.text = "";

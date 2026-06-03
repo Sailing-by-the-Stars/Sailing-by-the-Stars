@@ -15,9 +15,10 @@ MonoBehaviour:
   hasName: 1
   npcName: Axel
   talkingSpeed: 0.95
+  autoAdvance: 1
+  secondsPerCharacter: 0.03
   nodes:
   - rid: 141452603536965731
-  - rid: 141452603536965737
   hasItemID: 0
   itemID: 0
   references:
@@ -27,12 +28,6 @@ MonoBehaviour:
       type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
       data:
         nodeID: Grab_Student_ID
-        text: Oh! My student identification card for my university!
-        nextNodeID: Grab_Student_ID_P2
-    - rid: 141452603536965737
-      type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
-      data:
-        nodeID: Grab_Student_ID_P2
-        text: I remember being so proud for getting accepted, I would show this card
-          around to anyone I'd talk to. Definitely one of my greatest achievements.
+        text: My university student card! Definitely one of my greatest achievements.
+          I'm so proud of myself for getting accepted, even now.
         nextNodeID: 

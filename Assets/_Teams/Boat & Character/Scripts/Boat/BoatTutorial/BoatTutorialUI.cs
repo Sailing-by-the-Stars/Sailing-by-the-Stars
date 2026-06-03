@@ -13,6 +13,8 @@ public class BoatTutorialUI : MonoBehaviour
     [SerializeField] private CanvasGroup haulAnchorPanel;
     [SerializeField] private CanvasGroup steerRudderPanel;
     [SerializeField] private CanvasGroup adjustSailPanel;
+    [SerializeField] private CanvasGroup simpleTurnPanel;
+    [SerializeField] private CanvasGroup simpleThrottlePanel;
 
     [Header("Interact Prompt Text")]
     [SerializeField] private TextMeshProUGUI interactPromptText;
@@ -26,7 +28,6 @@ public class BoatTutorialUI : MonoBehaviour
     private void Awake() => Instance = this;
     private void Start()  => HideAll();
 
-    // Each step passes its own label now
     public void ShowInteractPrompt(string partName)
     {
         if (interactPromptText != null)
@@ -38,14 +39,18 @@ public class BoatTutorialUI : MonoBehaviour
     public void ShowHaulAnchor()     => TransitionTo(haulAnchorPanel);
     public void ShowSteerRudder()    => TransitionTo(steerRudderPanel);
     public void ShowAdjustSail()     => TransitionTo(adjustSailPanel);
+    public void ShowSimpleTurn()     => TransitionTo(simpleTurnPanel);
+    public void ShowSimpleThrottle() => TransitionTo(simpleThrottlePanel);
 
     public void Hide()
     {
-        if (_fadeCoroutine != null) StopCoroutine(_fadeCoroutine);
-        var toFade = _activePanel;
-        _activePanel = null;
-        if (toFade != null)
-            _fadeCoroutine = StartCoroutine(FadePanel(toFade, 0f, () => SetVisible(toFade, false)));
+        if (_fadeCoroutine != null)
+        {
+            StopCoroutine(_fadeCoroutine);
+            _fadeCoroutine = null;
+        }
+
+        HideAll();
     }
 
     private void TransitionTo(CanvasGroup next)
@@ -93,11 +98,28 @@ public class BoatTutorialUI : MonoBehaviour
 
     private void HideAll()
     {
-        SetVisible(interactPromptPanel, false);
-        SetVisible(leavePromptPanel,    false);
-        SetVisible(haulAnchorPanel,     false);
-        SetVisible(steerRudderPanel,    false);
-        SetVisible(adjustSailPanel,     false);
+        CanvasGroup[] groups =
+        {
+            interactPromptPanel,
+            leavePromptPanel,
+            haulAnchorPanel,
+            steerRudderPanel,
+            simpleTurnPanel,
+            simpleThrottlePanel,
+            adjustSailPanel
+        };
+
+        foreach (CanvasGroup cg in groups)
+        {
+            if (cg == null)
+                continue;
+
+            cg.alpha = 0f;
+            cg.interactable = false;
+            cg.blocksRaycasts = false;
+            cg.gameObject.SetActive(false);
+        }
+
         _activePanel = null;
     }
 

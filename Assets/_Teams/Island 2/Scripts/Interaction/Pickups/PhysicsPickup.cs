@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 
 // Author: Edward
+// Edited by: Jantina
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(Collider))]
 public class PhysicsPickup : MonoBehaviour, IPickup
@@ -43,12 +44,16 @@ public class PhysicsPickup : MonoBehaviour, IPickup
         SetPhysicsValue(true);
         
         GameEvents.ExecOnPickup(this);
+        GetComponent<ItemDialogueTrigger>()?.TriggerDialogue(); // Added by Jantina for Dialogue System
     }
 
     public virtual void CollectAndDestroy()
     {
         SetPhysicsValue(true);
         GameEvents.ExecOnPickup(this);
+
+        GetComponent<ItemDialogueTrigger>()?.TriggerDialogue(); // Added by Jantina for Dialogue System
+
         if (despawnParticleEffect)
         {
             GameObject go = Instantiate(despawnParticleEffect, transform.position, Quaternion.identity);

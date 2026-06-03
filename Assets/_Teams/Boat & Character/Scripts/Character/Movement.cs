@@ -123,7 +123,7 @@ public class Movement : MonoBehaviour
     {
         if (!isOnBoat)
         {
-            Jump();
+            //Jump();
             IsGrounded();
 
             if (isGrounded)
@@ -171,6 +171,9 @@ public class Movement : MonoBehaviour
             case "BoatAnchor":
                 MoveAnchor();
                 break;
+            case "BoatSimple": // Added by Jantina for Simple Boat Movement
+                MoveSimpleBoat();
+                break;
             default:
                 print("Wrong player state initialized.");
                 break;        
@@ -179,6 +182,7 @@ public class Movement : MonoBehaviour
 
     void Interact()
     {
+        if (boatController != null && boatController.IsSimpleModeEnabled && isOnBoat) return;
         RaycastHit hit;
         if (Physics.Raycast(cam.transform.position, cam.transform.forward, out hit, InteractionRange))
         {
@@ -211,10 +215,11 @@ public class Movement : MonoBehaviour
 
         float speed = movementSpeed;
 
-        if (playerControls.Land.Sprint.IsPressed())
+        // Legs have been cut due to jank ~Joost
+        /*if (playerControls.Land.Sprint.IsPressed())
         {
             speed *= sprintMultiplier;
-        }
+        }*/
 
         Vector3 move = transform.forward * input.y + transform.right * input.x;
 
@@ -243,10 +248,12 @@ public class Movement : MonoBehaviour
         rb.MovePosition(rb.position + move * speed * Time.fixedDeltaTime);
         //<
     }
+    // Legs have been cut due to jank ~Joost
+    /*
     public void SetSprintMultiplier(float multiplier)
     {
         sprintMultiplier = multiplier;
-    }
+    }*/
 
     void RotateCamera()
     {
@@ -323,6 +330,21 @@ public class Movement : MonoBehaviour
 
         buoyancyController.enabled = true;
         boatController.enabled = true;
+        // Added by Jantina
+        var boatRb = boatController.GetComponent<Rigidbody>();
+        if (boatRb != null)
+        {
+            boatRb.linearVelocity = Vector3.zero;
+            boatRb.angularVelocity = Vector3.zero;
+        }
+
+        boatController.SetSimpleThrottleInput(0f);
+
+        if (boatController.IsSimpleModeEnabled)
+        {
+            SwitchState("BoatSimple");
+            boatController.HaulAnchor();
+        }
     }
 
     public void ExitBoat()
@@ -331,10 +353,26 @@ public class Movement : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
 
-        isOnBoat = false;
+        if (boatController != null)
+        {
+            var boatRb = boatController.GetComponent<Rigidbody>();
+            if (boatRb != null)
+            {
+                boatRb.linearVelocity = Vector3.zero;
+                boatRb.angularVelocity = Vector3.zero;
+            }
 
         ambienceMusic?.StopAmbienceMusic(); //ADDED BY ALONSO
 
+            boatController.DropAnchor();
+        }
+        boatController.SetSimpleThrottleInput(0f);
+        isOnBoat = false;
+        boatController.DropAnchor();
+        if (boatController != null)
+        {
+            boatController.HardStop();
+        }
         buoyancyController.enabled = false;
         boatController.enabled = false;
     }
@@ -406,7 +444,9 @@ public class Movement : MonoBehaviour
 
     // END ADDED BY JANTINA
 
-    void Jump()
+
+    // Legs have been cut due to jank ~Joost
+    /*void Jump()
     {
         if (isGrounded)
         {
@@ -416,7 +456,7 @@ public class Movement : MonoBehaviour
                 rb.AddForce(new Vector3(0, jumpStrength, 0));
             }
         }
-    }
+    }*/
 
 
     
@@ -489,14 +529,14 @@ public class Movement : MonoBehaviour
             // Moving Left
             boatController.rudderAxis.OnNegative();
             // Added by Jantina — notify tutorial
-            boatTutorialManager?.NotifyRudderSteered();
+            boatTutorialManager?.NotifyRudderSteeredComplex();
         }
         else if (moveDirection.x > 0)
         {
             // Moving right
             boatController.rudderAxis.OnPositive();
             // Added by Jantina — notify tutorial
-            boatTutorialManager?.NotifyRudderSteered();
+            boatTutorialManager?.NotifyRudderSteeredComplex();
         }
         else
         {
@@ -595,6 +635,11 @@ public class Movement : MonoBehaviour
 
                 SetPlayerState(newState);
                 break;
+            case "BoatSimple":
+                stateMachine.SetState(GameState.Sailing); 
+                limitCamMovement = false;
+                SetPlayerState("BoatSimple");
+                break;
             default:
                 print("Wrong player state initialized.");
                 break;
@@ -604,5 +649,35 @@ public class Movement : MonoBehaviour
     void SetPlayerState(string state)
     {
         playerState = state;
+    }
+
+
+    // Added by Jantina for Simple Boat Movement
+    void MoveSimpleBoat()
+    {
+        Vector2 input = playerControls.Land.Move.ReadValue<Vector2>();
+
+        boatController.SetSimpleTurnInput(input.x);
+
+        if (Mathf.Abs(input.x) > 0.1f)
+        {
+            boatTutorialManager?.NotifyRudderSteered();
+        }
+        float throttle =
+            input.y > 0.1f ? 1f : 0f;
+
+        boatController.SetSimpleThrottleInput(throttle);
+
+        if (throttle > 0f)
+        {
+            boatTutorialManager?.NotifyThrottleUsed();
+        }
+    }
+    public void ToggleBoatMode(bool simpleMode)
+    {
+        boatController.SetSimpleMode(simpleMode);
+
+        if (!simpleMode && playerState == "BoatSimple")
+            SwitchState("Land");
     }
 }

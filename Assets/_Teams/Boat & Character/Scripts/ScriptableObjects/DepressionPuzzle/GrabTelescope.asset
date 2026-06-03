@@ -15,9 +15,10 @@ MonoBehaviour:
   hasName: 1
   npcName: Axel
   talkingSpeed: 0.95
+  autoAdvance: 1
+  secondsPerCharacter: 0.03
   nodes:
   - rid: 141452603536965748
-  - rid: 141452603536965749
   hasItemID: 0
   itemID: 0
   references:
@@ -27,12 +28,6 @@ MonoBehaviour:
       type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
       data:
         nodeID: Grab_Telescope
-        text: 'My telescope!? <pause=2>...I remember this...this brings back a lot
-          of memories. '
-        nextNodeID: Grab_Telescope_P2
-    - rid: 141452603536965749
-      type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
-      data:
-        nodeID: Grab_Telescope_P2
-        text: First time I took a good look at the stars...
+        text: I remember this...it's my first ever telescope! First time I took a
+          good look at the stars...
         nextNodeID: 

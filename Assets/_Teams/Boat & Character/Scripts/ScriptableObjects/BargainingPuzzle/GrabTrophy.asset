@@ -15,9 +15,10 @@ MonoBehaviour:
   hasName: 1
   npcName: Axel
   talkingSpeed: 0.95
+  autoAdvance: 1
+  secondsPerCharacter: 0.03
   nodes:
   - rid: 141452603536965740
-  - rid: 141452603536965741
   hasItemID: 0
   itemID: 0
   references:
@@ -27,13 +28,6 @@ MonoBehaviour:
       type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
       data:
         nodeID: Grab_Trophy
-        text: My trophy for 'Best Up and Coming Scientist' I received at my university's
-          competition!
-        nextNodeID: Grab_Trophy_P2
-    - rid: 141452603536965741
-      type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
-      data:
-        nodeID: Grab_Trophy_P2
-        text: I remember working so hard on my entry, I barely slept at all that
-          month...
+        text: The trophy I received at my university's competition! I remember working
+          so hard I barely slept at all that month...
         nextNodeID: 
