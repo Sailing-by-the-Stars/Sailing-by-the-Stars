@@ -1,5 +1,7 @@
 using System;
 using System.Collections;
+using FMOD.Studio;
+using FMODUnity;
 using UnityEngine;
 
 public class PShadowPillar : MonoBehaviour
@@ -16,6 +18,11 @@ public class PShadowPillar : MonoBehaviour
     [HideInInspector] public Vector2Int gridPos;
 
     private Coroutine moveRoutine;
+    
+    [SerializeField] private EventReference pillarDragEvent;
+    [SerializeField] private float volume = 0.5f;
+
+    private EventInstance pillarDragInstance;
     
     private void Start()
     {
@@ -47,7 +54,20 @@ public class PShadowPillar : MonoBehaviour
             return;
         }
 
+        StartAudio();
         moveRoutine = StartCoroutine(SmoothMove(targetPosition, targetRotation, newGridPos, duration, onComplete));
+    }
+    
+    private void StartAudio()
+    {
+        if (!pillarDragInstance.isValid())
+        {
+            pillarDragInstance = RuntimeManager.CreateInstance(pillarDragEvent);
+            pillarDragInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+        }
+
+        pillarDragInstance.setVolume(volume);
+        pillarDragInstance.start();
     }
 
     private IEnumerator SmoothMove(Vector3 targetPosition, Quaternion targetRotation, Vector2Int newGridPos, float duration, Action onComplete)

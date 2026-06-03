@@ -82,7 +82,7 @@ public class MainMenuController : MonoBehaviour
     private void Update()
     {
         if ((TempStateMachine.Instance.gameState != GameState.Dialogue && TempStateMachine.Instance.gameState != GameState.Journal) && 
-            (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.Tab)))
+            Input.GetKeyDown(KeyCode.Escape))
         {
             if (_isPaused) CloseMenu();
             else OpenMenu();
