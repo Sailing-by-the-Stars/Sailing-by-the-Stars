@@ -111,12 +111,18 @@ public class Journal : ToolPickup, AstroTutorialStep
         RewardItem.collectedReward?.Invoke(0);
         PuzzleProgress.MarkComplete("denial");
 
+#if !UNITY_EDITOR
+        skipTutorial = false;
+#endif
+
+
         if (!skipTutorial)
         {
             TutorialSequence.Instance.NextStep(0);
         }
         else
         {
+            TutorialSequence.Instance.NextStep(1000);
             TutorialInputs();
         }
 
@@ -602,7 +608,7 @@ public class Journal : ToolPickup, AstroTutorialStep
     {
         if (sequence == null)
         {
-            currentTutorialStep = int.MaxValue;
+            currentTutorialStep = 100000;
         } else if (currentSequence != null && currentSequence != sequence)
         {
             Debug.LogError("this tutorialDialogue object is already in a different sequence!!");

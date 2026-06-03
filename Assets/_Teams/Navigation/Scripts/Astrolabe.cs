@@ -10,6 +10,9 @@ using UnityEngine.UI;
 
 public class Astrolabe : ToolPickup, AstroTutorialStep
 {
+    [SerializeField]
+    bool skipTutorial = false;
+
     PlayerControls playerControls;
     GameState prevState;
 
@@ -50,6 +53,8 @@ public class Astrolabe : ToolPickup, AstroTutorialStep
     [SerializeField]
     int tutorialStep = 0;
 
+    bool journalTutFin = false;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
     void Start()
@@ -64,6 +69,11 @@ public class Astrolabe : ToolPickup, AstroTutorialStep
         {
             text.enabled = false;
         }
+    }
+
+    public void endJournalTut()
+    {
+        journalTutFin = true;
     }
 
     public void EnterStep(TutorialSequence sequence)
@@ -154,6 +164,27 @@ public class Astrolabe : ToolPickup, AstroTutorialStep
 
     public override void Grab(PickupController pickupController)
     {
+
+#if !UNITY_EDITOR
+        skipTutorial = false;
+#endif
+
+        if (!journalTutFin && skipTutorial == false)
+        {
+            return;
+        }
+
+        if (!skipTutorial)
+        {
+            AstrolabeTutorialSeq.AstroInstance.NextStep(0);
+        }
+        else
+        {
+            AstrolabeTutorialSeq.AstroInstance.NextStep(1000);
+            EnableControl(int.MaxValue);
+        }
+
+
         base.Grab(pickupController);
 
         //GameEvents.ExecOnPickup(this); // Needed for the tutorial popup ui, just make sure to call this when the Astrolable is picked up
