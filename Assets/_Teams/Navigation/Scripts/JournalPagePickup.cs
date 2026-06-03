@@ -14,6 +14,7 @@ public class JournalPagePickup : MonoBehaviour, IPickup
     ShowJournalUpdateNotif notif;
     
     public virtual string InteractMessage => "Press E to pickup";
+    public virtual GameObject ShouldHighlight(InteractionController interactionController) => gameObject;
 
     void Awake()
     {
