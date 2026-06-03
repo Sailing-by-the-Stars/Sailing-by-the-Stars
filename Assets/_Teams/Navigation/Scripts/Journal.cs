@@ -106,6 +106,8 @@ public class Journal : ToolPickup, AstroTutorialStep
 
     public override void Grab(PickupController pickupController)
     {
+        PuzzleProgress.MarkComplete("denial");
+
         base.Grab(pickupController);
 
         RewardItem.collectedReward?.Invoke(0);
