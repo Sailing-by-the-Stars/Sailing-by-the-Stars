@@ -29,7 +29,7 @@ namespace _Teams.World_Design.Scripts.Border
         void Update()
         {
             //Debug.Log(player.transform.position);
-            if(player.transform.position.y < deathHeight)
+            if(player.transform.position.y < deathHeight && TempStateMachine.Instance.gameState != GameState.Sailing)
             {
                 checkpointManager.GoToCheckpointDrown();
             }
