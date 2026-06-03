@@ -6,6 +6,7 @@ public class AcceptanceKiller : MonoBehaviour
     [SerializeField] private EventReference destroySound;
     [SerializeField] private GameObject targetToDestroy;
     [SerializeField] private LayerMask occlusionMask;
+    [SerializeField] private ParticleSystem particles;
 
     private Camera cam;
     private bool hasBeenSeen = false;
@@ -76,6 +77,11 @@ public class AcceptanceKiller : MonoBehaviour
     void DestroyTarget()
     {
         destroyed = true;
+
+        if (particles != null)
+        {
+            particles.Stop();
+        }
 
         if (!destroySound.IsNull)
         {
