@@ -246,7 +246,7 @@ Light:
   serializedVersion: 12
   m_Type: 2
   m_Color: {r: 0.7921569, g: 1, b: 0.64705884, a: 1}
-  m_Intensity: 1907.8319
+  m_Intensity: 238.7324
   m_Range: 7.4
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -586,13 +586,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::_Teams.World_Design.Scripts.Challenges.Ghost_Boat.LostSoulBoatScript
   playerTransform: {fileID: 0}
   moveSpeed: 3
-  timeUntilFade: 20
-  fadeDuration: 5
-  fadeStartRange: 40
-  fadeEndRange: 20
+  timeUntilFadeMin: 10
+  timeUntilFadeMax: 15
+  fadeDuration: 10
+  fadeStartRange: 110
+  fadeEndRange: 80
   maxOpacity: 0.2
   minFadeOpacity: 0.0001
   distanceToPlayer: 0
+  currentFadeInTime: 0
+  currentFadeOutTime: 0
+  currentTimeUntilFade: 0
   targetLights:
   - {fileID: 1104758859091948341}
   - {fileID: 6345015062636106863}
@@ -675,7 +679,7 @@ Light:
   serializedVersion: 12
   m_Type: 2
   m_Color: {r: 0.7921569, g: 1, b: 0.64705884, a: 1}
-  m_Intensity: 1907.8319
+  m_Intensity: 238.7324
   m_Range: 7.4
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -951,7 +955,7 @@ Light:
   serializedVersion: 12
   m_Type: 2
   m_Color: {r: 0.7921569, g: 1, b: 0.64705884, a: 1}
-  m_Intensity: 1907.8319
+  m_Intensity: 238.7324
   m_Range: 7.4
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -1461,7 +1465,7 @@ Light:
   serializedVersion: 12
   m_Type: 2
   m_Color: {r: 0.7921569, g: 1, b: 0.64705884, a: 1}
-  m_Intensity: 1907.8319
+  m_Intensity: 238.7324
   m_Range: 7.4
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
