@@ -1,8 +1,4 @@
-using System;
-using System.Drawing;
-using Unity.Mathematics;
 using UnityEngine;
-using static StarDataLoader;
 
 
 public class StarInfo : MonoBehaviour
@@ -10,10 +6,10 @@ public class StarInfo : MonoBehaviour
     public Transform thisTransform;
 
     public float emissionMult;
-    public UnityEngine.Color matColor;
+    public Color matColor;
 
     [ColorUsage(true, true)]
-    public UnityEngine.Color emissionColor;
+    public Color emissionColor;
     public Vector3 initpos;
 
 /*#if UNITY_EDITOR

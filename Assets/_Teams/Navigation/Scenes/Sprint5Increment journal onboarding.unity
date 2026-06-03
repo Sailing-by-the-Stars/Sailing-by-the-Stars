@@ -42593,6 +42593,29 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8253a55ace190744d8c134b0634488c4, type: 3}
+--- !u!1 &956327997 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6538734316113297710, guid: 3c5a1360ca4cc1241b85d169fb05c5ad, type: 3}
+  m_PrefabInstance: {fileID: 1250946308}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &956328000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 956327997}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2acd90b9748cff34fa43bee2a733ab7f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MinigamePageCollector
+  sectionName: 1
+  navPages:
+  - page:
+      leftPage: {fileID: 2800000, guid: 271cdd194a13974499ec3b2056f35231, type: 3}
+      rightPage: {fileID: 0}
+    OpenedPages: 01000000
 --- !u!1001 &965887074
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -43481,15 +43504,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 305281889057762526, guid: e76cad86bd81a431eb6d50c3a2812907, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 190.01465
+      value: 251.3
       objectReference: {fileID: 0}
     - target: {fileID: 305281889057762526, guid: e76cad86bd81a431eb6d50c3a2812907, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 11.938
+      value: 8.86
       objectReference: {fileID: 0}
     - target: {fileID: 305281889057762526, guid: e76cad86bd81a431eb6d50c3a2812907, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 154.62988
+      value: 224
       objectReference: {fileID: 0}
     - target: {fileID: 305281889057762526, guid: e76cad86bd81a431eb6d50c3a2812907, type: 3}
       propertyPath: m_LocalRotation.w
@@ -43689,6 +43712,10 @@ PrefabInstance:
       propertyPath: 'Sections.Array.data[3]'
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 2358016012327723333, guid: f41368a9eab38fa4b9e4770f5e06511f, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2878314677265258634, guid: f41368a9eab38fa4b9e4770f5e06511f, type: 3}
       propertyPath: journal1
       value: 
@@ -43808,6 +43835,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: journal
       objectReference: {fileID: 0}
+    - target: {fileID: 3739814670767443526, guid: 3c5a1360ca4cc1241b85d169fb05c5ad, type: 3}
+      propertyPath: nrOfPages
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3739814670767443526, guid: 3c5a1360ca4cc1241b85d169fb05c5ad, type: 3}
+      propertyPath: navPages.Array.size
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6051651805166570810, guid: 3c5a1360ca4cc1241b85d169fb05c5ad, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.29109162
@@ -43866,7 +43901,10 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1545068150355585793, guid: 3c5a1360ca4cc1241b85d169fb05c5ad, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1569110437}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 6538734316113297710, guid: 3c5a1360ca4cc1241b85d169fb05c5ad, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 956328000}
   m_SourcePrefab: {fileID: 100100000, guid: 3c5a1360ca4cc1241b85d169fb05c5ad, type: 3}
 --- !u!4 &1250946309 stripped
 Transform:
@@ -49032,7 +49070,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &6496661053974364091
 GameObject:
   m_ObjectHideFlags: 0

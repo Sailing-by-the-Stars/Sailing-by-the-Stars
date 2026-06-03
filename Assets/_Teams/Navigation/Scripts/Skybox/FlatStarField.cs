@@ -21,6 +21,7 @@ public class ManualTwinkler
     public int starID;
     public int targetAngle;
     public bool tutorialStar = false;
+    public ConfirmStarFoundBox confirmBox;
 }
 
 public class FlatStarField : MonoBehaviour
@@ -78,7 +79,7 @@ public class FlatStarField : MonoBehaviour
     [SerializeField]
     bool debugColors = false;
 
-    [ContextMenu("fix my shit plz")]
+    //[ContextMenu("fix my shit plz")]
     void fixiiiiiiit()
     {
         manualStars.Clear();
@@ -120,6 +121,11 @@ public class FlatStarField : MonoBehaviour
             constelation.finalColor = availableColors[
                 UnityEngine.Random.Range(0, availableColors.Count)
             ];
+        }
+
+        if(starObjects.Count > 0)
+        {
+            RegenerateStars();
         }
     }
 
@@ -316,6 +322,8 @@ public class FlatStarField : MonoBehaviour
             TwinklingStar twinkler = null;
             bool fullyManual = false;
 
+            TwinklingStar template = transform.parent.GetComponent<TwinklingStar>();
+
             foreach (Constelation manualStar in manualStars)
             {
                 foreach (int id in manualStar.starIDs)
@@ -337,7 +345,6 @@ public class FlatStarField : MonoBehaviour
                     }
                     else
                     {
-                        TwinklingStar template = transform.parent.GetComponent<TwinklingStar>();
                         bool twinkling = false;
 
                         int i = 0;
@@ -374,8 +381,21 @@ public class FlatStarField : MonoBehaviour
                                 EntryCheck entryCheck = new();
                                 entryCheck.entryNumber = i;
                                 entryCheck.targetAngle = obj.targetAngle;
+                                
                                 twinkler.entryNumbers.Add(entryCheck);
-                                stargo.layer = LayerMask.NameToLayer("Constelation");
+
+                                if (obj.confirmBox)
+                                {
+                                    obj.confirmBox.starToConfirm = twinkler;
+
+                                }
+                                else if(!obj.tutorialStar)
+                                {
+                                    Debug.LogWarning($"the twinkling star {obj.starID} doesn't have a confirmBox assigned to it");
+                                }
+
+
+                                    stargo.layer = LayerMask.NameToLayer("Constelation");
                                 stargo.GetComponent<SphereCollider>().radius = starColliderMult;
                                 twinkling = true;
                                 continue;
@@ -474,21 +494,22 @@ public class FlatStarField : MonoBehaviour
 
             //set the stars size
             //>
-            if (!fullyManual)
+            Vector3 size = new Vector3(starSize, starSize, starSize);
+            
+
+            if (isManualStar)
             {
-                Vector3 size = new Vector3(starSize, starSize, starSize);
-                stargo.transform.localScale = size;
-
-                if (isManualStar)
+                starSize *= manualSizeMult;
+                starSize *= starConstelation.sizeMult;
+                if (twinkler != null)
                 {
-                    starSize *= manualSizeMult;
-                    if(twinkler != null)
-                    {
-                        starSize *= twinklerSizeMult;
-                    }
+                    starSize *= twinklerSizeMult;
+                }
 
-                    starSize += flatManualSizeAdd;
+                starSize += flatManualSizeAdd;
 
+                if (!fullyManual)
+                {
                     if (starSize < minManualSize)
                     {
                         Vector3 newsize = new Vector3(minManualSize, minManualSize, minManualSize);
@@ -499,21 +520,25 @@ public class FlatStarField : MonoBehaviour
                         Vector3 newsize = new Vector3(starSize, starSize, starSize);
                         stargo.transform.localScale = newsize;
                     }
+                }
 
 
-                    if (twinkler != null)
-                    {
-                        starSize /= twinklerSizeMult;
-                        starSize *= twinklerEmissionMult;
-                    }
+                if (twinkler != null)
+                {
+                    starSize /= twinklerSizeMult;
+                    starSize *= twinklerEmissionMult;
                 }
             }
+            else
+            {
+                stargo.transform.localScale = size;
+            }
 
-            //<
+                //<
 
-            //set the references on the star
-            //>
-            half intensityMul;
+                //set the references on the star
+                //>
+                half intensityMul;
             intensityMul = (half)MathF.Pow(2.0f, emissionMult);
 
             StarInfo starInfo = GetComponent<StarInfo>();
@@ -530,8 +555,6 @@ public class FlatStarField : MonoBehaviour
 
             if (debugColors)
             {
-                
-
                 if (isManualStar && starConstelation != null)
                 {
                     starInfo.matColor = starConstelation.debugColor;
@@ -550,7 +573,6 @@ public class FlatStarField : MonoBehaviour
                     starInfo.emissionColor = tempColor;
                     starInfo.emissionMult = intensityMul * starSize;
                 }
-
             }
             else
             {
@@ -599,6 +621,69 @@ public class FlatStarField : MonoBehaviour
 
             foreach (StarInfo childStar in starInfo.GetComponentsInChildren<StarInfo>())
             {
+                float tempStarSize = starSize;
+
+                if(childStar == starInfo)
+                {
+                    continue;
+                }
+
+                twinkler = childStar.GetComponent<TwinklingStar>();
+
+                if (twinkler != null)
+                {
+                    int i = 0;
+                    foreach (var obj in twinklingStars)
+                    {
+                        i++;
+
+                        twinkler.twinkleCurve = template.twinkleCurve;
+                        twinkler.selectedCurve = template.selectedCurve;
+                        twinkler.dimCurve = template.dimCurve;
+                        twinkler.intensity = template.intensity;
+                        twinkler.twinkleTime = template.twinkleTime;
+
+                        twinkler.tutorialStar = obj.tutorialStar;
+
+                        EntryCheck entryCheck = new();
+                        entryCheck.entryNumber = i;
+                        entryCheck.targetAngle = obj.targetAngle;
+
+                        twinkler.entryNumbers.Add(entryCheck);
+
+                        if (obj.confirmBox)
+                        {
+                            obj.confirmBox.starToConfirm = twinkler;
+
+                        }
+                        else if (!obj.tutorialStar)
+                        {
+                            Debug.LogWarning($"the twinkling star {obj.starID} doesn't have a confirmBox assigned to it");
+                        }
+
+
+                        childStar.gameObject.layer = LayerMask.NameToLayer("Constelation");
+                        childStar.GetComponent<SphereCollider>().radius = starColliderMult;
+                    }
+                            
+
+
+
+                    tempStarSize *= twinklerSizeMult;
+                    //tempStarSize /= twinklerEmissionMult;
+                }
+
+                if (tempStarSize < minManualSize)
+                {
+                    Vector3 newsize = new Vector3(minManualSize, minManualSize, minManualSize);
+                    childStar.transform.localScale = newsize;
+                }
+                else
+                {
+                    Vector3 newsize = new Vector3(tempStarSize, tempStarSize, tempStarSize);
+                    childStar.transform.localScale = newsize;
+                }
+
                 childStar.Initialize(starInfo);
             }
         }
@@ -617,10 +702,6 @@ public class FlatStarField : MonoBehaviour
                 Destroy(o);
 #endif
         }
-
-
-
-
         starObjects = new();
     }
 

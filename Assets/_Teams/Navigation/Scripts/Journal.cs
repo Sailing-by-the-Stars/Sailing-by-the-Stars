@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.InputSystem;
 
 public enum SectionName
 {
@@ -27,7 +28,11 @@ public class Page
 
 public class Journal : ToolPickup, AstroTutorialStep
 {
-    PlayerControls playerControls;
+    [SerializeField]
+    bool skipTutorial = false;
+
+
+    public PlayerControls playerControls;
     GameState prevState;
 
     //[NonSerialized]
@@ -52,7 +57,8 @@ public class Journal : ToolPickup, AstroTutorialStep
     int curSectionIndex = 0;
 
     List<Bookmark> bookmarks;
-    
+    public Action bookmarkClicked;
+
     private Camera cam;
     private float initialFOV;
     private float zoomFOV = 30;
@@ -79,6 +85,8 @@ public class Journal : ToolPickup, AstroTutorialStep
     JournalOpenSound openSound;
     JournalCloseSound closeSound;
 
+
+    Canvas popupui;
     private void Awake()
     {
         openSound = FindFirstObjectByType<JournalOpenSound>();
@@ -95,23 +103,23 @@ public class Journal : ToolPickup, AstroTutorialStep
 
     }
 
-    public void EnableControl(int nr)
-    {
-        if (nr > tutorialStep)
-        {
-            tutorialStep = nr;
-        }
-    }
-
 
     public override void Grab(PickupController pickupController)
     {
         base.Grab(pickupController);
 
-        EnableControl(0);
-        //TutorialSequence.Instance.NextStep(0);
+        RewardItem.collectedReward?.Invoke(0);
 
-        isEquipped = true;
+        if (!skipTutorial)
+        {
+            TutorialSequence.Instance.NextStep(0);
+        }
+        else
+        {
+            TutorialInputs();
+        }
+
+            isEquipped = true;
 
         //Disable collider to hide interact text
         GetComponent<BoxCollider>().enabled = false;
@@ -214,14 +222,25 @@ public class Journal : ToolPickup, AstroTutorialStep
         rightPageQ.enabled = false;
 
         //Throws object not found error but works...
-        if (gameObject.GetComponentInChildren<Canvas>())
+
+        popupui = gameObject.GetComponentInChildren<Canvas>();
+        if (popupui)
         {
-            gameObject.GetComponentInChildren<Canvas>().enabled = false;
+            popupui.enabled = false;
 
         }
         else
         {
-            Debug.LogWarning("journal has no canvas?");
+            Debug.LogError("journal has no canvas?");
+        }
+
+        if (skipTutorial)
+        {
+
+            var player = GameObject.FindGameObjectWithTag("Player");
+            var pickupController = player.GetComponent<PickupController>();
+
+            Grab(pickupController);
         }
     }
 
@@ -270,12 +289,6 @@ public class Journal : ToolPickup, AstroTutorialStep
             // in the sections loop above would case OpenSection() to be run every frame
             if (playerControls.Journal.PreviousPage.triggered)
             {
-                if (currentSequence != null && currentTutorialStep == 1)
-                {
-                    ExitStep();
-                    currentSequence = null;
-                }
-
                 curPageNr -= 1;
                 
                 if (curPageNr < 0)
@@ -298,12 +311,6 @@ public class Journal : ToolPickup, AstroTutorialStep
 
             if (playerControls.Journal.NextPage.triggered)
             {
-                if (currentSequence != null && currentTutorialStep == 1)
-                {
-                    ExitStep();
-                    currentSequence = null;
-                }
-
                 curPageNr += 1;
                 
                 if (curPageNr > totalNrOfPages - 1)
@@ -353,22 +360,12 @@ public class Journal : ToolPickup, AstroTutorialStep
     {
         if (isEquipped)
         {
-            if (playerControls.Journal.Open.triggered && (currentTutorialStep != 1 || currentSequence == null))
-            {
-                EnableControl(currentTutorialStep);
-                
-                if(currentSequence != null && currentTutorialStep == 0)
-                {
-                    ExitStep();
-                }   
+            if (playerControls.Journal.Open.triggered)
+            { 
 
                 prevPageNumber = -1;
                 if (bookOpened)
                 {
-                    if(currentSequence != null && currentTutorialStep == 6)
-                    {
-                        ExitStep();
-                    }
                     
                     if (openSound != null)
                     {
@@ -382,7 +379,6 @@ public class Journal : ToolPickup, AstroTutorialStep
                     leftPageQ.enabled = false;
                     rightPageQ.enabled = false;
                     bookModel.SetActive(false);
-                    gameObject.GetComponentInChildren<Canvas>().enabled = false;
                     foreach (Bookmark bookmark in bookmarks)
                     {
                         bookmark.gameObject.SetActive(false);
@@ -413,11 +409,6 @@ public class Journal : ToolPickup, AstroTutorialStep
                     foreach (Bookmark bookmark in bookmarks)
                     {
                         bookmark.gameObject.SetActive(true);
-                    }
-
-                    if (currentTutorialStep != 1)
-                    {
-                        gameObject.GetComponentInChildren<Canvas>().enabled = true;
                     }
                     
                     //Update section for if a new page is picked up in a different section
@@ -466,10 +457,6 @@ public class Journal : ToolPickup, AstroTutorialStep
             {
                 if (zoomedIn)
                 {
-                    if(currentSequence != null && currentTutorialStep == 4)
-                    {
-                        ExitStep();
-                    }
                     
                     zoomedIn = false;
                     if (zoomCoroutine == null)
@@ -479,11 +466,6 @@ public class Journal : ToolPickup, AstroTutorialStep
                 }
                 else
                 {
-                    if(currentSequence != null && currentTutorialStep == 3)
-                    {
-                        ExitStep();
-                    }
-                    
                     zoomedIn = true;
                     if (zoomCoroutine == null)
                     {
@@ -589,21 +571,169 @@ public class Journal : ToolPickup, AstroTutorialStep
     }
 
 
+    public void OpenPage(Page page, int extraPages)
+    {
+        int newPageNr = getFullPageNR(page);
+
+        if (curPageNr > newPageNr - extraPages)
+        {
+            curPageNr += extraPages;
+            prevPageNumber = curPageNr;
+        }
+
+        if (curPageNr >= newPageNr)
+        {
+            //Jump back to the new page
+            curPageNr -= curPageNr - newPageNr;
+            prevPageNumber = curPageNr - 1;
+        }
+        else if (curPageNr < newPageNr)
+        {
+            //Jump forward to the new page
+            curPageNr += curPageNr + newPageNr;
+            prevPageNumber = curPageNr - 1;
+        }
+    }
+
+
 
     public void EnterStep(TutorialSequence sequence)
     {
-        if (currentSequence != null && currentSequence != sequence)
+        if (sequence == null)
+        {
+            currentTutorialStep = int.MaxValue;
+        } else if (currentSequence != null && currentSequence != sequence)
         {
             Debug.LogError("this tutorialDialogue object is already in a different sequence!!");
             return;
         }
         
         currentSequence = sequence;
-        currentTutorialStep = sequence.index;
-        
-        if(currentTutorialStep == 8)
+        currentTutorialStep += 1;
+
+        //Debug.Log($"going to the next tutorial step: {currentTutorialStep}");
+
+
+        switch (currentTutorialStep)
         {
-            EnableControl(1);
+            case 0:
+                ///step 0:
+                ///turn off all inputs
+                TutorialInputs(-1);
+                //finish when user presses J
+                playerControls.Journal.Open.performed += FinishInputPrompt;
+                break;
+                //wait 1 text prompt,
+                //then turn on journal.open
+                //TutorialInputs(0);
+            case 1:
+                ///step 1:
+                ///turn off inputs
+                TutorialInputs(-1);
+                //finish when either is pressed
+                playerControls.Journal.PreviousPage.performed += FinishInputPrompt;
+                playerControls.Journal.NextPage.performed += FinishInputPrompt;
+                break;
+                //wait a prompt
+                //then turn on the page flips
+                //TutorialInputs(1);
+            case 2:
+                ///step 2:
+                ///turn on zoom
+                TutorialInputs(2);
+                //finish on press
+                playerControls.Journal.Zoom.performed += FinishInputPrompt;
+
+                break;
+            case 3:
+                ///step 3:
+                ///turn on zoom
+                TutorialInputs(2);
+                //finish on press
+                playerControls.Journal.Zoom.performed += FinishInputPrompt;
+                break;
+            case 4:
+                ///step 4:
+                ///turn on bookmark clicks
+                TutorialInputs(3);
+                //finish when any of them are pressed
+                bookmarkClicked += FinishInputPrompt;
+                break;
+            case 5:
+                ///step 5: 
+                ///turn off all input
+                TutorialInputs(4);
+                //wait 2 prompts
+                //TutorialInputs();
+                //prompt for j press 
+                playerControls.Journal.Open.performed += FinishInputPrompt;
+                break;
+                //turn on controls hud
+                //finish
+            default:
+                if (popupui)
+                {
+                    popupui.enabled = true;
+                }
+                else
+                {
+                    Debug.LogWarning("no popup ui assigned?");
+                }
+
+                    TutorialInputs();
+
+                break;
+        }
+    }
+
+    private void FinishInputPrompt(InputAction.CallbackContext context)
+    {
+        FinishInputPrompt();
+    }
+
+    private void FinishInputPrompt()
+    {
+        playerControls.Journal.Open.performed -= FinishInputPrompt;
+        playerControls.Journal.PreviousPage.performed -= FinishInputPrompt;
+        playerControls.Journal.NextPage.performed -= FinishInputPrompt;
+        playerControls.Journal.Zoom.performed -= FinishInputPrompt;
+        bookmarkClicked -= FinishInputPrompt;
+
+
+
+        ExitStep();
+    }
+
+
+    public void TutorialInputs(int tutorialIndex = -2)
+    {
+        playerControls.Journal.Disable();
+
+        switch (tutorialIndex)
+        {
+            case -1:
+                break;
+            case 0:
+                playerControls.Journal.Open.Enable();
+                break;
+            case 1:
+                playerControls.Journal.PreviousPage.Enable();
+                playerControls.Journal.NextPage.Enable();
+                break;
+            case 2:
+                playerControls.Journal.Zoom.Enable();
+                break;
+            case 3:
+                playerControls.Journal.Click.Enable();
+                break;
+
+            case 4:
+                playerControls.Journal.Enable();
+                playerControls.Journal.Open.Enable();
+                break;
+            default:
+                playerControls.Journal.Enable();
+                break;
         }
     }
 
@@ -614,8 +744,9 @@ public class Journal : ToolPickup, AstroTutorialStep
             Debug.LogError("tried continueing a tutorial while none was assigned!");
             return;
         }
-
-        currentSequence.FinishStep(currentTutorialStep);
+        TutorialSequence tempSeq = currentSequence;
+        currentSequence = null;
+        tempSeq.FinishStep(currentTutorialStep);
     }
 
 }

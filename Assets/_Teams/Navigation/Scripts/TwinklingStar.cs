@@ -107,7 +107,7 @@ public class TwinklingStar : MonoBehaviour
             {
                 entryCheck.beenChecked = true;
                 targetAngle = entryCheck.targetAngle;
-                if (starState != StarState.highlighted)
+                if (starState != StarState.highlighted && starState != StarState.dimmed)
                 {
                     starState = StarState.selected;
                 }

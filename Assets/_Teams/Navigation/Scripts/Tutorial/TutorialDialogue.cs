@@ -57,7 +57,6 @@ public class TutorialDialogue : AstroDialogue, AstroTutorialStep
     public void Finish()
     {
         currentSequence.finishStep -= Finish;
-
         TurnOffTextBoxes(true);
     }
 

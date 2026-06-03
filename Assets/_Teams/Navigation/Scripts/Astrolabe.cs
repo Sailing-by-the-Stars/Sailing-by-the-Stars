@@ -101,11 +101,11 @@ public class Astrolabe : ToolPickup, AstroTutorialStep
         else if (nr == 2)
         {
             playerControls.Astrolabe.Open.Enable();
-            playerControls.Astrolabe.Rotate.Enable();
+            playerControls.Astrolabe.ChangeAngle.Enable();
         } else if (nr == 3)
         {
             playerControls.Astrolabe.Open.Enable();
-            playerControls.Astrolabe.ChangeAngle.Enable();
+            playerControls.Astrolabe.Rotate.Enable();
         }
         else if (nr == 4)
         {
@@ -119,6 +119,9 @@ public class Astrolabe : ToolPickup, AstroTutorialStep
         else if (nr == 6)
         {
             playerControls.Astrolabe.Enable();
+        }
+        else if (nr == 7)
+        {
         }
         else
         {
@@ -200,7 +203,7 @@ public class Astrolabe : ToolPickup, AstroTutorialStep
         {
             zoomCoroutine = StartCoroutine(ZoomOut(animationTime - Time.deltaTime));
         }
-        sideView = true;
+        sideView = false;
     }
 
     // Update is called once per frame

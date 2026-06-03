@@ -1,10 +1,11 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class Bookmark : MonoBehaviour, IPointerClickHandler
+public class Bookmark : MonoBehaviour
 {
-    
+    Journal journal;
     public TutorialSequence currentSequence = null;
     [NonSerialized]
     public int currentTutorialStep = -1;
@@ -15,11 +16,19 @@ public class Bookmark : MonoBehaviour, IPointerClickHandler
     private void Start()
     {
         startPos = transform.localPosition;
+        journal = GetComponentInParent<Journal>();
     }
 
-    public void OnPointerClick(PointerEventData eventData)
+    void Update()
     {
-        transform.GetComponentInParent<Journal>().OpenSection(sectionName);
+        if (journal.playerControls.Journal.Click.triggered)
+        {
+            if (IsPointerOverUIElement())
+            {
+                journal.OpenSection(sectionName);
+                journal.bookmarkClicked?.Invoke();
+            }
+        }
     }
 
     public void Highlight()
@@ -69,5 +78,33 @@ public class Bookmark : MonoBehaviour, IPointerClickHandler
         }
 
         currentSequence.FinishStep(currentTutorialStep);
+    }
+
+
+    public bool IsPointerOverUIElement()
+    {
+        return IsPointerOverUIElement(GetEventSystemRaycastResults());
+    }
+    public bool IsPointerOverUIElement(List<RaycastResult> eventSystemRaysastResults)
+    {
+        for (int index = 0; index < eventSystemRaysastResults.Count; index++)
+        {
+            RaycastResult curRaysastResult = eventSystemRaysastResults[index];
+
+            if (curRaysastResult.gameObject == gameObject)
+                return true;
+        }
+
+        return false;
+    }
+    static List<RaycastResult> GetEventSystemRaycastResults()
+    {
+        PointerEventData eventData = new PointerEventData(EventSystem.current);
+        eventData.position = Input.mousePosition;
+
+        List<RaycastResult> raysastResults = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(eventData, raysastResults);
+
+        return raysastResults;
     }
 }

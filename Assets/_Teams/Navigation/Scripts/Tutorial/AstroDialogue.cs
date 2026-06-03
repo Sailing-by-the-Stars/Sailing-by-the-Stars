@@ -50,15 +50,16 @@ public class AstroDialogue : MonoBehaviour
         {
             if (Input.GetMouseButtonDown(0))
             {
-                if(inTyping)
-                {
-                    inTyping = false;
-                    return;
-                }
-            
-            
                 if (index < dialogue.Count)
                 {
+                    if (inTyping && !dialogue[index].waitForTutorial)
+                    {
+                        inTyping = false;
+                        return;
+                    }
+            
+            
+                
                     if (dialogue[index].waitForTutorial == true)
                     {
                         WaitFlag();
@@ -90,8 +91,15 @@ public class AstroDialogue : MonoBehaviour
     {
         foreach (DialogueTextBox textBox in DialogueTextBox.dialogueTextBoxes)
         {
-            textBox.TurnOn();
-            textBox.textBox.text = text;
+            if (!string.IsNullOrEmpty(text))
+            {
+                textBox.TurnOn();
+                textBox.textBox.text = text;
+            }
+            else
+            {
+                textBox.TurnOff();
+            }
         }
     }
 
@@ -199,18 +207,20 @@ public class AstroDialogue : MonoBehaviour
 
     protected virtual void endOfLine(int indexOfLine = -1)
     {
-        foreach (GameObject obj in dialogue[indexOfLine].manualUI)
-        {
-            obj.SetActive(false);
-        }
-
         if (indexOfLine >= 0)
         {
             dialogue[indexOfLine].endOfLine.Invoke();
         }
-        if (dialogue[indexOfLine].waitForTutorial && dialogue[indexOfLine].waitAtLineEnd == false)
+        if (dialogue[indexOfLine].waitForTutorial )
         {
             WaitFlag();
+        }
+        else
+        {
+            foreach (GameObject obj in dialogue[indexOfLine].manualUI)
+            {
+                obj.SetActive(false);
+            }
         }
     }
 
@@ -231,20 +241,22 @@ public class AstroDialogue : MonoBehaviour
         {
             T += Time.deltaTime;
 
-            if(lineToShow.timeTillEndOfline < T)
+            if (lineToShow.timeTillEndOfline < T)
             {
-                inTyping = false;
+                if(!dialogue[indexOfLine].waitAtLineEnd)
+                    inTyping = false;
+
             }
             yield return null;
         }
 
         endOfLine(indexOfLine);
 
+        inTyping = false;
         if (dialogue[indexOfLine].waitAtLineEnd == false && dialogue[indexOfLine].waitForTutorial == false)
         {
             NextLine(dialogue[indexOfLine].lineToGoToNext);
         }
-        inTyping = false;
 
         yield return null;
     }

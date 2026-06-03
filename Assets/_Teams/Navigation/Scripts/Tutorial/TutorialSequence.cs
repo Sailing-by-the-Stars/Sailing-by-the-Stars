@@ -59,18 +59,17 @@ public class TutorialSequence : MonoBehaviour
 
     public void FinishStep(int stepIndex, bool continueStep = true)
     {
-        //hack
-        currentStepFinishes+= 2;
+        currentStepFinishes += 1;
 
         if (index != stepIndex)
         {
-            //Debug.LogWarning("tried finishing the wrong step!!");
+            Debug.LogWarning("tried finishing the wrong step!!");
             return;
         }
         
         if (EventOrder[index].sequenceEnter.GetPersistentEventCount() > currentStepFinishes)
         {
-            Debug.Log($"waiting for {EventOrder[index].sequenceEnter.GetPersistentEventCount() - currentStepFinishes} more events to finish before the next step");
+            //Debug.Log($"waiting for {EventOrder[index].sequenceEnter.GetPersistentEventCount() - currentStepFinishes} more events to finish before the next step");
             return;
         }
         else
@@ -109,7 +108,6 @@ public class TutorialSequence : MonoBehaviour
             return;
         }
 
-        Debug.Log($"going to the next tutorial step: {index}");
         currentStepFinishes = 0;
         EventOrder[index].sequenceEnter.Invoke(this);
     }

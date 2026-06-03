@@ -1106,6 +1106,15 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Click"",
+                    ""type"": ""Button"",
+                    ""id"": ""e0597870-adb9-4206-9841-52498f0afc01"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -1249,6 +1258,17 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Zoom"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""39f31475-155f-422e-af68-71e71fe3b02e"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Click"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1429,6 +1449,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         m_Journal_PreviousPage = m_Journal.FindAction("Previous Page", throwIfNotFound: true);
         m_Journal_BookmarkPage = m_Journal.FindAction("Bookmark Page", throwIfNotFound: true);
         m_Journal_Zoom = m_Journal.FindAction("Zoom", throwIfNotFound: true);
+        m_Journal_Click = m_Journal.FindAction("Click", throwIfNotFound: true);
         // Interaction
         m_Interaction = asset.FindActionMap("Interaction", throwIfNotFound: true);
         m_Interaction_Pickup = m_Interaction.FindAction("Pickup", throwIfNotFound: true);
@@ -2428,6 +2449,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     private readonly InputAction m_Journal_PreviousPage;
     private readonly InputAction m_Journal_BookmarkPage;
     private readonly InputAction m_Journal_Zoom;
+    private readonly InputAction m_Journal_Click;
     /// <summary>
     /// Provides access to input actions defined in input action map "Journal".
     /// </summary>
@@ -2459,6 +2481,10 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Journal/Zoom".
         /// </summary>
         public InputAction @Zoom => m_Wrapper.m_Journal_Zoom;
+        /// <summary>
+        /// Provides access to the underlying input action "Journal/Click".
+        /// </summary>
+        public InputAction @Click => m_Wrapper.m_Journal_Click;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -2500,6 +2526,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @Zoom.started += instance.OnZoom;
             @Zoom.performed += instance.OnZoom;
             @Zoom.canceled += instance.OnZoom;
+            @Click.started += instance.OnClick;
+            @Click.performed += instance.OnClick;
+            @Click.canceled += instance.OnClick;
         }
 
         /// <summary>
@@ -2526,6 +2555,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @Zoom.started -= instance.OnZoom;
             @Zoom.performed -= instance.OnZoom;
             @Zoom.canceled -= instance.OnZoom;
+            @Click.started -= instance.OnClick;
+            @Click.performed -= instance.OnClick;
+            @Click.canceled -= instance.OnClick;
         }
 
         /// <summary>
@@ -2988,6 +3020,13 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnZoom(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Click" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnClick(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Interaction" which allows adding and removing callbacks.
