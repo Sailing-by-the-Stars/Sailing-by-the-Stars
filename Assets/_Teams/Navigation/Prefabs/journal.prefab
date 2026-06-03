@@ -159,59 +159,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Bookmark
   sectionName: 2
---- !u!1 &192161762854265666
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 886542496920381772}
-  - component: {fileID: 8707556857047111160}
-  m_Layer: 0
-  m_Name: NavigationSection
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &886542496920381772
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 192161762854265666}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 103.67527, y: 14.368309, z: -195.70372}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 7278097493265071532}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8707556857047111160
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 192161762854265666}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ca72145ac60a4884ea1a47839aa9a012, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AstrolabeInstructionsSection
-  parentJournal: {fileID: 0}
-  pages:
-  - leftPage: {fileID: 2800000, guid: 7ebd0c7ba3ce0bb418d153d12c803d9c, type: 3}
-    rightPage: {fileID: 2800000, guid: 7cb2b1b4aa9474e49a46561f8ded3741, type: 3}
-  nrOfPages: 1
-  sectionName: 1
-  currentPageNr: 0
-  firstPageNr: 0
-  lastPageNr: 0
 --- !u!1 &362741016971897189
 GameObject:
   m_ObjectHideFlags: 0
@@ -242,7 +189,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 1, y: 0, z: 0, w: 0}
   m_LocalPosition: {x: 69.73494, y: 2.1363895, z: 759.055}
-  m_LocalScale: {x: 0.32, y: 0.32, z: 0.32}
+  m_LocalScale: {x: 0.29109162, y: 0.3199999, z: 0.29109156}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 1814370428176532130}
@@ -609,59 +556,6 @@ Transform:
   - {fileID: 4368422392459536396}
   m_Father: {fileID: 1799705561411895472}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &2614454316811492863
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 6484132954058731941}
-  - component: {fileID: -281367453631433654}
-  m_Layer: 0
-  m_Name: AstrolabeInstructionsSection
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &6484132954058731941
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2614454316811492863}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 103.67527, y: 14.368309, z: -195.70372}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 7278097493265071532}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &-281367453631433654
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2614454316811492863}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ca72145ac60a4884ea1a47839aa9a012, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AstrolabeInstructionsSection
-  parentJournal: {fileID: 0}
-  pages:
-  - leftPage: {fileID: 2800000, guid: 1703f893db760394ba9a3ae3bbdf4f27, type: 3}
-    rightPage: {fileID: 2800000, guid: e813446cf5ea125449c37d63c0e96c08, type: 3}
-  nrOfPages: 1
-  sectionName: 0
-  currentPageNr: 0
-  firstPageNr: 0
-  lastPageNr: 0
 --- !u!1 &2632164090117699151
 GameObject:
   m_ObjectHideFlags: 0
@@ -1038,7 +932,6 @@ Transform:
   - {fileID: 5914989596854207507}
   - {fileID: 829814214046199557}
   - {fileID: 3280313558997584858}
-  - {fileID: 7278097493265071532}
   - {fileID: 6564942876050279902}
   m_Father: {fileID: 1814370428176532130}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1199,114 +1092,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 7358620477521112105}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &5535080074550448166
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 5105937012928949269}
-  - component: {fileID: -6260979270764983535}
-  m_Layer: 0
-  m_Name: LoreSection
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &5105937012928949269
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5535080074550448166}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 103.67527, y: 14.368309, z: -195.70372}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 7278097493265071532}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &-6260979270764983535
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5535080074550448166}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fb050841cce6fb54c8992af2d81e6b73, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::LoreSection
-  parentJournal: {fileID: 0}
-  pages:
-  - leftPage: {fileID: 2800000, guid: 0203a5204199648458e233db57da6e2d, type: 3}
-    rightPage: {fileID: 2800000, guid: 4b310192174f5164c90d5d2005eae319, type: 3}
-  - leftPage: {fileID: 2800000, guid: b2c824fd975a1bb4890a3b373dd80828, type: 3}
-    rightPage: {fileID: 2800000, guid: e7ead4c3ba0ae0c4996ac8cc7ae7423d, type: 3}
-  nrOfPages: 2
-  sectionName: 2
-  currentPageNr: 0
-  firstPageNr: 0
-  lastPageNr: 0
---- !u!1 &5543370339668468076
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 8165793719482925400}
-  - component: {fileID: -3989806098401707131}
-  m_Layer: 0
-  m_Name: QuestSection
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &8165793719482925400
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5543370339668468076}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 103.67527, y: 14.368309, z: -195.70372}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 7278097493265071532}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &-3989806098401707131
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5543370339668468076}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 626c226e175e4c449a5c86b0839c062a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::QuestSection
-  parentJournal: {fileID: 0}
-  pages:
-  - leftPage: {fileID: 0}
-    rightPage: {fileID: 0}
-  nrOfPages: 1
-  sectionName: 3
-  currentPageNr: 0
-  firstPageNr: 0
-  lastPageNr: 0
 --- !u!1 &5692713619670155676
 GameObject:
   m_ObjectHideFlags: 0
@@ -1338,41 +1123,6 @@ Transform:
   m_Children:
   - {fileID: 9162216340953368939}
   m_Father: {fileID: 7579816970448948796}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &6059326172889856093
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 7278097493265071532}
-  m_Layer: 0
-  m_Name: sections
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &7278097493265071532
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6059326172889856093}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -4.0576386, y: 1.5760801, z: -0.41440076}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 6484132954058731941}
-  - {fileID: 886542496920381772}
-  - {fileID: 5105937012928949269}
-  - {fileID: 8165793719482925400}
-  m_Father: {fileID: 1545068150355585793}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6178943447378752335
 GameObject:
@@ -1745,11 +1495,19 @@ PrefabInstance:
     - target: {fileID: -281367453631433654, guid: 301282ec739ec7f49b3f3fe2eee7b3c0, type: 3}
       propertyPath: pages.Array.data[0].leftPage
       value: 
-      objectReference: {fileID: 2800000, guid: 1703f893db760394ba9a3ae3bbdf4f27, type: 3}
+      objectReference: {fileID: 2800000, guid: 2633ec9d4db261c4ab37163d9f66c049, type: 3}
     - target: {fileID: -281367453631433654, guid: 301282ec739ec7f49b3f3fe2eee7b3c0, type: 3}
       propertyPath: pages.Array.data[0].rightPage
       value: 
-      objectReference: {fileID: 2800000, guid: e813446cf5ea125449c37d63c0e96c08, type: 3}
+      objectReference: {fileID: 2800000, guid: eaeb770f411e3484380eb0a3a13054a6, type: 3}
+    - target: {fileID: -281367453631433654, guid: 301282ec739ec7f49b3f3fe2eee7b3c0, type: 3}
+      propertyPath: pages.Array.data[1].rightPage
+      value: 
+      objectReference: {fileID: 2800000, guid: 2633ec9d4db261c4ab37163d9f66c049, type: 3}
+    - target: {fileID: -281367453631433654, guid: 301282ec739ec7f49b3f3fe2eee7b3c0, type: 3}
+      propertyPath: pages.Array.data[2].rightPage
+      value: 
+      objectReference: {fileID: 2800000, guid: eaeb770f411e3484380eb0a3a13054a6, type: 3}
     - target: {fileID: 2614454316811492863, guid: 301282ec739ec7f49b3f3fe2eee7b3c0, type: 3}
       propertyPath: m_Name
       value: AstrolabeInstructionsSection
@@ -1896,6 +1654,38 @@ PrefabInstance:
     - target: {fileID: 2614454316811492863, guid: 1a34995d1f22e3946b64d210a0421c70, type: 3}
       propertyPath: m_Name
       value: NavigationSection
+      objectReference: {fileID: 0}
+    - target: {fileID: 5553032684126425751, guid: 1a34995d1f22e3946b64d210a0421c70, type: 3}
+      propertyPath: nrOfPages
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5553032684126425751, guid: 1a34995d1f22e3946b64d210a0421c70, type: 3}
+      propertyPath: pages.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5553032684126425751, guid: 1a34995d1f22e3946b64d210a0421c70, type: 3}
+      propertyPath: navPages.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5553032684126425751, guid: 1a34995d1f22e3946b64d210a0421c70, type: 3}
+      propertyPath: navPages.Array.data[0].page.leftPage
+      value: 
+      objectReference: {fileID: 2800000, guid: 7ebd0c7ba3ce0bb418d153d12c803d9c, type: 3}
+    - target: {fileID: 5553032684126425751, guid: 1a34995d1f22e3946b64d210a0421c70, type: 3}
+      propertyPath: navPages.Array.data[1].page.leftPage
+      value: 
+      objectReference: {fileID: 2800000, guid: 271cdd194a13974499ec3b2056f35231, type: 3}
+    - target: {fileID: 5553032684126425751, guid: 1a34995d1f22e3946b64d210a0421c70, type: 3}
+      propertyPath: navPages.Array.data[0].page.rightPage
+      value: 
+      objectReference: {fileID: 2800000, guid: 7cb2b1b4aa9474e49a46561f8ded3741, type: 3}
+    - target: {fileID: 5553032684126425751, guid: 1a34995d1f22e3946b64d210a0421c70, type: 3}
+      propertyPath: navPages.Array.data[1].OpenedPages.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5553032684126425751, guid: 1a34995d1f22e3946b64d210a0421c70, type: 3}
+      propertyPath: 'navPages.Array.data[1].OpenedPages.Array.data[0]'
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6484132954058731941, guid: 1a34995d1f22e3946b64d210a0421c70, type: 3}
       propertyPath: m_LocalPosition.x
