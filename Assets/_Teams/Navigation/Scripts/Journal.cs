@@ -109,6 +109,7 @@ public class Journal : ToolPickup, AstroTutorialStep
         base.Grab(pickupController);
 
         RewardItem.collectedReward?.Invoke(0);
+        PuzzleProgress.MarkComplete("denial");
 
         if (!skipTutorial)
         {
@@ -679,8 +680,6 @@ public class Journal : ToolPickup, AstroTutorialStep
                 {
                     Debug.LogWarning("no popup ui assigned?");
                 }
-
-                    TutorialInputs();
 
                 break;
         }

@@ -117,6 +117,8 @@ public class AstroDialogue : MonoBehaviour
                 obj.SetActive(false);
             }
         }
+
+        currentDialogue = null;
     }
 
 

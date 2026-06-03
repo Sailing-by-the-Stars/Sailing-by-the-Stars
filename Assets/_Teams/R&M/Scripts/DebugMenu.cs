@@ -85,7 +85,7 @@ public class DebugMenu : MonoBehaviour
         }
 
         // Legs have been cut due to jank ~Joost
-        /*var speedBtn = Instantiate(buttonPrefab, container);
+        var speedBtn = Instantiate(buttonPrefab, container);
         speedBtn.GetComponentInChildren<TextMeshProUGUI>().text = "SPEEEEEDYYY SPRINT";
         speedBtn.onClick.AddListener(() =>
         {
@@ -93,9 +93,9 @@ public class DebugMenu : MonoBehaviour
 
             if (movement != null)
             {
-                movement.SetSprintMultiplier(10f);
+                movement.SetSprintMultiplier(4f);
             }
-        });*/
+        });
 
         var jesusButton = Instantiate(buttonPrefab, container);
         jesusButton.GetComponentInChildren<TextMeshProUGUI>().text = "Walk On Water";
