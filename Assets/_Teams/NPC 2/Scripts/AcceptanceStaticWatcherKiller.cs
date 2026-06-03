@@ -7,6 +7,7 @@ public class AcceptanceKiller : MonoBehaviour
     [SerializeField] private GameObject targetToDestroy;
     [SerializeField] private LayerMask occlusionMask;
     [SerializeField] private ParticleSystem particles;
+    [SerializeField] private float maxVisibilityDistance = 10f;
 
     private Camera cam;
     private bool hasBeenSeen = false;
@@ -39,6 +40,13 @@ public class AcceptanceKiller : MonoBehaviour
         Vector3 camPos = cam.transform.position;
         Vector3 toObj = transform.position - camPos;
 
+        float dist = toObj.magnitude;
+
+        if (dist > maxVisibilityDistance)
+        {
+            return false;
+        }
+
         float dot = Vector3.Dot(cam.transform.forward, toObj.normalized);
 
         if (dot < 0)
@@ -59,9 +67,13 @@ public class AcceptanceKiller : MonoBehaviour
             return false;
         }
 
-        float dist = toObj.magnitude;
-
-        bool hitSomething = Physics.Raycast(camPos, toObj.normalized, out RaycastHit hit, dist, occlusionMask);
+        bool hitSomething = Physics.Raycast(
+            camPos,
+            toObj.normalized,
+            out RaycastHit hit,
+            dist,
+            occlusionMask
+        );
 
         if (hitSomething)
         {

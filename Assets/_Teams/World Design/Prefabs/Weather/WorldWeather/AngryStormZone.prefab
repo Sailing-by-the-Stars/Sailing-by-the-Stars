@@ -19,7 +19,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &8850413001653790430
 Transform:
   m_ObjectHideFlags: 0
@@ -28,7 +28,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1454824320224994356}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: 0.34442616, z: -0, w: 0.93881345}
+  m_LocalRotation: {x: 0, y: 0.34442982, z: 0, w: 0.9388121}
   m_LocalPosition: {x: -91, y: 0.16000366, z: -1347}
   m_LocalScale: {x: 602.1512, y: 8.6747, z: 571.21313}
   m_ConstrainProportionsScale: 0
@@ -199,12 +199,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ZoneEventMusic
   fmodEvent:
     Guid:
-      Data1: -1931530165
-      Data2: 1261801039
-      Data3: -304735315
-      Data4: 1849102358
-    Path: event:/Music/mus_AngerEvent
-  parameterName: EventMusicEQ
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  parameterName: 
   targetIntensity: 1
   lerpDuration: 6
 --- !u!1001 &681015964671513610
@@ -299,6 +299,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.x
       value: -0.183
       objectReference: {fileID: 0}
+    - target: {fileID: 8376894608700700532, guid: 74fa206c1f5fad04ba1e283c8fadd440, type: 3}
+      propertyPath: spawnPrefab
+      value: 
+      objectReference: {fileID: 5757729298046627257, guid: 86ef762e950e4b84c8eba8925770c53e, type: 3}
     - target: {fileID: 8376894608700700532, guid: 74fa206c1f5fad04ba1e283c8fadd440, type: 3}
       propertyPath: spawnOnStart
       value: 0
