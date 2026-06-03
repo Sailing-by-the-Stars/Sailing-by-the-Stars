@@ -59,7 +59,7 @@ public class PhysicsPickup : MonoBehaviour, IPickup
             GameObject go = Instantiate(despawnParticleEffect, transform.position, Quaternion.identity);
             Destroy(go, 1f); // Destroy the particle effect after 1 second to clean up the scene
         }
-        Destroy(gameObject);
+        gameObject.SetActive(false);
     }
 
     public virtual void Drop(PickupController pickupController)

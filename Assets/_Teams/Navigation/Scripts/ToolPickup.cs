@@ -6,7 +6,8 @@ public class ToolPickup : MonoBehaviour, IPickup
     [SerializeField] private Vector3 pickupPositionOffset;
     
     public virtual string InteractMessage => "Press E to Pickup";
-    public virtual GameObject ShouldHighlight(InteractionController interactionController) => null;
+    [SerializeField] protected GameObject meshToHighlight;
+    public virtual GameObject ShouldHighlight(InteractionController interactionController) => meshToHighlight ? meshToHighlight : gameObject;
 
     public void Interact(InteractionController interactionController)
     {
