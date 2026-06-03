@@ -319,7 +319,7 @@ public class Movement : MonoBehaviour
         if (rb != null) Destroy(rb);
         isOnBoat = true;
 
-        ambienceMusic?.SetAmbMusic(3); //ADDED BY ALONSO
+        ambienceMusic?.PlayAmbienceMusic(2f); //ADDED BY ALONSO
 
         buoyancyController.enabled = true;
         boatController.enabled = true;
@@ -333,7 +333,7 @@ public class Movement : MonoBehaviour
 
         isOnBoat = false;
 
-        ambienceMusic?.ResetAmbMusic(); //ADDED BY ALONSO
+        ambienceMusic?.StopAmbienceMusic(); //ADDED BY ALONSO
 
         buoyancyController.enabled = false;
         boatController.enabled = false;

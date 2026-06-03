@@ -1,75 +1,71 @@
+using System.Collections;
 using FMOD.Studio;
 using FMODUnity;
-using System.Collections;
 using UnityEngine;
-using UnityEngine.Rendering;
-using UnityEngine.Rendering.HighDefinition;
 
-/// <summary>
-/// Code by Alonso
-/// </summary>
 public class SetAmbienceMusicSail : MonoBehaviour
 {
     [SerializeField] private EventReference fmodEvent;
+    [SerializeField] private float startDelay = 2f;
 
-    [Header("Values")]
-    private float originalValue = 0f;
-    private float duration = 3f;
-    private float currentValue;
-
-    [Header("Reference")]
     private Coroutine routine;
     private EventInstance instance;
-    private PARAMETER_ID eventMusicEQ;
-    void Start()
+    private bool hasStarted = false;
+
+    private void Awake()
     {
         instance = RuntimeManager.CreateInstance(fmodEvent);
-
-        instance.getDescription(out EventDescription desc);
-        desc.getParameterDescriptionByName("EventMusicEQ", out PARAMETER_DESCRIPTION pdesc);
-        eventMusicEQ = pdesc.id;
-
-        currentValue = originalValue;
-
-        instance.start();
-        instance.setParameterByID(eventMusicEQ, currentValue);
     }
 
-    //Function to set a new value to the ambience music
-    public void SetAmbMusic(float target)
+    public void PlayAmbienceMusic(float delay = -1f)
     {
-        if (routine != null) StopCoroutine(routine);
-        routine = StartCoroutine(LerpDenialMusic(target));
+        if (delay < 0f)
+            delay = startDelay;
+
+        if (routine != null)
+            StopCoroutine(routine);
+
+        routine = StartCoroutine(PlayAfterDelay(delay));
     }
 
-    //Funtion to reset the ambience music
-    public void ResetAmbMusic()
+    public void StopAmbienceMusic()
     {
-        SetAmbMusic(originalValue);
-    }
-
-    //Coroutine that changes the ambience music value in a progression
-    private IEnumerator LerpDenialMusic(float target)
-    {
-        float start = currentValue;
-        float time = 0f;
-
-        while (time < duration)
+        if (routine != null)
         {
-            currentValue = Mathf.Lerp(start, target, time / duration);
-            instance.setParameterByID(eventMusicEQ, currentValue);
-
-            time += Time.deltaTime;
-            yield return null;
+            StopCoroutine(routine);
+            routine = null;
         }
 
-        currentValue = target;
-        instance.setParameterByID(eventMusicEQ, currentValue);
+        if (instance.isValid())
+        {
+            instance.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
+        }
+
+        hasStarted = false;
+    }
+
+    private IEnumerator PlayAfterDelay(float delay)
+    {
+        if (delay > 0f)
+            yield return new WaitForSeconds(delay);
+
+        if (instance.isValid() && !hasStarted)
+        {
+            instance.start();
+            hasStarted = true;
+        }
+
+        routine = null;
     }
 
     private void OnDestroy()
     {
-        instance.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
-        instance.release();
+        if (routine != null)
+            StopCoroutine(routine);
+
+        if (instance.isValid())
+        {
+            instance.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
+        }
     }
 }
