@@ -1,10 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using TMPro;
-using UnityEngine.Events;
-using System;
-using Unity.VisualScripting;
 
 public class TutorialDialogue : AstroDialogue, AstroTutorialStep
 {
@@ -14,7 +8,7 @@ public class TutorialDialogue : AstroDialogue, AstroTutorialStep
 
     protected override void Start()
     {
-        
+        base.Start();
     }
 
     public void EnterStep(TutorialSequence sequence)
@@ -28,7 +22,7 @@ public class TutorialDialogue : AstroDialogue, AstroTutorialStep
         }
         currentSequence = sequence;
         currentTutorialStep = sequence.index;
-
+        
         if(currentDialogue == null || currentDialogue != this)
         {
             StartDialogue(currentSequence.EventOrder[sequence.index].dialogueEntry);
@@ -63,7 +57,6 @@ public class TutorialDialogue : AstroDialogue, AstroTutorialStep
     public void Finish()
     {
         currentSequence.finishStep -= Finish;
-
         TurnOffTextBoxes(true);
     }
 

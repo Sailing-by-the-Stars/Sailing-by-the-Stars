@@ -15,6 +15,8 @@ MonoBehaviour:
   hasName: 1
   npcName: Axel
   talkingSpeed: 0.95
+  autoAdvance: 1
+  secondsPerCharacter: 0.03
   nodes:
   - rid: 141452603536965744
   hasItemID: 0
@@ -26,6 +28,5 @@ MonoBehaviour:
       type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
       data:
         nodeID: Idle_Depression_Puzzle
-        text: Hmm...so the riddle is supposed to give me an answer that I need to
-          input in the controls of the lighthouse...?
+        text: So, I should solve the riddle and input the answer in the telegraph?
         nextNodeID: 

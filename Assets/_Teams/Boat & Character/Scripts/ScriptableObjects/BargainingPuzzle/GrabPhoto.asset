@@ -15,6 +15,8 @@ MonoBehaviour:
   hasName: 1
   npcName: Axel
   talkingSpeed: 0.95
+  autoAdvance: 1
+  secondsPerCharacter: 0.03
   nodes:
   - rid: 141452603536965732
   hasItemID: 0
@@ -26,6 +28,5 @@ MonoBehaviour:
       type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
       data:
         nodeID: Grab_Photo
-        text: A photo of me and Max...<pause=0.5>I do miss her sometimes...<pause=1>I
-          wonder if she ever thinks about me.
+        text: Max...I do miss her sometimes. I wonder if she ever thinks about me.
         nextNodeID: 

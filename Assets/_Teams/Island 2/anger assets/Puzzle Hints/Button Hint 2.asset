@@ -12,9 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a27b1591cf442e34da26ab4a98de3513, type: 3}
   m_Name: Button Hint 2
   m_EditorClassIdentifier: Assembly-CSharp::Dialogue
-  hasName: 0
-  npcName: 
+  hasName: 1
+  npcName: Axel
   talkingSpeed: 0.95
+  autoAdvance: 1
+  secondsPerCharacter: 0.03
   nodes:
   - rid: 7513793525250261078
   hasItemID: 0
@@ -25,6 +27,7 @@ MonoBehaviour:
     - rid: 7513793525250261078
       type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
       data:
-        nodeID: Line_1
-        text: Button Hint 2
+        nodeID: Button_Hint2
+        text: I should make sure the shadows match exactly with the patterns on the
+          walls.
         nextNodeID: 

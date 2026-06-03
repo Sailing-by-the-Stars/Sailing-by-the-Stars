@@ -21,8 +21,8 @@ public class SequenceEntry
 
 public class TutorialSequence : MonoBehaviour
 {
-    public static bool finishedTutorial = false;
-    public static bool startedTutorial = false;
+    public bool finishedTutorial = false;
+    public bool startedTutorial = false;
     public static TutorialSequence Instance;
 
     private void Awake()
@@ -41,7 +41,7 @@ public class TutorialSequence : MonoBehaviour
 
     [SerializeField]
     bool startOnStart = false;
-    public List<SequenceEntry> EventOrder;
+    public List<SequenceEntry> EventOrder = new();
     public int index = 0;
 
     private int currentStepFinishes = 0;
@@ -59,17 +59,17 @@ public class TutorialSequence : MonoBehaviour
 
     public void FinishStep(int stepIndex, bool continueStep = true)
     {
-        currentStepFinishes++;
+        currentStepFinishes += 1;
 
         if (index != stepIndex)
         {
-            //Debug.LogWarning("tried finishing the wrong step!!");
+            Debug.LogWarning("tried finishing the wrong step!!");
             return;
         }
-
+        
         if (EventOrder[index].sequenceEnter.GetPersistentEventCount() > currentStepFinishes)
         {
-            Debug.Log($"waiting for {EventOrder[index].sequenceEnter.GetPersistentEventCount() - currentStepFinishes} more events to finish before the next step");
+            //Debug.Log($"waiting for {EventOrder[index].sequenceEnter.GetPersistentEventCount() - currentStepFinishes} more events to finish before the next step");
             return;
         }
         else
@@ -108,7 +108,6 @@ public class TutorialSequence : MonoBehaviour
             return;
         }
 
-        Debug.Log($"going to the next tutorial step: {index}");
         currentStepFinishes = 0;
         EventOrder[index].sequenceEnter.Invoke(this);
     }

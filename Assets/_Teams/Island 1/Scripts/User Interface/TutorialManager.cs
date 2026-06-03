@@ -57,7 +57,7 @@ namespace Assets._Teams.Island_1.Scripts.User_Interface
             yield return _waitForSecondsRealtime;
             EnqueueStep(TutorialStep.LookAround);
             EnqueueStep(TutorialStep.Move);
-            EnqueueStep(TutorialStep.Sprint);
+            //EnqueueStep(TutorialStep.Sprint);
         }
 
         private void ShowStep(TutorialStep step)
