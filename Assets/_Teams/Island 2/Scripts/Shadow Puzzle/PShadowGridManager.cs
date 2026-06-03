@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.VFX;
 
 public class PShadowGridManager : MonoBehaviour
 {
@@ -14,7 +15,11 @@ public class PShadowGridManager : MonoBehaviour
     [SerializeField] private float slidingTime = 0.15f;
     
     [Header("Reward References")]
-    [SerializeField] private GameObject rewardDistortionWall;
+    [SerializeField] private Transform rewardWall;
+    [SerializeField] private float rewardWallTargetOffset;
+    [SerializeField] private float rewardWallMoveSpeed = 5f;
+    private Vector3 rewardWallStartPos;
+    private float rewardWallCurrentOffset;
     [SerializeField] private List<GameObject> rewardTorches;
 
     [Header("Puzzle Hints")]
@@ -32,8 +37,15 @@ public class PShadowGridManager : MonoBehaviour
     private void Awake()
     {
         grid = new PShadowPillar[width, height];
+        
+        rewardWallStartPos = rewardWall.localPosition;
     }
-    
+
+    private void Update()
+    {
+        OpenRewardWall();
+    }
+
 #if UNITY_EDITOR
     private void OnDrawGizmos()
     {
@@ -301,17 +313,27 @@ public class PShadowGridManager : MonoBehaviour
     {
         List<PShadowPillar> pillarsToCheck = grid.Cast<PShadowPillar>().Where(pillar => pillar).ToList();
         if (pillarsToCheck.Any(pillar => !pillar.IsInCorrectPosition())) return false;
-
-        rewardDistortionWall.SetActive(false);
+        
+        
         foreach (GameObject torch in rewardTorches)
         {
             torch.GetComponentInChildren<Light>().enabled = true;
+            torch.GetComponentInChildren<VisualEffect>().enabled = true;
         }
         
         Debug.Log("ANGER PUZZLE SOLVED!");
         PuzzleProgress.MarkComplete("anger");
+        if (rewardWall) rewardWall.GetComponent<RewardWallAudio>().StartAudio();
 
         return true;
+    }
+
+    private void OpenRewardWall()
+    {
+        if (!rewardWall || !PuzzleProgress.IsComplete("anger")) return;
+        
+        rewardWallCurrentOffset = Mathf.Lerp(rewardWallCurrentOffset, rewardWallTargetOffset, rewardWallMoveSpeed * Time.deltaTime);
+        rewardWall.localPosition = rewardWallStartPos + Vector3.up * rewardWallCurrentOffset;
     }
 
     private struct MoveRequest
