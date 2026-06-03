@@ -15,6 +15,8 @@ MonoBehaviour:
   hasName: 1
   npcName: Astronaut kid
   talkingSpeed: 0.95
+  autoAdvance: 0
+  secondsPerCharacter: 0.03
   nodes:
   - rid: 164572784810786889
   - rid: 164572784810786890
@@ -30,7 +32,7 @@ MonoBehaviour:
   - rid: 164572784810786900
   - rid: 164572784810786901
   - rid: 164572784810786902
-  - rid: 164572784810786903
+  - rid: 5524419295311036492
   hasItemID: 0
   itemID: 0
   references:
@@ -154,9 +156,10 @@ MonoBehaviour:
         nodeID: 14
         text: You can have this astronaut helmet!
         nextNodeID: 15
-    - rid: 164572784810786903
-      type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
+    - rid: 5524419295311036492
+      type: {class: EventNode, ns: , asm: Assembly-CSharp}
       data:
         nodeID: 15
         text: Enjoy mister!
+        eventID: GiveHelmet
         nextNodeID: 
