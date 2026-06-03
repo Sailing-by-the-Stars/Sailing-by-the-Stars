@@ -254,6 +254,7 @@ GameObject:
   - component: {fileID: 8610397940945083547}
   - component: {fileID: 5511844463631982616}
   - component: {fileID: 3043754529946217158}
+  - component: {fileID: 533925460424388825}
   m_Layer: 0
   m_Name: Anger Reward Item
   m_TagString: Untagged
@@ -399,6 +400,20 @@ MonoBehaviour:
   meshToHighlight: {fileID: 0}
   itemID: -1
   puzzleProgressID: anger
+--- !u!114 &533925460424388825
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1178377032520361410}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea1d725e30e0a0641af01f648d71bd8f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ItemDialogueTrigger
+  dialogue: {fileID: 11400000, guid: 1a0f1fe26e63c514c958fb0742b56fce, type: 2}
+  onlyTriggerOnce: 1
 --- !u!1 &3537907695118694646
 GameObject:
   m_ObjectHideFlags: 0
@@ -1523,22 +1538,6 @@ PrefabInstance:
     - target: {fileID: 5291227544399107501, guid: 3a9bb1495dbdf9244843101a0c79ef79, type: 3}
       propertyPath: m_LocalPosition.z
       value: 225.1495
-      objectReference: {fileID: 0}
-    - target: {fileID: 5291227544399107501, guid: 3a9bb1495dbdf9244843101a0c79ef79, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5291227544399107501, guid: 3a9bb1495dbdf9244843101a0c79ef79, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5291227544399107501, guid: 3a9bb1495dbdf9244843101a0c79ef79, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5291227544399107501, guid: 3a9bb1495dbdf9244843101a0c79ef79, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 5291227544399107501, guid: 3a9bb1495dbdf9244843101a0c79ef79, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x

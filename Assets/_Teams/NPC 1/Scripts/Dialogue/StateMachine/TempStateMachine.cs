@@ -94,7 +94,7 @@ public class TempStateMachine : MonoBehaviour
                 PlayerControls.BoatRudder.Enable();
                 SetCursorVisibility(false);
                 break;
-
+            
             default:
                 Debug.LogError("The player state is set completely wrong.");
                 break;

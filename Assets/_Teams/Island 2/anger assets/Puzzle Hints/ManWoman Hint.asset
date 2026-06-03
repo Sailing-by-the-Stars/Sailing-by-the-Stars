@@ -12,19 +12,38 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a27b1591cf442e34da26ab4a98de3513, type: 3}
   m_Name: ManWoman Hint
   m_EditorClassIdentifier: Assembly-CSharp::Dialogue
-  hasName: 0
-  npcName: 
+  hasName: 1
+  npcName: Axel
   talkingSpeed: 0.95
+  autoAdvance: 1
+  secondsPerCharacter: 0.03
   nodes:
   - rid: 7513793525250261082
+  - rid: 2145329768866250753
+  - rid: 2145329768866250754
   hasItemID: 0
   itemID: 0
   references:
     version: 2
     RefIds:
+    - rid: 2145329768866250753
+      type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: Man_Woman_Argument_P2
+        text: She was yelling at me for 'not paying attention to her and only caring
+          about my research'.
+        nextNodeID: Man_Woman_Argument_P3
+    - rid: 2145329768866250754
+      type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: Man_Woman_Argument_P3
+        text: And I said some things that I...really shouldn't have said. But she
+          never understood me or what I was trying to achieve!
+        nextNodeID: 
     - rid: 7513793525250261082
       type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
       data:
-        nodeID: Line_1
-        text: Man Woman Hint
-        nextNodeID: 
+        nodeID: Man_Woman_Argument_P1
+        text: This is reminiscent of that argument I had with Max before we broke
+          up...
+        nextNodeID: Man_Woman_Argument_P2

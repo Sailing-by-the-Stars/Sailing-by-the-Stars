@@ -35,6 +35,11 @@ public class DialogueObjectEditor : Editor
             EditorGUILayout.PropertyField(itemID_prop, new GUIContent("ItemID"));
         EditorGUILayout.PropertyField(talkingSpeed_prop, new GUIContent("Talking Speed"));
         EditorGUILayout.Space();
+        EditorGUILayout.LabelField("Auto-Advance", EditorStyles.boldLabel);
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("autoAdvance"), new GUIContent("Auto-Advance (no input)"));
+        if (serializedObject.FindProperty("autoAdvance").boolValue)
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("secondsPerCharacter"), new GUIContent("Seconds Per Character"));
+        EditorGUILayout.Space();
         EditorGUILayout.LabelField("Add Node", EditorStyles.boldLabel);
         if (GUILayout.Button("Add Dialogue Line")) AddNode(new DialogueLineNode());
         if (GUILayout.Button("Add Choice Node")) AddNode(new ChoiceNode());

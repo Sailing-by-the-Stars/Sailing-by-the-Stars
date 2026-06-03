@@ -15,9 +15,10 @@ MonoBehaviour:
   hasName: 1
   npcName: Axel
   talkingSpeed: 0.95
+  autoAdvance: 1
+  secondsPerCharacter: 0.03
   nodes:
   - rid: 141452603536965735
-  - rid: 141452603536965736
   hasItemID: 0
   itemID: 0
   references:
@@ -27,13 +28,6 @@ MonoBehaviour:
       type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
       data:
         nodeID: Grab_Pills
-        text: My sleeping pills. I tend to have a hard time sleeping at night so
-          I take these sometimes.
-        nextNodeID: Grab_Pills_P2
-    - rid: 141452603536965736
-      type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
-      data:
-        nodeID: Grab_Pills_P2
-        text: But, who has time to sleep anyway? The day doesn't have enough hours
-          in it as it is.
+        text: My sleeping pills. I haven't taken them in a while. I'm more productive
+          at night anyway.
         nextNodeID: 

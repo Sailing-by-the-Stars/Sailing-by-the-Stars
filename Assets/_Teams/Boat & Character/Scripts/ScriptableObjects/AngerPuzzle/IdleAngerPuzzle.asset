@@ -10,22 +10,23 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a27b1591cf442e34da26ab4a98de3513, type: 3}
-  m_Name: Hint2BargainingDialogue
+  m_Name: IdleAngerPuzzle
   m_EditorClassIdentifier: Assembly-CSharp::Dialogue
   hasName: 1
   npcName: Axel
   talkingSpeed: 0.95
+  autoAdvance: 1
+  secondsPerCharacter: 0.03
   nodes:
-  - rid: 141452603536965730
+  - rid: 2145329768866250752
   hasItemID: 0
   itemID: 0
   references:
     version: 2
     RefIds:
-    - rid: 141452603536965730
+    - rid: 2145329768866250752
       type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
       data:
-        nodeID: Hint2_Bargaining_Dialogue
-        text: 'So, the weight is heaviest to lightest...I definitely value certain
-          things over others... '
+        nodeID: Idle_Anger_Puzzle
+        text: So...if I understand correctly, I just need to align the shadows.
         nextNodeID: 

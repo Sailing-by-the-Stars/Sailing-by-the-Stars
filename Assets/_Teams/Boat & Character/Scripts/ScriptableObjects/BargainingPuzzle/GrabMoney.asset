@@ -15,9 +15,10 @@ MonoBehaviour:
   hasName: 1
   npcName: Axel
   talkingSpeed: 0.95
+  autoAdvance: 1
+  secondsPerCharacter: 0.03
   nodes:
   - rid: 141452603536965738
-  - rid: 141452603536965739
   hasItemID: 0
   itemID: 0
   references:
@@ -27,12 +28,6 @@ MonoBehaviour:
       type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
       data:
         nodeID: Grab_Money
-        text: Money? This may be mine, but I don't remember using this kind of pouch...
-        nextNodeID: Grab_Money_P2
-    - rid: 141452603536965739
-      type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
-      data:
-        nodeID: Grab_Money_P2
-        text: Either way, this could come in useful for when I get back home! Money
-          makes the world go round, after all.
+        text: I don't remember using this kind of pouch, but more money is always
+          useful! Money makes the world go round, after all.
         nextNodeID: 
