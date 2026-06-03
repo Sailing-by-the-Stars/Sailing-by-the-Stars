@@ -183,7 +183,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 415747213171492294, guid: 3f71ab30b3f58514ea3dc5e18f01b564, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.707107
       objectReference: {fileID: 0}
     - target: {fileID: 415747213171492294, guid: 3f71ab30b3f58514ea3dc5e18f01b564, type: 3}
       propertyPath: m_LocalRotation.x
@@ -191,7 +191,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 415747213171492294, guid: 3f71ab30b3f58514ea3dc5e18f01b564, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0
+      value: -0.7071066
       objectReference: {fileID: 0}
     - target: {fileID: 415747213171492294, guid: 3f71ab30b3f58514ea3dc5e18f01b564, type: 3}
       propertyPath: m_LocalRotation.z
@@ -203,7 +203,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 415747213171492294, guid: 3f71ab30b3f58514ea3dc5e18f01b564, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
+      value: -90
       objectReference: {fileID: 0}
     - target: {fileID: 415747213171492294, guid: 3f71ab30b3f58514ea3dc5e18f01b564, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
@@ -32898,25 +32898,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1238450087}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1020103814 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3954329586496340310, guid: b30d005f72aa7d6439261a13e13f2c23, type: 3}
-  m_PrefabInstance: {fileID: 7420044604117170416}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1020103819
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1020103814}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ea1d725e30e0a0641af01f648d71bd8f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ItemDialogueTrigger
-  dialogue: {fileID: 11400000, guid: 0158351eccd80b445864fa3247aea9da, type: 2}
-  onlyTriggerOnce: 1
 --- !u!1001 &1063141791
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -33006,25 +32987,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 67c51965501d08847996b1d0dee2c7df, type: 3}
---- !u!1 &1069120145 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 337916923114043115, guid: b30d005f72aa7d6439261a13e13f2c23, type: 3}
-  m_PrefabInstance: {fileID: 7420044604117170416}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1069120150
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1069120145}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ea1d725e30e0a0641af01f648d71bd8f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ItemDialogueTrigger
-  dialogue: {fileID: 11400000, guid: fd5e5ac1d323bcb438c78180fbea9f71, type: 2}
-  onlyTriggerOnce: 1
 --- !u!1001 &1069592279
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -38336,30 +38298,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1cfbf4d70e6f3fa4e886d930b36c0cb4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ItemSpawner
---- !u!1 &1212601274 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5695178703405796153, guid: b30d005f72aa7d6439261a13e13f2c23, type: 3}
-  m_PrefabInstance: {fileID: 7420044604117170416}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1212601275 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2326610407719644439, guid: b30d005f72aa7d6439261a13e13f2c23, type: 3}
   m_PrefabInstance: {fileID: 7420044604117170416}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1212601279
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1212601274}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ea1d725e30e0a0641af01f648d71bd8f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ItemDialogueTrigger
-  dialogue: {fileID: 11400000, guid: 59cc3d640b124c44594a76b343bd54d7, type: 2}
-  onlyTriggerOnce: 1
 --- !u!1001 &1216743628
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -38627,25 +38570,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d8f6fd535518f5540b4bcc3099582f77, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.RenderPipelines.HighDefinition.Runtime::UnityEngine.Rendering.HighDefinition.WaterSurface
---- !u!1 &1292818129 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4851351111004812512, guid: b30d005f72aa7d6439261a13e13f2c23, type: 3}
-  m_PrefabInstance: {fileID: 7420044604117170416}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1292818134
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1292818129}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ea1d725e30e0a0641af01f648d71bd8f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ItemDialogueTrigger
-  dialogue: {fileID: 11400000, guid: 87d4a56b4555409448394a8ef8284e25, type: 2}
-  onlyTriggerOnce: 1
 --- !u!1 &1310179916
 GameObject:
   m_ObjectHideFlags: 8
@@ -48650,11 +48574,6 @@ Texture2D:
     offset: 0
     size: 0
     path: 
---- !u!4 &1419863919 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 1993391235762772657, guid: b30d005f72aa7d6439261a13e13f2c23, type: 3}
-  m_PrefabInstance: {fileID: 7420044604117170416}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1447446594
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -80733,19 +80652,7 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 2326610407719644439, guid: b30d005f72aa7d6439261a13e13f2c23, type: 3}
       insertIndex: -1
       addedObject: {fileID: 6991970039650144934}
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 337916923114043115, guid: b30d005f72aa7d6439261a13e13f2c23, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1069120150}
-    - targetCorrespondingSourceObject: {fileID: 4851351111004812512, guid: b30d005f72aa7d6439261a13e13f2c23, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1292818134}
-    - targetCorrespondingSourceObject: {fileID: 5695178703405796153, guid: b30d005f72aa7d6439261a13e13f2c23, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1212601279}
-    - targetCorrespondingSourceObject: {fileID: 3954329586496340310, guid: b30d005f72aa7d6439261a13e13f2c23, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1020103819}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b30d005f72aa7d6439261a13e13f2c23, type: 3}
 --- !u!4 &7420044604117170417 stripped
 Transform:
@@ -80860,7 +80767,7 @@ MonoBehaviour:
   altarIndicatorSparkle: {fileID: 0}
   altarArrowObject: {fileID: 9212693959786725523}
   heaviestItemTransform: {fileID: 1487243019}
-  correctPedestalSlot: {fileID: 1419863919}
+  correctPedestalSlot: {fileID: 0}
 --- !u!65 &8031679592198099518
 BoxCollider:
   m_ObjectHideFlags: 0
