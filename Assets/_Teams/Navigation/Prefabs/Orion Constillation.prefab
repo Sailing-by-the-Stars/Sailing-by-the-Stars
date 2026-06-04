@@ -1315,6 +1315,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d40e59aea1f787244b027d8b57e3fe08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TwinklingStar
+  fmodEvent:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  volume: 1
   debugState: 0
   twinkleCurve:
     serializedVersion: 2
@@ -1451,17 +1459,17 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  intensity: 2.5
+  intensity: 0.3
   twinkleTime: 1.5
   dimTime: 2
   selectedTime: 5
+  animationFPS: 12
   selectedIntensity: 1
   targetAngle: 1
   tutorialStar: 0
   initialColor: {r: 0, g: 41.08653, b: 31.33823, a: 41.08653}
   initpos: {x: 58.417725, y: 69.73001, z: -2076.815}
   frameCount: 12
-  animationFPS: 12
 --- !u!114 &178969673002809582
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1475,9 +1483,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StarInfo
   thisTransform: {fileID: 316942150800489314}
-  emissionMult: 41.08653
+  emissionMult: 20.8
   matColor: {r: 0, g: 1, b: 0.7627373, a: 1}
-  emissionColor: {r: 0, g: 41.08653, b: 31.33823, a: 41.08653}
+  emissionColor: {r: 0, g: 0.3209885, b: 0.24482992, a: 41.08653}
   initpos: {x: 58.417725, y: 69.73001, z: -2076.815}
 --- !u!1 &4749635028747717365
 GameObject:

@@ -88,7 +88,7 @@ public class Astrolabe : ToolPickup, AstroTutorialStep
         EnableControl(7);
     }
 
-    public void EnableControl(int nr)
+    public void EnableControl(int nr = -1)
     {
         if (nr > currentTutorialStep && nr != 7 && nr !=6)
         {
@@ -313,7 +313,12 @@ public class Astrolabe : ToolPickup, AstroTutorialStep
             }*/
 
             if (playerControls.Astrolabe.Open.triggered)
-            { 
+            {
+                if (AstrolabeTutorialSeq.finished)
+                {
+                    EnableControl(10000);
+                }
+
                 if (currentSequence != null && (currentTutorialStepFRFR == 0 || currentTutorialStepFRFR > 2))
                 {
                     ExitStep();

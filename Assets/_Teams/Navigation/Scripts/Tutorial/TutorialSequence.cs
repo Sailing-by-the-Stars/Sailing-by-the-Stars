@@ -47,7 +47,7 @@ public class TutorialSequence : MonoBehaviour
     public List<SequenceEntry> EventOrder = new();
     public int index = 0;
 
-    private int currentStepFinishes = 0;
+    public int currentStepFinishes = 0;
 
     public Action finishStep;
 
@@ -91,7 +91,7 @@ public class TutorialSequence : MonoBehaviour
         }
     }
 
-    public void NextStep(int stepIndex = -1)
+    public virtual void NextStep(int stepIndex = -1)
     {
 
 

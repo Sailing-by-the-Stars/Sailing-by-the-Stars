@@ -633,7 +633,7 @@ public class FlatStarField : MonoBehaviour
                 }
 
                 twinkler = childStar.GetComponent<TwinklingStar>();
-
+                float mult = 1;
                 if (twinkler != null)
                 {
                     int i = 0;
@@ -645,7 +645,7 @@ public class FlatStarField : MonoBehaviour
                             twinkler.twinkleCurve = template.twinkleCurve;
                             twinkler.selectedCurve = template.selectedCurve;
                             twinkler.dimCurve = template.dimCurve;
-                            twinkler.intensity = template.intensity;
+                            //twinkler.intensity = template.intensity;
                             twinkler.twinkleTime = template.twinkleTime;
 
                             twinkler.tutorialStar = false;
@@ -671,12 +671,12 @@ public class FlatStarField : MonoBehaviour
                             childStar.GetComponent<SphereCollider>().radius = starColliderMult;
                         }
                     }
-                            
 
 
+                    mult = (1 / twinklerSizeMult) * emissionMult/2;
 
                     tempStarSize *= twinklerSizeMult;
-                    //tempStarSize /= twinklerEmissionMult;
+                    //tempStarSize *= twinklerEmissionMult;
                 }
 
                 if (tempStarSize < minManualSize)
@@ -690,7 +690,17 @@ public class FlatStarField : MonoBehaviour
                     childStar.transform.localScale = newsize;
                 }
 
-                childStar.Initialize(starInfo);
+
+                if (childStar.GetComponent<TwinklingStar>())
+                {
+                    childStar.Initialize(starInfo, mult);
+
+                }
+                else
+                {
+                    childStar.Initialize(starInfo);
+
+                }
             }
         }
 

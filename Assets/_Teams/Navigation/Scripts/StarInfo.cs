@@ -33,9 +33,17 @@ public class StarInfo : MonoBehaviour
 
     public void Initialize(StarInfo baseStar)
     {
+
         emissionMult = baseStar.emissionMult;
         matColor = baseStar.matColor;
         emissionColor = baseStar.emissionColor;
+        Initialize();
+    }
+
+    public void Initialize(StarInfo baseStar, float mult)
+    {
+        emissionMult = baseStar.emissionMult * mult;
+        matColor = baseStar.matColor;
         Initialize();
     }
 
