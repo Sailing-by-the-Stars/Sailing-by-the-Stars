@@ -308,6 +308,8 @@ public class FlatStarField : MonoBehaviour
             starPositionType = new FlatStarPosition();
         }
 
+        TwinklingStar.tutorialStars = new();
+
         stars = sdl.LoadData(starPositionType);
         starObjects = new();
         foreach (StarDataLoader.Star star in stars)

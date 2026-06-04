@@ -32,6 +32,8 @@ public class EntryCheck
 
 public class TwinklingStar : MonoBehaviour
 {
+    StarTutorialHelper currentHelper;
+
     [SerializeField] StarState debugState;
 
     StarState prevStarState;
@@ -73,6 +75,8 @@ public class TwinklingStar : MonoBehaviour
     public static event Action OnStarFound;
 
     public List<EntryCheck> entryNumbers = new();
+
+    public static List<TwinklingStar> tutorialStars;
 
 
     public Color initialColor;
@@ -123,7 +127,18 @@ public class TwinklingStar : MonoBehaviour
 
         if (tutorialStar)
         {
-            starState = StarState.dimmed;
+            tutorialStars.Add(this);
+        }
+    }
+
+    private void OnDestroy()
+    {
+        if (tutorialStar)
+        {
+            if (tutorialStars.Contains(this))
+            {
+                tutorialStars.Remove(this);
+            }
         }
     }
 
@@ -138,6 +153,12 @@ public class TwinklingStar : MonoBehaviour
 
     public virtual void Hit(float hitAngle)
     {
+        if(starState == StarState.selected)
+        {
+            ExitStep();
+        }
+
+
         if(starState == StarState.dimmed)
         {
             return;
@@ -463,5 +484,33 @@ public class TwinklingStar : MonoBehaviour
     private void SimulateStarFound()
     {
         OnStarFound?.Invoke();
+    }
+
+    public void EnterStep(StarTutorialHelper helper)
+    {
+        currentHelper = helper;
+    }
+
+    public void ExitStep()
+    {
+        if (currentHelper)
+        {
+            currentHelper.ExitStep();
+        }
+        else
+        {
+            return;
+        }
+
+        currentHelper = null;
+
+        if (tutorialStars.Contains(this))
+        {
+            tutorialStars.Remove(this);
+        }
+        else
+        {
+            Debug.LogWarning("the tutorial star isn't in the tutorialstars??");
+        }
     }
 }

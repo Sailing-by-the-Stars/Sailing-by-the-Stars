@@ -21,6 +21,9 @@ public class SequenceEntry
 
 public class TutorialSequence : MonoBehaviour
 {
+    public UnityEvent enterTutorial;
+    public UnityEvent exitTutorial;
+
     public bool finishedTutorial = false;
     public bool startedTutorial = false;
     public static TutorialSequence Instance;
@@ -90,6 +93,11 @@ public class TutorialSequence : MonoBehaviour
 
     public void NextStep(int stepIndex = -1)
     {
+        if(stepIndex == 0)
+        {
+            enterTutorial.Invoke();
+        }
+
         startedTutorial = true;
         if(stepIndex != -1)
         {
@@ -104,6 +112,8 @@ public class TutorialSequence : MonoBehaviour
         if(index + 1 > EventOrder.Count)
         {
             Debug.LogWarning("got to the end of the tutorial!");
+            exitTutorial
+                .Invoke();
             finishedTutorial = true;
             return;
         }

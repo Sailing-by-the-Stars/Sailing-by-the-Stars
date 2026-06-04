@@ -111,6 +111,12 @@ public class Journal : ToolPickup, AstroTutorialStep
         base.Grab(pickupController);
 
         RewardItem.collectedReward?.Invoke(0);
+        PuzzleProgress.MarkComplete("denial");
+
+#if !UNITY_EDITOR
+        skipTutorial = false;
+#endif
+
 
         if (!skipTutorial)
         {
@@ -118,6 +124,7 @@ public class Journal : ToolPickup, AstroTutorialStep
         }
         else
         {
+            TutorialSequence.Instance.NextStep(1000);
             TutorialInputs();
         }
 
@@ -603,7 +610,7 @@ public class Journal : ToolPickup, AstroTutorialStep
     {
         if (sequence == null)
         {
-            currentTutorialStep = int.MaxValue;
+            currentTutorialStep = 100000;
         } else if (currentSequence != null && currentSequence != sequence)
         {
             Debug.LogError("this tutorialDialogue object is already in a different sequence!!");
@@ -681,8 +688,6 @@ public class Journal : ToolPickup, AstroTutorialStep
                 {
                     Debug.LogWarning("no popup ui assigned?");
                 }
-
-                    TutorialInputs();
 
                 break;
         }

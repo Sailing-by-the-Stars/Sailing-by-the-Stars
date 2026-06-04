@@ -13,7 +13,7 @@ public class Movement : MonoBehaviour
 {
     [Header("Movement Settings")]
     [SerializeField] float movementSpeed = 4f;
-    [SerializeField] float sprintMultiplier;
+    [SerializeField] float sprintMultiplier = 1;
     [SerializeField] float jumpStrength = 20f;
 
     [Header("Camera Setting")]
@@ -216,10 +216,10 @@ public class Movement : MonoBehaviour
         float speed = movementSpeed;
 
         // Legs have been cut due to jank ~Joost
-        /*if (playerControls.Land.Sprint.IsPressed())
+        if (playerControls.Land.Sprint.IsPressed())
         {
             speed *= sprintMultiplier;
-        }*/
+        }
 
         Vector3 move = transform.forward * input.y + transform.right * input.x;
 
@@ -249,11 +249,11 @@ public class Movement : MonoBehaviour
         //<
     }
     // Legs have been cut due to jank ~Joost
-    /*
+    
     public void SetSprintMultiplier(float multiplier)
     {
         sprintMultiplier = multiplier;
-    }*/
+    }
 
     void RotateCamera()
     {
