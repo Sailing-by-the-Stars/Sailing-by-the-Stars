@@ -19,6 +19,8 @@ public class StarTutorialHelper : MonoBehaviour, AstroTutorialStep
         foreach (TwinklingStar twinkler in TwinklingStar.tutorialStars)
         {
             twinkler.EnterStep(this);
+
+            //Debug.LogError($"found the star {twinkler.name}");
         }
     }
 

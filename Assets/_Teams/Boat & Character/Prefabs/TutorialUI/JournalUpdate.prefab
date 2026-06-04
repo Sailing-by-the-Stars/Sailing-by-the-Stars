@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 6320486627605413941}
   - component: {fileID: 3144129426177008892}
   - component: {fileID: 7457032069176361306}
+  - component: {fileID: 8578850003112906050}
   m_Layer: 5
   m_Name: JournalUpdate
   m_TagString: Untagged
@@ -28,7 +29,7 @@ RectTransform:
   m_GameObject: {fileID: 4763205544310453089}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.94868, y: 0.94868, z: 0.94868}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5120788534724629859}
@@ -71,7 +72,7 @@ Animator:
   m_GameObject: {fileID: 4763205544310453089}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: be35a716c3358df418559474b1d7e68e, type: 2}
+  m_Controller: {fileID: 9100000, guid: 42c82f933ebea44469c8601206798a5b, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -83,6 +84,18 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &8578850003112906050
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4763205544310453089}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39916e38386bf2f4c8227a439697f4cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ShowJournalUpdateNotif
 --- !u!1 &6045070035393162351
 GameObject:
   m_ObjectHideFlags: 0

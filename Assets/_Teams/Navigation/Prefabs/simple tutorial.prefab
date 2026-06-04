@@ -1356,6 +1356,18 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+        - m_Target: {fileID: 0}
+          m_TargetAssemblyTypeName: StarTutorialHelper, Assembly-CSharp
+          m_MethodName: enableStars
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 2
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
     endOfLine:
       m_PersistentCalls:
         m_Calls: []
@@ -1393,19 +1405,7 @@ MonoBehaviour:
     lineToGoToNext: -1
     startOfLine:
       m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 3016184529312803922}
-          m_TargetAssemblyTypeName: Astrolabe, Assembly-CSharp
-          m_MethodName: EnableControl
-          m_Mode: 3
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 3
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
+        m_Calls: []
     endOfLine:
       m_PersistentCalls:
         m_Calls: []
@@ -1443,14 +1443,14 @@ MonoBehaviour:
     startOfLine:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 3016184529312803922}
-          m_TargetAssemblyTypeName: Astrolabe, Assembly-CSharp
-          m_MethodName: EnableControl
+        - m_Target: {fileID: 887578688244434262}
+          m_TargetAssemblyTypeName: Journal, Assembly-CSharp
+          m_MethodName: TutorialInputs
           m_Mode: 3
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
             m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 7
+            m_IntArgument: -1
             m_FloatArgument: 0
             m_StringArgument: 
             m_BoolArgument: 0
@@ -1467,22 +1467,22 @@ MonoBehaviour:
     lineToGoToNext: -1
     startOfLine:
       m_PersistentCalls:
-        m_Calls: []
-    endOfLine:
-      m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 3016184529312803922}
-          m_TargetAssemblyTypeName: Astrolabe, Assembly-CSharp
-          m_MethodName: EnableControl
+        - m_Target: {fileID: 887578688244434262}
+          m_TargetAssemblyTypeName: Journal, Assembly-CSharp
+          m_MethodName: ForcePage
           m_Mode: 3
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
             m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 6
+            m_IntArgument: 1
             m_FloatArgument: 0
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+    endOfLine:
+      m_PersistentCalls:
+        m_Calls: []
   - text: There is also a note attached with the directions to the next Island. Use
       the <color=#F0E37D>Astrolabe</color> and <color=#F0E37D>Celestial map</color>
       to locate the shown star
@@ -1493,22 +1493,22 @@ MonoBehaviour:
     lineToGoToNext: -1
     startOfLine:
       m_PersistentCalls:
-        m_Calls: []
-    endOfLine:
-      m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 3016184529312803922}
-          m_TargetAssemblyTypeName: Astrolabe, Assembly-CSharp
-          m_MethodName: EnableControl
+        - m_Target: {fileID: 887578688244434262}
+          m_TargetAssemblyTypeName: Journal, Assembly-CSharp
+          m_MethodName: ForcePage
           m_Mode: 3
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
             m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 6
+            m_IntArgument: 2
             m_FloatArgument: 0
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+    endOfLine:
+      m_PersistentCalls:
+        m_Calls: []
   - text: You will find your destination by following the star to the angle described
     manualUI: []
     waitAtLineEnd: 0
@@ -1529,6 +1529,18 @@ MonoBehaviour:
             m_ObjectArgument: {fileID: 0}
             m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
             m_IntArgument: 6
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+        - m_Target: {fileID: 887578688244434262}
+          m_TargetAssemblyTypeName: Journal, Assembly-CSharp
+          m_MethodName: ForcePage
+          m_Mode: 3
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: -1
             m_FloatArgument: 0
             m_StringArgument: 
             m_BoolArgument: 0
@@ -1584,18 +1596,6 @@ MonoBehaviour:
   - sequenceEnter:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 2378189378780516795}
-          m_TargetAssemblyTypeName: TutorialDialogue, Assembly-CSharp
-          m_MethodName: EnterStep
-          m_Mode: 0
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
         - m_Target: {fileID: 3016184529312803922}
           m_TargetAssemblyTypeName: Astrolabe, Assembly-CSharp
           m_MethodName: EnterStep
@@ -1608,26 +1608,26 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+        - m_Target: {fileID: 2378189378780516795}
+          m_TargetAssemblyTypeName: TutorialDialogue, Assembly-CSharp
+          m_MethodName: EnterStep
+          m_Mode: 0
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
     continueAfterEntry: 1
-    nextEntry: 1
+    nextEntry: -1
     dialogueEntry: 0
     dialogueEntryText: You picked up a <color=#F0E37D>Astrolabe</color>
     clickForDialogue: 0
   - sequenceEnter:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 3016184529312803922}
-          m_TargetAssemblyTypeName: Astrolabe, Assembly-CSharp
-          m_MethodName: EnterStep
-          m_Mode: 0
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
         - m_Target: {fileID: 2378189378780516795}
           m_TargetAssemblyTypeName: TutorialDialogue, Assembly-CSharp
           m_MethodName: EnterStep
@@ -1640,8 +1640,20 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+        - m_Target: {fileID: 0}
+          m_TargetAssemblyTypeName: StarTutorialHelper, Assembly-CSharp
+          m_MethodName: EnterStep
+          m_Mode: 0
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
     continueAfterEntry: 1
-    nextEntry: 2
+    nextEntry: -1
     dialogueEntry: 2
     dialogueEntryText: The astrolabe is a tool to help <color=#F0E37D>navigate the
       stars</color>
@@ -1649,8 +1661,8 @@ MonoBehaviour:
   - sequenceEnter:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 2378189378780516795}
-          m_TargetAssemblyTypeName: TutorialDialogue, Assembly-CSharp
+        - m_Target: {fileID: 3016184529312803922}
+          m_TargetAssemblyTypeName: Astrolabe, Assembly-CSharp
           m_MethodName: EnterStep
           m_Mode: 0
           m_Arguments:
@@ -1661,8 +1673,8 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
-        - m_Target: {fileID: 3016184529312803922}
-          m_TargetAssemblyTypeName: Astrolabe, Assembly-CSharp
+        - m_Target: {fileID: 2378189378780516795}
+          m_TargetAssemblyTypeName: TutorialDialogue, Assembly-CSharp
           m_MethodName: EnterStep
           m_Mode: 0
           m_Arguments:
@@ -1681,39 +1693,6 @@ MonoBehaviour:
   - sequenceEnter:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 0}
-          m_TargetAssemblyTypeName: TutorialTwinkler, Assembly-CSharp
-          m_MethodName: EnterStep
-          m_Mode: 0
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-        - m_Target: {fileID: 2378189378780516795}
-          m_TargetAssemblyTypeName: TutorialDialogue, Assembly-CSharp
-          m_MethodName: EnterStep
-          m_Mode: 0
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-    continueAfterEntry: 1
-    nextEntry: -1
-    dialogueEntry: 6
-    dialogueEntryText: Look at the number pointed at. Polaris is currently at 33
-      degrees from the horizon
-    clickForDialogue: 0
-  - sequenceEnter:
-      m_PersistentCalls:
-        m_Calls:
         - m_Target: {fileID: 2378189378780516795}
           m_TargetAssemblyTypeName: TutorialDialogue, Assembly-CSharp
           m_MethodName: EnterStep
@@ -1740,8 +1719,9 @@ MonoBehaviour:
           m_CallState: 2
     continueAfterEntry: 1
     nextEntry: -1
-    dialogueEntry: 7
-    dialogueEntryText: 
+    dialogueEntry: 6
+    dialogueEntryText: Look at the number pointed at. Polaris is currently at 33
+      degrees from the horizon
     clickForDialogue: 0
   - sequenceEnter:
       m_PersistentCalls:
@@ -3229,6 +3209,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 3016184529312803922}
+        m_TargetAssemblyTypeName: Astrolabe, Assembly-CSharp
+        m_MethodName: endJournalTut
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: -2
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   waitFlag: 0
   dialogue:
   - text: You picked up a <color=#F0E37D>Journal</color>
@@ -3437,7 +3429,31 @@ MonoBehaviour:
       m_Calls: []
   exitTutorial:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 887578688244434262}
+        m_TargetAssemblyTypeName: Journal, Assembly-CSharp
+        m_MethodName: TutorialInputs
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: -2
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 3016184529312803922}
+        m_TargetAssemblyTypeName: Astrolabe, Assembly-CSharp
+        m_MethodName: endJournalTut
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: -2
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   finishedTutorial: 0
   startedTutorial: 0
   startOnStart: 0
@@ -4263,12 +4279,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
+  m_ReferenceResolution: {x: 1920, y: 1080}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
+  m_MatchWidthOrHeight: 0.5
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
@@ -5159,22 +5175,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5875249299029452663}
     m_Modifications:
-    - target: {fileID: 5607120406041716019, guid: 877a63e25843be84780a89eb2bf33841, type: 3}
-      propertyPath: leftOnly
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5607120406041716019, guid: 877a63e25843be84780a89eb2bf33841, type: 3}
-      propertyPath: pageIDHack
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 5607120406041716019, guid: 877a63e25843be84780a89eb2bf33841, type: 3}
-      propertyPath: page.leftPage
-      value: 
-      objectReference: {fileID: 2800000, guid: 64f3a884d980b86449e41fccb1dad507, type: 3}
-    - target: {fileID: 5607120406041716019, guid: 877a63e25843be84780a89eb2bf33841, type: 3}
-      propertyPath: page.rightPage
-      value: 
-      objectReference: {fileID: 2800000, guid: d85163c73a86b3c4b84e5c8b70167da4, type: 3}
     - target: {fileID: 508388940395461487, guid: d6d04486734541045b01c9ff76106d54, type: 3}
       propertyPath: m_LocalPosition.x
       value: -377.588
@@ -5251,6 +5251,22 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5607120406041716019, guid: 877a63e25843be84780a89eb2bf33841, type: 3}
+      propertyPath: leftOnly
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5607120406041716019, guid: 877a63e25843be84780a89eb2bf33841, type: 3}
+      propertyPath: pageIDHack
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5607120406041716019, guid: 877a63e25843be84780a89eb2bf33841, type: 3}
+      propertyPath: page.leftPage
+      value: 
+      objectReference: {fileID: 2800000, guid: 64f3a884d980b86449e41fccb1dad507, type: 3}
+    - target: {fileID: 5607120406041716019, guid: 877a63e25843be84780a89eb2bf33841, type: 3}
+      propertyPath: page.rightPage
+      value: 
+      objectReference: {fileID: 2800000, guid: d85163c73a86b3c4b84e5c8b70167da4, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -5269,10 +5285,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5875249299029452663}
     m_Modifications:
-    - target: {fileID: 5607120406041716019, guid: 877a63e25843be84780a89eb2bf33841, type: 3}
-      propertyPath: leftOnly
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 508388940395461487, guid: d6d04486734541045b01c9ff76106d54, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.39000005
@@ -5349,6 +5361,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5607120406041716019, guid: 877a63e25843be84780a89eb2bf33841, type: 3}
+      propertyPath: leftOnly
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -5369,7 +5385,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3540181415083067949, guid: ce13e5fb1ec3db54fa44d7e2a8a66671, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 203.133
+      value: 122.4
       objectReference: {fileID: 0}
     - target: {fileID: 3540181415083067949, guid: ce13e5fb1ec3db54fa44d7e2a8a66671, type: 3}
       propertyPath: m_LocalPosition.y
@@ -5377,7 +5393,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3540181415083067949, guid: ce13e5fb1ec3db54fa44d7e2a8a66671, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 536.467
+      value: 446.5
       objectReference: {fileID: 0}
     - target: {fileID: 3540181415083067949, guid: ce13e5fb1ec3db54fa44d7e2a8a66671, type: 3}
       propertyPath: m_LocalRotation.w
@@ -5446,19 +5462,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1491634443114468454, guid: 36438098deccace4dab2849fed42090b, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 197.21997
+      value: 128.83
       objectReference: {fileID: 0}
     - target: {fileID: 1491634443114468454, guid: 36438098deccace4dab2849fed42090b, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 3.3199997
+      value: 5.77
       objectReference: {fileID: 0}
     - target: {fileID: 1491634443114468454, guid: 36438098deccace4dab2849fed42090b, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 538.70996
+      value: 427.46
       objectReference: {fileID: 0}
     - target: {fileID: 1491634443114468454, guid: 36438098deccace4dab2849fed42090b, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.971984
+      value: 0.9548356
       objectReference: {fileID: 0}
     - target: {fileID: 1491634443114468454, guid: 36438098deccace4dab2849fed42090b, type: 3}
       propertyPath: m_LocalRotation.x
@@ -5466,7 +5482,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1491634443114468454, guid: 36438098deccace4dab2849fed42090b, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.23504724
+      value: -0.29713458
       objectReference: {fileID: 0}
     - target: {fileID: 1491634443114468454, guid: 36438098deccace4dab2849fed42090b, type: 3}
       propertyPath: m_LocalRotation.z
@@ -5478,7 +5494,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1491634443114468454, guid: 36438098deccace4dab2849fed42090b, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 27.189
+      value: -34.571
       objectReference: {fileID: 0}
     - target: {fileID: 1491634443114468454, guid: 36438098deccace4dab2849fed42090b, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
@@ -5488,6 +5504,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: journal_pedestal
       objectReference: {fileID: 0}
+    - target: {fileID: 2546104868616830080, guid: 36438098deccace4dab2849fed42090b, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.0492
+      objectReference: {fileID: 0}
+    - target: {fileID: 4798357331021467017, guid: 36438098deccace4dab2849fed42090b, type: 3}
+      propertyPath: pages.Array.size
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6868537103259439842, guid: 36438098deccace4dab2849fed42090b, type: 3}
       propertyPath: skipTutorial
       value: 0
@@ -5496,6 +5520,10 @@ PrefabInstance:
       propertyPath: meshToHighlight
       value: 
       objectReference: {fileID: 4837858048392044622}
+    - target: {fileID: 8847252137628342166, guid: 36438098deccace4dab2849fed42090b, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.0492
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -5530,18 +5558,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5875249299029452663}
     m_Modifications:
-    - target: {fileID: 5607120406041716019, guid: 877a63e25843be84780a89eb2bf33841, type: 3}
-      propertyPath: pageIDHack
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 5607120406041716019, guid: 877a63e25843be84780a89eb2bf33841, type: 3}
-      propertyPath: page.leftPage
-      value: 
-      objectReference: {fileID: 2800000, guid: 64f3a884d980b86449e41fccb1dad507, type: 3}
-    - target: {fileID: 5607120406041716019, guid: 877a63e25843be84780a89eb2bf33841, type: 3}
-      propertyPath: page.rightPage
-      value: 
-      objectReference: {fileID: 2800000, guid: d85163c73a86b3c4b84e5c8b70167da4, type: 3}
     - target: {fileID: 508388940395461487, guid: d6d04486734541045b01c9ff76106d54, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.39
@@ -5622,6 +5638,18 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5607120406041716019, guid: 877a63e25843be84780a89eb2bf33841, type: 3}
+      propertyPath: pageIDHack
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5607120406041716019, guid: 877a63e25843be84780a89eb2bf33841, type: 3}
+      propertyPath: page.leftPage
+      value: 
+      objectReference: {fileID: 2800000, guid: 64f3a884d980b86449e41fccb1dad507, type: 3}
+    - target: {fileID: 5607120406041716019, guid: 877a63e25843be84780a89eb2bf33841, type: 3}
+      propertyPath: page.rightPage
+      value: 
+      objectReference: {fileID: 2800000, guid: d85163c73a86b3c4b84e5c8b70167da4, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -5640,10 +5668,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5875249299029452663}
     m_Modifications:
-    - target: {fileID: 5607120406041716019, guid: 877a63e25843be84780a89eb2bf33841, type: 3}
-      propertyPath: leftOnly
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 508388940395461487, guid: d6d04486734541045b01c9ff76106d54, type: 3}
       propertyPath: m_LocalPosition.x
       value: -2.43
@@ -5714,6 +5738,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4558769531945896393, guid: d6d04486734541045b01c9ff76106d54, type: 3}
       propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5607120406041716019, guid: 877a63e25843be84780a89eb2bf33841, type: 3}
+      propertyPath: leftOnly
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []

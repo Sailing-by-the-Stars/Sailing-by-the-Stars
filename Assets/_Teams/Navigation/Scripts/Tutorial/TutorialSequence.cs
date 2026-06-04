@@ -93,6 +93,8 @@ public class TutorialSequence : MonoBehaviour
 
     public void NextStep(int stepIndex = -1)
     {
+
+
         if(stepIndex == 0)
         {
             enterTutorial.Invoke();
@@ -108,6 +110,7 @@ public class TutorialSequence : MonoBehaviour
             index++;
             stepIndex = index;
         }
+        //Debug.LogError(stepIndex);
 
         if(index + 1 > EventOrder.Count)
         {

@@ -32,6 +32,9 @@ public class EntryCheck
 
 public class TwinklingStar : MonoBehaviour
 {
+    public FMODUnity.EventReference fmodEvent;
+    public float volume = 1;
+
     StarTutorialHelper currentHelper;
 
     [SerializeField] StarState debugState;
@@ -46,7 +49,7 @@ public class TwinklingStar : MonoBehaviour
             if (StarState == value) return;
             StarState = value;
             UpdateStar(StarState, prevStarState);
-            Debug.Log($"starState changed to: {StarState}");
+            UnityEngine.Debug.Log($"starState changed to: {StarState}");
             prevStarState = StarState;
         }
     }
@@ -67,6 +70,7 @@ public class TwinklingStar : MonoBehaviour
     public float twinkleTime = 1;
     public float dimTime = 2;
     public float selectedTime = 5;
+    public float animationFPS = 12f;
     public float selectedIntensity = 1;
     public float targetAngle = 1;
     public bool tutorialStar = false;
@@ -84,7 +88,6 @@ public class TwinklingStar : MonoBehaviour
     public Vector3 initpos;
 
     public int frameCount = 12;
-    public float animationFPS = 12f;
 
 
     private void OnEnable()
@@ -122,13 +125,24 @@ public class TwinklingStar : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        if (GetComponent<GlobeShape>())
+        {
+            this.enabled = false;
+            return;
+        }
+
         currentTarget = -1;
         initpos = transform.position;
 
         if (tutorialStar)
         {
             tutorialStars.Add(this);
+            //Debug.LogError($"registered the star {name}");
         }
+
+
+        starState = StarState.minigame;
+        starState = StarState.none;
     }
 
     private void OnDestroy()
@@ -153,7 +167,7 @@ public class TwinklingStar : MonoBehaviour
 
     public virtual void Hit(float hitAngle)
     {
-        if(starState == StarState.selected)
+        if(starState == StarState.selected && tutorialStar)
         {
             ExitStep();
         }
@@ -274,7 +288,7 @@ public class TwinklingStar : MonoBehaviour
     {
         public void Enter(TwinklingStar star)
         {
-            
+            star.UpdateColor();
         }
 
         public void Tick(TwinklingStar star)
@@ -284,7 +298,7 @@ public class TwinklingStar : MonoBehaviour
 
         public void Exit(TwinklingStar star)
         {
-            
+            star.UpdateColor();
         }
     }
 
@@ -352,11 +366,22 @@ public class TwinklingStar : MonoBehaviour
         float timer = 1;
         float animationLength = 1;
 
+        StarTwinklingSound sound;
+
         public void Enter(TwinklingStar star)
         {
             timer = 1f;
             animationLength = star.selectedTime;
             star.twinkle = true;
+
+
+            sound = new();
+            sound.fmodEvent = star.fmodEvent;
+            sound.init();
+
+            FMOD.ATTRIBUTES_3D temp = FMODUnity.RuntimeUtils.To3DAttributes(star.transform);
+
+            sound.PlaySound(temp, star.volume);
         }
 
         public void Tick(TwinklingStar star)
@@ -364,29 +389,35 @@ public class TwinklingStar : MonoBehaviour
             if (!star.twinkle)
                 return;
 
+            float animationDuration = (float)star.frameCount / star.animationFPS;
+
             timer += Time.deltaTime;
 
-            if (timer > animationLength)
+            if (timer >= animationLength)
                 timer -= animationLength;
-
-            float curveOutput = 0;
 
             int frame = 0;
 
-            if (timer >= 0 && timer < 1f)
+            if (timer < animationDuration)
             {
-                curveOutput = star.selectedCurve.Evaluate(timer);
-                frame = Mathf.FloorToInt((timer / animationLength) * star.frameCount);
-                frame = Mathf.Clamp(frame, 0, star.frameCount - 1);
+                frame = Mathf.FloorToInt(timer * star.animationFPS);
+                frame = Mathf.Min(frame, star.frameCount - 1);
+            }
+            else
+            {
+                frame = 0;
             }
 
-            star.UpdateColor(star.intensity * (curveOutput * star.selectedIntensity), frame);
+            star.UpdateColor(star.intensity * star.selectedIntensity, frame);
         }
 
         public void Exit(TwinklingStar star)
         {
             star.twinkle = false;
             star.UpdateColor(0);
+
+            sound.StopSound();
+            Destroy(sound);
         }
 
         private IEnumerator Brighten(TwinklingStar star)
@@ -444,6 +475,9 @@ public class TwinklingStar : MonoBehaviour
 
         public void Enter(TwinklingStar star)
         {
+            StarFoundSound.PlaySound();
+
+
             timer = 0;
             animationLength = star.dimTime;
             star.twinkle = true;
@@ -493,6 +527,8 @@ public class TwinklingStar : MonoBehaviour
 
     public void ExitStep()
     {
+        //Debug.LogError($"found tutorial star {name}!");
+
         if (currentHelper)
         {
             currentHelper.ExitStep();

@@ -120,7 +120,7 @@ public abstract class JournalSection : MonoBehaviour
         }
     }
 
-    void FixScaling(Texture tex, Transform trans)
+    protected virtual void FixScaling(Texture tex, Transform trans)
     {
         if (parentJournal.maxPageWidth == 0f || parentJournal.maxPageHeight == 0f)
         {

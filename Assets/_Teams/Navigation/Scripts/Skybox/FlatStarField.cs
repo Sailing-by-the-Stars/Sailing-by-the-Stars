@@ -380,6 +380,8 @@ public class FlatStarField : MonoBehaviour
 
                                 twinkler.tutorialStar = obj.tutorialStar;
 
+                                twinkler.fmodEvent = template.fmodEvent;
+
                                 EntryCheck entryCheck = new();
                                 entryCheck.entryNumber = i;
                                 entryCheck.targetAngle = obj.targetAngle;
@@ -638,34 +640,36 @@ public class FlatStarField : MonoBehaviour
                     foreach (var obj in twinklingStars)
                     {
                         i++;
-
-                        twinkler.twinkleCurve = template.twinkleCurve;
-                        twinkler.selectedCurve = template.selectedCurve;
-                        twinkler.dimCurve = template.dimCurve;
-                        twinkler.intensity = template.intensity;
-                        twinkler.twinkleTime = template.twinkleTime;
-
-                        twinkler.tutorialStar = obj.tutorialStar;
-
-                        EntryCheck entryCheck = new();
-                        entryCheck.entryNumber = i;
-                        entryCheck.targetAngle = obj.targetAngle;
-
-                        twinkler.entryNumbers.Add(entryCheck);
-
-                        if (obj.confirmBox)
+                        if (star.catalog_number == obj.starID)
                         {
-                            obj.confirmBox.starToConfirm = twinkler;
+                            twinkler.twinkleCurve = template.twinkleCurve;
+                            twinkler.selectedCurve = template.selectedCurve;
+                            twinkler.dimCurve = template.dimCurve;
+                            twinkler.intensity = template.intensity;
+                            twinkler.twinkleTime = template.twinkleTime;
 
+                            twinkler.tutorialStar = false;
+
+                            EntryCheck entryCheck = new();
+                            entryCheck.entryNumber = i;
+                            entryCheck.targetAngle = obj.targetAngle;
+
+                            twinkler.entryNumbers.Add(entryCheck);
+
+                            if (obj.confirmBox)
+                            {
+                                obj.confirmBox.starToConfirm = twinkler;
+
+                            }
+                            else if (!obj.tutorialStar)
+                            {
+                                Debug.LogWarning($"the twinkling star {obj.starID} doesn't have a confirmBox assigned to it");
+                            }
+
+
+                            childStar.gameObject.layer = LayerMask.NameToLayer("Constelation");
+                            childStar.GetComponent<SphereCollider>().radius = starColliderMult;
                         }
-                        else if (!obj.tutorialStar)
-                        {
-                            Debug.LogWarning($"the twinkling star {obj.starID} doesn't have a confirmBox assigned to it");
-                        }
-
-
-                        childStar.gameObject.layer = LayerMask.NameToLayer("Constelation");
-                        childStar.GetComponent<SphereCollider>().radius = starColliderMult;
                     }
                             
 

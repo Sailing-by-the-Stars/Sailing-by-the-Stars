@@ -173,7 +173,10 @@ public class AstroDialogue : MonoBehaviour
         if (indexOfLine >= 0)
         {
             dialogue[indexOfLine].startOfLine.Invoke();
+            inTyping = false;
             StopAllCoroutines();
+            _coroutineGeneration++; // invalidate any still-running coroutine tails
+            waitFlag = false;
             index = indexOfLine;
             StartCoroutine(typeOutLine(dialogue[indexOfLine], indexOfLine));
         }
@@ -227,35 +230,40 @@ public class AstroDialogue : MonoBehaviour
     }
 
 
+    // In AstroDialogue:
+    private int _coroutineGeneration = 0;
+
     protected virtual IEnumerator typeOutLine(astroDialogue lineToShow, int indexOfLine = -1)
     {
+        int myGeneration = ++_coroutineGeneration;
         float T = 0;
 
         inTyping = true;
         foreach (GameObject obj in lineToShow.manualUI)
-        {
             obj.SetActive(true);
-        }
-            
+
         SetText(lineToShow.text);
-        
+
         while (inTyping)
         {
             T += Time.deltaTime;
-
             if (lineToShow.timeTillEndOfline < T)
             {
-                if(!dialogue[indexOfLine].waitAtLineEnd)
+                if (!dialogue[indexOfLine].waitAtLineEnd)
                     inTyping = false;
-
             }
             yield return null;
         }
 
         endOfLine(indexOfLine);
 
+        // If endOfLine triggered a new coroutine (via WaitFlag ? TryGoNextline ? showLine),
+        // that call already incremented _coroutineGeneration. Bail out.
+        if (myGeneration != _coroutineGeneration)
+            yield break;
+
         inTyping = false;
-        if (dialogue[indexOfLine].waitAtLineEnd == false && dialogue[indexOfLine].waitForTutorial == false)
+        if (!dialogue[indexOfLine].waitAtLineEnd && !dialogue[indexOfLine].waitForTutorial)
         {
             NextLine(dialogue[indexOfLine].lineToGoToNext);
         }

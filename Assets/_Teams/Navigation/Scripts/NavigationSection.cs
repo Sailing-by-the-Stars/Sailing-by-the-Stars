@@ -11,8 +11,7 @@ public class NavigationSection : JournalSection
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-
-        if(navPages.Count >= pages.Count)
+        if (navPages.Count >= pages.Count)
         {
             pages.Clear();
             foreach (var navPage in navPages)
@@ -33,17 +32,17 @@ public class NavigationSection : JournalSection
         }
 
 
-        if(navPages.Count != pages.Count)
+        if (navPages.Count != pages.Count)
         {
             Debug.LogError("initializing the initial navPages went wrong somehow!!");
-        } 
+        }
     }
 
     public override void OpenPage(int pageNr)
     {
         base.OpenPage(pageNr);
 
-        if (navPages[pageNr] == null || navPages[pageNr].OpenedPages == null)
+        if (navPages[pageNr] == null || navPages[pageNr].OpenedPages == null || !TutorialSequence.Instance.finishedTutorial)
         {
             return;
         }
@@ -60,70 +59,85 @@ public class NavigationSection : JournalSection
         */
     }
 
+    /// <summary>
+    /// Adds a page to the section at the given pageID slot.
+    /// Pass pageID = -1 to append to the end.
+    /// Navigation is left to the caller — use parentJournal.GoToPage() afterwards if needed.
+    /// </summary>
     public void AddPage(NavPage navPage, int pageID)
     {
-        if (pageID == -1)
-        {
-            pages.Add(navPage.page);
-            navPages.Add(navPage);
-            nrOfPages = pages.Count;
-            return;
-        }
-
         if (pageID < -1)
         {
-            Debug.LogError($"Invalid page index: {pageID}");
+            Debug.LogError($"AddPage: invalid pageID {pageID}");
             return;
         }
 
-        int extraPages = 0;
-        while (pages.Count <= pageID)
+        if (pageID == -1)
         {
-            pages.Add(null);
-            navPages.Add(null);
-            extraPages++;
+            // Append to end
+            navPage.page.pageID = pages.Count;
+            pages.Add(navPage.page);
+            navPages.Add(navPage);
         }
-
-        if (navPages[pageID] != null)
+        else
         {
-            Debug.LogWarning($"Overwriting page at index {pageID}");
-            foreach (int i in navPages[pageID].OpenedPages)
+            // Pad with nulls up to the requested slot
+            while (pages.Count <= pageID)
             {
-                if (!navPage.OpenedPages.Contains(i))
+                pages.Add(null);
+                navPages.Add(null);
+            }
+
+            // Merge OpenedPages if overwriting an existing entry
+            if (navPages[pageID] != null)
+            {
+                Debug.LogWarning($"AddPage: overwriting page at index {pageID}");
+                foreach (int id in navPages[pageID].OpenedPages)
                 {
-                    navPage.OpenedPages.Add(i);
+                    if (!navPage.OpenedPages.Contains(id))
+                        navPage.OpenedPages.Add(id);
                 }
             }
+
+            navPage.page.pageID = pageID;
+            pages[pageID] = navPage.page;
+            navPages[pageID] = navPage;
         }
-        
-        OpenSection();
-
-        pages[pageID] = navPage.page;
-        navPages[pageID] = navPage;
-
-        navPage.page.pageID = pageID;
 
         nrOfPages = pages.Count;
+    }
 
-        int newPageNr = parentJournal.getFullPageNR(navPage.page);
 
-        if (parentJournal.curPageNr > newPageNr - extraPages)
+    protected override void FixScaling(Texture tex, Transform trans)
+    {
+        if (parentJournal.maxPageWidth == 0f || parentJournal.maxPageHeight == 0f)
         {
-            parentJournal.curPageNr += extraPages;
-            parentJournal.prevPageNumber = parentJournal.curPageNr;
+            parentJournal.maxPageWidth = trans.localScale.x;
+            parentJournal.maxPageHeight = trans.localScale.y;
         }
-        
-        if (parentJournal.curPageNr >= newPageNr)
+
+        float tempWidth = parentJournal.maxPageWidth;
+
+        float texWidth = tex.width;
+        float texHeight = tex.height;
+
+        float texRatio = texWidth / texHeight;
+        float maxRatio = tempWidth / parentJournal.maxPageHeight;
+
+        float newWidth;
+        float newHeight;
+
+        if (texRatio > maxRatio)
         {
-            //Jump back to the new page
-            parentJournal.curPageNr -= parentJournal.curPageNr - newPageNr;
-            parentJournal.prevPageNumber = parentJournal.curPageNr - 1; 
-        } 
-        else if (parentJournal.curPageNr < newPageNr)
-        {
-            //Jump forward to the new page
-            parentJournal.curPageNr += parentJournal.curPageNr + newPageNr;
-            parentJournal.prevPageNumber = parentJournal.curPageNr - 1; 
+            newWidth = tempWidth;
+            newHeight = tempWidth / texRatio;
         }
+        else
+        {
+            newHeight = parentJournal.maxPageHeight;
+            newWidth = parentJournal.maxPageHeight * texRatio;
+        }
+
+        trans.localScale = new Vector2(newWidth, newHeight);
     }
 }
