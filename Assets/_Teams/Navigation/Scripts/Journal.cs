@@ -3,8 +3,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Rendering.PostProcessing;
 
 public enum SectionName
 {
@@ -56,7 +58,7 @@ public class Journal : ToolPickup, AstroTutorialStep
     List<Bookmark> bookmarks;
     public Action bookmarkClicked;
 
-    private Camera cam;
+    private CinemachineCamera cam;
     private float initialFOV;
     private float zoomFOV = 30;
     private float animationTime = 0.75f;
@@ -176,8 +178,8 @@ public class Journal : ToolPickup, AstroTutorialStep
         initalRot = Quaternion.Euler(90, 90, 90);
         transform.localRotation = initalRot;
 
-        cam = GetComponentInParent<Camera>();
-        initialFOV = cam.fieldOfView;
+        cam = Camera.main.GetComponent<CinemachineBrain>().ActiveVirtualCamera as CinemachineCamera;
+        initialFOV = cam.Lens.FieldOfView;
         animationCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
 
         zoomedIn = false;
@@ -493,7 +495,7 @@ public class Journal : ToolPickup, AstroTutorialStep
                 yield break;
             }
 
-            cam.fieldOfView = zoomFOV + animationCurve.Evaluate(timer / animationTime) * (initialFOV - zoomFOV);
+            cam.Lens.FieldOfView = zoomFOV + animationCurve.Evaluate(timer / animationTime) * (initialFOV - zoomFOV);
             yield return new WaitForEndOfFrame();
         }
 
@@ -512,7 +514,7 @@ public class Journal : ToolPickup, AstroTutorialStep
                 yield break;
             }
 
-            cam.fieldOfView = zoomFOV + animationCurve.Evaluate(timer / animationTime) * (initialFOV - zoomFOV);
+            cam.Lens.FieldOfView = zoomFOV + animationCurve.Evaluate(timer / animationTime) * (initialFOV - zoomFOV);
             yield return new WaitForEndOfFrame();
         }
 

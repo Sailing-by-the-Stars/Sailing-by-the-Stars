@@ -1,7 +1,6 @@
 using System.Collections;           // ADDED: needed for coroutines
-using System.Text.RegularExpressions;
+using Unity.Cinemachine;
 using UnityEngine;
-using UnityEngine.InputSystem.LowLevel;
 
 //Creator: Joost
 //Edited by: Johan
@@ -39,7 +38,8 @@ public class Movement : MonoBehaviour
 
     PlayerControls playerControls;
 
-    Camera cam;
+    [SerializeField]
+    Transform cam;
 
     float xCamRotation = 0f;
     float yCamRotation = 0f;
@@ -101,7 +101,7 @@ public class Movement : MonoBehaviour
  
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
-        cam = GetComponentInChildren<Camera>();
+        //cam = GetComponentInChildren<CinemachineCamera>();
         rb = GetComponent<Rigidbody>();
  
         if (boat != null)

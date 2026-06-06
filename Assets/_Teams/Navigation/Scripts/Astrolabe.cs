@@ -2,11 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using TMPro;
+using Unity.Cinemachine;
 using UnityEngine;
-using UnityEngine.InputSystem;
-using UnityEngine.UI;
 
 public class Astrolabe : ToolPickup, AstroTutorialStep
 {
@@ -23,7 +21,7 @@ public class Astrolabe : ToolPickup, AstroTutorialStep
     //[NonSerialized]
     public List<int> completedSteps = new();
 
-    private Camera cam;
+    private CinemachineCamera cam;
     
     private float initialFOV;
     private float zoomFOV = 30;
@@ -214,10 +212,10 @@ public class Astrolabe : ToolPickup, AstroTutorialStep
         {
             text.enabled = false;
         }
-        
-        cam = GetComponentInParent<Camera>();
-        
-        initialFOV = cam.fieldOfView;
+
+        cam = Camera.main.GetComponent<CinemachineBrain>().ActiveVirtualCamera as CinemachineCamera;
+
+        initialFOV = cam.Lens.FieldOfView;
         
         animationCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
 
@@ -456,7 +454,7 @@ public class Astrolabe : ToolPickup, AstroTutorialStep
             float T =  timer / animationTime;
             float curveOutput = animationCurve.Evaluate(T);
             
-            cam.fieldOfView = zoomFOV + curveOutput * (initialFOV - zoomFOV);
+            cam.Lens.FieldOfView = zoomFOV + curveOutput * (initialFOV - zoomFOV);
             
             yield return new WaitForEndOfFrame();
         }
@@ -484,7 +482,7 @@ public class Astrolabe : ToolPickup, AstroTutorialStep
             float T =  timer / animationTime;
             float curveOutput = animationCurve.Evaluate(T);
             
-            cam.fieldOfView = zoomFOV + curveOutput * (initialFOV - zoomFOV);
+            cam.Lens.FieldOfView = zoomFOV + curveOutput * (initialFOV - zoomFOV);
             
             yield return new WaitForEndOfFrame();
         }
