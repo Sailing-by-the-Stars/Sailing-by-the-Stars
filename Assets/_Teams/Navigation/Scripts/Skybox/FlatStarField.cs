@@ -646,6 +646,7 @@ public class FlatStarField : MonoBehaviour
                             twinkler.selectedCurve = template.selectedCurve;
                             twinkler.dimCurve = template.dimCurve;
                             //twinkler.intensity = template.intensity;
+                            twinkler.initialColor = tempColor;
                             twinkler.twinkleTime = template.twinkleTime;
 
                             twinkler.tutorialStar = false;
