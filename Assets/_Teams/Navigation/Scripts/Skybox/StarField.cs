@@ -5,20 +5,7 @@ using UnityEngine;
 using UnityEngine.Rendering.HighDefinition;
 using static StarDataLoader;
 
-[Serializable]
-public class Constelation
-{
-    public string name = "";
-    public List<int> starIDs = new();
-    public GameObject starPrefab;
-}
 
-[Serializable]
-public class ManualTwinkler
-{
-    public int starID;
-    public int targetAngle; 
-}
 
 
 public class StarField : MonoBehaviour

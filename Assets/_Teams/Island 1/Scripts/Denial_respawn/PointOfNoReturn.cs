@@ -9,7 +9,9 @@ using UnityEngine.UI;
 /// When the player walks through it for the first time:
 ///   1. Screen fades to black
 ///   2. Player is teleported back to the respawn point
-///   3. The WakeUp blink animation plays, as if they're waking up again
+///   3. Blockade 1 is disabled
+///   4. Blockade 2 is enabled
+///   5. Journal is enabled
 ///
 /// After that the trigger does nothing, so the player can pass freely.
 ///
@@ -17,7 +19,6 @@ using UnityEngine.UI;
 ///   Respawn Point  — empty GameObject placed at the island start
 ///   Fade Panel     — a full-screen black UI Image (same one used elsewhere,
 ///                    or create a new Canvas + Image for this scene)
-///   Wake Up        — drag the Eyelids GameObject (with the WakeUp script) here
 ///   Fade Duration  — how long the fade to black takes (default 0.8s)
 /// </summary>
 [RequireComponent(typeof(Collider))]
@@ -31,12 +32,25 @@ public class PointOfNoReturn : MonoBehaviour
     [Tooltip("A full-screen black UI Image used to fade to black.")]
     public Image fadePanel;
 
-    [Tooltip("How long the fade to black takes in seconds.")]
-    public float fadeDuration = 0.8f;
+    [Tooltip("How long the fade to black (and back) takes in seconds.")]
+    public float fadeDuration = 1.3f;
 
-    [Header("Wake Up")]
-    [Tooltip("Drag the Eyelids GameObject (the one with the WakeUp script) here.")]
-    public WakeUp wakeUp;
+    [Tooltip("How long the screen stays fully black before fading back in.")]
+    public float blackHoldDuration = 1.0f;
+
+    [Header("Rock Blockades")]
+    [Tooltip("This blockade is active at the start of the game and disabled after respawn.")]
+    public GameObject blockade1;
+
+    [Tooltip("This blockade is inactive at the start of the game and enabled after respawn.")]
+    public GameObject blockade2;
+
+    [Header("Journals")]
+    [Tooltip("This journal is desabled at the start of the game and enabled after respawn.")]
+    public GameObject journal1;
+
+    [Tooltip("This journal is desabled at the start of the game and enabled after respawn.")]
+    public GameObject journal2;
 
     private bool _hasTriggered = false;
 
@@ -47,7 +61,13 @@ public class PointOfNoReturn : MonoBehaviour
         // Start with the fade panel invisible
         if (fadePanel != null)
             SetFadeAlpha(0f);
+
+        // Start state:
+        // Blockade 1 blocks the first path.
+        // Blockade 2 is disabled until the player respawns.
+        SetInitialBlockadeState();
     }
+
 
     private void OnTriggerEnter(Collider other)
     {
@@ -110,9 +130,22 @@ public class PointOfNoReturn : MonoBehaviour
             rb.angularVelocity  = Vector3.zero;
         }
 
+        // Switch the rock blockades after the player has respawned
+        if (blockade1 != null)
+            blockade1.SetActive(false);
+
+        if (blockade2 != null)
+            blockade2.SetActive(true);
+
+        if (journal1 != null)
+            journal1.SetActive(true);
+
+        if (journal2 != null)
+            journal2.SetActive(true);
+
         if (movement != null) movement.enabled = true;
 
-        yield return new WaitForSecondsRealtime(0.2f);
+        yield return new WaitForSecondsRealtime(blackHoldDuration);
 
         if (fadePanel != null)
         {
@@ -127,13 +160,22 @@ public class PointOfNoReturn : MonoBehaviour
             fadePanel.gameObject.SetActive(false);
         }
 
-        // Replay the wake-up blink animation
-        if (wakeUp != null)
-            wakeUp.Play();
-        else
-            Debug.LogWarning("[PointOfNoReturn] No WakeUp reference assigned — blink skipped.", this);
-
         Debug.Log("[PointOfNoReturn] Player returned to island start.");
+    }
+
+    private void SetInitialBlockadeState()
+    {
+        if (blockade1 != null)
+            blockade1.SetActive(true);
+
+        if (blockade2 != null)
+            blockade2.SetActive(false);
+        
+        if (journal1 != null)
+            journal1.SetActive(false);
+
+        if (journal2 != null)
+            journal2.SetActive(false);
     }
 
     private void SetFadeAlpha(float alpha)

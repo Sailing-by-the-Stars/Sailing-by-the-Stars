@@ -7,8 +7,10 @@ using UnityEngine.Events;
 public class astroDialogue
 {
     public string text = "";
+    public List<GameObject> manualUI = new();
     public bool waitAtLineEnd = false;
-    public bool waitBeforeLineEnd = false;
+    public bool waitForTutorial = false;
+    public float timeTillEndOfline = 4f;
     public int lineToGoToNext = -1;
     public UnityEvent startOfLine;
     public UnityEvent endOfLine;
@@ -25,13 +27,16 @@ public class AstroDialogue : MonoBehaviour
     [SerializeField] 
     protected int index = 0;
 
-    private string line;
     private bool inTyping;
 
     public UnityEvent enterDialogue;
     public UnityEvent exitDialogue;
 
-    [SerializeField] protected List<astroDialogue> dialogue = new();
+    public bool waitFlag = false;
+
+    public List<astroDialogue> dialogue = new();
+
+    public static bool disabled = false;
 
     protected virtual void Start()
     {
@@ -39,37 +44,39 @@ public class AstroDialogue : MonoBehaviour
     }
 
 
-    protected virtual void Update()
+    protected virtual void LateUpdate()
     {
-        if (inDialogue)
+        if (inDialogue && disabled != true && MainMenuController._isPaused != true)
         {
-            if (Input.GetMouseButtonDown(0))
+            if (Input.GetMouseButtonUp(0))
             {
-                if (!inTyping)
+                if (index < dialogue.Count)
                 {
-                    if (dialogue[index].waitAtLineEnd == false)
+                    if (inTyping && !dialogue[index].waitForTutorial)
+                    {
+                        inTyping = false;
+                        return;
+                    }
+            
+            
+                
+                    if (dialogue[index].waitForTutorial == true)
+                    {
+                        WaitFlag();
+                        return;
+                    }
+            
+                    if (dialogue[index].waitAtLineEnd == true)
                     {
                         if (NextLine())
                         {
                             return;
                         }
                     }
-
-                    if (!dialogue[index].waitBeforeLineEnd)
-                    {
-                        TurnOffTextBoxes();
-                    }
-                    else
-                    {
-                        WaitFlag();
-                    }
                 }
                 else
                 {
-                    StopAllCoroutines();
-                    endOfLine(index);
-                    inTyping = false;
-                    SetText(dialogue[index].text);
+                    endDialogue();
                 }
             }
         }
@@ -77,15 +84,22 @@ public class AstroDialogue : MonoBehaviour
 
     public virtual void WaitFlag()
     {
-
+        waitFlag = true;
     }
 
     protected virtual void SetText(string text)
     {
         foreach (DialogueTextBox textBox in DialogueTextBox.dialogueTextBoxes)
         {
-            textBox.TurnOn();
-            textBox.textBox.text = text;
+            if (!string.IsNullOrEmpty(text))
+            {
+                textBox.TurnOn();
+                textBox.textBox.text = text;
+            }
+            else
+            {
+                textBox.TurnOff();
+            }
         }
     }
 
@@ -95,6 +109,16 @@ public class AstroDialogue : MonoBehaviour
         {
             textBox.TurnOff();
         }
+
+        foreach (astroDialogue aDialogue in dialogue)
+        {
+            foreach (GameObject obj in aDialogue.manualUI)
+            {
+                obj.SetActive(false);
+            }
+        }
+
+        currentDialogue = null;
     }
 
 
@@ -124,7 +148,7 @@ public class AstroDialogue : MonoBehaviour
         enterDialogue.Invoke();
         inDialogue = true;
         index = Dindex;
-        typeLine(Dindex);
+        showLine(Dindex);
     }
 
     public virtual void endDialogue()
@@ -144,14 +168,17 @@ public class AstroDialogue : MonoBehaviour
         inDialogue = false;
     }
 
-    public virtual void typeLine(int indexOfLine)
+    public virtual void showLine(int indexOfLine)
     {
         if (indexOfLine >= 0)
         {
             dialogue[indexOfLine].startOfLine.Invoke();
+            inTyping = false;
             StopAllCoroutines();
+            _coroutineGeneration++; // invalidate any still-running coroutine tails
+            waitFlag = false;
             index = indexOfLine;
-            StartCoroutine(typeOutLine(dialogue[indexOfLine].text, indexOfLine));
+            StartCoroutine(typeOutLine(dialogue[indexOfLine], indexOfLine));
         }
         else
         {
@@ -161,6 +188,8 @@ public class AstroDialogue : MonoBehaviour
 
     protected virtual bool NextLine(int Dindex = -1)
     {
+        waitFlag = false;
+
         if (Dindex >= 0)
         {
             index = Dindex;
@@ -173,10 +202,11 @@ public class AstroDialogue : MonoBehaviour
 
         if(Dindex < dialogue.Count)
         {
-            typeLine(Dindex);
+            showLine(Dindex);
             return true;
         }
 
+        //endDialogue();
         return false;
     }
 
@@ -186,21 +216,58 @@ public class AstroDialogue : MonoBehaviour
         {
             dialogue[indexOfLine].endOfLine.Invoke();
         }
+        if (dialogue[indexOfLine].waitForTutorial )
+        {
+            WaitFlag();
+        }
+        else
+        {
+            foreach (GameObject obj in dialogue[indexOfLine].manualUI)
+            {
+                obj.SetActive(false);
+            }
+        }
     }
 
 
-    protected virtual IEnumerator typeOutLine(string lineToType, int indexOfLine = -1)
+    // In AstroDialogue:
+    private int _coroutineGeneration = 0;
+
+    protected virtual IEnumerator typeOutLine(astroDialogue lineToShow, int indexOfLine = -1)
     {
+        int myGeneration = ++_coroutineGeneration;
+        float T = 0;
+
         inTyping = true;
-        SetText(string.Empty);
-        line = string.Empty;
-        foreach (char character in lineToType.ToCharArray())
+        foreach (GameObject obj in lineToShow.manualUI)
+            obj.SetActive(true);
+
+        SetText(lineToShow.text);
+
+        while (inTyping)
         {
-            line += character;
-            SetText(line);
-            yield return new WaitForSeconds(textSpeed);
+            T += Time.deltaTime;
+            if (lineToShow.timeTillEndOfline < T)
+            {
+                if (!dialogue[indexOfLine].waitAtLineEnd)
+                    inTyping = false;
+            }
+            yield return null;
         }
-        inTyping = false;
+
         endOfLine(indexOfLine);
+
+        // If endOfLine triggered a new coroutine (via WaitFlag ? TryGoNextline ? showLine),
+        // that call already incremented _coroutineGeneration. Bail out.
+        if (myGeneration != _coroutineGeneration)
+            yield break;
+
+        inTyping = false;
+        if (!dialogue[indexOfLine].waitAtLineEnd && !dialogue[indexOfLine].waitForTutorial)
+        {
+            NextLine(dialogue[indexOfLine].lineToGoToNext);
+        }
+
+        yield return null;
     }
 }

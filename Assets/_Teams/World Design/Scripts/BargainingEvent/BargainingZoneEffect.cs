@@ -2,6 +2,7 @@
  * Created by Christina Pence
  * Contributed to by:
  */
+using _Teams.World_Design.Scripts.Checkpoints;
 using UnityEngine;
 
 /// <summary>
@@ -13,7 +14,6 @@ using UnityEngine;
 public class BargainingZoneEffect : MonoBehaviour, IZoneEffect
 {
     private BargainingController controller;
-    [SerializeField] private float audioIntensity = 1.0f;
 
     private void Start()
     {
@@ -29,11 +29,14 @@ public class BargainingZoneEffect : MonoBehaviour, IZoneEffect
         {
             return;
         }
-        if (controller.IsCompleted || controller.IsActive)
+        controller.StartEvent(instigator);
+    }
+    public void OnExit(GameObject instigator)
+    {
+        if (controller == null)
         {
             return;
         }
-        controller.StartEvent(instigator);
+        controller.EndEvent();
     }
-    public void OnExit(GameObject instigator) {}
 }

@@ -54,9 +54,10 @@ namespace Assets._Teams.Island_1.Scripts.User_Interface
 
         private IEnumerator StartWithDelay()
         {
-            yield return new WaitForSecondsRealtime(10f);
+            yield return _waitForSecondsRealtime;
             EnqueueStep(TutorialStep.LookAround);
             EnqueueStep(TutorialStep.Move);
+            //EnqueueStep(TutorialStep.Sprint);
         }
 
         private void ShowStep(TutorialStep step)
@@ -74,7 +75,7 @@ namespace Assets._Teams.Island_1.Scripts.User_Interface
 
             currentStep = step;
             currentPopup = popup;
-            if (step != TutorialStep.NavigateJournal) // This is a bit hacky, but it allows us to trigger the journal tutorial when picking up the astrolabe
+            if (step != TutorialStep.ToggleAstrolabe) // This is a bit hacky, but it allows us to trigger the journal tutorial when picking up the astrolabe
             {
                 currentPopup.gameObject.SetActive(true);
             }
@@ -157,17 +158,9 @@ namespace Assets._Teams.Island_1.Scripts.User_Interface
             if (currentStep == TutorialStep.PickUpItem && currentPopup)
                 currentPopup.Complete();
 
-            if (currentStep == TutorialStep.NavigateJournal && currentPopup) // This is a bit hacky, but it allows us to trigger the journal tutorial when picking up the astrolabe
-                StartCoroutine(DelayNavigationPopup());
+            if (currentStep == TutorialStep.ToggleAstrolabe && currentPopup) // This is a bit hacky, but it allows us to trigger the journal tutorial when picking up the astrolabe
+                currentPopup.gameObject.SetActive(true);
         }
-
-        private IEnumerator DelayNavigationPopup()
-        {
-            yield return _waitForSecondsRealtime0_1; // Just need to make sure the player released the E button so it does not immediately register in the journal tutorial popup
-
-            currentPopup.gameObject.SetActive(true);
-        }
-
 
         private void OnTutorialItemUse(IPickup pickup)
         {

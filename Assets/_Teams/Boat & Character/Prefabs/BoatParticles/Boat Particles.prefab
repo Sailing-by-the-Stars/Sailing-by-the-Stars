@@ -83,6 +83,18 @@ PrefabInstance:
       value: 178.496
       objectReference: {fileID: 0}
     - target: {fileID: 3273215977122972435, guid: 4af846e9d2b1cda40ad89081917a817a, type: 3}
+      propertyPath: UVModule.tilesX
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3273215977122972435, guid: 4af846e9d2b1cda40ad89081917a817a, type: 3}
+      propertyPath: UVModule.tilesY
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3273215977122972435, guid: 4af846e9d2b1cda40ad89081917a817a, type: 3}
+      propertyPath: UVModule.enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3273215977122972435, guid: 4af846e9d2b1cda40ad89081917a817a, type: 3}
       propertyPath: ShapeModule.arc.mode
       value: 0
       objectReference: {fileID: 0}
@@ -91,13 +103,33 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3273215977122972435, guid: 4af846e9d2b1cda40ad89081917a817a, type: 3}
+      propertyPath: InitialModule.maxNumParticles
+      value: 10000
+      objectReference: {fileID: 0}
+    - target: {fileID: 3273215977122972435, guid: 4af846e9d2b1cda40ad89081917a817a, type: 3}
+      propertyPath: InitialModule.startSize.scalar
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3273215977122972435, guid: 4af846e9d2b1cda40ad89081917a817a, type: 3}
+      propertyPath: UVModule.frameOverTime.minScalar
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3273215977122972435, guid: 4af846e9d2b1cda40ad89081917a817a, type: 3}
       propertyPath: EmissionModule.m_Bursts.Array.size
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3273215977122972435, guid: 4af846e9d2b1cda40ad89081917a817a, type: 3}
       propertyPath: EmissionModule.rateOverTime.scalar
-      value: 100
+      value: 500
       objectReference: {fileID: 0}
+    - target: {fileID: 3273215977122972435, guid: 4af846e9d2b1cda40ad89081917a817a, type: 3}
+      propertyPath: UVModule.frameOverTime.minMaxState
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3296192604316952683, guid: 4af846e9d2b1cda40ad89081917a817a, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 5ad0f54f2f1462a4ba3afbd7a0d1b799, type: 2}
     - target: {fileID: 8000231240158270122, guid: 4af846e9d2b1cda40ad89081917a817a, type: 3}
       propertyPath: m_Name
       value: SideFoamLeft
@@ -172,6 +204,42 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 267.391
       objectReference: {fileID: 0}
+    - target: {fileID: 3703759343360892071, guid: 31b39b892a7aec849af9163edfb7cf39, type: 3}
+      propertyPath: UVModule.tilesX
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3703759343360892071, guid: 31b39b892a7aec849af9163edfb7cf39, type: 3}
+      propertyPath: UVModule.tilesY
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3703759343360892071, guid: 31b39b892a7aec849af9163edfb7cf39, type: 3}
+      propertyPath: UVModule.enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3703759343360892071, guid: 31b39b892a7aec849af9163edfb7cf39, type: 3}
+      propertyPath: moveWithTransform
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3703759343360892071, guid: 31b39b892a7aec849af9163edfb7cf39, type: 3}
+      propertyPath: InitialModule.maxNumParticles
+      value: 10000
+      objectReference: {fileID: 0}
+    - target: {fileID: 3703759343360892071, guid: 31b39b892a7aec849af9163edfb7cf39, type: 3}
+      propertyPath: UVModule.frameOverTime.minScalar
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3703759343360892071, guid: 31b39b892a7aec849af9163edfb7cf39, type: 3}
+      propertyPath: UVModule.frameOverTime.minMaxState
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3703759343360892071, guid: 31b39b892a7aec849af9163edfb7cf39, type: 3}
+      propertyPath: InitialModule.gravityModifier.scalar
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6532836056304636573, guid: 31b39b892a7aec849af9163edfb7cf39, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 5ad0f54f2f1462a4ba3afbd7a0d1b799, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -231,6 +299,18 @@ PrefabInstance:
       value: 178.231
       objectReference: {fileID: 0}
     - target: {fileID: 3273215977122972435, guid: 4af846e9d2b1cda40ad89081917a817a, type: 3}
+      propertyPath: UVModule.tilesX
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3273215977122972435, guid: 4af846e9d2b1cda40ad89081917a817a, type: 3}
+      propertyPath: UVModule.tilesY
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3273215977122972435, guid: 4af846e9d2b1cda40ad89081917a817a, type: 3}
+      propertyPath: UVModule.enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3273215977122972435, guid: 4af846e9d2b1cda40ad89081917a817a, type: 3}
       propertyPath: ShapeModule.arc.mode
       value: 0
       objectReference: {fileID: 0}
@@ -239,13 +319,33 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3273215977122972435, guid: 4af846e9d2b1cda40ad89081917a817a, type: 3}
+      propertyPath: InitialModule.maxNumParticles
+      value: 10000
+      objectReference: {fileID: 0}
+    - target: {fileID: 3273215977122972435, guid: 4af846e9d2b1cda40ad89081917a817a, type: 3}
+      propertyPath: InitialModule.startSize.scalar
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3273215977122972435, guid: 4af846e9d2b1cda40ad89081917a817a, type: 3}
+      propertyPath: UVModule.frameOverTime.minScalar
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3273215977122972435, guid: 4af846e9d2b1cda40ad89081917a817a, type: 3}
       propertyPath: EmissionModule.m_Bursts.Array.size
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3273215977122972435, guid: 4af846e9d2b1cda40ad89081917a817a, type: 3}
       propertyPath: EmissionModule.rateOverTime.scalar
-      value: 100
+      value: 500
       objectReference: {fileID: 0}
+    - target: {fileID: 3273215977122972435, guid: 4af846e9d2b1cda40ad89081917a817a, type: 3}
+      propertyPath: UVModule.frameOverTime.minMaxState
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3296192604316952683, guid: 4af846e9d2b1cda40ad89081917a817a, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 5ad0f54f2f1462a4ba3afbd7a0d1b799, type: 2}
     - target: {fileID: 8000231240158270122, guid: 4af846e9d2b1cda40ad89081917a817a, type: 3}
       propertyPath: m_Name
       value: SideFoamRight

@@ -1,10 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using TMPro;
-using UnityEngine.Events;
-using System;
-using Unity.VisualScripting;
 
 public class TutorialDialogue : AstroDialogue, AstroTutorialStep
 {
@@ -14,11 +8,13 @@ public class TutorialDialogue : AstroDialogue, AstroTutorialStep
 
     protected override void Start()
     {
-        
+        base.Start();
     }
 
     public void EnterStep(TutorialSequence sequence)
     {
+        waitFlag = false;
+
         if (currentSequence != null && currentSequence != sequence)
         {
             Debug.LogWarning("this tutorialDialogue object is already in a different sequence!!");
@@ -26,7 +22,7 @@ public class TutorialDialogue : AstroDialogue, AstroTutorialStep
         }
         currentSequence = sequence;
         currentTutorialStep = sequence.index;
-
+        
         if(currentDialogue == null || currentDialogue != this)
         {
             StartDialogue(currentSequence.EventOrder[sequence.index].dialogueEntry);
@@ -39,6 +35,10 @@ public class TutorialDialogue : AstroDialogue, AstroTutorialStep
 
     public override void WaitFlag()
     {
+        if (waitFlag)
+        {
+            return;
+        }
         base.WaitFlag();
 
         if (!currentSequence)
@@ -46,6 +46,8 @@ public class TutorialDialogue : AstroDialogue, AstroTutorialStep
             Debug.LogWarning("tried waiting on a tutorial while none was assigned!");
             return;
         }
+
+        //currentSequence.FinishStep(currentTutorialStep);
 
         currentSequence.finishStep += Finish;
 
@@ -55,7 +57,6 @@ public class TutorialDialogue : AstroDialogue, AstroTutorialStep
     public void Finish()
     {
         currentSequence.finishStep -= Finish;
-
         TurnOffTextBoxes(true);
     }
 
@@ -68,6 +69,7 @@ public class TutorialDialogue : AstroDialogue, AstroTutorialStep
         }
 
         currentSequence.FinishStep(currentTutorialStep);
+        //Debug.LogError("gaaaaaaaaah");
     }
 
     void TryGoNextline(int Dindex)

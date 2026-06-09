@@ -5,9 +5,6 @@ namespace Assets._Teams.Island_1.Scripts.User_Interface.Tutorials
 {
     public class NavigateJournal : TutorialPopup
     {
-        [Header("References")]
-        [SerializeField] private Image progressbarMask;
-
         bool EPressed = false;
         bool QPressed = false;
 
@@ -22,18 +19,10 @@ namespace Assets._Teams.Island_1.Scripts.User_Interface.Tutorials
                 QPressed = true;
             }
 
-            SetMaskFill();
-
             if (EPressed && QPressed)
             {
                 Complete();
             }
-        }
-
-        void SetMaskFill()
-        {
-            float fillAmount = (EPressed ? 0.5f : 0.0f) + (QPressed ? 0.5f : 0.0f);
-            progressbarMask.fillAmount = fillAmount;
         }
     }
 }

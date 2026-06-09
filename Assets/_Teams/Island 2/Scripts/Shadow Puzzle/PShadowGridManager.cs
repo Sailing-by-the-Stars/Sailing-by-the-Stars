@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.VFX;
 
 public class PShadowGridManager : MonoBehaviour
 {
@@ -12,6 +13,22 @@ public class PShadowGridManager : MonoBehaviour
     
     [Tooltip("Keep this low aprox. around 0.08 - 0.25. Free to experiment though.")]
     [SerializeField] private float slidingTime = 0.15f;
+    
+    [Header("Reward References")]
+    [SerializeField] private Transform rewardWall;
+    [SerializeField] private float rewardWallTargetOffset;
+    [SerializeField] private float rewardWallMoveSpeed = 5f;
+    private Vector3 rewardWallStartPos;
+    private float rewardWallCurrentOffset;
+    [SerializeField] private List<GameObject> rewardTorches;
+
+    [Header("Puzzle Hints")]
+    [SerializeField] private Dialogue buttonHint1;
+    [SerializeField] private Dialogue buttonHint2;
+    [SerializeField] private Dialogue buttonHint3;
+    [SerializeField] private Dialogue manWomanHint;
+    [SerializeField] private Dialogue braceletHint;
+    private int buttonPresses;
 
     private PShadowPillar[,] grid;
     private bool isMoving;
@@ -20,8 +37,15 @@ public class PShadowGridManager : MonoBehaviour
     private void Awake()
     {
         grid = new PShadowPillar[width, height];
+        
+        rewardWallStartPos = rewardWall.localPosition;
     }
-    
+
+    private void Update()
+    {
+        OpenRewardWall();
+    }
+
 #if UNITY_EDITOR
     private void OnDrawGizmos()
     {
@@ -105,6 +129,7 @@ public class PShadowGridManager : MonoBehaviour
         if (isMoving) return;
         if (direction != -1 && direction != 1) return;
 
+        buttonPresses++;
         if (isRow)
         {
             if (index < 0 || index >= height) return;
@@ -238,17 +263,77 @@ public class PShadowGridManager : MonoBehaviour
         
         activeMoves = 0;
         isMoving = false;
-
-        CheckSolvedCondition();
+        
+        CheckHintRequirement();
     }
 
-    private void CheckSolvedCondition()
+    private void CheckHintRequirement()
+    {
+        int i = 0;
+        List<PShadowPillar> pillarsToCheck = grid.Cast<PShadowPillar>().Where(pillar => pillar).ToList();
+        foreach (var pillar in pillarsToCheck)
+        {
+            if (!pillar.isBracelet && pillar.IsInCorrectPosition() && manWomanHint)
+            {
+                DialogueSystem.Instance.StartDialogue(manWomanHint, gameObject);
+                manWomanHint = null;
+                continue;
+            } 
+            if (pillar.isBracelet && pillar.IsInCorrectPosition())
+            {
+                i++;
+            }
+            if (i >= 2 && braceletHint)
+            {
+                DialogueSystem.Instance.StartDialogue(braceletHint, gameObject);
+                braceletHint = null;
+            }
+        }
+        
+        if (CheckSolvedCondition()) return;
+        
+        if (buttonPresses >= 10 && buttonHint1)
+        {
+            DialogueSystem.Instance.StartDialogue(buttonHint1, gameObject);
+            buttonHint1 = null;
+        }
+        if (buttonPresses >= 20 && buttonHint2)
+        {
+            DialogueSystem.Instance.StartDialogue(buttonHint2, gameObject);
+            buttonHint2 = null;
+        }
+        if (buttonPresses >= 30 && buttonHint3)
+        {
+            DialogueSystem.Instance.StartDialogue(buttonHint3, gameObject);
+            buttonHint3 = null;
+        }
+    }
+
+    private bool CheckSolvedCondition()
     {
         List<PShadowPillar> pillarsToCheck = grid.Cast<PShadowPillar>().Where(pillar => pillar).ToList();
-        if (pillarsToCheck.Any(pillar => !pillar.IsInCorrectPosition())) return;
+        if (pillarsToCheck.Any(pillar => !pillar.IsInCorrectPosition())) return false;
         
-        Debug.Log("PUZZLE SOLVED!");
+        
+        foreach (GameObject torch in rewardTorches)
+        {
+            torch.GetComponentInChildren<Light>().enabled = true;
+            torch.GetComponentInChildren<VisualEffect>().enabled = true;
+        }
+        
+        Debug.Log("ANGER PUZZLE SOLVED!");
         PuzzleProgress.MarkComplete("anger");
+        if (rewardWall) rewardWall.GetComponent<RewardWallAudio>().StartAudio();
+
+        return true;
+    }
+
+    private void OpenRewardWall()
+    {
+        if (!rewardWall || !PuzzleProgress.IsComplete("anger")) return;
+        
+        rewardWallCurrentOffset = Mathf.Lerp(rewardWallCurrentOffset, rewardWallTargetOffset, rewardWallMoveSpeed * Time.deltaTime);
+        rewardWall.localPosition = rewardWallStartPos + Vector3.up * rewardWallCurrentOffset;
     }
 
     private struct MoveRequest

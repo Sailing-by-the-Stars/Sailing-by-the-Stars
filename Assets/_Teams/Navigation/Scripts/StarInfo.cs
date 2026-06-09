@@ -1,17 +1,15 @@
-using System;
-using System.Drawing;
-using Unity.Mathematics;
 using UnityEngine;
-using static StarDataLoader;
 
 
 public class StarInfo : MonoBehaviour
 {
+    public Transform thisTransform;
+
     public float emissionMult;
-    public UnityEngine.Color matColor;
+    public Color matColor;
 
     [ColorUsage(true, true)]
-    public UnityEngine.Color emissionColor;
+    public Color emissionColor;
     public Vector3 initpos;
 
 /*#if UNITY_EDITOR
@@ -23,14 +21,30 @@ public class StarInfo : MonoBehaviour
 
     public void Initialize()
     {
-        initpos = transform.position;
-
+        thisTransform = transform;
+        initpos = thisTransform.position;
 
         if (GetComponent<MeshRenderer>() == null)
         {
             return;
         }
         Initialize(GetComponent<MeshRenderer>());
+    }
+
+    public void Initialize(StarInfo baseStar)
+    {
+
+        emissionMult = baseStar.emissionMult;
+        matColor = baseStar.matColor;
+        emissionColor = baseStar.emissionColor;
+        Initialize();
+    }
+
+    public void Initialize(StarInfo baseStar, float mult)
+    {
+        emissionMult = baseStar.emissionMult * mult;
+        matColor = baseStar.matColor;
+        Initialize();
     }
 
 
@@ -56,6 +70,11 @@ public class StarInfo : MonoBehaviour
             _mpb.SetColor(Shader.PropertyToID("_Color"), matColor);
             _mpb.SetColor(Shader.PropertyToID("_EmissiveColor"), emissionColor);
         }
+        else if (material.shader.name == "Shader Graphs/animated stars")
+        {
+            _mpb.SetColor(Shader.PropertyToID("_Color"), matColor);
+            _mpb.SetColor(Shader.PropertyToID("_EmissiveColor"), emissionColor);
+        }
         else
         {
             Debug.LogError($"wrong shader: '{material.shader.name}'");
@@ -63,5 +82,20 @@ public class StarInfo : MonoBehaviour
         }
 
         renderer.SetPropertyBlock(_mpb);
+    }
+
+    private void OnDestroy()
+    {
+        FlatStarField flatStarField = thisTransform.GetComponentInParent<FlatStarField>();
+        if (flatStarField != null)
+        {
+            flatStarField.starObjects.Remove(gameObject);
+        }
+        GlobeShape globeShape = thisTransform.GetComponentInParent<GlobeShape>();
+        if (globeShape != null)
+        {
+            globeShape.relatedMiniStars.Remove(this);
+            globeShape.InitializeMiniStars();
+        }
     }
 }

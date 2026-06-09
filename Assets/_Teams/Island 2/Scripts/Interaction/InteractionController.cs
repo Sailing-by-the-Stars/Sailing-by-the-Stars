@@ -1,6 +1,7 @@
-﻿using TMPro;
+﻿using System.Text.RegularExpressions;
+using TMPro;
 using UnityEngine;
-using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 /** Interaction System Documentation - How to Use:
  *
@@ -16,12 +17,21 @@ public class InteractionController : MonoBehaviour
     [Header("Interaction References & Settings")]
     [SerializeField] private Camera playerCamera;
     [SerializeField] private TextMeshProUGUI interactionText;
+    [SerializeField] private Image interactionBackground;
     [SerializeField] private float interactionDistance = 5f;
 
     private RaycastHit currentHit;
     private IInteractable activeInteractable;
     private IInteractable currentTargetedInteractable;
     public Transform CurrentHitTransform => currentHit.collider ? currentHit.collider.transform : null;
+
+    private PlayerControls playerControls;
+
+    private void Start()
+    {
+        playerControls = TempStateMachine.Instance.PlayerControls;
+        interactionBackground = interactionText.GetComponentInParent<Image>();
+    }
 
     private void Update()
     {
@@ -33,35 +43,76 @@ public class InteractionController : MonoBehaviour
     private void UpdateCurrentInteractable()
     {
         var ray = playerCamera.ViewportPointToRay(new Vector2(0.5f, 0.5f));
+        IInteractable newTarget = null;
+
+        if (Physics.Raycast(ray, out currentHit, interactionDistance, ~0, QueryTriggerInteraction.Ignore))
+        {
+            var interactableTargeted = currentHit.collider?.GetComponentInParent<IInteractable>();
+            
+            if (interactableTargeted != null && interactableTargeted.ShouldShowMessage(this))
+            {
+                newTarget = interactableTargeted;
+            }
+        }
+
+        if (!ReferenceEquals(newTarget, currentTargetedInteractable))
+        {
+            if (currentTargetedInteractable != null)
+            {
+                var highlightable = currentTargetedInteractable.ShouldHighlight(this);
+                if (highlightable)
+                {
+                    SetLayerRecursively(highlightable, "Default");
+                }
+            }
+
+            if (newTarget != null)
+            {
+                var highlightable = newTarget.ShouldHighlight(this);
+                if (highlightable)
+                {
+                    SetLayerRecursively(highlightable, "Selection");
+                }
+            }
+            
+            currentTargetedInteractable = newTarget;
+        }
         
-        Physics.Raycast(ray, out currentHit, interactionDistance, ~0, QueryTriggerInteraction.Ignore);
         Debug.DrawRay(ray.origin, ray.direction * interactionDistance, Color.green);
-        
-        var interactableTargeted = currentHit.collider?.GetComponentInParent<IInteractable>();
-        currentTargetedInteractable = interactableTargeted != null &&
-                                      interactableTargeted.ShouldShowMessage(this)
-                                      ? interactableTargeted : null;
+    }
+
+    private void SetLayerRecursively(GameObject obj, string layerName)
+    {
+        obj.layer = LayerMask.NameToLayer(layerName);
+        foreach (Transform child in obj.transform)
+        {
+            SetLayerRecursively(child.gameObject, layerName);
+        }
     }
 
     private void UpdateInteractionText()
     {
         if (currentTargetedInteractable == null || DialogueSystem.Instance.isDialogueActive)
         {
+            interactionBackground.enabled = false;
             interactionText.text = string.Empty;
             return;
         }
 
-        interactionText.text = currentTargetedInteractable.InteractMessage;
+        interactionBackground.enabled = true;
+        // Note: For some reason you can't save tags (<color></color>) in interfaces, they just get dropped,
+        // so it's necessary to add the tags back here. Yay, Unity!
+        string richText = Regex.Replace(currentTargetedInteractable.InteractMessage, @"\bE\b", "<color=#F0E37D>E</color>");
+        interactionText.text = richText;
     }
 
     private void CheckForInteractionInput()
     {
         if (currentTargetedInteractable == null || DialogueSystem.Instance.isDialogueActive) return;
+        
+        var key = playerControls.Interaction.Pickup;
 
-        // TODO: replace hardcoded key press with Input Actions
-        var key = Keyboard.current.eKey;
-
-        if (key.wasPressedThisFrame)
+        if (key.WasPerformedThisFrame())
         {
             activeInteractable = currentTargetedInteractable;
 
@@ -69,7 +120,7 @@ public class InteractionController : MonoBehaviour
             activeInteractable.HoldInteract(this);
         }
 
-        if (key.wasReleasedThisFrame && activeInteractable != null)
+        if (key.WasReleasedThisFrame() && activeInteractable != null)
         {
             activeInteractable.ReleaseInteract(this);
             activeInteractable = null;

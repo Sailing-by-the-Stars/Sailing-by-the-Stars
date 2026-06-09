@@ -5461,6 +5461,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f5b1320ed852c64409d86616f2462417, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Altar
+  dialogues:
+  - dialogue: {fileID: 11400000, guid: 31dc2a23ef4207742b4006e6a60d1abb, type: 2}
+    conditions: []
   pedestals:
   - index: 0
     pedestalRoot: {fileID: 1811723178772844552}
@@ -5485,7 +5488,9 @@ MonoBehaviour:
   candles:
   - {fileID: 5030782171385173456}
   - {fileID: 4919797045498713917}
-  rewardCompartment: {fileID: 1347417203695960521}
+  rewardDoor: {fileID: 0}
+  rewardDoorTargetOffset: -0.03
+  rewardDoorMoveSpeed: 5
 --- !u!1 &1913231681805801852
 GameObject:
   m_ObjectHideFlags: 0

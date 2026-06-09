@@ -71,6 +71,6 @@ public class BargainingCheckpoint : MonoBehaviour
         {
             return;
         }
-        controller.OnCheckpointReached(this);
+        //controller.OnCheckpointReached(this);
     }
 }

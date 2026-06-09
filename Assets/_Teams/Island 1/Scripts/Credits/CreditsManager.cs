@@ -67,7 +67,7 @@ public class CreditsManager : MonoBehaviour
         Vector2 startPos = new Vector2(creditsTextRect.anchoredPosition.x, -screenHeight);
         creditsTextRect.anchoredPosition = startPos;
 
-        float totalScrollDistance = screenHeight + creditsTextRect.rect.height;
+        float totalScrollDistance = (2 * screenHeight) + creditsTextRect.rect.height;
         float scrolled = 0f;
 
         while (scrolled < totalScrollDistance)

@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System.Collections;
 
 public class TeleportManager : MonoBehaviour
 {
@@ -11,8 +12,11 @@ public class TeleportManager : MonoBehaviour
     private void Awake()
     {
         Instance = this;
-        player = GameObject.FindGameObjectWithTag("Player").transform;
+    }
 
+    private void Start()
+    {
+        player = GameObject.FindGameObjectWithTag("Player").transform;
         FindTeleportPoints();
     }
 
@@ -31,16 +35,74 @@ public class TeleportManager : MonoBehaviour
     }
     public void TeleportObjectNextToPlayer(GameObject go)
     {
-        go.transform.position = player.position + Vector3.right * 1.5f;
+        StartCoroutine(TeleportBoatRoutine(go));
     }
 
-    public Dictionary<string, Transform> GetTeleportPoints() => teleportPoints;
+    private IEnumerator TeleportBoatRoutine(GameObject go)
+    {
+        Debug.Log("[BoatTP] Coroutine started");
+        
+        if (player == null)
+            player = GameObject.FindGameObjectWithTag("Player").transform;
+
+        float distance = 3f;
+        Vector3 spawnPos = player.position + player.forward * distance;
+
+        var rb = go.GetComponent<Rigidbody>();
+        var buoyancy = go.GetComponent<BuoyancyController>();
+        var boatController = go.GetComponent<BoatController>();
+
+        if (buoyancy) buoyancy.enabled = false;
+        if (boatController) boatController.enabled = false;
+
+        rb.constraints = RigidbodyConstraints.None;
+        rb.isKinematic = false;
+
+        yield return new WaitForFixedUpdate();
+        Debug.Log("[BoatTP] After first WaitForFixedUpdate");
+
+        rb.linearVelocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
+        rb.position = spawnPos;
+        go.transform.position = spawnPos;
+        Debug.Log($"[BoatTP] Position set to {spawnPos}, actual pos: {go.transform.position}");
+
+        yield return new WaitForFixedUpdate();
+        Debug.Log("[BoatTP] After second WaitForFixedUpdate");
+
+        rb.isKinematic = true;
+        rb.constraints = RigidbodyConstraints.FreezeAll;
+
+        if (buoyancy) buoyancy.enabled = true;
+        if (boatController) boatController.enabled = true;
+        
+        Debug.Log("[BoatTP] Done");
+    }
+    public Dictionary<string, Transform> GetTeleportPoints()
+    {
+        if (teleportPoints.Count == 0)
+            FindTeleportPoints();
+        return teleportPoints;
+    }
 
     public void TeleportTo(string name)
     {
+        if (teleportPoints.Count == 0)
+            FindTeleportPoints();
+
         if (teleportPoints.TryGetValue(name, out var target))
         {
-            player.position = target.position + Vector3.up * 1.2f;
+            var movement = player.GetComponent<Movement>();
+            Vector3 destination = target.position + Vector3.up * 1.2f;
+
+            if (movement != null)
+            {
+                movement.TeleportPlayer(destination);
+            }
+            else
+            {
+                player.position = destination;
+            }
         }
     }
 }

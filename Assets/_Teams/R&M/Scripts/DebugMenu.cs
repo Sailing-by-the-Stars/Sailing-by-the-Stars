@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine.InputSystem;
 using System.Linq;
+using System.Collections;
 
 public class DebugMenu : MonoBehaviour
 {
@@ -10,41 +11,41 @@ public class DebugMenu : MonoBehaviour
     public GameObject menuPanel;
     public Button buttonPrefab;
     public Transform container;
-    private InputSystem_Actions input;
+    [Header("Debug Spawnables")]
+    public Journal journalPrefab;
+    public Astrolabe astrolabePrefab;
     private bool isOpen;
+    private Button journalBtn;
+    private Button astrolabeBtn;
+
+    private PlayerControls controls;
+    private PlayerControls.DebugActions debugControls;
 
     private void Awake()
     {
-        input = new InputSystem_Actions();
+        controls = TempStateMachine.Instance.PlayerControls;
+        debugControls = controls.Debug;
     }
-
-    // private void OnEnable()
-    // {
-    //     input.UI.Enable();
-    //     input.UI.OpenTeleportMenu.performed += OnToggleMenu;
-    // }
-
-    // private void OnDisable()
-    // {
-    //     input.UI.OpenTeleportMenu.performed -= OnToggleMenu;
-    //     input.UI.Disable();
-    // }
-    private void Update()
+    private void OnEnable()
     {
-        if (Input.GetKeyDown(KeyCode.M))  
-        {
-            ToggleMenu();
-        }
+        debugControls.ToggleDebugMenu.performed += OnToggleMenu;
     }
 
-    private void Start()
+    private void OnDisable()
+    {
+        debugControls.ToggleDebugMenu.performed -= OnToggleMenu;
+    }
+    private IEnumerator Start()
     {
         menuPanel.SetActive(false);
+        yield return null;
         GenerateButtons();
     }
 
     private void OnToggleMenu(InputAction.CallbackContext ctx)
     {
+        if (DialogueSystem.Instance.isDialogueActive)
+            return;
         ToggleMenu();
     }
 
@@ -53,8 +54,10 @@ public class DebugMenu : MonoBehaviour
         isOpen = !isOpen;
         menuPanel.SetActive(isOpen);
 
-        TempStateMachine.Instance.gameState =
-            isOpen ? GameState.Dialogue : GameState.Moving;
+        if (isOpen)
+            TeleportManager.Instance.GetTeleportPoints();
+
+        TempStateMachine.Instance.SetState(isOpen ? GameState.Dialogue : GameState.Moving);
     }
 
     private void GenerateButtons()
@@ -81,15 +84,70 @@ public class DebugMenu : MonoBehaviour
             });
         }
 
-        var spawnBtn = Instantiate(buttonPrefab, container);
-        spawnBtn.GetComponentInChildren<TextMeshProUGUI>().text = "Spawn Boat";
-        spawnBtn.onClick.AddListener(() =>
+        // Legs have been cut due to jank ~Joost
+        var speedBtn = Instantiate(buttonPrefab, container);
+        speedBtn.GetComponentInChildren<TextMeshProUGUI>().text = "SPEEEEEDYYY SPRINT";
+        speedBtn.onClick.AddListener(() =>
         {
-            var boat = GameObject.FindGameObjectWithTag("boat");
-            if (boat != null)
-                TeleportManager.Instance.TeleportObjectNextToPlayer(boat);
-            else
-                Debug.LogWarning("No object with tag 'Boat' found in scene.");
+            var movement = FindFirstObjectByType<Movement>();
+
+            if (movement != null)
+            {
+                movement.SetSprintMultiplier(4f);
+            }
         });
+
+        var jesusButton = Instantiate(buttonPrefab, container);
+        jesusButton.GetComponentInChildren<TextMeshProUGUI>().text = "Walk On Water";
+        jesusButton.onClick.AddListener(() =>
+        {
+            var obj = FindFirstObjectByType<JesusDebugCube>();
+
+            if (obj != null)
+            {
+                obj.Toggle();
+            }
+        });
+
+        var resetTutorialBtn = Instantiate(buttonPrefab, container);
+        resetTutorialBtn.GetComponentInChildren<TextMeshProUGUI>().text = "Reset Tutorials";
+        resetTutorialBtn.onClick.AddListener(() =>
+        {
+            TutorialResetter.Instance.ResetAll();
+        });
+
+        journalBtn = Instantiate(buttonPrefab, container);
+        journalBtn.GetComponentInChildren<TextMeshProUGUI>().text = "Give Journal";
+        journalBtn.onClick.AddListener(() =>
+        {
+            StartCoroutine(GiveItemRoutine(journalPrefab));
+            journalBtn.gameObject.SetActive(false);
+        });
+
+        astrolabeBtn = Instantiate(buttonPrefab, container);
+        astrolabeBtn.GetComponentInChildren<TextMeshProUGUI>().text = "Give Astrolabe";
+        astrolabeBtn.onClick.AddListener(() =>
+        {
+            StartCoroutine(GiveItemRoutine(astrolabePrefab));
+            astrolabeBtn.gameObject.SetActive(false);
+        });
+    }
+
+    IEnumerator GiveItemRoutine(ToolPickup itemPrefab)
+    {
+        var player = GameObject.FindGameObjectWithTag("Player");
+        var pickupController = player.GetComponent<PickupController>();
+
+        var existingItems = FindObjectsOfType(itemPrefab.GetType());
+        foreach (var item in existingItems)
+        {
+            Destroy(((Component)item).gameObject);
+        }
+
+        var itemInstance = Instantiate(itemPrefab);
+
+        yield return null;
+
+        itemInstance.Grab(pickupController);
     }
 }

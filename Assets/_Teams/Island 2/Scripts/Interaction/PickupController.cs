@@ -23,6 +23,13 @@ public class PickupController : MonoBehaviour
     
     public bool HasPickup => currentPickup != null;
 
+    PlayerControls playerControls;
+
+    private void Start()
+    {
+        playerControls = TempStateMachine.Instance.PlayerControls;
+    }
+
     public void GrabPickup(IPickup newPickup)
     {
         currentPickup = newPickup;
@@ -47,8 +54,7 @@ public class PickupController : MonoBehaviour
 
     private void CheckDropInput()
     {
-        // TODO: replace hardcoded key press with Input Actions
-        if (!Keyboard.current.qKey.wasPressedThisFrame || !HasPickup) return;
+        if (!playerControls.Interaction.Drop.WasPerformedThisFrame() || !HasPickup) return;
         
         currentPickup.Drop(this);
         currentPickup = null;
@@ -56,8 +62,7 @@ public class PickupController : MonoBehaviour
 
     private void CheckPickupInput()
     {
-        // TODO: replace hardcoded key press with Input Actions
-        if (!Mouse.current.leftButton.wasPressedThisFrame || !HasPickup) return;
+        if (!playerControls.Interaction.Use.WasPerformedThisFrame() || !HasPickup) return;
 
         currentPickup.Use();
     }

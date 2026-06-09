@@ -20,7 +20,7 @@ public class WakeUp : MonoBehaviour
     /// </summary>
     public void Play()
     {
-        StartCoroutine(PlayWakeUpAnimation());
+        //StartCoroutine(PlayWakeUpAnimation());
     }
 
     IEnumerator PlayWakeUpAnimation()

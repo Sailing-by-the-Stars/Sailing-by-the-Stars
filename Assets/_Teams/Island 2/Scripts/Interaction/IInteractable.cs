@@ -1,10 +1,13 @@
-﻿// Author: Edward
+﻿using UnityEngine;
+
+// Author: Edward
 public interface IInteractable
 {
     // Text that shows up in the Canvas when aiming at an Interactable
     public string InteractMessage { get; }
-
+    
     public bool ShouldShowMessage(InteractionController interactionController) { return true; }
+    public GameObject ShouldHighlight(InteractionController interactionController) { return null; }
     
     // Choose: if your Interactable needs to have a "hold button down" functionality, override HoldInteract and optionally ReleaseInteract
     // Otherwise, override just Interact

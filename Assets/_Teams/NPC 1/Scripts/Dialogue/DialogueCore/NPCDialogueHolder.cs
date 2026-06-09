@@ -1,19 +1,20 @@
 using System.Collections.Generic;
 using UnityEngine;
-
+using FMODUnity;
+// Created by Jantina
 [System.Serializable]
 public class ConditionalDialogue
 {
     public Dialogue dialogue;
     public List<DialogueCondition> conditions;
 }
-/// <summary>
-/// Handles dialogue interaction with this NPC.
-/// Ensures only the closest NPC can be interacted with.
-/// </summary>
+
 public class NPCDialogueHolder : MonoBehaviour, IInteractable
 {
     public List<ConditionalDialogue> dialogues;
+
+    [Header("Voice")]
+    public EventReference dialogueVoice;
 
     [HideInInspector]
     public bool hasInteractedBefore = false;
@@ -29,14 +30,14 @@ public class NPCDialogueHolder : MonoBehaviour, IInteractable
         if (GetComponent<Animator>() != null)
             GetComponent<Animator>().SetBool("IsTalking", true);
 
-        // 👇 LOOP BACKWARDS (highest priority = last added)
+
         for (int i = dialogues.Count - 1; i >= 0; i--)
         {
             var entry = dialogues[i];
 
             bool valid = true;
 
-            // If no conditions → treat as fallback
+
             if (entry.conditions != null && entry.conditions.Count > 0)
             {
                 foreach (var cond in entry.conditions)

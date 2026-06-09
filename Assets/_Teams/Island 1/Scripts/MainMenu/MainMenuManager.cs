@@ -26,7 +26,7 @@ public class MainMenuManager : MonoBehaviour
 {
     [Header("Scene To Load")]
     [Tooltip("Exact scene name to load when Play is pressed (no path, no .unity extension).")]
-    public string gameSceneName = "Sprint3Increment 1";
+    public int sceneID = 1;
 
     [Header("UI References")]
     [Tooltip("A full-screen black Image used to fade in/out. Set its alpha to 0 in the Inspector.")]
@@ -94,7 +94,7 @@ public class MainMenuManager : MonoBehaviour
             SetFadeAlpha(1f);
         }
 
-        SceneManager.LoadScene(gameSceneName);
+        SceneManager.LoadScene(sceneID);
     }
 
     private void SetFadeAlpha(float alpha)

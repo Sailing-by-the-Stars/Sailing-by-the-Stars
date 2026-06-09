@@ -94,6 +94,10 @@ MonoBehaviour:
   randomEventsActive: 1
   autoRerollWindIntensity: 5
   windObject: {fileID: 7752405435474241748}
+  minAudibleWindSpeedMps: 2
+  minAudibleAudioValue: 0
+  maxWindSpeedForFullAudioMps: 20
+  audioResponseExponent: 0.8
 --- !u!114 &5662462678758272535
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -108,7 +112,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TestRainController
   rainParticleSystem: {fileID: 1003409115036372713}
   windInfluence: 3
-  followTarget: {fileID: 0}
+  followTargetTag: Player
   emitterHeight: 60
   maxRateOverTime: 1500
   maxStartSpeed: 15

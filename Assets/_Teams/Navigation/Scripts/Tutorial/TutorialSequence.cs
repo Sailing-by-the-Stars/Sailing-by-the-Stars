@@ -11,13 +11,21 @@ public class SequenceEntry
     public bool continueAfterEntry = true;
     public int nextEntry = -1;
     public int dialogueEntry = -1;
+
+#if UNITY_EDITOR
+    public string dialogueEntryText;
+#endif
+
     public bool clickForDialogue = false;
 }
 
 public class TutorialSequence : MonoBehaviour
 {
-    public static bool finishedTutorial = false;
-    public static bool startedTutorial = false;
+    public UnityEvent enterTutorial;
+    public UnityEvent exitTutorial;
+
+    public bool finishedTutorial = false;
+    public bool startedTutorial = false;
     public static TutorialSequence Instance;
 
     private void Awake()
@@ -36,10 +44,10 @@ public class TutorialSequence : MonoBehaviour
 
     [SerializeField]
     bool startOnStart = false;
-    public List<SequenceEntry> EventOrder;
+    public List<SequenceEntry> EventOrder = new();
     public int index = 0;
 
-    private int currentStepFinishes = 0;
+    public int currentStepFinishes = 0;
 
     public Action finishStep;
 
@@ -54,16 +62,17 @@ public class TutorialSequence : MonoBehaviour
 
     public void FinishStep(int stepIndex, bool continueStep = true)
     {
-        currentStepFinishes++;
+        currentStepFinishes += 1;
 
         if (index != stepIndex)
         {
             Debug.LogWarning("tried finishing the wrong step!!");
             return;
         }
+        
         if (EventOrder[index].sequenceEnter.GetPersistentEventCount() > currentStepFinishes)
         {
-            Debug.Log($"waiting for {EventOrder[index].sequenceEnter.GetPersistentEventCount() - currentStepFinishes} more events to finish before the next step");
+            //Debug.Log($"waiting for {EventOrder[index].sequenceEnter.GetPersistentEventCount() - currentStepFinishes} more events to finish before the next step");
             return;
         }
         else
@@ -82,8 +91,15 @@ public class TutorialSequence : MonoBehaviour
         }
     }
 
-    public void NextStep(int stepIndex = -1)
+    public virtual void NextStep(int stepIndex = -1)
     {
+
+
+        if(stepIndex == 0)
+        {
+            enterTutorial.Invoke();
+        }
+
         startedTutorial = true;
         if(stepIndex != -1)
         {
@@ -94,16 +110,33 @@ public class TutorialSequence : MonoBehaviour
             index++;
             stepIndex = index;
         }
+        //Debug.LogError(stepIndex);
 
         if(index + 1 > EventOrder.Count)
         {
             Debug.LogWarning("got to the end of the tutorial!");
+            exitTutorial
+                .Invoke();
             finishedTutorial = true;
             return;
         }
 
-        Debug.Log($"going to the next tutorial step: {index}");
         currentStepFinishes = 0;
         EventOrder[index].sequenceEnter.Invoke(this);
     }
+
+#if UNITY_EDITOR
+    private void OnValidate()
+    {
+        TutorialDialogue tutorialDialogue = GetComponent<TutorialDialogue>();
+
+        foreach (var step in EventOrder)
+        {
+            if(step.dialogueEntry >= 0 && tutorialDialogue && tutorialDialogue.dialogue.Count > step.dialogueEntry)
+            {
+                step.dialogueEntryText = tutorialDialogue.dialogue[step.dialogueEntry].text;
+            }
+        }
+    }
+#endif
 }

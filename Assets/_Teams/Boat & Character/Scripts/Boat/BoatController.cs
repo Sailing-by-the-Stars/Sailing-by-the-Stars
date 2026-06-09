@@ -1,11 +1,11 @@
 /*
 *   Created by Johan Beimers
-*   Contributed to by: 
+*   Contributed to by: Jantina
 */
 
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
+using System.Linq;
+using UnityEngine.Rendering;
 
 [RequireComponent(typeof(Rigidbody))]
 public class BoatController : MonoBehaviour
@@ -19,11 +19,23 @@ public class BoatController : MonoBehaviour
     [SerializeField] private float waterDensity = 1000f;
     [SerializeField] private float keelDragStrength = 100f;
     [SerializeField] private float baseForwardForce = 900f;
-    [SerializeField] private float maxRotationRate = 10f;
+    [SerializeField] private float maxTiltAngle = 10f;
     [SerializeField] private float rudderTorqueStrength = 30f;
     [SerializeField] private float sidedriftCorrectionStrength = 150f;
+    [SerializeField] private float lightIntensity = 1393.47f;
+    [SerializeField] private float lightIntensityMultiplier = 3f;
     [SerializeField] private bool useLocalWindSpeed = true;
     [SerializeField] private bool enableWindForces = true;
+
+    [Header("Simple Movement Version Settings")]
+    [SerializeField] private bool simpleModeEnabled = true;
+    [SerializeField] private float maxSimpleSpeed = 10f;
+    [SerializeField] private float simpleThrottleAccel = 2f;
+    [SerializeField] private float simpleThrottleDecay = 1.5f;
+    [SerializeField] private float simpleTurnTorque = 40f; 
+    [SerializeField] private float simpleForwardAcceleration = 6f;
+    [SerializeField] private float simpleLinearDrag = 2f;
+    
 
     [Header("Physics stats (Debugging!)")]
     [SerializeField] private float forwardSpeed;
@@ -38,12 +50,19 @@ public class BoatController : MonoBehaviour
     [SerializeField] private Vector3 apparentWind = Vector3.zero;
 
     [Header("Boat stats")]
-    [SerializeField] private float maxRudderDeflection = 20f;
+    [SerializeField] public float maxRudderDeflection = 20f;
     [SerializeField] private float maxMastAngle = 90f;
 
     [Header("Controls")]
     [SerializeField] public SmoothAxis2D rudderAxis;
     [SerializeField] public SmoothAxis2D mastAxis;
+
+    
+
+    [Header("Particle System")]
+    [SerializeField] private float baseParticleEmissionRate = 0f;
+    [SerializeField] private float speedEmissionMultiplier = 5f;
+
 
     [Header("")]
     [SerializeField] private GameObject hullObject;
@@ -51,24 +70,24 @@ public class BoatController : MonoBehaviour
     [SerializeField] private GameObject rudderPivot;
     [SerializeField] private GameObject flagPivot;
 
-    [Header("Particle System")]
-    [SerializeField] private ParticleSystem boatFoam;
-    [SerializeField] private ParticleSystem sideFoamRight;
-    [SerializeField] private ParticleSystem sideFoamLeft;
-
-
     private Rigidbody rigidBody;
     private GameObject[] rudderObjects;
     private GameObject[] mastObjects;
+    private ParticleSystem[] boatParticles;
     private GameObject flagObject;
-
+    private Light lanternLight;
+    private float _simpleThrottleInput = 0f;
+    private float simpleThrottle = 0f;
+    private float _simpleTurnInput = 0f;
     private bool anchorDropped = true;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    void Awake()
     {
         rigidBody = GetComponent<Rigidbody>();
-
+    }
+    void Start()
+    {
         rudderObjects = GameObject.FindGameObjectsWithTag("rudder");
         if (rudderObjects.Count() == 0)
         {
@@ -92,23 +111,44 @@ public class BoatController : MonoBehaviour
             enabled = false;
             return;
         }
+
+        boatParticles = GetComponentsInChildren<ParticleSystem>();
+        if (boatParticles.Count() == 0)
+        {
+            Debug.LogError("No particle systems found in children of the boat!");
+            enabled = false;
+            return;
+        }
+
+        lanternLight = GetComponentInChildren<Light>();
+
+        EnableParticles();
     }
 
     void OnEnable()
     {
         rudderAxis.Reset();
         mastAxis.Reset();
+
+        if (boatParticles != null)
+            EnableParticles();
+    }
+
+    void OnDisable()
+    {
+        DisableParticles();
     }
 
     // Update is called once per frame
     void Update()
     {
-        RotateRudder();
-        RotateMastAndSail();
+        if (!simpleModeEnabled)
+        {
+            RotateRudder();
+            RotateMastAndSail();
+        }
         RotateFlagIntoWind();
-        boatFoam.Play();
-        sideFoamRight.Play();
-        sideFoamLeft.Play();
+        UpdateParticleDensity();
     }
 
     void FixedUpdate()
@@ -127,22 +167,34 @@ public class BoatController : MonoBehaviour
         float mastDirectionIntoWind = Vector3.SignedAngle(mastDirection, -windDirection, Vector3.up);
         if (!anchorDropped)
         {
-            if (enableWindForces)
+            if (simpleModeEnabled) // Added by Jantina
             {
-                CalculateDrag(apparentWind.magnitude, mastDirectionIntoWind);
-                CalculateLift(apparentWind.magnitude, mastDirectionIntoWind);
+                ApplySimpleMode();
             }
-
-            AoA = mastDirectionIntoWind;
-
-            ApplyBaseForwardForce();
-            ApplyRudderTorque();
-            ApplyKeelDrag();
+            else
+            {
+                if (enableWindForces)
+                {
+                    CalculateDrag(apparentWind.magnitude, mastDirectionIntoWind);
+                    CalculateLift(apparentWind.magnitude, mastDirectionIntoWind);
+                }
+                AoA = mastDirectionIntoWind;
+                ApplyBaseForwardForce();
+                ApplyRudderTorque();
+                ApplyKeelDrag();
+            }
         }
 
-        applyWaterDrag();
+        if (!simpleModeEnabled)
+        {
+            applyWaterDrag();
+            WindCaughtIndicator(mastDirectionIntoWind);
+        }
+        TiltLimiter();
+        
 
         forwardSpeed = transform.InverseTransformVector(rigidBody.linearVelocity).z;
+        
     }
 
     //Calculates the force of drag experienced on the sail, used when running downwind and broadreach
@@ -292,7 +344,7 @@ public class BoatController : MonoBehaviour
         currentMastAngle = targetMastAngle;
     }
 
-    private float currentRudderAngle = 0f;
+    public float currentRudderAngle = 0f;
     
     private void RotateRudder()
     {
@@ -309,8 +361,11 @@ public class BoatController : MonoBehaviour
 
     public void DropAnchor()
     {
-        anchorDropped = true;
-        rigidBody.linearDamping = .5f;
+        if (!anchorDropped)
+        {
+            anchorDropped = true;
+            rigidBody.linearDamping = .5f;
+        }
     }
 
     public void HaulAnchor()
@@ -326,5 +381,185 @@ public class BoatController : MonoBehaviour
 
         float flagAOA = Vector3.SignedAngle(flagDirection, windDirection, Vector3.up);
         flagObject.transform.RotateAround(flagPivot.transform.position, flagPivot.transform.up, flagAOA);
+    }
+
+    private void TiltLimiter()
+    {
+        float zAngle = transform.rotation.eulerAngles.z % 360;
+        if (zAngle > 180f) zAngle -= 360f;
+
+        Vector3 currentRotation = transform.eulerAngles;
+
+        if (zAngle > maxTiltAngle || zAngle < -maxTiltAngle)
+        {
+            zAngle = Mathf.Clamp(zAngle, - maxTiltAngle, maxTiltAngle);
+            currentRotation.z = zAngle;
+        }
+
+        float xAngle = Mathf.DeltaAngle(transform.eulerAngles.x, 0f);
+
+        if (Mathf.Abs(xAngle) > 2f)
+        {
+            xAngle = Mathf.Clamp(xAngle, -2f, 2f);
+            currentRotation.x = -xAngle;
+        }
+
+        transform.eulerAngles = currentRotation;
+    }
+
+    private void WindCaughtIndicator(float apparentWindAngle)
+    {
+        float liftDifference = Mathf.DeltaAngle(0, apparentWindAngle);
+        float dragDifference = Mathf.DeltaAngle(90, apparentWindAngle);
+        float drag2Difference = Mathf.DeltaAngle(-90, apparentWindAngle);
+        float intensityMultiplier = 1f;
+
+        if (Mathf.Abs(liftDifference) < 10f)
+            intensityMultiplier = 1f + lightIntensityMultiplier * (10f - Mathf.Abs(liftDifference)) / 10f;
+        else if (Mathf.Abs(dragDifference) < 10f)
+            intensityMultiplier = 1f + lightIntensityMultiplier * (10f - Mathf.Abs(dragDifference)) / 10f;
+        else if (Mathf.Abs(drag2Difference) < 10f)
+            intensityMultiplier = 1f + lightIntensityMultiplier * (10f - Mathf.Abs(drag2Difference)) / 10f;
+
+        lanternLight.intensity = LightUnitUtils.LumenToCandela(lightIntensity * intensityMultiplier, 4f * Mathf.PI);
+    }
+
+    private void EnableParticles()
+    {
+        foreach (ParticleSystem boatParticle in boatParticles)
+        {
+            boatParticle.Play();
+        }
+    }
+
+    private void DisableParticles()
+    {
+        foreach (ParticleSystem boatParticle in boatParticles)
+        {
+            boatParticle.Stop();
+        }
+    }
+
+    private void UpdateParticleDensity()
+    {
+        float emissionRate = baseParticleEmissionRate + forwardSpeed * forwardSpeed * speedEmissionMultiplier;
+
+        foreach (ParticleSystem boatParticle in boatParticles)
+        {
+            var emission = boatParticle.emission;
+            emission.rateOverTime = emissionRate;
+        }
+    }
+
+    // SIMPLE BOAT CONTROLS: By Jantina
+
+    public void SetSimpleTurnInput(float value)
+    {
+        _simpleTurnInput = value;
+    }
+
+    void ApplySimpleMode()
+    {
+        float targetThrottle =
+            _simpleThrottleInput > 0.1f
+            ? 1f
+            : 0f;
+
+        if (targetThrottle > simpleThrottle)
+        {
+            simpleThrottle = Mathf.MoveTowards(
+                simpleThrottle,
+                targetThrottle,
+                simpleThrottleAccel * Time.fixedDeltaTime
+            );
+        }
+        else
+        {
+            simpleThrottle = Mathf.MoveTowards(
+                simpleThrottle,
+                targetThrottle,
+                simpleThrottleDecay * Time.fixedDeltaTime
+            );
+        }
+
+        rigidBody.AddRelativeForce(
+            Vector3.forward *
+            simpleThrottle *
+            simpleForwardAcceleration,
+            ForceMode.Acceleration
+        );
+
+        rigidBody.AddTorque(
+            Vector3.up *
+            _simpleTurnInput *
+            simpleTurnTorque,
+            ForceMode.Acceleration
+        );
+
+        Vector3 angularVel = rigidBody.angularVelocity;
+
+        angularVel.x = 0f;
+        angularVel.z = 0f;
+
+        angularVel.y *= 0.94f;
+
+        rigidBody.angularVelocity = angularVel;
+
+        Vector3 velocity = rigidBody.linearVelocity;
+
+        float verticalVelocity = velocity.y;
+
+        Vector3 horizontalVelocity = new Vector3(
+            velocity.x,
+            0f,
+            velocity.z
+        );
+
+        horizontalVelocity *= 1f / (
+            1f + simpleLinearDrag * Time.fixedDeltaTime
+        );
+
+        if (horizontalVelocity.magnitude > maxSimpleSpeed)
+        {
+            horizontalVelocity =
+                horizontalVelocity.normalized *
+                maxSimpleSpeed;
+        }
+
+        rigidBody.linearVelocity = new Vector3(
+            horizontalVelocity.x,
+            verticalVelocity,
+            horizontalVelocity.z
+        );
+
+        ApplyKeelDrag();
+
+        forwardSpeed = Vector3.Dot(
+            rigidBody.linearVelocity,
+            transform.forward
+        );
+    }
+    public void SetSimpleMode(bool enabled)
+    {
+        simpleModeEnabled = enabled;
+        rudderAxis.Reset();
+        mastAxis.Reset();   
+    }
+    public void SetSimpleThrottleInput(float value)
+    {
+        _simpleThrottleInput = Mathf.Clamp01(value);
+    }
+    public bool IsSimpleModeEnabled => simpleModeEnabled;
+    public void HardStop()
+    {
+        if (rigidBody == null) return;
+
+        rigidBody.linearVelocity = Vector3.zero;
+        rigidBody.angularVelocity = Vector3.zero;
+
+        simpleThrottle = 0f;
+        _simpleThrottleInput = 0f;
+        _simpleTurnInput = 0f;
+        forwardSpeed = 0f;
     }
 }

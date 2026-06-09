@@ -1,13 +1,24 @@
 ﻿using UnityEngine;
 
 // Author: Edward
+// Edited by: Jantina
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(Collider))]
 public class PhysicsPickup : MonoBehaviour, IPickup
 {
     [Header("Attachment Settings")]
     [SerializeField] private Vector3 pickupPositionOffset;
+    [SerializeField] private Vector3 pickupRotationOffset;
     
+    [Header("Despawn Effect")]
+    [Tooltip("Optional particle effect to spawn when this pickup is collected/destroyed.")]
+    [SerializeField] private GameObject despawnParticleEffect;
+    
+    [Header("Highlight")]
+    [Tooltip("Change if prefab has children and only a specific child needs to be highlighted.")]
+    [SerializeField] protected GameObject meshToHighlight;
+    public virtual GameObject ShouldHighlight(InteractionController interactionController) => meshToHighlight ? meshToHighlight : gameObject;
+
     private Rigidbody pickupRigidbody;
     private Collider pickupCollider;
 
@@ -17,6 +28,7 @@ public class PhysicsPickup : MonoBehaviour, IPickup
     {
         pickupRigidbody = GetComponent<Rigidbody>();
         pickupCollider = GetComponent<Collider>();
+        meshToHighlight = gameObject;
     }
 
     public void Interact(InteractionController interactionController)
@@ -33,6 +45,22 @@ public class PhysicsPickup : MonoBehaviour, IPickup
         SetPhysicsValue(true);
         
         GameEvents.ExecOnPickup(this);
+        GetComponent<ItemDialogueTrigger>()?.TriggerDialogue(); // Added by Jantina for Dialogue System
+    }
+
+    public virtual void CollectAndDestroy()
+    {
+        SetPhysicsValue(true);
+        GameEvents.ExecOnPickup(this);
+
+        GetComponent<ItemDialogueTrigger>()?.TriggerDialogue(); // Added by Jantina for Dialogue System
+
+        if (despawnParticleEffect)
+        {
+            GameObject go = Instantiate(despawnParticleEffect, transform.position, Quaternion.identity);
+            Destroy(go, 1f); // Destroy the particle effect after 1 second to clean up the scene
+        }
+        gameObject.SetActive(false);
     }
 
     public virtual void Drop(PickupController pickupController)
@@ -50,7 +78,7 @@ public class PhysicsPickup : MonoBehaviour, IPickup
         
         transform.parent = newParent;
         transform.localPosition = pickupPositionOffset;
-        transform.localRotation = Quaternion.identity;
+        transform.localRotation = Quaternion.Euler(pickupRotationOffset);
         
         // All this fancy stuff just because Unity by default changes the scale of an object to match it to its new parent...
         Vector3 parentScale = newParent.lossyScale;

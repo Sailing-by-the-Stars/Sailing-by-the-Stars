@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace _Teams.World_Design.Scripts.ZoneEffects.Environmental.WeatherEvents.Thunder
@@ -5,7 +6,7 @@ namespace _Teams.World_Design.Scripts.ZoneEffects.Environmental.WeatherEvents.Th
     public class ThunderSpawnObject : MonoBehaviour
     {
         [Header("Spawn Setup")]
-        [SerializeField] private GameObject spawnPrefab;
+        [SerializeField] private List<GameObject> spawnPrefabs;
         [SerializeField] private bool spawnOnStart = false;
         [SerializeField] private Vector3 worldOffset;
         [SerializeField] private float intensity;
@@ -28,7 +29,7 @@ namespace _Teams.World_Design.Scripts.ZoneEffects.Environmental.WeatherEvents.Th
 
         public GameObject TriggerSpawn()
         {
-            if (spawnPrefab == null)
+            if (spawnPrefabs.Count == 0)
             {
                 return null;
             }
@@ -36,6 +37,7 @@ namespace _Teams.World_Design.Scripts.ZoneEffects.Environmental.WeatherEvents.Th
             Vector3 spawnPosition = GetBottomRandomPosition() + worldOffset; 
             Quaternion spawnRotation = Quaternion.identity;
 
+            GameObject spawnPrefab = spawnPrefabs[Random.Range(0, spawnPrefabs.Count)];
             lastSpawnedInstance = Instantiate(spawnPrefab, spawnPosition, spawnRotation, transform);
             
             return lastSpawnedInstance;
@@ -60,15 +62,15 @@ namespace _Teams.World_Design.Scripts.ZoneEffects.Environmental.WeatherEvents.Th
         private Bounds ResolveBounds()
         {
             GameObject targetObject = boundsObject != null ? boundsObject : gameObject;
+            
+            if (targetObject.TryGetComponent(out Collider objectCollider))
+            {
+                return objectCollider.bounds;
+            }
 
             if (targetObject.TryGetComponent(out Renderer objectRenderer))
             {
                 return objectRenderer.bounds;
-            }
-
-            if (targetObject.TryGetComponent(out Collider objectCollider))
-            {
-                return objectCollider.bounds;
             }
 
             return new Bounds(targetObject.transform.position, Vector3.zero);

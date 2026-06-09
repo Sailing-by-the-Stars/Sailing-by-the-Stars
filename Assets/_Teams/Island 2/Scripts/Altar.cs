@@ -13,7 +13,9 @@ public class Altar : MonoBehaviour, IInteractable
         
         [HideInInspector] public BargainItem storedPickup;
     }
-    
+
+    private bool pedestalsFull = false;
+    public List<ConditionalDialogue> dialogues;
     public string InteractMessage => "Press E to Place / Swap Item";
 
     [SerializeField] private List<Pedestal> pedestals = new();
@@ -118,6 +120,7 @@ public class Altar : MonoBehaviour, IInteractable
     private void OpenRewardCompartment()
     {
         if (!rewardDoor || !ritualCompleted) return;
+        
         Debug.Log("Bargain Completed.");
         PuzzleProgress.MarkComplete("bargaining");
         
@@ -127,13 +130,47 @@ public class Altar : MonoBehaviour, IInteractable
 
     private void IsOrderCorrect()
     {
+        pedestalsFull = pedestals.All(pedestal => pedestal.storedPickup);
+
         Debug.Log("Item placed on pedestal");
-        if (pedestals.All(pedestal => pedestal.storedPickup && pedestal.storedPickup.weight == pedestal.index))
+        if (pedestalsFull && pedestals.All(pedestal => pedestal.storedPickup.weight == pedestal.index))
             CompleteRitual();
+        else if (pedestalsFull)
+            StartDialogue();
     }
 
     private void OnDestroy()
     {
         GameEvents.OnAltarItemPlaced -= IsOrderCorrect;
+    }
+
+    private void StartDialogue()
+    {
+        for (int i = dialogues.Count - 1; i >= 0; i--)
+        {
+            var entry = dialogues[i];
+
+            bool valid = true;
+
+            if (entry.conditions != null && entry.conditions.Count > 0)
+            {
+                foreach (var cond in entry.conditions)
+                {
+                    if (!cond.Evaluate(PlayerState.Instance))
+                    {
+                        valid = false;
+                        break;
+                    }
+                }
+            }
+
+            if (valid)
+            {
+                DialogueSystem.Instance.StartDialogue(entry.dialogue, gameObject);
+                return;
+            }
+        }
+
+        Debug.LogWarning("No valid idle dialogue found for this area.");
     }
 }

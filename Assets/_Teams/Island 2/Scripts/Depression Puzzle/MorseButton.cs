@@ -8,6 +8,9 @@ public class MorseButton : MonoBehaviour, IInteractable
     [SerializeField] private string objectInteractMessage;
     public string InteractMessage => objectInteractMessage;
     public bool ShouldShowMessage => true;
+    
+    [SerializeField] protected GameObject meshToHighlight;
+    public virtual GameObject ShouldHighlight(InteractionController interactionController) => meshToHighlight ? meshToHighlight : gameObject;
 
     private void Start()
     {

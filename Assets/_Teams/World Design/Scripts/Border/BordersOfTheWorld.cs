@@ -14,6 +14,7 @@ public class BordersOfTheWorld : MonoBehaviour
     [Tooltip("Script tries to find reference if unassigned")]
     [SerializeField] private PlayOutBounds boundsAudio;
 
+
     private void Start()
     {
         if (boundsAudio == null)

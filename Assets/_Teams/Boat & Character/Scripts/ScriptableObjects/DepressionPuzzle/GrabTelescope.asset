@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a27b1591cf442e34da26ab4a98de3513, type: 3}
+  m_Name: GrabTelescope
+  m_EditorClassIdentifier: Assembly-CSharp::Dialogue
+  hasName: 1
+  npcName: Axel
+  talkingSpeed: 0.95
+  autoAdvance: 1
+  secondsPerCharacter: 0.03
+  nodes:
+  - rid: 141452603536965748
+  hasItemID: 0
+  itemID: 0
+  references:
+    version: 2
+    RefIds:
+    - rid: 141452603536965748
+      type: {class: DialogueLineNode, ns: , asm: Assembly-CSharp}
+      data:
+        nodeID: Grab_Telescope
+        text: I remember this...it's my first ever telescope! First time I took a
+          good look at the stars...
+        nextNodeID: 

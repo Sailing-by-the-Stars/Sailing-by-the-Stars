@@ -10,6 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1867408222837579120}
   - component: {fileID: 8578989360898947300}
+  - component: {fileID: 3927531102120492388}
+  - component: {fileID: 5543801497583760516}
   m_Layer: 0
   m_Name: TPManager
   m_TagString: Untagged
@@ -44,3 +46,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26c38b09dff8d1f458bad5e2aa87de3e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TeleportManager
+--- !u!114 &3927531102120492388
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2040947520602584645}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: efd3166ec86ffa04682e539aa9b23477, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TutorialResetter
+--- !u!114 &5543801497583760516
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2040947520602584645}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd6ec90c444ec8e45bc57195e2f417f9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PopupPriorityManager
