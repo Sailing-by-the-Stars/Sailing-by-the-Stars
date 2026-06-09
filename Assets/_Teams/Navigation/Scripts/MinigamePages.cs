@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 
 
-[RequireComponent(typeof(NavigationSection))]
+[RequireComponent(typeof(JournalSection))]
 public class MinigamePages : MonoBehaviour
 {
     [SerializeField]
@@ -38,18 +38,18 @@ public class MinigamePages : MonoBehaviour
         switch (pageID)
         {
             case 0:
-                position = 1;
+                position = 0;
                 break;
             case 1:
-                position = 1;
+                position = 0;
                 gotoPos = true;
                 break;
             case 2:
-                position = 2;
+                position = 1;
                 gotoPos = true;
                 break;
             case 3:
-                position = 2;
+                position = 1;
                 gotoPos = true;
                 break;
             default:

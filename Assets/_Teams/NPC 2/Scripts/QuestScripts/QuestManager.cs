@@ -29,8 +29,6 @@ public class QuestManager : MonoBehaviour
 
         playerState = FindFirstObjectByType<PlayerState>();
 
-        if (questUI == null)
-            questUI = FindFirstObjectByType<QuestUI>();
     }
 
     /// <summary>

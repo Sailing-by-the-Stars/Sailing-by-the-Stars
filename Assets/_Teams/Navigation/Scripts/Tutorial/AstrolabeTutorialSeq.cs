@@ -18,6 +18,11 @@ public class AstrolabeTutorialSeq : TutorialSequence
         AstroInstance = this;
     }
 
+    public void ManualFinish()
+    {
+        finished = true;
+    }
+
 
     public override void NextStep(int stepIndex = -1)
     {

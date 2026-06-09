@@ -42,7 +42,7 @@ public class NavigationSection : JournalSection
     {
         base.OpenPage(pageNr);
 
-        if (navPages[pageNr] == null || navPages[pageNr].OpenedPages == null || !TutorialSequence.Instance.finishedTutorial)
+        if (navPages[pageNr] == null || navPages[pageNr].OpenedPages == null || !AstrolabeTutorialSeq.finished)
         {
             return;
         }

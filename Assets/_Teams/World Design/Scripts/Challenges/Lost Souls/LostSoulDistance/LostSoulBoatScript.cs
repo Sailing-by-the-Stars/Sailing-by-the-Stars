@@ -86,7 +86,7 @@ namespace _Teams.World_Design.Scripts.Challenges.Lost_Souls
 
             if (playerTransform == null)
             {
-                GameObject player = GameObject.FindGameObjectWithTag("Player");
+                GameObject player = Camera.main.gameObject;
                 if (player != null)
                 {
                     playerTransform = player.transform;

@@ -1277,7 +1277,7 @@ MonoBehaviour:
     manualUI: []
     waitAtLineEnd: 0
     waitForTutorial: 0
-    timeTillEndOfline: 3
+    timeTillEndOfline: 4
     lineToGoToNext: -1
     startOfLine:
       m_PersistentCalls:
@@ -1290,7 +1290,7 @@ MonoBehaviour:
     - {fileID: 2464834239751090235}
     waitAtLineEnd: 0
     waitForTutorial: 1
-    timeTillEndOfline: 3
+    timeTillEndOfline: 4
     lineToGoToNext: -1
     startOfLine:
       m_PersistentCalls:
@@ -1314,7 +1314,7 @@ MonoBehaviour:
     manualUI: []
     waitAtLineEnd: 0
     waitForTutorial: 0
-    timeTillEndOfline: 3
+    timeTillEndOfline: 4
     lineToGoToNext: -1
     startOfLine:
       m_PersistentCalls:
@@ -1326,7 +1326,7 @@ MonoBehaviour:
     manualUI: []
     waitAtLineEnd: 0
     waitForTutorial: 0
-    timeTillEndOfline: 3
+    timeTillEndOfline: 4
     lineToGoToNext: -1
     startOfLine:
       m_PersistentCalls:
@@ -1339,7 +1339,7 @@ MonoBehaviour:
     - {fileID: 6354017498846278079}
     waitAtLineEnd: 0
     waitForTutorial: 1
-    timeTillEndOfline: 3
+    timeTillEndOfline: 4
     lineToGoToNext: -1
     startOfLine:
       m_PersistentCalls:
@@ -1376,7 +1376,7 @@ MonoBehaviour:
     - {fileID: 1957501407342430101}
     waitAtLineEnd: 0
     waitForTutorial: 1
-    timeTillEndOfline: 3
+    timeTillEndOfline: 4
     lineToGoToNext: -1
     startOfLine:
       m_PersistentCalls:
@@ -1396,12 +1396,12 @@ MonoBehaviour:
     endOfLine:
       m_PersistentCalls:
         m_Calls: []
-  - text: Look at the number pointed at. Polaris is currently at 33 degrees from
-      the horizon
+  - text: Look at the number pointed at. Polaris is currently at about 20 degrees
+      from the horizon
     manualUI: []
     waitAtLineEnd: 0
     waitForTutorial: 0
-    timeTillEndOfline: 3
+    timeTillEndOfline: 6
     lineToGoToNext: -1
     startOfLine:
       m_PersistentCalls:
@@ -1414,7 +1414,7 @@ MonoBehaviour:
     - {fileID: 7132053829766896774}
     waitAtLineEnd: 0
     waitForTutorial: 1
-    timeTillEndOfline: 3
+    timeTillEndOfline: 4
     lineToGoToNext: -1
     startOfLine:
       m_PersistentCalls:
@@ -1438,7 +1438,7 @@ MonoBehaviour:
     manualUI: []
     waitAtLineEnd: 0
     waitForTutorial: 0
-    timeTillEndOfline: 3
+    timeTillEndOfline: 4
     lineToGoToNext: -1
     startOfLine:
       m_PersistentCalls:
@@ -1463,7 +1463,7 @@ MonoBehaviour:
     manualUI: []
     waitAtLineEnd: 0
     waitForTutorial: 0
-    timeTillEndOfline: 3
+    timeTillEndOfline: 5
     lineToGoToNext: -1
     startOfLine:
       m_PersistentCalls:
@@ -1489,7 +1489,7 @@ MonoBehaviour:
     manualUI: []
     waitAtLineEnd: 0
     waitForTutorial: 0
-    timeTillEndOfline: 3
+    timeTillEndOfline: 8
     lineToGoToNext: -1
     startOfLine:
       m_PersistentCalls:
@@ -1513,7 +1513,7 @@ MonoBehaviour:
     manualUI: []
     waitAtLineEnd: 0
     waitForTutorial: 0
-    timeTillEndOfline: 3
+    timeTillEndOfline: 6
     lineToGoToNext: -1
     startOfLine:
       m_PersistentCalls:
@@ -1533,6 +1533,15 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+  - text: Once you have found the star, board the boat and continue your adventure
+    manualUI: []
+    waitAtLineEnd: 0
+    waitForTutorial: 1
+    timeTillEndOfline: 5
+    lineToGoToNext: -1
+    startOfLine:
+      m_PersistentCalls:
+        m_Calls:
         - m_Target: {fileID: 887578688244434262}
           m_TargetAssemblyTypeName: Journal, Assembly-CSharp
           m_MethodName: ForcePage
@@ -1545,15 +1554,6 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
-  - text: Once you have found the star, board the boat and continue your adventure
-    manualUI: []
-    waitAtLineEnd: 0
-    waitForTutorial: 0
-    timeTillEndOfline: 3
-    lineToGoToNext: -1
-    startOfLine:
-      m_PersistentCalls:
-        m_Calls: []
     endOfLine:
       m_PersistentCalls:
         m_Calls:
@@ -1720,8 +1720,8 @@ MonoBehaviour:
     continueAfterEntry: 1
     nextEntry: -1
     dialogueEntry: 6
-    dialogueEntryText: Look at the number pointed at. Polaris is currently at 33
-      degrees from the horizon
+    dialogueEntryText: Look at the number pointed at. Polaris is currently at about
+      20 degrees from the horizon
     clickForDialogue: 0
   - sequenceEnter:
       m_PersistentCalls:
@@ -1744,6 +1744,7 @@ MonoBehaviour:
     dialogueEntryText: Before getting on the boat, check your <color=#F0E37D>Journal</color>
     clickForDialogue: 0
   index: 0
+  currentStepFinishes: 0
 --- !u!1 &2657244772834348660
 GameObject:
   m_ObjectHideFlags: 0
@@ -3227,7 +3228,7 @@ MonoBehaviour:
     manualUI: []
     waitAtLineEnd: 0
     waitForTutorial: 0
-    timeTillEndOfline: 3
+    timeTillEndOfline: 4
     lineToGoToNext: -1
     startOfLine:
       m_PersistentCalls:
@@ -3240,7 +3241,7 @@ MonoBehaviour:
     - {fileID: 1985901966361978425}
     waitAtLineEnd: 0
     waitForTutorial: 1
-    timeTillEndOfline: 3
+    timeTillEndOfline: 4
     lineToGoToNext: -1
     startOfLine:
       m_PersistentCalls:
@@ -3264,7 +3265,7 @@ MonoBehaviour:
     manualUI: []
     waitAtLineEnd: 0
     waitForTutorial: 0
-    timeTillEndOfline: 3
+    timeTillEndOfline: 4
     lineToGoToNext: -1
     startOfLine:
       m_PersistentCalls:
@@ -3277,7 +3278,7 @@ MonoBehaviour:
     - {fileID: 4346607117290452758}
     waitAtLineEnd: 0
     waitForTutorial: 1
-    timeTillEndOfline: 3
+    timeTillEndOfline: 4
     lineToGoToNext: -1
     startOfLine:
       m_PersistentCalls:
@@ -3302,7 +3303,7 @@ MonoBehaviour:
     - {fileID: 814663596194410028}
     waitAtLineEnd: 0
     waitForTutorial: 1
-    timeTillEndOfline: 3
+    timeTillEndOfline: 4
     lineToGoToNext: -1
     startOfLine:
       m_PersistentCalls:
@@ -3327,7 +3328,7 @@ MonoBehaviour:
     - {fileID: 2542808811807993770}
     waitAtLineEnd: 0
     waitForTutorial: 1
-    timeTillEndOfline: 3
+    timeTillEndOfline: 4
     lineToGoToNext: -1
     startOfLine:
       m_PersistentCalls:
@@ -3352,7 +3353,7 @@ MonoBehaviour:
     - {fileID: 4330400696756858384}
     waitAtLineEnd: 0
     waitForTutorial: 1
-    timeTillEndOfline: 3
+    timeTillEndOfline: 4
     lineToGoToNext: -1
     startOfLine:
       m_PersistentCalls:
@@ -3364,7 +3365,7 @@ MonoBehaviour:
     manualUI: []
     waitAtLineEnd: 0
     waitForTutorial: 0
-    timeTillEndOfline: 3
+    timeTillEndOfline: 4
     lineToGoToNext: -1
     startOfLine:
       m_PersistentCalls:
@@ -3377,7 +3378,7 @@ MonoBehaviour:
     manualUI: []
     waitAtLineEnd: 0
     waitForTutorial: 0
-    timeTillEndOfline: 3
+    timeTillEndOfline: 5
     lineToGoToNext: -1
     startOfLine:
       m_PersistentCalls:
@@ -3390,7 +3391,7 @@ MonoBehaviour:
     - {fileID: 212234032102285115}
     waitAtLineEnd: 0
     waitForTutorial: 1
-    timeTillEndOfline: 3
+    timeTillEndOfline: 4
     lineToGoToNext: -1
     startOfLine:
       m_PersistentCalls:
@@ -3651,6 +3652,7 @@ MonoBehaviour:
     dialogueEntryText: Use this to <color=#F0E37D>skip</color> between sections
     clickForDialogue: 0
   index: 0
+  currentStepFinishes: 0
 --- !u!1 &6029798261796583818
 GameObject:
   m_ObjectHideFlags: 0
@@ -5385,19 +5387,19 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3540181415083067949, guid: ce13e5fb1ec3db54fa44d7e2a8a66671, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 122.4
+      value: 104.047
       objectReference: {fileID: 0}
     - target: {fileID: 3540181415083067949, guid: ce13e5fb1ec3db54fa44d7e2a8a66671, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2.969
+      value: 4.79
       objectReference: {fileID: 0}
     - target: {fileID: 3540181415083067949, guid: ce13e5fb1ec3db54fa44d7e2a8a66671, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 446.5
+      value: 360.859
       objectReference: {fileID: 0}
     - target: {fileID: 3540181415083067949, guid: ce13e5fb1ec3db54fa44d7e2a8a66671, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.99598026
+      value: 0.9976399
       objectReference: {fileID: 0}
     - target: {fileID: 3540181415083067949, guid: ce13e5fb1ec3db54fa44d7e2a8a66671, type: 3}
       propertyPath: m_LocalRotation.x
@@ -5405,7 +5407,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3540181415083067949, guid: ce13e5fb1ec3db54fa44d7e2a8a66671, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.08957314
+      value: 0.06866467
       objectReference: {fileID: 0}
     - target: {fileID: 3540181415083067949, guid: ce13e5fb1ec3db54fa44d7e2a8a66671, type: 3}
       propertyPath: m_LocalRotation.z
@@ -5417,7 +5419,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3540181415083067949, guid: ce13e5fb1ec3db54fa44d7e2a8a66671, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 10.278
+      value: 7.875
       objectReference: {fileID: 0}
     - target: {fileID: 3540181415083067949, guid: ce13e5fb1ec3db54fa44d7e2a8a66671, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
@@ -5456,21 +5458,49 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5969657385247550143}
     m_Modifications:
+    - target: {fileID: 169887444882301148, guid: 36438098deccace4dab2849fed42090b, type: 3}
+      propertyPath: nrOfPages
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 169887444882301148, guid: 36438098deccace4dab2849fed42090b, type: 3}
+      propertyPath: pages.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 169887444882301148, guid: 36438098deccace4dab2849fed42090b, type: 3}
+      propertyPath: pages.Array.data[0].leftPage
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 169887444882301148, guid: 36438098deccace4dab2849fed42090b, type: 3}
+      propertyPath: pages.Array.data[0].rightPage
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 938215281510909838, guid: 36438098deccace4dab2849fed42090b, type: 3}
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1142770525891362545, guid: 36438098deccace4dab2849fed42090b, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1142770525891362545, guid: 36438098deccace4dab2849fed42090b, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1142770525891362545, guid: 36438098deccace4dab2849fed42090b, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1491634443114468454, guid: 36438098deccace4dab2849fed42090b, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 128.83
+      value: 141.388
       objectReference: {fileID: 0}
     - target: {fileID: 1491634443114468454, guid: 36438098deccace4dab2849fed42090b, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 5.77
+      value: 5.19
       objectReference: {fileID: 0}
     - target: {fileID: 1491634443114468454, guid: 36438098deccace4dab2849fed42090b, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 427.46
+      value: 410.755
       objectReference: {fileID: 0}
     - target: {fileID: 1491634443114468454, guid: 36438098deccace4dab2849fed42090b, type: 3}
       propertyPath: m_LocalRotation.w
@@ -5500,6 +5530,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1536895379352467360, guid: 36438098deccace4dab2849fed42090b, type: 3}
+      propertyPath: sectionName
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1961316410431118787, guid: 36438098deccace4dab2849fed42090b, type: 3}
+      propertyPath: navPages.Array.data[0].page.leftPage
+      value: 
+      objectReference: {fileID: 2800000, guid: 3df53231531c74b41a946606cc2f52bf, type: 3}
+    - target: {fileID: 1961316410431118787, guid: 36438098deccace4dab2849fed42090b, type: 3}
+      propertyPath: navPages.Array.data[0].page.rightPage
+      value: 
+      objectReference: {fileID: 2800000, guid: 80e9de5c1e52b6e4384b103f9f66a3f4, type: 3}
+    - target: {fileID: 2239643280150048527, guid: 36438098deccace4dab2849fed42090b, type: 3}
+      propertyPath: m_Color.a
+      value: 0.7372549
+      objectReference: {fileID: 0}
     - target: {fileID: 2303742065397403356, guid: 36438098deccace4dab2849fed42090b, type: 3}
       propertyPath: m_Name
       value: journal_pedestal
@@ -5508,9 +5554,33 @@ PrefabInstance:
       propertyPath: m_LocalScale.y
       value: 1.0492
       objectReference: {fileID: 0}
+    - target: {fileID: 3459160579301510996, guid: 36438098deccace4dab2849fed42090b, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3459160579301510996, guid: 36438098deccace4dab2849fed42090b, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3459160579301510996, guid: 36438098deccace4dab2849fed42090b, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4182164624667784039, guid: 36438098deccace4dab2849fed42090b, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4798357331021467017, guid: 36438098deccace4dab2849fed42090b, type: 3}
       propertyPath: pages.Array.size
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5372218323546230346, guid: 36438098deccace4dab2849fed42090b, type: 3}
+      propertyPath: m_Color.a
+      value: 0.7372549
+      objectReference: {fileID: 0}
+    - target: {fileID: 6036180074419530476, guid: 36438098deccace4dab2849fed42090b, type: 3}
+      propertyPath: sectionName
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6868537103259439842, guid: 36438098deccace4dab2849fed42090b, type: 3}
       propertyPath: skipTutorial
@@ -5520,6 +5590,50 @@ PrefabInstance:
       propertyPath: meshToHighlight
       value: 
       objectReference: {fileID: 4837858048392044622}
+    - target: {fileID: 6868537103259439842, guid: 36438098deccace4dab2849fed42090b, type: 3}
+      propertyPath: Sections.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6997909690260531449, guid: 36438098deccace4dab2849fed42090b, type: 3}
+      propertyPath: sectionName
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7454325766848710758, guid: 36438098deccace4dab2849fed42090b, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7454325766848710758, guid: 36438098deccace4dab2849fed42090b, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7454325766848710758, guid: 36438098deccace4dab2849fed42090b, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7898444670292461528, guid: 36438098deccace4dab2849fed42090b, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7898444670292461528, guid: 36438098deccace4dab2849fed42090b, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7898444670292461528, guid: 36438098deccace4dab2849fed42090b, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8343727007731949147, guid: 36438098deccace4dab2849fed42090b, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8343727007731949147, guid: 36438098deccace4dab2849fed42090b, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8343727007731949147, guid: 36438098deccace4dab2849fed42090b, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8847252137628342166, guid: 36438098deccace4dab2849fed42090b, type: 3}
       propertyPath: m_LocalScale.y
       value: 1.0492
@@ -5527,7 +5641,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7464585803299437547, guid: 36438098deccace4dab2849fed42090b, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7164646036711649123}
   m_SourcePrefab: {fileID: 100100000, guid: 36438098deccace4dab2849fed42090b, type: 3}
 --- !u!114 &887578688244434262 stripped
 MonoBehaviour:
@@ -5540,6 +5657,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff0cf481b15171446967d5a19ca98bf9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Journal
+--- !u!1 &3789545142789925983 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7464585803299437547, guid: 36438098deccace4dab2849fed42090b, type: 3}
+  m_PrefabInstance: {fileID: 5980958460145751988}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &7164646036711649123
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3789545142789925983}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 571dc769da450c647844e116ef0dcd89, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  sectionName: 2
+  pages:
+  - leftPage: {fileID: 2800000, guid: 8916e250ceedb5842ace23ed2be99da9, type: 3}
+    rightPage: {fileID: 0}
+  - leftPage: {fileID: 2800000, guid: 8916e250ceedb5842ace23ed2be99da9, type: 3}
+    rightPage: {fileID: 2800000, guid: 2ec0d0df0b14f054fa235e9a79ccb9a5, type: 3}
+  - leftPage: {fileID: 2800000, guid: 3e2288355d096554fa2a62ae78746e26, type: 3}
+    rightPage: {fileID: 0}
+  - leftPage: {fileID: 2800000, guid: 3e2288355d096554fa2a62ae78746e26, type: 3}
+    rightPage: {fileID: 2800000, guid: 193a5f52f074a6d478bb976c16de6aef, type: 3}
 --- !u!1 &4837858048392044622 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1162813005977024506, guid: 36438098deccace4dab2849fed42090b, type: 3}

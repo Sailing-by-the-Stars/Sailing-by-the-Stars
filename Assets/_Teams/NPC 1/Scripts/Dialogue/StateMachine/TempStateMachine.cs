@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public enum GameState { Moving, Dialogue, Sailing, Journal, Astrolabe, Anchor, Sail, Rudder}
+public enum GameState { Moving, Dialogue, Sailing, Journal, Astrolabe, Anchor, Sail, Rudder, Paused}
 
 public class TempStateMachine : MonoBehaviour
 {
@@ -93,6 +93,9 @@ public class TempStateMachine : MonoBehaviour
                 PlayerControls.Looking.Enable();
                 PlayerControls.BoatRudder.Enable();
                 SetCursorVisibility(false);
+                break;
+            case GameState.Paused:
+                SetCursorVisibility(true);
                 break;
             
             default:

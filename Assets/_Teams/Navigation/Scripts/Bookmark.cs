@@ -21,13 +21,19 @@ public class Bookmark : MonoBehaviour
 
     void Update()
     {
-        if (journal.playerControls.Journal.Click.triggered)
+        if (journal.playerControls.Journal.Click.WasPressedThisFrame())
         {
             if (IsPointerOverUIElement())
             {
                 journal.OpenSection(sectionName);
                 journal.bookmarkClicked?.Invoke();
+
+                AstroDialogue.disabled = true;
             }
+        }
+        else if (journal.playerControls.Journal.Click.WasReleasedThisFrame())
+        {
+            AstroDialogue.disabled = false;
         }
     }
 

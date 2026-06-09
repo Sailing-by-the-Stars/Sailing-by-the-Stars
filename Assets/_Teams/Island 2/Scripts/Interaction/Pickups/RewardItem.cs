@@ -18,7 +18,7 @@ public class RewardItem : PhysicsPickup
 
     private void Collect()
     {
-        QuestManager.Instance.RegisterItemCollected(itemID);
+        //QuestManager.Instance.RegisterItemCollected(itemID);
         PuzzleProgress.MarkComplete(puzzleProgressID);
         collectedReward?.Invoke(pageID);
     }

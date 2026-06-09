@@ -372,6 +372,8 @@ public class FlatStarField : MonoBehaviour
                                     twinkler = stargo.AddComponent<TwinklingStar>();
                                 }
 
+
+                                twinkler.volume = template.volume;
                                 twinkler.twinkleCurve = template.twinkleCurve;
                                 twinkler.selectedCurve = template.selectedCurve;
                                 twinkler.dimCurve = template.dimCurve;
@@ -379,6 +381,12 @@ public class FlatStarField : MonoBehaviour
                                 twinkler.twinkleTime = template.twinkleTime;
 
                                 twinkler.tutorialStar = obj.tutorialStar;
+
+
+                                if (!twinkler.tutorialStar)
+                                {
+                                    twinkler.selectedTime = template.selectedTime;
+                                }
 
                                 twinkler.fmodEvent = template.fmodEvent;
 
@@ -642,6 +650,7 @@ public class FlatStarField : MonoBehaviour
                         i++;
                         if (star.catalog_number == obj.starID)
                         {
+                            twinkler.volume = template.volume;
                             twinkler.twinkleCurve = template.twinkleCurve;
                             twinkler.selectedCurve = template.selectedCurve;
                             twinkler.dimCurve = template.dimCurve;
@@ -649,7 +658,11 @@ public class FlatStarField : MonoBehaviour
                             twinkler.initialColor = tempColor;
                             twinkler.twinkleTime = template.twinkleTime;
 
-                            twinkler.tutorialStar = false;
+                            twinkler.tutorialStar = obj.tutorialStar;
+                            if (!twinkler.tutorialStar)
+                            {
+                                twinkler.selectedTime = template.selectedTime;
+                            }
 
                             EntryCheck entryCheck = new();
                             entryCheck.entryNumber = i;

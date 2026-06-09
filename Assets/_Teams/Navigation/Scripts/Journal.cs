@@ -27,6 +27,7 @@ public class Page
 
 public class Journal : ToolPickup, AstroTutorialStep
 {
+    [Header("journal things")]
     [SerializeField]
     bool skipTutorial = false;
 
@@ -219,6 +220,8 @@ public class Journal : ToolPickup, AstroTutorialStep
         }
         else
         {
+            if (popupui)
+                popupui.enabled = true;
             if (bookOpened)
             {
                 playerControls.Journal.Enable();
@@ -350,6 +353,7 @@ public class Journal : ToolPickup, AstroTutorialStep
 
         bookOpened = true;
         bookModel.SetActive(true);
+        popupui.gameObject.SetActive(true);
 
         foreach (Bookmark bookmark in bookmarks)
             bookmark.gameObject.SetActive(true);
@@ -371,6 +375,7 @@ public class Journal : ToolPickup, AstroTutorialStep
         leftPageQ.enabled = false;
         rightPageQ.enabled = false;
         bookModel.SetActive(false);
+        popupui.gameObject.SetActive(false);
 
         foreach (Bookmark bookmark in bookmarks)
             bookmark.gameObject.SetActive(false);
@@ -550,6 +555,7 @@ public class Journal : ToolPickup, AstroTutorialStep
             case 2:
             case 3:
                 TutorialInputs(2);
+                playerControls.Journal.Zoom.performed += FinishZoom;
                 playerControls.Journal.Zoom.performed += FinishInputPrompt;
                 break;
             case 4:
@@ -567,6 +573,12 @@ public class Journal : ToolPickup, AstroTutorialStep
                     Debug.LogWarning("no popup ui assigned?");
                 break;
         }
+    }
+
+    private void FinishZoom(InputAction.CallbackContext context)
+    {
+            playerControls.Journal.Zoom.Disable();
+            playerControls.Journal.Zoom.performed -= FinishZoom;
     }
 
     private void FinishInputPrompt(InputAction.CallbackContext context) => FinishInputPrompt();

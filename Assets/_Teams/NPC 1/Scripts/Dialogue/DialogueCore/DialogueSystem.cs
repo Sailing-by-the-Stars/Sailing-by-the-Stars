@@ -163,7 +163,7 @@ public class DialogueSystem : MonoBehaviour
         BuildNodeLookup();
         isDialogueActive = true;
 
-        if (currentDialogue.hasItemID)
+        if (currentDialogue.hasItemID && QuestManager.Instance!= null)
             QuestManager.Instance.RegisterItemCollected(currentDialogue.itemID);
 
         if (currentDialogue.nodes.Count == 0) return;
@@ -207,7 +207,7 @@ public class DialogueSystem : MonoBehaviour
         }
         else if (currentNode is StartQuestNode questNode)
         {
-            if (questNode.questToStart != null)
+            if (questNode.questToStart != null && QuestManager.Instance != null)
                 QuestManager.Instance.StartQuest(questNode.questToStart);
 
             currentLineNode = new DialogueLineNode { text = questNode.text };

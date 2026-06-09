@@ -30,12 +30,15 @@ public class MainMenuController : MonoBehaviour
     [SerializeField] private GameObject menuRoot;
     [SerializeField] private string gameSceneName = "MainGame";
 
-    private bool _isPaused = false;
+    public static bool _isPaused = false;
     private Dictionary<int, Coroutine> _fadeCoroutines = new Dictionary<int, Coroutine>();
 
     private int _currentHoveredIndex = -1;
     private Dictionary<int, Coroutine> _shiftCoroutines = new Dictionary<int, Coroutine>();
     private UIBlurEffect _blurEffect;
+
+
+    private GameState prevState = GameState.Moving;
 
     private void Start()
     {
@@ -81,11 +84,13 @@ public class MainMenuController : MonoBehaviour
 
     private void Update()
     {
-        if ((TempStateMachine.Instance.gameState != GameState.Dialogue && TempStateMachine.Instance.gameState != GameState.Journal) && 
-            Input.GetKeyDown(KeyCode.Escape))
+        if (TempStateMachine.Instance.gameState != GameState.Dialogue && TempStateMachine.Instance.gameState != GameState.Journal)
         {
-            if (_isPaused) CloseMenu();
-            else OpenMenu();
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                if (_isPaused) CloseMenu();
+                else OpenMenu();
+            }
         }
     }
 
@@ -94,7 +99,13 @@ public class MainMenuController : MonoBehaviour
         _isPaused = true;
         Time.timeScale = 0f;
         if (menuRoot != null) menuRoot.SetActive(true);
-        TempStateMachine.Instance.SetState(_isPaused ? GameState.Dialogue : GameState.Moving);
+
+        if (TempStateMachine.Instance.gameState != GameState.Paused)
+        {
+            prevState = TempStateMachine.Instance.gameState;
+        }
+            TempStateMachine.Instance.SetState(GameState.Paused);
+
     }
 
     public void CloseMenu()
@@ -102,7 +113,12 @@ public class MainMenuController : MonoBehaviour
         _isPaused = false;
         Time.timeScale = 1f;
         if (menuRoot != null) menuRoot.SetActive(false);
-        TempStateMachine.Instance.SetState(_isPaused ? GameState.Dialogue : GameState.Moving);
+        if(prevState == GameState.Paused)
+        {
+            prevState = GameState.Moving;
+        }
+
+            TempStateMachine.Instance.SetState(prevState);
     }
 
     public void OnReturnToGame()

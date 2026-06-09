@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
+using Unity.VisualScripting;
 using UnityEngine;
 using static TMPro.SpriteAssetUtilities.TexturePacker_JsonArray;
 
@@ -69,7 +70,7 @@ public class TwinklingStar : MonoBehaviour
     public float intensity = 1;
     public float twinkleTime = 1;
     public float dimTime = 2;
-    public float selectedTime = 5;
+    public float selectedTime = 2;
     public float animationFPS = 12f;
     public float selectedIntensity = 1;
     public float targetAngle = 1;
@@ -327,6 +328,8 @@ public class TwinklingStar : MonoBehaviour
 
         public void Enter(TwinklingStar star)
         {
+            StarFoundSound.PlaySound();
+
             timer = 0;
             animationLength = star.twinkleTime;
             star.twinkle = true;
@@ -349,7 +352,7 @@ public class TwinklingStar : MonoBehaviour
                 float T = timer / animationLength;
                 float curveOutput = star.twinkleCurve.Evaluate(T);
 
-                star.UpdateColor(star.initialColor, star.intensity * (curveOutput));
+                star.UpdateColor(star.initialColor, star.intensity * (curveOutput + 0.5f));
             }
         }
 
@@ -375,7 +378,7 @@ public class TwinklingStar : MonoBehaviour
             star.twinkle = true;
 
 
-            sound = new();
+            sound = star.AddComponent<StarTwinklingSound>();
             sound.fmodEvent = star.fmodEvent;
             sound.init();
 
@@ -500,7 +503,7 @@ public class TwinklingStar : MonoBehaviour
                 float T = timer / animationLength;
                 float curveOutput = star.dimCurve.Evaluate(T);
 
-                star.UpdateColor(star.intensity * curveOutput);
+                star.UpdateColor(timer * star.animationFPS);
             }
             else
             {

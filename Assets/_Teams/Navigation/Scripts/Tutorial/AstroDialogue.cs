@@ -10,7 +10,7 @@ public class astroDialogue
     public List<GameObject> manualUI = new();
     public bool waitAtLineEnd = false;
     public bool waitForTutorial = false;
-    public float timeTillEndOfline = 2.5f;
+    public float timeTillEndOfline = 4f;
     public int lineToGoToNext = -1;
     public UnityEvent startOfLine;
     public UnityEvent endOfLine;
@@ -36,19 +36,19 @@ public class AstroDialogue : MonoBehaviour
 
     public List<astroDialogue> dialogue = new();
 
+    public static bool disabled = false;
+
     protected virtual void Start()
     {
         TurnOffTextBoxes();
-
-
     }
 
 
-    protected virtual void Update()
+    protected virtual void LateUpdate()
     {
-        if (inDialogue)
+        if (inDialogue && disabled != true && MainMenuController._isPaused != true)
         {
-            if (Input.GetMouseButtonDown(0))
+            if (Input.GetMouseButtonUp(0))
             {
                 if (index < dialogue.Count)
                 {
