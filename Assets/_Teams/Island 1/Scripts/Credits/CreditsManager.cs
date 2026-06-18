@@ -2,6 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class CreditsManager : MonoBehaviour
 {
@@ -67,7 +68,7 @@ public class CreditsManager : MonoBehaviour
         Vector2 startPos = new Vector2(creditsTextRect.anchoredPosition.x, -screenHeight);
         creditsTextRect.anchoredPosition = startPos;
 
-        float totalScrollDistance = (2 * screenHeight) + creditsTextRect.rect.height;
+        float totalScrollDistance = (float)(2.5 * screenHeight) + creditsTextRect.rect.height;
         float scrolled = 0f;
 
         while (scrolled < totalScrollDistance)
@@ -91,10 +92,7 @@ public class CreditsManager : MonoBehaviour
             yield return new WaitForSecondsRealtime(endHoldDuration);
         }
 
-#if UNITY_EDITOR
-        UnityEditor.EditorApplication.isPlaying = false;
-#else
-        Application.Quit();
-#endif
+        Time.timeScale = 1f;
+        SceneManager.LoadScene("MainMenu6");
     }
 }
